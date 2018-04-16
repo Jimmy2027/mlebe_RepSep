@@ -1,1 +1,18 @@
-While it is beyond the scope or intent of this study to single out and individually investigate articles by our colleagues, we offer a comparison from our own data and pipelines, illustrating the benefits of context awareness and specific optimizations in animal MRI.
+\section{Background}
+
+In order to make any generalizable statements regarding brain functioning and organization, an equivalence between brain areas across individuals needs to be established.
+This is most commonly done by spatial (rigid, affine, and non-linear) transformation of all brains in a study to a population or atlas template.
+This step, called registration, is consequently performed as part of any neuroimaging workflow attempting to produce spatially resolved and generalizable results.
+
+The computations required for registration are commonly performed at the very onset of the preprocessing workflow (possibly after slice-timing correction),
+though --- depending on the workflow --- the actual image manipulation may only take place once inter-subject comparison is needed, or at the very end for statistic map publishing !!!Cite paper which does this and says that it minimizes interpolation!!!
+As a consequence of this marginal position of the processing step, and its general independence from the hypothesis and experimental design, registration is often relegated to default values and exempt from rigorous quality control (QC).
+While the first of the aforementioned issues is mitigated by the presence (in almost any software package with registration capabilities) of high-level registration functions optimized for the size and spatial features of the human brain, the lack of accessible QC remains an issue across the board.
+
+In small animal imaging (of which we will be particularly focusing on the mouse) registration is currently most expediently performed by 	
+
+The registration process consists of the computation of a transformation matrix (which can have multiple layers of complexity, e.g. combining a transformation from the functional to the structural scan with a transformation from the structural scan to a general template) and the application of the transformation matrix in s process called warping.
+
+	\subsection{Extra}
+	While a population template may require less deformation, it only permits within-study comparability, and requires additional interpolation in order to allow region of interest (ROI) delineation or inter-study comparison.
+	While it is beyond the scope or intent of this study to single out and individually investigate articles by our colleagues, we offer a comparison from our own data and pipelines, illustrating the benefits of context awareness and specific optimizations in animal MRI.
