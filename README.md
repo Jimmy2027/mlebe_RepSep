@@ -1,6 +1,6 @@
-# Best Practices for Registration in Small Animal Brain Imaging
+# Improving Registration in Small Animal Brain Imaging
 
-These are the content files used to generate scientific communication materials for the “Best Practices for Registration in Small Animal Brain Imaging” project.
+These are the content files used to generate scientific communication materials for the “Improving Registration in Small Animal Brain Imaging” project.
 
 ## Compilation Instructions
 
@@ -11,14 +11,14 @@ From your terminal, run the following commands line by line:
 
 ```sh
 git clone git@github.com:TheChymera/RepSeP.git
-git clone git@bitbucket.org:TheChymera/coosspf.git && cd coosspf
+git clone git@bitbucket.org:TheChymera/irsabi.git && cd irsabi
 cp -rf ../RepSeP/pythontex .
 ```
 
 If the above should fail with a `Permission denied (publickey)` error, you should do one of the following:
 
 * [Add an SSH key](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/) to your GitHub account.
-* Pull via the HTTPS links: `https://github.com/TheChymera/RepSeP.git` and `https://TheChymera@bitbucket.org/TheChymera/coosspf.git`, respectively.
+* Pull via the HTTPS links: `https://github.com/TheChymera/RepSeP.git` and `https://TheChymera@bitbucket.org/TheChymera/irsabi.git`, respectively.
 
 ### Poster
 

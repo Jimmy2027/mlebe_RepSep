@@ -1,0 +1,93 @@
+\documentclass[10pt,a4paper,twocolumn,german]{article}
+
+\title{Improving Registration in Small Animal Brain Imaging}
+\author{
+	\authorstyle{Horea-Ioan Ioanas\textsuperscript{1}}
+	\authorstyle{Markus Marks\textsuperscript{1}}
+	\authorstyle{Markus Rudin\textsuperscript{1}}
+	\newline
+	\textsuperscript{1}\institution{Institute for Biomedical Engineering, ETH and University of Zurich}
+}
+\date{}
+\input{article_style.tex}
+
+\begin{document}
+\maketitle
+\thispagestyle{firstpage}
+\noindent
+\textsf{%
+\textbf{Abstract ---}
+	\input{abstract.tex}
+}
+
+\section{Background}
+	\input{background.tex}
+\section{3D Plotting}
+	In this section we demonstrate 3D plotting performance for this document class.
+
+	Matplotlib's 3D plots are associated with a number of intricacies (such as axes.facecolor specifying the background of the 2D output figure and not the 3D grid --- which is why they are particularly interesting. 
+	
+	\py{pytex_fig('scripts/3dplot.py', conf='article/3dplot.conf', label='3dplot', caption='A 3D plot.')}
+
+\section{Other Plots}
+	Here we demonstrate more generic plotting capabilities.
+
+	Radarplots --- as seen in figure~\ref{fig:radar} --- display and fit well into the article-style output. 
+	\py{pytex_fig('scripts/radar.py', label='radar', caption='A radar plot.')}	
+	
+	\py{pytex_fig('scripts/bsc_percentage.py', conf='article/bsc_percentage.conf', label='bsc_percentage', caption='Percentage of Bachelor’s degrees conferred to women in the U.S.A. by major (1970-2011).', multicol=True)}
+
+\section{Section}
+
+	Lorem ipsum dolor sit amet, purto iracundia ei duo, cum primis definitiones in.
+	Mea ut eripuit evertitur, commune detraxit gloriatur eu vis.
+	Est ad unum deleniti, ut cum liber aeque nostrum.
+	Ne aperiam accusata his, no tractatos intellegat intellegam vel.
+	Qui ne agam populo voluptaria, no nibh semper explicari mei.
+	
+	Ad mei aeterno sadipscing, id duo sonet vocent numquam.
+	Ex nec dicant albucius. Sed doming cotidieque at, ea per modus dicit, fuisset adipisci mel te.
+	Causae graecis reformidans te has, cu pri commune salutandi, eum id sumo laoreet.
+	Vim modo utamur aliquam an, mutat rebum integre ex nec, qui id munere iracundia constituam.
+	At nam quis assum veniam.	
+	
+	Ad mei aeterno sadipscing, id duo sonet vocent numquam.
+	Ex nec dicant albucius. Sed doming cotidieque at, ea per modus dicit, fuisset adipisci mel te.
+	Causae graecis reformidans te has, cu pri commune salutandi, eum id sumo laoreet.
+	Vim modo utamur aliquam an, mutat rebum integre ex nec, qui id munere iracundia constituam.
+	At nam quis assum veniam.	
+\section{Section}
+
+	Lorem ipsum dolor sit amet, purto iracundia ei duo, cum primis definitiones in.
+	Mea ut eripuit evertitur, commune detraxit gloriatur eu vis.
+	Est ad unum deleniti, ut cum liber aeque nostrum.
+	Ne aperiam accusata his, no tractatos intellegat intellegam vel.
+	Qui ne agam populo voluptaria, no nibh semper explicari mei.
+	
+	Ad mei aeterno sadipscing, id duo sonet vocent numquam.
+	Ex nec dicant albucius. Sed doming cotidieque at, ea per modus dicit, fuisset adipisci mel te.
+	Causae graecis reformidans te has, cu pri commune salutandi, eum id sumo laoreet.
+	Vim modo utamur aliquam an, mutat rebum integre ex nec, qui id munere iracundia constituam.
+	At nam quis assum veniam.	
+	
+	Ad mei aeterno sadipscing, id duo sonet vocent numquam.
+	Ex nec dicant albucius. Sed doming cotidieque at, ea per modus dicit, fuisset adipisci mel te.
+	Causae graecis reformidans te has, cu pri commune salutandi, eum id sumo laoreet.
+	Vim modo utamur aliquam an, mutat rebum integre ex nec, qui id munere iracundia constituam.
+	At nam quis assum veniam.	
+
+\section{Section}
+
+	Ne duo erat discere nominati, sensibus imperdiet no qui.
+	Te ius imperdiet torquatos.
+	Mea in affert aperiri lucilius, pri ut mollis praesent percipitur.
+	Facer oblique maiestatis est ne.
+	Oratio tamquam neglegentur et cum, odio doming in nam, an est omnes phaedrum convenire.
+
+	Ad mei aeterno sadipscing, id duo sonet vocent numquam.
+	Ex nec dicant albucius. Sed doming cotidieque at, ea per modus dicit, fuisset adipisci mel te.
+	Causae graecis reformidans te has, cu pri commune salutandi, eum id sumo laoreet.
+	Vim modo utamur aliquam an, mutat rebum integre ex nec, qui id munere iracundia constituam.
+	At nam quis assum veniam.	
+
+\end{document}
