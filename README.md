@@ -23,7 +23,7 @@ If the above should fail with a `Permission denied (publickey)` error, you shoul
 ### Poster
 
 ```sh
-pdflatex -shell-escape poster.tex && pythontex.py poster.tex && pdflatex -shell-escape poster.tex && bibtex poster && pdflatex -shell-escape poster.tex && pdflatex -shell-escape poster.tex
+pdflatex -shell-escape article.tex && pythontex.py article.tex && pdflatex -shell-escape article.tex && bibtex article && pdflatex -shell-escape article.tex && pdflatex -shell-escape article.tex
 ```
 
 ## Contributing
