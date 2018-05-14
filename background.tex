@@ -5,30 +5,32 @@ This is most commonly done by spatial (rigid, affine, and non-linear) transforma
 This process, called registration, is consequently performed as part of any neuroimaging workflow attempting to produce spatially resolved and generalizable results.
 
 The computations required for registration are commonly performed at the very onset of the preprocessing workflow (possibly after slice-timing correction),
-though --- depending on the workflow --- the actual image manipulation may also take place only once inter-subject comparison is needed, or at the very end, for statistic map publishing [[[paper which does this and says that it minimizes interpolation]]].
-As a consequence of the hierarchically marginal position, as well as its general independence from experimental design and hypothesis, registration is often relegated to default values and exempt from rigorous design efforts and QC.
+though --- depending on the workflow --- the actual image manipulation may only take place much later, once inter-subject comparison is needed [[[paper which does this and says that it minimizes interpolation]]].
+As a consequence of this marginal positioning in the preprocessing sequence, as well as its general independence from experimental design and hypothesis, registration is often relegated to default values and exempt from rigorous design efforts and QC.
 Human brain imaging uniquely benefits from high-level registration functions (shipped by most software packages providing registration functionality), which are optimized for the size and spatial features of the human brain, thus mitigating the first of the aforementioned issues.
-The latter issues, however --- a lack of accessible QC --- remains notable for brain registration across all species.
+The latter issue, however --- a lack of accessible QC --- remains notable for brain registration across all species.
 
-In mouse brain imaging, registration is currently most expediently and frequently performed by implementing a series of steps which adjust the nature of the mouse brain data to fit human brain priors and optimized parameters.
+\subsection*{Manipulations}
+In mouse brain imaging, registration is frequently aided by a series of manipulations which adjust the nature of mouse brain data to fit human brain priors and optimized parameters.
+These manipulations deal with one of three aspects of the data:
 
-\subsubsection{Size Manipulation}
-The foremost such step consists of adjusting the voxel dimensions (as recorded in the NIfTI header \cite{nifti}) so that the mouse data represent a volume corresponding to what human-optimized registration and bias correction interfaces expect (commonly this constitutes a 10-fold increase in each dimension).	
+\subsubsection*{Size}
+The foremost data manipulation procedure is the adjustment of the voxel dimensions (as recorded in the NIfTI header \cite{nifti}) so that the mouse data represent a volume corresponding to what human-optimized registration and bias correction interfaces expect (commonly this constitutes a 10-fold increase in each dimension).	
 
-\subsubsection{Image Content Manipulation}
-A second step consists of re-engineering the masking procedure (whereby the brain is isolated from the skull, also referred to as skull-stripping or brain extraction).
-Human brain masking functions cannot be adapted via merely a metadata modification, since it is the very shape of the mouse brain that precludes human priors from working correctly.
-While more intricate approaches --- such as adapting specific function parameters and priors to animal data \cite{rbet} --- have been successfully pursued, simpler solutions remain popular, and may consist of applying an empirically determined threshold ahead of running a human brain masking function, or foregoing this step altogether.
-Notably, the majority of brain masking workarounds end up wholly or partly removing the olfactory bulbs (if at all present in the acquired data).
+\subsubsection*{Image Content}
+Another notable data manipulation procedure consists in adjusting the data matrix content so that human prior based masking (i.e. brain extraction, also referred to as skull-stripping) will produce acceptable results.
+While more intricate approaches --- such as adapting specific function parameters and priors to animal data \cite{rbet} --- might remove the need for data adaptation, rudimentary solutions remain popular, and may consist of applying an empirically determined percentile threshold, intended to clear non-brain or distal brain tissue by intensity, and to leave a more spherical brain for the human masking function.
+Notably, both the function adaptations for animal data and the animal data matrix adaptations for use with human masking functions are known to wholly or partly remove the olfactory bulbs (if at all present in the acquired data) --- which is why sometimes the choice is made to instead simply forego brain extraction.
 
-\subsection{Orientation Manipulation}
-Lastly, the so-called orientation of the data is deleted.
-This procedure consists in the deletion of the Q-Form affine from the NIfTI header, and is intended to mitigate incorrect data orientation produced by the scanner.
+\subsubsection*{Orientation}
+Commonly, the so-called orientation of the data is seen as problematic, and consequently deleted.
+This procedure consists in resetting the S-Form affine from the NIfTI header to zeroes, and is intended to mitigate incorrect data orientation produced by the scanner.
 While it is true that the scanner affine reported for mouse data may be nonstandard (the confusion is two-fold: mice lie prone with the coronal plane progressing axially whereas higher primates lie supine with the horizontal plane progressing axially), it is equally true that affines of mouse brain templates may be nonstandard.
 A different but related manipulation is dimension swapping.
 This changes the order of the NIfTI data matirx rather than the affine, which 
 Occasionally, correct or automatically redressable affines are deleted in order to correspond to a malformed template.
 
+\subsection*{Templates}
 As the latter of the enumerated hacks eminently demonstrates, the template is a key component of a registration workflow.
 The templates used for mouse brain MRI are highly heterogeneous, and include histological templates, as well as .
 Histological templates are a po, in order to benefit from higher resolution and access to molecular imaging data in the same coordinate space.
