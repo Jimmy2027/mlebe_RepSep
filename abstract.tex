@@ -1,7 +1,6 @@
 Given the need for inter-subject and inter-study comparability, spatial map registration to a standardized space is an indispensable part of modern Magnetic Resonance Imaging (MRI).
-Human MRI research has produced numerous registration toolkits and associated workflow implementations, predominantly accessed via high-level interfaces contain hard-coded parameters optimized for specific human MRI use cases.
-Animal MRI commonly makes use of these high-level interfaces, and implements additional hacks to mitigate the nonhuman idiosyncracies of the species being imaged --- instead of optimizing the workflow for the data at hand.
-Quality control is commonly performed by operator inspection, making it infrequent, biased, slow, and unreproducible.
-In this paper we present a novel workflow using the full flexibility of low-level functions from one of the most popular neuroimaging registration toolkits, and provide an optimized set of parameters for small animal imaging.
-Additionally, we present a quality control (QC) workflow, which can automatically assess the registration quality of processed datasets.
-We showcase the capabilities of both workflow, by comparing our current registration performance with that of a legacy registration workflow (containing multiple popular hacks - which we specifically critique).
+Mouse MRI workflows commonly utilize high-level interfaces specifically intended for human data --- and adapt the data to the interface rather than vice-versa.
+Quality control (QC) is commonly performed by interactive operator inspection, making it infrequent, biased, slow, and unreproducible.
+In this paper we present a novel registration workflow using the full flexibility of low-level interfaces from one of the most popular normalization toolkits, and provide an optimized set of parameters for mouse brain imaging.
+Additionally, we present a QC workflow, which can automatically assess the registration quality of current as well as past processed datasets.
+We showcase the capabilities of both workflows, in a comparison of our current workflow and a legacy workflow (the latter illustrating multiple popular hacks - which we detail and comment).
