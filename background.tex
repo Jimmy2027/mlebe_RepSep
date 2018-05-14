@@ -19,6 +19,12 @@ While more intricate approaches --- such as adapting specific function parameter
 The registration process consists of the computation of a transformation matrix (which can have multiple layers of complexity, e.g. combining a transformation from the functional to the structural scan with a transformation from the structural scan to a general template) and the application of the transformation matrix in s process called warping.
 
 	\subsection{Extra}
+	Affine “removal” comes to the strong detriment to the resulting neuroimaging data, which persists in all downstream statistics produced from such data.
+	This is due to the fact that visual representation unavoidably requires an affine transformation (to turn data points into volumes in space), and the deletion of this information makes the spatial representation more rather than less ambiguous.
+	One common issue which may arise is that software (rightfully) attempts to recreate the affine information.
+	Such data recovery behaviour is not determined by the NIfTI (or any other) standard, and as such is unpredictable.
+	An illustration of this issue ls given by the comparison of coordinates in the MRIcroGL and SAMRI (internally using NiLearn) plots of the legacy pipeline results.
+	
 	While a population template may require less deformation, it only permits within-study comparability, and requires additional interpolation in order to allow region of interest (ROI) delineation or inter-study comparison.
 	While it is beyond the scope or intent of this study to single out and individually investigate articles by our colleagues, we offer a comparison from our own data and pipelines, illustrating the benefits of context awareness and specific optimizations in animal MRI.
 	Destructive hacks in particular (such as affine transformation deletion or scaling) preclude both the usage of preprocessed data and of the preprocessing workflow itself in size-sensitive applications, which may include a plethora of diagnostic or preoperative imaging scenarios (e.g. !!!cite StereotaXYZ!!!).
