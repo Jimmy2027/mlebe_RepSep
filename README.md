@@ -1,4 +1,4 @@
-# Improving Registration in Small Animal Brain Imaging
+# An Optimized, Hackable, Standards-Adherent Registration Pipeline for Small Animal Brain Imaging
 
 These are the content files used to generate scientific communication materials for the “Improving Registration in Small Animal Brain Imaging” project.
 
