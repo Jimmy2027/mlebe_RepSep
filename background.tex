@@ -50,7 +50,14 @@ The registration process consists of the computation of a transformation matrix 
 	While a population template may require less deformation, it only permits within-study comparability, and requires additional interpolation in order to allow region of interest (ROI) delineation or inter-study comparison.
 	While it is beyond the scope or intent of this study to single out and individually investigate articles by our colleagues, we offer a comparison from our own data and pipelines, illustrating the benefits of context awareness and specific optimizations in animal MRI.
 	Destructive hacks in particular (such as affine transformation deletion or scaling) preclude both the usage of preprocessed data and of the preprocessing workflow itself in size-sensitive applications, which may include a plethora of diagnostic or preoperative imaging scenarios (e.g. !!!cite StereotaXYZ!!!).
-	
+	Templates may have malformed headers due to residual mis-specification from the raw data source, or errors in affine reconstruction after conversion from otientation-agnostic formats (e.g. NRRD)
+	While general axis progression (e.g. anterior, left, superior) may easily be matched among atlases, the finer orientation within the data matirx cannot.
+	Particularly histological and ex-vivo extracted brain atlases have the inferior brain surface aligned to the YZ-plane (as if lying on a surface).
+	While this may appear visually more pleasing, it does not correspond to the canonical alignment of the mouse brain relative to the sampling matrix in the scanner (where the upper surface of the mouse brain is aligned to the yz-plane).
+	In the interest of minimizing interpolation, it is highly advisable to use a template the data matrix raster of which is closest to the canonical experimental sampling raster.
+	Even if ultimately co-registration with histological data is desired, an MR-analogous template raster is still desirable, as histological data is much more highly resolved than MR data, and its interpolation is less likely to produce artifacts at the MR data resolution. 
+
+
 Human MRI research has produced numerous registration toolkits and associated workflow implementations, predominantly accessed via high-level interfaces contain hard-coded parameters optimized for specific human MRI use cases.
 Animal MRI commonly makes use of these high-level interfaces, and implements additional hacks to mitigate the nonhuman idiosyncracies of the species being imaged --- instead of optimizing the workflow for the data at hand.
 Quality control is commonly performed by operator inspection, making it infrequent, biased, slow, and unreproducible.
