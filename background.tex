@@ -45,8 +45,6 @@ They suffer, in comparison, from a lower resolution, and would need to have any 
 Ex-vivo templates based on intact mouse heads provide both native MR contrasts and brains free of deformation and supporting whole brain sampling.
 They share the resolution issues and the need to first register histological data, which is also seen in ex-vivo templates based on extracted brains.
 
-The registration process consists of the computation of a transformation matrix (which can have multiple layers of complexity, e.g. combining a transformation from the functional to the structural scan with a transformation from the structural scan to a general template) and the application of the transformation matrix in s process called warping.
-
 \subsection{Challenges}
 It thus becomes obvious that in addition to the issues shared with registration of human MRI data, the current challenges in mouse MRI registration consist in minimizing workarounds and reliance on high-level interfaces with inappropriate parameters and priors, as well as the reduction (perhaps through merger) of standard space templates.
 Information removal during preprocessing is a notable issue, since data lost at the onset of the neouroimaging workflow, will persist in all downstream steps and preclude numerous modes of analysis.
