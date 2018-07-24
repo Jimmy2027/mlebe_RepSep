@@ -16,8 +16,8 @@ import numpy as np
 
 # preprocess the data
 # ------------------
-bids_base = '/media/nexus/storage2/ni_data/christian_bids_data/bids/'
-template = "/home/nexus/.samri_files/templates/mouse/DSURQE/DSURQEc_200micron_average.nii"
+bids_base = '~/ni_data/ofM.dr/bids/'
+template = "/usr/share/mouse-brain-atlases/dsurqec_200micron.nii"
 
 full_prep(bids_base,
 	"mouse",
