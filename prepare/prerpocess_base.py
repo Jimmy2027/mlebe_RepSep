@@ -1,3 +1,5 @@
+from samri.pipelines.preprocess import generic, legacy
+
 bids_base = '~/ni_data/ofM.dr/bids'
 generic(bids_base, "/usr/share/mouse-brain-atlases/dsurqec_200micron.nii",
 	registration_mask="/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii",
@@ -8,6 +10,7 @@ generic(bids_base, "/usr/share/mouse-brain-atlases/dsurqec_200micron.nii",
 	negative_contrast_agent=True,
 	out_base='~/ni_data/ofM.dr/preprocessing',
 	keep_work=True,
+	strict=True,
 	)
 generic(bids_base, "/usr/share/mouse-brain-atlases/dsurqec_200micron.nii",
 	registration_mask="/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii",
