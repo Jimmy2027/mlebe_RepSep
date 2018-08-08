@@ -1,6 +1,15 @@
+from samri.pipelines.reposit import bru2bids
 from samri.pipelines.preprocess import generic, legacy
 
+data_dir = '~/ni_data/ofM.dr'
+
+bru2bids(data_dir,
+	inflated_size=False,
+	functional_match={"acquisition":["EPIlowcov"]},
+	structural_match={"acquisition":["TurboRARElowcov"]},
+	)
 bids_base = '~/ni_data/ofM.dr/bids'
+
 generic(bids_base, "/usr/share/mouse-brain-atlases/dsurqec_200micron.nii",
 	registration_mask="/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii",
 	functional_match={'type':['cbv'],},
@@ -10,7 +19,6 @@ generic(bids_base, "/usr/share/mouse-brain-atlases/dsurqec_200micron.nii",
 	negative_contrast_agent=True,
 	out_base='~/ni_data/ofM.dr/preprocessing',
 	keep_work=True,
-	strict=True,
 	)
 generic(bids_base, "/usr/share/mouse-brain-atlases/dsurqec_200micron.nii",
 	registration_mask="/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii",
