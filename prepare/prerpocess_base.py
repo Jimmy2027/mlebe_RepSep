@@ -1,15 +1,9 @@
-from samri.pipelines.reposit import bru2bids
 from samri.pipelines.preprocess import generic, legacy
+from samri.pipelines import manipulations
 
-data_dir = '~/ni_data/ofM.dr'
-
-bru2bids(data_dir,
-	inflated_size=False,
-	functional_match={"acquisition":["EPIlowcov"]},
-	structural_match={"acquisition":["TurboRARElowcov"]},
-	)
 bids_base = '~/ni_data/ofM.dr/bids'
 
+# Preprocess all of the data:
 generic(bids_base, "/usr/share/mouse-brain-atlases/dsurqec_200micron.nii",
 	registration_mask="/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii",
 	functional_match={'type':['cbv'],},
@@ -38,3 +32,7 @@ legacy(bids_base, "/usr/share/mouse-brain-atlases/lambmc_200micron.nii",
 	out_base='~/ni_data/ofM.dr/preprocessing',
 	)
 
+# Create 3D collapsed dataset to speed up repeated evaluations
+manipulations.collapse_nifti('~/ni_data/ofM.dr/preprocessing/generic',
+	'~/ni_data/ofM.dr/preprocessing/generic_collapsed',
+	)
