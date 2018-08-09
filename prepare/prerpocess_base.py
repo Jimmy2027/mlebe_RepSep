@@ -18,7 +18,6 @@ generic(bids_base, "/usr/share/mouse-brain-atlases/dsurqec_200micron.nii",
 	functional_registration_method="composite",
 	negative_contrast_agent=True,
 	out_base='~/ni_data/ofM.dr/preprocessing',
-	keep_work=True,
 	)
 generic(bids_base, "/usr/share/mouse-brain-atlases/dsurqec_200micron.nii",
 	registration_mask="/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii",
