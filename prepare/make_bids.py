@@ -7,4 +7,3 @@ bru2bids(data_dir,
 	functional_match={"acquisition":["EPIlowcov"]},
 	structural_match={"acquisition":["TurboRARElowcov"]},
 	)
-
