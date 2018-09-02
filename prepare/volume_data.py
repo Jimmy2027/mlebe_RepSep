@@ -1,4 +1,4 @@
-from snr import df_threshold_volume ,iter_threshold_volume
+from samri.report.snr import df_threshold_volume ,iter_threshold_volume
 from samri.utilities import bids_autograb
 import nibabel as nib
 import numpy as np
