@@ -52,4 +52,4 @@ df_ = df_threshold_volume(legacy_df,
 	)
 df_['thresholded volume'] = df_['thresholded volume']/1000.
 df = df.append(df_)
-df.to_csv('vol.csv')
+df.to_csv('../data/volumes.csv')
