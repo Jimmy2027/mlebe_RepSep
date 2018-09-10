@@ -27,28 +27,27 @@ base_df['Processing'] = 'Unprocessed'
 generic_df['Processing'] = 'Generic'
 legacy_df['Processing'] = 'Legacy'
 
+base_df['threshold'] = ''
 base_files = base_df['path'].tolist()
-voxels = np.array([])
 for base_file in base_files:
 	img = nib.load(base_file)
 	data = img.get_data()
-	voxels = np.append(voxels,data)
-voxels = voxels.flatten()
-threshold = np.percentile(voxels,50)
+	threshold = np.percentile(data,50)
+	base_df.loc[base_df['path'] == base_file, 'threshold'] = threshold
+	generic_df.loc[generic_df['path'] == base_file, 'threshold'] = threshold
+	legacy_df.loc[legacy_df['path'] == base_file, 'threshold'] = threshold
+
 df = pd.DataFrame([])
 df_ = df_threshold_volume(base_df,
-	threshold=threshold,
-	threshold_is_percentile=False,
+	threshold='threshold',
 	)
 df = df.append(df_)
 df_ = df_threshold_volume(generic_df,
-	threshold=threshold,
-	threshold_is_percentile=False,
+	threshold='threshold',
 	)
 df = df.append(df_)
 df_ = df_threshold_volume(legacy_df,
-	threshold=threshold,
-	threshold_is_percentile=False,
+	threshold='threshold',
 	)
 df_['thresholded volume'] = df_['thresholded volume']/1000.
 df = df.append(df_)
