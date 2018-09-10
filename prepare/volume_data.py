@@ -28,14 +28,15 @@ generic_df['Processing'] = 'Generic'
 legacy_df['Processing'] = 'Legacy'
 
 base_df['threshold'] = ''
-base_files = base_df['path'].tolist()
-for base_file in base_files:
-	img = nib.load(base_file)
+generic_df['threshold'] = ''
+legacy_df['threshold'] = ''
+for uid in uids:
+	img = nib.load(base_df.loc[base_df['uID'] == uid, 'path'].item())
 	data = img.get_data()
 	threshold = np.percentile(data,50)
-	base_df.loc[base_df['path'] == base_file, 'threshold'] = threshold
-	generic_df.loc[generic_df['path'] == base_file, 'threshold'] = threshold
-	legacy_df.loc[legacy_df['path'] == base_file, 'threshold'] = threshold
+	base_df.loc[base_df['uID'] == uid, 'threshold'] = threshold
+	generic_df.loc[generic_df['uID'] == uid, 'threshold'] = threshold
+	legacy_df.loc[legacy_df['uID'] == uid, 'threshold'] = threshold
 
 df = pd.DataFrame([])
 df_ = df_threshold_volume(base_df,
