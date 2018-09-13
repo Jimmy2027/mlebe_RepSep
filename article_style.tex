@@ -18,6 +18,7 @@
 \usepackage{graphviz}
 \usepackage{subcaption}
 \usepackage{cleveref}
+\usepackage[font={small,sf},labelfont={bf}]{caption}
 
 %VARIABLES
 %set up a more stable buffers (the normal ones gets blanked after the titlepage is invoked)
@@ -77,8 +78,8 @@
 }
 
 
-%SECTIONS
-%make sure the first paragraph of a section is not indented
+% Sections
+% make sure the first paragraph of a section is not indented
 \makeatletter
 	\let\@afterindenttrue\@afterindentfalse
 	\@afterindentfalse
@@ -92,7 +93,7 @@
 \titleformat{\subsubsection}[hang]{\footnotesize\usefont{T1}{phv}{b}{n}\color{Black}}{}{0em}{#1}%
 \titlespacing{\subsubsection}{0em}{0.75em}{0em}
 
-%PYTHONTEX
+% Pythontex
 \usepackage[autoprint=false, gobble=auto, pyfuture=all]{pythontex} %create figures on-line directly from python!
 \usepackage{pgf} %we need this backend
 
@@ -102,11 +103,17 @@ DOC_STYLE = 'article/main.conf'
 pytex.add_dependencies(DOC_STYLE, 'article/3dplot.conf', 'article/bsc_percentage.conf')
 \end{pythontexcustomcode}
 
+% Grey definitiosn.
+\definecolor{dg}{gray}{0.25}
+\definecolor{mg}{gray}{0.55}
+\definecolor{lg}{gray}{0.73}
+\definecolor{vlg}{gray}{0.9}
 
-
-%BODY
+% Body
 \setlength{\columnsep}{7mm}
 
+% Boilerplate visual style improvements
+\newcommand{\niceus}{\texttt{\_}}
 
 %BIBLIOGRAPHY
 %\usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex}
