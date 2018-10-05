@@ -23,7 +23,7 @@ While conceptually superior solution (e.g. adapting parameters and priors to ani
 Many consist of applying an empirically determined percentile threshold, intended to clear non-brain or distal brain tissue by intensity, and to leave a more spherical brain for the human masking function to operate on.
 Notably, both the function adaptations for animal data and the animal data matrix adaptations for use with human brain extraction functions are known to wholly or partly remove the olfactory bulbs (if at all present in the acquired data) --- which is why sometimes the choice is made to instead simply forego brain extraction.
 
-Commonly, the orientation of the data is seen as problematic, and consequently deleted.
+Often, the orientation of the acquiredacquired scan is seen as problematic, and consequently deleted.
 This procedure consists in resetting the S-Form affine from the NIfTI header to zeroes, and is intended to mitigate incorrect data orientation produced by the scanner.
 While it is true that the scanner affine reported for mouse data may be nonstandard (the confusion is two-fold: mice lie prone with the coronal plane progressing axially whereas higher primates lie supine with the horizontal plane progressing axially), it is equally true that affines of mouse brain templates may be nonstandard.
 A different but related manipulation is dimension swapping, which changes the order of the NIfTI data matirx rather than the affine.
