@@ -3,13 +3,17 @@ import pandas as pd
 import seaborn as sns
 from os import path
 
-volume_path = path.abspath('../data/volume.csv')
+volume_path = path.abspath('../data/volumes.csv')
 df = pd.read_csv(volume_path)
-a = sns.swarmplot(x="Processing",
+print(df.columns)
+a = sns.catplot(
+	x="Processing",
 	y="thresholded volume",
+	hue="Template",
 	data=df,
+	split=True,
 	)
-df_ = df.loc[df['Processing'] == 'Unprocessed']
-df__ = df_.sort_values(by='thresholded volume', ascending=False)
-print(df__)
-plt.savefig('foo.pdf')
+#df_ = df.loc[df['Processing'] == 'Unprocessed']
+#df__ = df_.sort_values(by='thresholded volume', ascending=False)
+#plt.savefig('foo.pdf')
+plt.show()
