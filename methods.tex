@@ -63,6 +63,21 @@ This budding Free and Open Source package handles data analysis for group member
 
 \subsection{Template Package}
 
+\py{pytex_subfigs(
+	[
+		{'script':'scripts/ambmc.py', 'label':'fig:amb','conf':'article/template.conf', 'options':'{.48\\textwidth}',
+			'caption':'The Australian Mouse Brain Mapping consortium template \cite{amb}, referred to in this article as the “legacy” template due to its original usage in the eponymous workflow.
+				It exemplifies histological contrast, the canonical histological template data matrix orientation (shared e.g. by the Allen Brain Institute template), alongside a non-standard header with features such as an RPS orientation and inflated affine transformation.'
+			,},
+		{'script':'scripts/dsurqec.py', 'label':'fig:dsu', 'conf':'article/template.conf', 'options':'{.48\\textwidth}',
+			'caption':'A derivative of the Toronto Hospital for Sick Children Mouse Imaging Center template \cite{dsu}, referred to in this article as “generic” due to its introduction as the default template in the eponymous workflow.
+				It exemplifies $T_2$ contrast, a canonical MR \textit{and} stereotactc data matrix orientation, a standard header with an RAS orientation, and a realistic affine transformation.
+				Note the origin at Bregma which provides histologically meaningful coordinates.'
+			,},
+		],
+	caption='Multiplanar depcitions of the mouse brain templates, with slice coordinates centered at zero on all axes.',
+	label='fig:t',)}
+
 The suitability of a registration workflow as a standard is contingent on the quality of the template being used.
 Particularly size and orientation of the template may pose constraints on the workflow.
 For example an unrealistically inflated template size mandates a similar manipulation of the image to be registered, and according parameters for all functions which deal with the data in its affine-determined geometric space.
