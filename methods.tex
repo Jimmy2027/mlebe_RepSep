@@ -12,7 +12,7 @@ and graphical or interactive interfaces are wholly avoided (as they impede repro
 		\includedot[width=\textwidth]{data/generic}
 		\vspace{.55em}
 		\caption{
-			“Generic” (new) workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function, and  making use of a higher-resolution structural scan intermediary for registration (note the two processing streams).
+			“SAMRI Generic” (new) workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function, and  making use of a higher-resolution structural scan intermediary for registration (note the two processing streams).
 			The function used is highly parameterized, and both of its instances --- “s\niceus register” and “f\niceus register” --- are supplied in the workflow with defaults optimized for mouse brain registration).
 			}
 		\label{fig:wfgg}
@@ -21,7 +21,7 @@ and graphical or interactive interfaces are wholly avoided (as they impede repro
 		\centering
 		\includedot[width=\textwidth]{data/legacy}
 		\caption{
-			“Legacy” workflow, based on the \textcolor{mg}{\texttt{antsIntroduction.sh}} function, performing destructive affine manipulations, and not making use of a structural intermediary.
+			“SAMRI Legacy” workflow, based on the \textcolor{mg}{\texttt{antsIntroduction.sh}} function, performing destructive affine manipulations, and not making use of a structural intermediary.
 			The function used has hard-coded parameters optimized for human brain registration.
 			}
 		\label{fig:wfgl}
@@ -84,12 +84,12 @@ For example an unrealistically inflated template size mandates a similar manipul
 Additionally, if the template axis orientation deviates by more than \SI{45}{\degree} from the image to be registered (or, as is more often the case, an axis is flipped), the global maximum of the first (rigid) registration steps may not be correctly found, and the image would then be skewed and nonlinearly deformed to fit into the template with an incorrect orientation.
 As such, the quality of the templates needs to be ascertained, and given the heterogeneous nature of available templates it would not be conducive to proper usage to not provide a certified default.
 
-Our default template is derived from the DSURQE !!!cite!!! template, having its origin relocated to the Bregma landmark, in order to provide better integration with histological atlases and surgery procedures (commonly using Bregma for reference).
+Our default template is derived from the DSURQE\cite{dsu} !!!!move here from legend, having its origin relocated to the Bregma landmark, in order to provide better integration with histological atlases and surgery procedures (commonly using Bregma for reference).
 The template is in the canonical orientation of the NIfTI format, RAS (left$\rightarrow$Right, posterior$\rightarrow$Anterior, inferior$\rightarrow$Superior), and has a coronal slice positioning reflective of both the typical animal head position in MR scanners and in stereotactic surgery frames.
 The template is provided in \SI{40}{\micro\meter} and \SI{200}{\micro\meter} isotropic resolutions.
 This atlas and all of its associated mask and label files is identified with the prefix \textcolor{mg}{\texttt{dsurqec}} in the template packages.
 
-We bundle the aforementioned MR template with two additional histological templates, derived from the Australian Mouse Brain Mapping Consortium (AMBMC) !!!cite!!! template, and the Allen Brain Institute (ABI) !!!cite!!! template.
+We bundle the aforementioned MR template with two additional histological templates, derived from the Australian Mouse Brain Mapping Consortium (AMBMC) \cite{amb} !!!!move here from legend template, and the Allen Brain Institute (ABI) !!!cite!!! template.
 While these atlases suffer from shortcomings listed under the \nameref{sec:bg}~section, we include the AMBMC template due to its prevalent usage in conjunction with the Legacy workflow, and the ABI atlas due to its role as the reference atlas for numerous gene expression and projection maps.
 We reorient the AMBMC template from its original RPS orientation to the canonical RAS, and apply an RAS orientation to the orientation-less ABI template after converting it to NIfTI from its original NRRD format.
 These atlases are also made available in \SI{40}{\micro\meter} and \SI{200}{\micro\meter} isotropic resolutions, and the corresponding files are prefixed with \textcolor{mg}{\texttt{ambmc}} and \textcolor{mg}{\texttt{qbi}}, respectively.
