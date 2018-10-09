@@ -1,10 +1,29 @@
 \section{Evaluation}
 
-The problem with evaluating preprocessing pipelines is, that we lack ground truth. Therefore any approach learning is potentially prone to overfitting. Here we derive two novel metrics for assessing the quality of the registration, which were not used by engineering the new workflow nor used in the optimisation procedure. 
+%The problem with evaluating preprocessing pipelines is, that we lack ground truth.
+%Therefore any approach learning is potentially prone to overfitting.
+We evaluate the quality of the registration both in terms of spatial features, as well as in terms of its repercussion on a higher-level functional analysis.
+%with our novel workflow or with the Here we derive two novel metrics for assessing the quality of the registration, which were not used by engineering the new workflow nor used in the optimisation procedure. 
 
-\subsection{Volume}
+A main challenge of QC with regard to spatial features is that a perfect remapping is undefined.
+Similarity metrics are ill-fitted for QC because their are used internally by registration functions, whose main function it is, in fact, to maximize them.
+Indeed an extreme maximization, especially via nonlinear transformations, results in a distortion of the image, which should be penalized in QC, but in light of image similarity score are represented as better performance.
+Additionally, similarity metrics are not independent, so this issue cannot be circumvented by maximizing a subset of metrics and performing QC in light of the remainder.
 
-Volume, Volume, Volume
+Functional analysis successfully circumvents the issue, as the metric being maximized in the registration process is not the same metric for used QC.
+However, functional analysis effects of registration are significantly more time-consuming and primarily relevant as a demonstration of relevance, rather than an efficient way to test, analyze, and incrementally improve preprocessing workflows.
+
+\subsection{Volume Conservation}
+
+We have developed a simple, fast, and portable (i.e. easy to apply on additional and future datasets and workflows) metric to measure distortion introduced in the preprocessing workflow.
+Volume Conservation (VC) is based on the assumption that the total volume of the scanned segment of the brain should remain approximately identical after registration.
+A volume increase may indicate that the brain was stretched to fill in template brain space not covered by the scan, while a volume decrease might indicate that non-brain voxels were squeezed into the template brain space.
+
+% This metric provides distortion checking rather than goodness-of-fit qantification, which is, as previously described, difficult to do in a lean automated fashion.
+
+\begin{sansmath}
+	\py{pytex_fig('scripts/vc_swarm.py', conf='article/1col.conf')}
+\end{sansmath}
 
 \subsection{Variance}
 
