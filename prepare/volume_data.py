@@ -1,4 +1,4 @@
-from samri.report.snr import df_Threshold_Volume ,iter_Threshold_Volume
+from samri.report.snr import df_threshold_volume ,iter_threshold_volume
 from samri.utilities import bids_autograb
 import nibabel as nib
 import numpy as np
@@ -53,34 +53,34 @@ legacy_dsurqec_df['Threshold'] = ''
 for uid in uids:
 	img = nib.load(base_df.loc[base_df['uID'] == uid, 'path'].item())
 	data = img.get_data()
-	Threshold = np.percentile(data,66)
-	base_df.loc[base_df['uID'] == uid, 'Threshold'] = Threshold
-	generic_df.loc[generic_df['uID'] == uid, 'Threshold'] = Threshold
-	generic_ambmc_df.loc[generic_ambmc_df['uID'] == uid, 'Threshold'] = Threshold
-	legacy_df.loc[legacy_df['uID'] == uid, 'Threshold'] = Threshold
-	legacy_dsurqec_df.loc[legacy_dsurqec_df['uID'] == uid, 'Threshold'] = Threshold
+	threshold = np.percentile(data,66)
+	base_df.loc[base_df['uID'] == uid, 'Threshold'] = threshold
+	generic_df.loc[generic_df['uID'] == uid, 'Threshold'] = threshold
+	generic_ambmc_df.loc[generic_ambmc_df['uID'] == uid, 'Threshold'] = threshold
+	legacy_df.loc[legacy_df['uID'] == uid, 'Threshold'] = threshold
+	legacy_dsurqec_df.loc[legacy_dsurqec_df['uID'] == uid, 'Threshold'] = threshold
 
 df = pd.DataFrame([])
-df_ = df_Threshold_Volume(base_df,
-	Threshold='Threshold',
+df_ = df_threshold_volume(base_df,
+	threshold='Threshold',
 	)
 df = df.append(df_)
-df_ = df_Threshold_Volume(generic_df,
-	Threshold='Threshold',
+df_ = df_threshold_volume(generic_df,
+	threshold='Threshold',
 	)
 df = df.append(df_)
-df_ = df_Threshold_Volume(generic_ambmc_df,
-	Threshold='Threshold',
+df_ = df_threshold_volume(generic_ambmc_df,
+	threshold='Threshold',
 	)
 df = df.append(df_)
-df_ = df_Threshold_Volume(legacy_df,
-	Threshold='Threshold',
-	)
-df_['Thresholded Volume'] = df_['Thresholded Volume']/1000.
-df = df.append(df_)
-df_ = df_Threshold_Volume(legacy_dsurqec_df,
-	Threshold='Threshold',
+df_ = df_threshold_volume(legacy_df,
+	threshold='Threshold',
 	)
 df_['Thresholded Volume'] = df_['Thresholded Volume']/1000.
 df = df.append(df_)
-df.to_csv('../data/Volumes.csv')
+df_ = df_threshold_volume(legacy_dsurqec_df,
+	threshold='Threshold',
+	)
+df_['Thresholded Volume'] = df_['Thresholded Volume']/1000.
+df = df.append(df_)
+df.to_csv('../data/volumes.csv')
