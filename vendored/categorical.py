@@ -1050,8 +1050,7 @@ class _ViolinPlotter(_CategoricalPlotter):
                              dashes=[self.inner_linewidth * 1.5] * 2)
         self.draw_to_density(ax, center, q50, support, density, split,
                              linewidth=self.inner_linewidth,
-                             color=self.linecolor,
-                             dashes=[self.inner_linewidth * 3] * 2)
+                             color=self.linecolor)
         self.draw_to_density(ax, center, q75, support, density, split,
                              linewidth=self.inner_linewidth,
                              color=self.linecolor,
