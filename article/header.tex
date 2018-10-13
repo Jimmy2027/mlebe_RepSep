@@ -105,7 +105,11 @@
 \input{pythontex/functions.py}
 \begin{pythontexcustomcode}[begin]{py}
 DOC_STYLE = 'article/main.conf'
-pytex.add_dependencies(DOC_STYLE, 'article/3dplot.conf', 'article/bsc_percentage.conf')
+pytex.add_dependencies(DOC_STYLE,
+	'article/3dplot.conf',
+	'article/bsc_percentage.conf',
+	'vendored/categorical.py',
+	)
 \end{pythontexcustomcode}
 
 % Grey definitiosn.
