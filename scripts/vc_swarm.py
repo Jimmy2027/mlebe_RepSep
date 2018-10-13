@@ -3,15 +3,26 @@ import pandas as pd
 import seaborn as sns
 import matplotlib as mpl
 from os import path
+from itertools import product
 
 volume_path = path.abspath('data/volumes.csv')
 df = pd.read_csv(volume_path)
+
+df['End Volume']=-1
+uids = df['uID'].unique()
+templates = [i for i in df['Template'].unique() if i != 'Unprocessed']
+processings = [i for i in df['Processing'].unique() if i != 'Unprocessed']
+
+for uid, template, processing in list(product(uids,templates,processings)):
+	reference = df.loc[(df['uID']==uid) & (df['Processing']=='Unprocessed'), 'Thresholded Volume'].item()
+	volume = df.loc[(df['uID']==uid) & (df['Processing']==processing) & (df['Template']==template), 'Thresholded Volume'].item()
+	df.loc[(df['uID']==uid) & (df['Processing']==processing) & (df['Template']==template), 'End Volume'] = volume/reference
+
 df.loc[df['Processing']=='Unprocessed', 'Template'] = ''
 ax = sns.swarmplot(
 	x="Processing",
-	y='Thresholded Volume',
-	data=df,
+	y='End Volume',
+	data=df.loc[df['Processing']!='Unprocessed'],
 	hue="Template",
 	size=mpl.rcParams['lines.markersize'],
-	#data=df.loc[df['Processing']=='Unprocessed'],
 	)
