@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib as mpl
 from os import path
 from itertools import product
-from vendored.categorical import violinplot
+from lib.categorical import violinplot
 
 # Style
 palette = ['#80e050','#755575']
