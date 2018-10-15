@@ -83,4 +83,16 @@ df_ = df_threshold_volume(legacy_dsurqec_df,
 	)
 df_['Thresholded Volume'] = df_['Thresholded Volume']/1000.
 df = df.append(df_)
+
+# Calculate Volume Change Factor
+df['Volume Change Factor']=-1
+uids = df['uID'].unique()
+templates = [i for i in df['Template'].unique() if i != 'Unprocessed']
+processings = [i for i in df['Processing'].unique() if i != 'Unprocessed']
+
+for uid, template, processing in list(product(uids,templates,processings)):
+	reference = df.loc[(df['uID']==uid) & (df['Processing']=='Unprocessed'), 'Thresholded Volume'].item()
+	volume = df.loc[(df['uID']==uid) & (df['Processing']==processing) & (df['Template']==template), 'Thresholded Volume'].item()
+	df.loc[(df['uID']==uid) & (df['Processing']==processing) & (df['Template']==template), 'Volume Change Factor'] = volume/reference
+
 df.to_csv('../data/volumes.csv')
