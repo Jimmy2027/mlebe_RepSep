@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
 import matplotlib as mpl
 from os import path
 from itertools import product
+from lib.categorical import violinplot
 
 # Style
 palette = ['#80e050','#755575']
@@ -22,11 +22,18 @@ for uid, template, processing in list(product(uids,templates,processings)):
 	df.loc[(df['uID']==uid) & (df['Processing']==processing) & (df['Template']==template), 'Volume Change Factor'] = volume/reference
 
 df.loc[df['Processing']=='Unprocessed', 'Template'] = ''
-ax = sns.swarmplot(
-	x='Processing',
+ax = violinplot(
+	x="Processing",
 	y='Volume Change Factor',
 	data=df.loc[df['Processing']!='Unprocessed'],
 	hue="Template",
-	size=mpl.rcParams['lines.markersize'],
+	saturation=1,
+	split=True,
+	inner='quartile',
 	palette=palette,
+	scale='area',
+	dodge=False,
+	inner_linewidth=1.0,
+	linewidth=mpl.rcParams['grid.linewidth'],
+	linecolor='w',
 	)

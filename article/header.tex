@@ -22,6 +22,7 @@
 \usepackage{nameref}
 \usepackage{siunitx}
 \usepackage{sansmath}
+\usepackage{makecell}
 
 %VARIABLES
 %set up a more stable buffers (the normal ones gets blanked after the titlepage is invoked)
@@ -31,6 +32,7 @@
 \let\mydate\@date
 \makeatother
 
+\sisetup{detect-all} % will use the current font for typesetting
 
 %HEADER/FOOTER
 \usepackage{fancyhdr}
@@ -103,7 +105,11 @@
 \input{pythontex/functions.py}
 \begin{pythontexcustomcode}[begin]{py}
 DOC_STYLE = 'article/main.conf'
-pytex.add_dependencies(DOC_STYLE, 'article/3dplot.conf', 'article/bsc_percentage.conf')
+pytex.add_dependencies(DOC_STYLE,
+	'article/3dplot.conf',
+	'article/bsc_percentage.conf',
+	'lib/categorical.py',
+	)
 \end{pythontexcustomcode}
 
 % Grey definitiosn.

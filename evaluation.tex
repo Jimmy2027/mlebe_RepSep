@@ -10,7 +10,7 @@ Similarity metrics are ill-fitted for QC because their are used internally by re
 Indeed an extreme maximization, especially via nonlinear transformations, results in a distortion of the image, which should be penalized in QC, but in light of image similarity score are represented as better performance.
 Additionally, similarity metrics are not independent, so this issue cannot be circumvented by maximizing a subset of metrics and performing QC in light of the remainder.
 
-Functional analysis successfully circumvents the issue, as the metric being maximized in the registration process is not the same metric for used QC.
+Functional analysis successfully circumvents the issue, as the metric being maximized in the registration process is not the same metric used for QC.
 However, functional analysis effects of registration are significantly more time-consuming and primarily relevant as a demonstration of relevance, rather than an efficient way to test, analyze, and incrementally improve preprocessing workflows.
 
 \subsection{Volume Conservation}
@@ -22,7 +22,10 @@ A volume increase may indicate that the brain was stretched to fill in template 
 % This metric provides distortion checking rather than goodness-of-fit qantification, which is, as previously described, difficult to do in a lean automated fashion.
 
 \begin{sansmath}
-	\py{pytex_fig('scripts/vc_swarm.py', conf='article/1col.conf')}
+	\py{pytex_fig('scripts/vc_violin.py', conf='article/1col.conf', label='vcv', caption='
+		Volume change relative to the original scan volume compared across processing workflows and target templates used.
+		Coloured patch width estimates observation density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.
+		')}
 \end{sansmath}
 
 \subsection{Variance}

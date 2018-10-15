@@ -87,4 +87,14 @@ df = df.append(df_)
 # Ar a voxel size of 0.2mm isotropic we are only sensitive to about 0.008mm^3
 df = df.round({'Volume':3,'Thresholded Volume':3})
 
+# Calculate Volume Change Factor
+df['Volume Change Factor']=-1
+uids = df['uID'].unique()
+templates = [i for i in df['Template'].unique() if i != 'Unprocessed']
+processings = [i for i in df['Processing'].unique() if i != 'Unprocessed']
+
+for uid, template, processing in list(product(uids,templates,processings)):
+	reference = df.loc[(df['uID']==uid) & (df['Processing']=='Unprocessed'), 'Thresholded Volume'].item()
+	volume = df.loc[(df['uID']==uid) & (df['Processing']==processing) & (df['Template']==template), 'Thresholded Volume'].item()
+	df.loc[(df['uID']==uid) & (df['Processing']==processing) & (df['Template']==template), 'Volume Change Factor'] = volume/reference
 df.to_csv('../data/volumes.csv')
