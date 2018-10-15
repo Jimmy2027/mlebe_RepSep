@@ -83,4 +83,8 @@ df_ = df_threshold_volume(legacy_dsurqec_df,
 	)
 df_['Thresholded Volume'] = df_['Thresholded Volume']/1000.
 df = df.append(df_)
+
+# Ar a voxel size of 0.2mm isotropic we are only sensitive to about 0.008mm^3
+df = df.round({'Volume':3,'Thresholded Volume':3})
+
 df.to_csv('../data/volumes.csv')
