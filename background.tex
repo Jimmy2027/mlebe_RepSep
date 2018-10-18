@@ -2,16 +2,17 @@
 \label{sec:bg}
 
 In order to make any generalizable statements regarding brain function and organization, an equivalence between brain areas across individuals needs to be established.
-This is most commonly done by spatial (rigid, affine, and non-linear) transformation of all brain maps in a study to a population or atlas template.
+This is most commonly done by spatial (rigid, affine, and non-linear) transformation of all brain maps in a study to a population or standard reference template.
 This process, called registration, is consequently performed as part of any neuroimaging workflow attempting to produce results which are both spatially resolved and generalizable across the population.
 
 The computations required for registration are commonly performed at the very onset of the preprocessing workflow (possibly after slice-timing correction),
-though --- depending on the workflow --- the actual image manipulation may only take place much later, once inter-subject comparison is needed [[[paper which does this and says that it minimizes interpolation]]].
+though --- depending on the workflow --- the actual image manipulation may only take place much later, once inter-subject comparison becomes needed.
+% [[[paper which does this and says that it minimizes interpolation]]].
 As a consequence of this marginal positioning in the preprocessing sequence, as well as its general independence from experimental designs and hypotheses, registration is often relegated to default values and exempt from rigorous design efforts and QC.
 
-QC is a notable issue for human as well as mouse brain imaging;
+Registration QC is a notable issue for human as well as mouse brain imaging;
 and is not limited by a lack of reporting functions, but by a lack of reporting metrics which can easily be communicated for a population.
-Concerning the registration itself, human brain imaging uniquely benefits from high-level functions (shipped by most software packages providing registration functionality), which are optimized for the size and spatial features of the human brain.
+Human brain imaging uniquely benefits from high-level functions (shipped by most software packages providing registration functionality), which are optimized for the size and spatial features of the human brain.
 The availability and widespread use of such functions greatly mitigates the issue that users would not themselves implement a rigorous registration workflow.
 In mouse brain imaging, however, registration is frequently performed using the selfsame high-level functions from human brain imaging, and applying a series of manipulations which adjust the nature of mouse brain data to fit human brain priors and parameters optimized for human brain registration.
 This general approach entails numerous issues, and represents a notable hurdle in the way of improving mouse brain imaging, yet needs to be detailed as a current common practice.
@@ -20,7 +21,7 @@ This general approach entails numerous issues, and represents a notable hurdle i
 The foremost data manipulation procedure is the adjustment of the voxel dimensions (as recorded in the NIfTI header \cite{nifti}), so that the mouse data represent a volume corresponding to what human-optimized brain extraction, bias correction, and registration interfaces expect (commonly this constitutes a 10-fold increase in each dimension).
 
 Another notable data manipulation procedure consists in adjusting the data matrix content so that human-prior based brain extraction will produce acceptable results.
-While conceptually superior solution (e.g. adapting parameters and priors to animal data \cite{rbet,Oguz2014}) are available and might remove the need for data adaptation at this step, rudimentary solutions remain popular.
+While conceptually superior solutions (e.g. adapting parameters and priors to animal data \cite{rbet,Oguz2014}) are available and might remove the need for data adaptation at this step, rudimentary solutions remain popular.
 Many consist of applying an empirically determined percentile threshold, intended to clear non-brain or distal brain tissue by intensity, and to leave a more spherical brain for the human masking function to operate on.
 Notably, both the function adaptations for animal data and the animal data matrix adaptations for use with human brain extraction functions are known to wholly or partly remove the olfactory bulbs (if at all present in the acquired data) --- which is why sometimes the choice is made to instead simply forego brain extraction.
 
@@ -33,23 +34,20 @@ Occasionally, correct or automatically redressable affines are thus deleted in o
 \subsection{Templates}
 As the above eminently demonstrates, the template is a key component of a registration workflow.
 Templates used for mouse brain MRI registration are highly heterogeneous, and include histological templates, as well as ex vivo MRI templates, scanned either inside the intact skull or after physical brain extraction.
-Histological templates are a po, in order to benefit from higher resolution and access to molecular imaging data in the same coordinate space.
-Such histological templates are however not produced in volumetric sampling analogous to MRI, and are not assigned a meaningful affine after conversion to NIfTI.
-Ex-vivo templates based on extracted brains are also popular
 
 Histological templates benefit from higher resolution and access to molecular imaging data in the same coordinate space.
 Such histological templates are however not produced in volumetric sampling analogous to MRI, and are often not assigned a meaningful affine after conversion to NIfTI.
 Histological contrast may only poorly correlate with any MR contrast, such as $T_1$, $T_2$, or $T_2^*$, making registration --- especially at lower resolutions --- less reliable, or necessitating the use of similarity metrics which impose additional restrictions.
-Not least of all, histological templates may be severely deformed (and may lack distal parts of the brain such as the olfactory bulbs) due to the brain extraction and sampling process;
-and data registered to them may be particularly difficult to use for navigation in the intact mouse brain, e.g. during data acquisition or stereotactic surgery,
+Not least of all, histological templates may be severely deformed (and may lack distal parts of the brain such as the olfactory bulbs) due to the brain extraction and sampling process.
+Consequently, data registered to them may be particularly difficult to use for navigation in the intact mouse brain, e.g. during data acquisition or stereotactic surgery,
 
 Ex-vivo templates based on extracted brains share most of the deformation issues present in histological templates;
 they are, however available in native MR contrasts, commonly $T_2$, making registration far easier.
 They suffer, in comparison, from a lower resolution, and would need to have any histological data from a histological atlas space first registered to them.
-Ex-vivo templates based on intact mouse heads provide both native MR contrasts and brains free of deformation and supporting whole brain sampling.
+Ex-vivo templates based on intact mouse heads provide both native MR contrast and brains free of deformation and supporting whole brain sampling.
 They share the resolution issues and the need to first register histological data, which is also seen in ex-vivo templates based on extracted brains.
 
 \subsection{Challenges}
 It thus becomes obvious that in addition to the issues shared with registration of human MRI data, the current challenges in mouse MRI registration consist in minimizing workarounds and reliance on high-level interfaces with inappropriate parameters and priors, as well as the reduction (perhaps through merger) of standard space templates.
-Information removal during preprocessing is a notable issue, since data lost at the onset of the neouroimaging workflow, will persist in all downstream steps and preclude numerous modes of analysis.
+Information removal during preprocessing is a notable issue, since data lost at the onset of a neouroimaging workflow, will persist in all downstream steps and preclude numerous modes of analysis.
 
