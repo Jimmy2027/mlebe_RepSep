@@ -55,6 +55,11 @@ Additionally we use a number of functions specifically developed for our workflo
 
 Given the aforementioned guiding principles, and the hitherto listed technologies, we have constructed two registration workflows: The “Legacy” workflow (\cref{fig:wfgl}), which exhibits the common practices detailed in the \nameref{sec:bg}~section; and our novel “Generic” workflow 
 
+For Quality Control we assemble workflows using the NumPy \cite{numpy}, SciPy \cite{scipy}, and pandas \cite{pandas} packages, as well as Statsmodels \cite{statsmodels} for top-level statistics and matplotlib \cite{matplotlib} and Seaborn \cite{seaborn} for plotting.
+Specifically, distribution densities for plots are drawn using the Scott bandwidth density estimator \cite{Scott1979}.
+
+% Markus Marks !!! add short technology paragraph for optimization methods.
+
 \subsection{Distribution}
 
 As registration is a crucial step of a larger data analysis process (rather than a process in its own right), the workflows are best distributed as part of a full stack (i.e. from raw data to statistical summaries) workflow package.
@@ -65,14 +70,14 @@ This budding Free and Open Source package handles data analysis for group member
 
 \py{pytex_subfigs(
 	[
-		{'script':'scripts/ambmc.py', 'label':'fig:amb','conf':'article/template.conf', 'options_pre':'{.48\\textwidth}',
-			'caption':'The Australian Mouse Brain Mapping consortium template \cite{amb}, referred to in this article as the “legacy” template due to its original usage in the eponymous workflow.
-				It exemplifies histological contrast, the canonical histological template data matrix orientation (shared e.g. by the Allen Brain Institute template), alongside a non-standard header with features such as an RPS orientation and inflated affine transformation.'
-			,},
-		{'script':'scripts/dsurqec.py', 'label':'fig:dsu', 'conf':'article/template.conf', 'options_pre':'{.48\\textwidth}',
+		{'script':'scripts/dsurqec.py', 'label':'dsu', 'conf':'article/template.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'A derivative of the Toronto Hospital for Sick Children Mouse Imaging Center template \cite{dsu}, referred to in this article as “generic” due to its introduction as the default template in the eponymous workflow.
 				It exemplifies $T_2$ contrast, a canonical MR \textit{and} stereotactc data matrix orientation, a standard header with an RAS orientation, and a realistic affine transformation.
 				Note the origin at Bregma which provides histologically meaningful coordinates.'
+			,},
+		{'script':'scripts/ambmc.py', 'label':'amb','conf':'article/template.conf', 'options_pre':'{.48\\textwidth}',
+			'caption':'The Australian Mouse Brain Mapping consortium template \cite{amb}, referred to in this article as the “legacy” template due to its original usage in the eponymous workflow.
+				It exemplifies histological contrast, the canonical histological template data matrix orientation (shared e.g. by the Allen Brain Institute template), alongside a non-standard header with features such as an RPS orientation and inflated affine transformation.'
 			,},
 		],
 	caption='Multiplanar depcitions of the mouse brain templates, with slice coordinates centered at zero on all axes.',
@@ -81,25 +86,29 @@ This budding Free and Open Source package handles data analysis for group member
 The suitability of a registration workflow as a standard is contingent on the quality of the template being used.
 Particularly size and orientation of the template may pose constraints on the workflow.
 For example an unrealistically inflated template size mandates a similar manipulation of the image to be registered, and according parameters for all functions which deal with the data in its affine-determined geometric space.
-Additionally, if the template axis orientation deviates by more than \SI{45}{\degree} from the image to be registered (or, as is more often the case, an axis is flipped), the global maximum of the first (rigid) registration steps may not be correctly found, and the image would then be skewed and nonlinearly deformed to fit into the template with an incorrect orientation.
-As such, the quality of the templates needs to be ascertained, and given the heterogeneous nature of available templates it would not be conducive to proper usage to not provide a certified default.
+Additionally, if the template axis orientation deviates by more than \SI{45}{\degree} from the image to be registered (or, as is more often the case, an axis is flipped), the global maximum of the first (rigid) registration steps may not be correctly determined, and the image would then be skewed and nonlinearly deformed to fit into the template with an incorrect orientation.
+As such, template quality needs to be ascertained, and given the heterogeneous nature of available templates it would not be conducive to proper usage to not provide a certified default.
 
-Our default template is derived from the DSURQE\cite{dsu} !!!!move here from legend, having its origin relocated to the Bregma landmark, in order to provide better integration with histological atlases and surgery procedures (commonly using Bregma for reference).
+Our recommended template (see \cref{fig:dsu}) is derived from the DSURQE template --- of the Toronto Hospital for Sick Children Mouse Imaging Center \cite{dsu}.
+The geometric origin of the template corresponds to the Bregma landmark, and provides integration with histological atlases and surgery procedures (commonly using Bregma for reference).
 The template is in the canonical orientation of the NIfTI format, RAS (left$\rightarrow$Right, posterior$\rightarrow$Anterior, inferior$\rightarrow$Superior), and has a coronal slice positioning reflective of both the typical animal head position in MR scanners and in stereotactic surgery frames.
 The template is provided in \SI{40}{\micro\meter} and \SI{200}{\micro\meter} isotropic resolutions.
-This atlas and all of its associated mask and label files is identified with the prefix \textcolor{mg}{\texttt{dsurqec}} in the template packages.
+This atlas and all of its associated mask and label files are identified with the prefix \textcolor{mg}{\texttt{dsurqec}} in the template packages.
 
-We bundle the aforementioned MR template with two additional histological templates, derived from the Australian Mouse Brain Mapping Consortium (AMBMC) \cite{amb} !!!!move here from legend template, and the Allen Brain Institute (ABI) !!!cite!!! template.
-While these atlases suffer from shortcomings listed under the \nameref{sec:bg}~section, we include the AMBMC template due to its prevalent usage in conjunction with the Legacy workflow, and the ABI atlas due to its role as the reference atlas for numerous gene expression and projection maps.
+We bundle the aforementioned MR template with two additional histological templates, derived from the Australian Mouse Brain Mapping Consortium (AMBMC) \cite{amb}, and the Allen Brain Institute (ABI) \cite{abi} template.
+While these atlases suffer from shortcomings listed under the \nameref{sec:bg}~section, we include the AMBMC template due to its extra long rostrocaudal coverage, and the ABI atlas due to its role as the reference atlas for numerous gene expression and projection maps.
 We reorient the AMBMC template from its original RPS orientation to the canonical RAS, and apply an RAS orientation to the orientation-less ABI template after converting it to NIfTI from its original NRRD format.
 These atlases are also made available in \SI{40}{\micro\meter} and \SI{200}{\micro\meter} isotropic resolutions, and the corresponding files are prefixed with \textcolor{mg}{\texttt{ambmc}} and \textcolor{mg}{\texttt{qbi}}, respectively.
 
 Additionally, we provide templates in the historically prevalent but incorrect, RPS orientation, and with the historically prevalent tenfold increase in voxel size.
-These templates are derivated from the DSURQE and AMBMC templates, and are prefixed with \textcolor{mg}{\texttt{ldsurque}} and \textcolor{mg}{\texttt{lambmc}}, respectively.
+These templates are derived from the DSURQE and AMBMC templates, and are prefixed with \textcolor{mg}{\texttt{ldsurque}} and \textcolor{mg}{\texttt{lambmc}}, respectively.
 
 Lastly, due to data size considerations, we distribute \SI{15}{\micro\meter} isotropic versions of all atlases available at this resolution (AMBMC and its legacy derivative, as well as ABI) in a separate package.
 The packages in question are called \textcolor{mg}{\texttt{mouse-brain-atlases}} and \textcolor{mg}{\texttt{mouse-brain-atlasesHD}};
 and up-to-date versions of these archives can be reproduced via the FOSS download, reorienting, and resampling scripts, written and released for the purpose of this publication.  
+
+For the comparisons performed in this text, \textcolor{mg}{\texttt{dsurqec}} and \textcolor{mg}{\texttt{ldsurqec}} template variations (which contain the same data matrix, but are matched to the orientation and size requirements of the \cref{fig:wfgg} and \cref{fig:wfgl} workflows, respectively) are referred to as the “Generic” template, due to the introduction of \textcolor{mg}{\texttt{dsurqec}} as the default template for the Generic SAMRI preprocessing workflow.
+Analogously, the \textcolor{mg}{\texttt{ambmc}} and \textcolor{mg}{\texttt{lambmc}} template variations are referred to as the “Legacy”, due to the prevalent usage of \textcolor{mg}{\texttt{ambmc}} as the default template for the Legacy SAMRI preprocessing workflow.
 
 \subsection{Testing Dataset}
 
@@ -113,9 +122,9 @@ and up-to-date versions of these archives can be reproduced via the FOSS downloa
 		)}
 
 
-For the quality control of the workflows, a dataset with an effective size of 102 scans is used .
-The dataset contains 11 animals with up to 5 sessions (spaced at an interval of 14 days) per animal.
-For each session an anatomical scan and two functional scans --- with Blood-Oxygen Level Dependent (BOLD) and Cerebral Blood Volume (CBV) contrast, respectively --- is recorded.
+For the quality control of the workflows, a dataset with an effective size of 102 scans is used.
+The dataset contains 11 animals, each recorded on up to 5 sessions (repeated at 14 day intervals).
+Each session contains an anatomical scan and two functional scans --- with Blood-Oxygen Level Dependent (BOLD) and Cerebral Blood Volume (CBV) contrast, respectively.
 
 Anatomical scans are acquired via a TurboRARE sequence, with a RARE factor of 8, an echo time (TE) of \SI{7}{\milli\second} and a repetition time (TR) of \SI{2500}{\milli\second}, sampled at a sagittal resolution of $\mathrm{\Delta x(\nu)=\SI{166.7}{\micro\meter}}$, a horizontal resolution of $\mathrm{\Delta y(\phi)=\SI{75}{\micro\meter}}$, and a coronal resolution of $\mathrm{\Delta z(t)=\SI{650}{\micro\meter}}$ (slice thickness of \SI{500}{\micro\meter}).
 The functional BOLD and CBV scans are acquired with $\mathrm{TR/TE = \SI{1000}{\milli\second}/\SI{15}{\milli\second}}$ and $\mathrm{TR/TE = \SI{1000}{\milli\second}/\SI{5.5}{\milli\second}}$, respectively, and with a flip angle of \SI{60}{\degree}.
