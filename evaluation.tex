@@ -2,7 +2,7 @@
 
 %The problem with evaluating preprocessing pipelines is, that we lack ground truth.
 %Therefore any approach learning is potentially prone to overfitting.
-We evaluate the quality of the registration both in terms of spatial features, as well as in terms of its repercussion on a higher-level functional analysis.
+We evaluate the quality of the registration both in terms of spatial features, as well as in terms of its repercussion on higher-level functional analysis.
 %with our novel workflow or with the Here we derive two novel metrics for assessing the quality of the registration, which were not used by engineering the new workflow nor used in the optimisation procedure. 
 
 A main challenge of QC with regard to spatial features is that a perfect remapping is undefined.
@@ -15,18 +15,24 @@ However, functional analysis effects of registration are significantly more time
 
 \subsection{Volume Conservation}
 
-We have developed a simple, fast, and portable (i.e. easy to apply on additional and future datasets and workflows) metric to measure distortion introduced in the preprocessing workflow.
+We have developed a simple, fast, and portable (i.e. easy to apply on additional existing and future datasets and workflows) metric to measure distortion introduced in the preprocessing workflow.
 Volume Conservation (VC) is based on the assumption that the total volume of the scanned segment of the brain should remain approximately identical after registration.
-A volume increase may indicate that the brain was stretched to fill in template brain space not covered by the scan, while a volume decrease might indicate that non-brain voxels were squeezed into the template brain space.
+A volume increase may indicate that the brain was stretched to fill in template brain space not covered by the scan, while a volume decrease might indicate that non-brain voxels were introduced into the template brain space.
+
+Reference brain volume is estimated as the 66\textsuperscript{th} percentile of the unregistered scan.
+The arbitrary unit equivalent of this percentile threshold is recorded for each scan and applied to all registration workflow results for that scan, to obtain transformed brain volume estimates.
+In order to mitigate possible differences arising from template size, we perform a multivariate analysis of both template and analysis.
 
 % This metric provides distortion checking rather than goodness-of-fit qantification, which is, as previously described, difficult to do in a lean automated fashion.
 
 \begin{sansmath}
 	\py{pytex_fig('scripts/vc_violin.py', conf='article/1col.conf', label='vcv', caption='
 		Volume change relative to the original scan volume compared across processing workflows and target templates used.
-		Coloured patch width estimates observation density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.
+		Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.
 		')}
 \end{sansmath}
+
+As seen in \cref{fig:vcv},
 
 \subsection{Variance}
 
