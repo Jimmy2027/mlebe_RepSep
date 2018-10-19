@@ -19,7 +19,7 @@ ax = violinplot(
 	x='Processing',
 	y='Volume Change Factor',
 	data=df.loc[df['Processing']!='Unprocessed'],
-	hue="Type",
+	hue="Contrast",
 	saturation=1,
 	split=True,
 	inner='quartile',
