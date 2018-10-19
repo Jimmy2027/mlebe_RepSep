@@ -98,4 +98,9 @@ for uid, template, processing in list(product(uids,templates,processings)):
 	reference = df.loc[(df['uID']==uid) & (df['Processing']=='Unprocessed'), 'Thresholded Volume'].item()
 	volume = df.loc[(df['uID']==uid) & (df['Processing']==processing) & (df['Template']==template), 'Thresholded Volume'].item()
 	df.loc[(df['uID']==uid) & (df['Processing']==processing) & (df['Template']==template), 'Volume Change Factor'] = volume/reference
+
+# Ready Strings for Printing
+df.columns = map(str.title, df.columns)
+df['Type'] = df['Type'].str.upper()
+
 df.to_csv('../data/volumes.csv')
