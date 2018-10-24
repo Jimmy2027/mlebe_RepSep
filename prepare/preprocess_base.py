@@ -9,7 +9,7 @@ generic(bids_base, "~/ambmc_200micron.nii.gz",
 	functional_match={'acquisition':['EPIlowcov'],},
 	structural_match={'acquisition':['TurboRARElowcov'],},
 	actual_size=True,
-        keep_work=True,
+	keep_work=True,
 	out_base='~/ni_data/ofM.dr/preprocessing',
 	workflow_name='generic_ambmc',
 	)
@@ -48,9 +48,9 @@ manipulations.collapse_nifti('~/ni_data/ofM.dr/preprocessing/legacy_dsurqec',
 	)
 manipulations.collapse_nifti('~/ni_data/ofM.dr/preprocessing/generic',
 	'~/ni_data/ofM.dr/preprocessing/generic_collapsed',
-	n_jobs_percentage=0.5,
+	#n_jobs_percentage=0.5,
 	)
 manipulations.collapse_nifti('~/ni_data/ofM.dr/preprocessing/legacy',
 	'~/ni_data/ofM.dr/preprocessing/legacy_collapsed',
-	n_jobs_percentage=0.5,
+	#n_jobs_percentage=0.5,
 	)
