@@ -40,18 +40,18 @@
 	\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
 
 	\lhead{}
-	\chead{\small\usefont{T1}{phv}{m}{n}\textcolor{Gray}{\mytitle}}
+	\chead{\small\textsf{\textcolor{Gray}{\mytitle}}}
 	\rhead{}
 
 	\lfoot{}
-	\cfoot{\footnotesize\usefont{T1}{phv}{m}{n} \textcolor{Gray}{\today}}
-	\rfoot{\footnotesize\usefont{T1}{phv}{m}{n} \textcolor{Gray}{Page} \thepage\ \textcolor{Gray}{of \pageref{LastPage}}}
+	\cfoot{\footnotesize\textsf{\textcolor{Gray}{\today}}}
+	\rfoot{\footnotesize\textsf{\textcolor{Gray}{Page} \thepage\ \textcolor{Gray}{of \pageref{LastPage}}}}
 
 	\fancypagestyle{firstpage}{
 		\fancyhf{}
 		\lfoot{}
-		\cfoot{\footnotesize \usefont{T1}{phv}{m}{n}\textcolor{Gray}{\today}}
-		\rfoot{\footnotesize \usefont{T1}{phv}{m}{n}\textcolor{Gray}{Page} \thepage\ \textcolor{Gray}{of \pageref{LastPage}}}
+		\cfoot{\footnotesize\textsf{\textcolor{Gray}{\today}}}
+		\rfoot{\footnotesize\textsf{\textcolor{Gray}{Page} \thepage\ \textcolor{Gray}{of \pageref{LastPage}}}}
 	}
 
 \usepackage{etoolbox}
@@ -61,8 +61,8 @@
 
 
 %TITLE
-\newcommand{\authorstyle}[1]{{\large\usefont{T1}{phv}{b}{n}\color{Gray}#1}}
-\newcommand{\institution}[1]{{\footnotesize\usefont{T1}{phv}{m}{n}\color{Black}#1}}
+\newcommand{\authorstyle}[1]{{\large\textsf{\color{Gray}#1}}}
+\newcommand{\institution}[1]{{\footnotesize\textsf{\color{Black}#1}}}
 \usepackage{titling}
 \newcommand{\HorRule}{\color{Gray}\rule{\linewidth}{1pt}}
 \pretitle{
