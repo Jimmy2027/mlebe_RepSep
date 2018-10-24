@@ -28,21 +28,37 @@ In order to best analyze volume conservation, a Volume Change Factor (VCF) is co
 \py{pytex_subfigs(
         [
                 {'script':'scripts/vc_violin.py', 'label':'vcv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
-			'caption':'Comparison across workflows and target templates.'
+			'caption':'Comparison across workflows and target templates, considering both BOLD and CBV both functional contrasts.'
                         ,},
-                {'script':'scripts/vcm_violin.py', 'label':'vcmv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
-                        'caption':'Comparison across workflows and functional contrasts.'
+                {'script':'scripts/vcc_violin.py', 'label':'vccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
                 ],
         caption='Volume change relative to the original scan volume. Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
         label='fig:vc',)}
 \end{sansmath}
 
-As seen in \cref{fig:vcv}, the Volume Change Factor (VCF) is sensitive to both
+As seen in \cref{fig:vcv}, we note that the Volume Change Factor (VCF) metric is sensitive to both
 the processing workflow (\py{boilerplate.fstatistic('Processing', condensed=True)}),
 the template (\py{boilerplate.fstatistic('Template', condensed=True)}),
-and intreactions thereof (\py{boilerplate.fstatistic('Processing:Template', condensed=True)}).
+and interactions thereof (\py{boilerplate.fstatistic('Processing:Template', condensed=True)}).
 
+Testing the core hypothesis of the comparison ---
+whether the Generic SAMRI workflow (with the Generic template) performs significantly different than the Legacy workflow (with the Legacy template) ---
+we note that it does
+(two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}).
+Additionally we note a root mean squared error ratio strongly favouring the Generic workflow
+($\mathrm{RMSE_{L}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
+
+Descriptively, we observe that the effect with the greatest magnitude is that of the template variable, with its Legacy level introducing a notable volume loss
+(VCF of \py{boilerplate.vc_factorci('Template[T.Legacy]')}).
+Further, we note that there is a variance increase in all conditions for the Legacy processing workflow
+(\py{boilerplate.varianceratio(template='Legacy')}-fold given the Legacy template, and \py{boilerplate.varianceratio(template='Generic')}-fold given the Generic template).
+
+With respect to the data break-up by contrast (from \cref{fig:vccv}), we see no notable main effect for the contrast variable
+(VCF of \py{boilerplate.vcc_factorci('Contrast[T.CBV]')}).
+We do, however, report a notable effect for the contrast-template interaction, with the Legacy workflow and CBV contrast interaction level introducing a volume loss
+(VCF of \py{boilerplate.vcc_factorci('Processing[T.Legacy]:Contrast[T.CBV]')}).
 
 \subsection{Functional Analysis}
 
