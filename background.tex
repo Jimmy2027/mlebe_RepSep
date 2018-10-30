@@ -21,9 +21,9 @@ Furthermore, such solutions are intended as “fast fixes”, and are not thorou
 We thus explicitly describe current practices, in an effort to not only propose better solutions, but do so in a falsifiable manner which provides adequate reference for both the novel and the legacy methods.
 
 \subsection{Manipulations}
-The foremost data manipulation procedure is the adjustment of the voxel dimensions
-(represented in the NIfTI header \cite{nifti} by the affines --- which map data matrix cordinates to gemoetrically meaningful spatial coordinates),
-so that the mouse data represent a volume corresponding to what human-optimized brain extraction, bias correction, and registration interfaces expect (commonly this constitutes a 10-fold increase in each dimension).
+The foremost data manipulation procedure in present-day mouse MRI is the adjustment of voxel dimensions.
+These dimensions are represented in the Neuroimaging Informatics Technology Initiative format (NIfTI) header \cite{nifti} by affine transformation parameters --- which map data matrix cordinates to gemoetrically meaningful spatial coordinates.
+Manipulations of the affine parameters are performed in order to make the data represent not the physiological mouse brain dimensions, but volumes corresponding to what human-optimized brain extraction, bias correction, and registration interfaces expect (commonly this constitutes a 10-fold increase in each spatial dimension).
 
 Another notable data manipulation procedure consists in adjusting the data matrix content itself, so that human-prior based brain extraction will produce acceptable results.
 While conceptually superior solutions (e.g. adapting parameters and priors to animal data \cite{rbet,Oguz2014}) are available and might remove the need for data adaptation at this step, rudimentary solutions remain popular.
@@ -31,10 +31,10 @@ Many consist of applying an empirically determined percentile threshold, intende
 Notably, both the function adaptations for animal data and the animal data matrix adaptations for use with human brain extraction functions are known to wholly or partly remove the olfactory bulbs (if at all present in the acquired data) --- which is why sometimes the choice is made to instead simply forego brain extraction.
 
 Often, the orientation of the scan is also seen as problematic, and consequently deleted.
-This procedure consists in resetting the S-Form affine from the NIfTI header to zeroes, and is intended to mitigate incorrect data orientation produced by the scanner.
+This procedure consists in resetting the S-Form affine from the NIfTI header to zeroes, and is intended to mitigate a data orientation produced by the scanner which is incorrect with respect to the target template.
 While it is true that the scanner affine reported for mouse data may be nonstandard (the confusion is two-fold: mice lie prone with the coronal plane progressing axially whereas higher primates lie supine with the horizontal plane progressing axially), it is equally true that affines of mouse brain templates may be nonstandard.
 A different but related manipulation is dimension swapping, which changes the order of the NIfTI data matirx rather than the affine.
-Occasionally, correct or automatically redressable affines are thus deleted in order to correspond to a malformed template.
+Occasionally, correct or automatically redressable affine parameters are thus deleted, and data reordered beyond easy recovery, in order to correspond to a malformed template.
 
 \subsection{Templates}
 As the above eminently demonstrates, the template is a key component of a registration workflow.
