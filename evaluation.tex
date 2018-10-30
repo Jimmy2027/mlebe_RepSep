@@ -71,11 +71,16 @@ This method is however primarily (and exceptionally) suited to demonstrate workf
 
 
 % Move the color switch to the start of the remaining draft segment.
-\color{lg}
 \subsection{Variance Analysis}
 
+\color{lg}
 \[ CC(x) = \frac{\sum_i{(x)}}{\sum_i{(x)}} \]
 
 %\py{pytex_fig('scripts/registration_qc.py', conf='article/varplot.conf', label='varplot', caption='Variance for different preprocessing pipelines')}
 
-To assess the quality of the pipeline we evaluated the registration performance for different metrices (Crosscorrelation (CC), Mutual Information (MI), Mean Squared Difference (MSQ)) for individual sessions and subjects on a representatitve dataset.  We define an assessment for registration quality based on the assumption, that for increased registration quality the variance of a similariy measure between the subject and the template should converge towards 0. This definition is based on the assumption that biological deformations of the brain across sessions should be negligible (Ref???!?!). Hence we calculate the variance over different similiarity metrics for each subject across sessions. We average for each workflow the results across subjects. We find that our new preprocessing pipeline has significantly less variance than the legacy workflow, while the optimised pipeline has even further decreased variance.
+To assess the quality of the pipeline we evaluated the registration performance for different metrices (Crosscorrelation (CC), Mutual Information (MI), Mean Squared Difference (MSQ)) for individual sessions and subjects on a representatitve dataset.
+We define an assessment for registration quality based on the assumption, that for increased registration quality the variance of a similariy measure between the subject and the template should converge towards 0.
+This definition is based on the assumption that biological deformations of the brain across sessions should be negligible (Ref???!?!).
+Hence we calculate the variance over different similiarity metrics for each subject across sessions.
+We average for each workflow the results across subjects.
+We find that our new preprocessing pipeline has significantly less variance than the legacy workflow, while the optimised pipeline has even further decreased variance.
