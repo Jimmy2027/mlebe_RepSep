@@ -73,7 +73,15 @@ This method is however primarily (and exceptionally) suited to demonstrate workf
 % Move the color switch to the start of the remaining draft segment.
 \subsection{Variance Analysis}
 
+While the absolute value of image similarity metrics cannot be relied upon for QC, the variance structure of similarity metrics in longitudinal datasets can.
+The rationale of analysing similarity metric variance is that in healthy adult mice, there is no significant change in brain structure over time, but there are significant differences in individual anatomy.
+This proposition is further strengthened in our dataset, as each animal has a slightly different but temporally stable implant placement. 
+The corollary of this statement in terms of value distributions, is that the more variance is reduced across sessions without being reduced across subjects, the more stable a workflow is and the less likely it is for its performance to be derived from over-fitting.
+
 \color{lg}
+We use this metric to optimize our registration parameters, as it is uniquely suites to our dataset (as opposed to to other implant-less data sets), and allows us to leverage it to a maximum use for the community, while keeping other less intricate and unrelated metrics usable for transferable QC for external datasets.
+
+
 \[ CC(x) = \frac{\sum_i{(x)}}{\sum_i{(x)}} \]
 
 %\py{pytex_fig('scripts/registration_qc.py', conf='article/varplot.conf', label='varplot', caption='Variance for different preprocessing pipelines')}
