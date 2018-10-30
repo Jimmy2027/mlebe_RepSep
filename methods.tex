@@ -7,19 +7,21 @@ We thus follow  a set of design guidelines, stating that:
 and (3) graphical or interactive interfaces are wholly avoided (as they impede reproducibility, encumber the dependency graph, and reduce the sustainability of the project).
 
 \begin{figure*}[h!]
-	\begin{subfigure}{.66\textwidth}
+	\begin{subfigure}{.64\textwidth}
 		\centering
 		\includedot[width=\textwidth]{data/generic}
-		\vspace{.55em}
+		\vspace{1.4em}
 		\caption{
-			“SAMRI Generic” (new) workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function, and  making use of a higher-resolution structural scan intermediary for registration (note the two processing streams).
+			“SAMRI Generic” (new) workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function, and making no use of empirical value thresholding, or destructive operations such as affine manipulation or data matrix reordering.
+			The pipeline uses a higher-resolution structural scan intermediary for registration (note the two processing streams).
 			The function used is highly parameterized, and both of its instances --- “s\niceus register” and “f\niceus register” --- are supplied in the workflow with defaults optimized for mouse brain registration).
 			}
 		\label{fig:wfgg}
 	\end{subfigure}\hfill
-	\begin{subfigure}{.31\textwidth}
+	\begin{subfigure}{.34\textwidth}
 		\centering
 		\includedot[width=\textwidth]{data/legacy}
+		\vspace{-1.9em}
 		\caption{
 			“SAMRI Legacy” workflow, based on the \textcolor{mg}{\texttt{antsIntroduction.sh}} function, performing destructive affine manipulations, and not making use of a structural intermediary.
 			The function used has hard-coded parameters optimized for human brain registration.
