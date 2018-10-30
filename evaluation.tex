@@ -5,10 +5,10 @@
 We evaluate the quality of the registration both in terms of spatial features, as well as in terms of its repercussion on higher-level functional analysis.
 %with our novel workflow or with the Here we derive two novel metrics for assessing the quality of the registration, which were not used by engineering the new workflow nor used in the optimisation procedure. 
 
-A main challenge of QC with regard to spatial features is that a perfect remapping is undefined.
-Similarity metrics are ill-fitted for QC because they are used internally by registration functions, whose main feature it is, that they maximize them.
+A main challenge of QC with regard to spatial features is that a perfect mapping to the template is undefined.
+Similarity metrics are ill-suited for QC because they are used internally by registration functions, whose main feature it is, that they maximize them.
 Indeed an extreme maximization, especially via nonlinear transformations, results in a distortion of the image, which should be penalized in QC, but in light of image similarity scores, is represented as better performance.
-Additionally, similarity metrics are not independent, so this issue cannot be circumvented by maximizing a subset of metrics and performing QC in light of the remainder.
+Additionally, similarity metrics are not independent, so this issue cannot be circumvented by maximizing a subset of metrics and performing QC in via the remainder.
 We thus develop three alternative evaluation metrics: volume conservation, functional analysis, and variance analysis.
 
 \subsection{Volume Conservation}
@@ -17,9 +17,9 @@ We have developed a simple, fast, and widely applicable metric to measure distor
 Volume conservation is based on the assumption that the total volume of the scanned segment of the brain should remain approximately identical after registration.
 A volume increase may indicate that the brain was stretched to fill in template brain space not covered by the scan, while a volume decrease might indicate that non-brain voxels were introduced into the template brain space.
 
-Reference brain volume is estimated as the 66\textsuperscript{th} percentile of the unregistered scan.
-The arbitrary unit equivalent of this percentile threshold is recorded for each scan and applied to all registration workflow results for that scan, to obtain transformed brain volume estimates.
-In order to mitigate possible differences arising from template size, we perform a multivariate analysis of both template and analysis.
+For the current implementation we define brain volume as estimated by the 66\textsuperscript{th} percentile of the unregistered scan.
+The arbitrary unit equivalent of this percentile threshold is recorded for each scan and applied to all registration workflow results for that particular scan, to obtain transformed brain volume estimates.
+In order to mitigate possible differences arising from template size, we perform a multivariate analysis of both template and workflow.
 In order to best analyze volume conservation, a Volume Change Factor (VCF) is computed for each processed scan, whereby volume conservation is highest for a VCF equal to 1.
 
 % This metric provides distortion checking rather than goodness-of-fit qantification, which is, as previously described, difficult to do in a lean automated fashion.
@@ -41,7 +41,7 @@ In order to best analyze volume conservation, a Volume Change Factor (VCF) is co
 As seen in \cref{fig:vcv}, we note that the Volume Change Factor (VCF) metric is sensitive to both
 the processing workflow (\py{boilerplate.fstatistic('Processing', condensed=True)}),
 the template (\py{boilerplate.fstatistic('Template', condensed=True)}),
-and interactions thereof (\py{boilerplate.fstatistic('Processing:Template', condensed=True)}).
+and interaction thereof (\py{boilerplate.fstatistic('Processing:Template', condensed=True)}).
 
 Testing the core hypothesis of the comparison ---
 whether the Generic SAMRI workflow (with the Generic template) performs significantly different than the Legacy workflow (with the Legacy template) ---
@@ -62,8 +62,8 @@ We do, however, report a notable effect for the contrast-template interaction, w
 
 \subsection{Functional Analysis}
 
-Functional analysis, successfully circumvents the issue, as the metric being maximized in the registration process is not the same metric used for QC.
-This method is however primarily suited to demonstrate workflow relevance to higher-level applications.
+Functional analysis in another suitable method to ascertain registration quality, as the metric being maximized in the registration process is not the same metric used for QC.
+This method is however primarily (and exceptionally) suited to demonstrate workflow relevance to higher-level applications, and less suited for wide-spread QC (as it is the most computationally intensive and only applicable to a subset of all mouse MRI data).
 
 \subsection{Variance}
 
