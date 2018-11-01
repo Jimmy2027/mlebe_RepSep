@@ -7,7 +7,7 @@ masks = {
 	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
 	'generic_ambmc':'/usr/share/mouse-brain-atlases/ambmc_200micron_mask.nii.gz',
 	'legacy':'/usr/share/mouse-brain-atlases/lambmc_200micron_mask.nii.gz',
-	'legacy_dsurqec':"/usr/share/mouse-brain-atlases/ldsurqec_200micron_mask.nii.gz",
+	'legacy_dsurqec':'/usr/share/mouse-brain-atlases/ldsurqec_200micron_mask.nii.gz',
 	}
 
 for key in masks:
