@@ -7,28 +7,28 @@ import pandas as pd
 
 base_df = bids_autograb('~/ni_data/ofM.dr/bids_collapsed')
 base_df = base_df.loc[~base_df['path'].str.endswith('.json')]
-base_df = base_df.loc[base_df['type'].isin(['bold','cbv'])]
-base_df['uID'] = base_df['subject']+'_'+base_df['session']+'_'+base_df['type']
+base_df = base_df.loc[base_df['modality'].isin(['bold','cbv'])]
+base_df['uID'] = base_df['subject']+'_'+base_df['session']+'_'+base_df['modality']
 
 generic_df = bids_autograb('~/ni_data/ofM.dr/preprocessing/generic_collapsed')
 generic_df = generic_df.loc[~generic_df['path'].str.endswith('.json')]
-generic_df = generic_df.loc[generic_df['type'].isin(['bold','cbv'])]
-generic_df['uID'] = generic_df['subject']+'_'+generic_df['session']+'_'+generic_df['type']
+generic_df = generic_df.loc[generic_df['modality'].isin(['bold','cbv'])]
+generic_df['uID'] = generic_df['subject']+'_'+generic_df['session']+'_'+generic_df['modality']
 
 generic_ambmc_df = bids_autograb('~/ni_data/ofM.dr/preprocessing/generic_ambmc_collapsed')
 generic_ambmc_df = generic_ambmc_df.loc[~generic_ambmc_df['path'].str.endswith('.json')]
-generic_ambmc_df = generic_ambmc_df.loc[generic_ambmc_df['type'].isin(['bold','cbv'])]
-generic_ambmc_df['uID'] = generic_ambmc_df['subject']+'_'+generic_ambmc_df['session']+'_'+generic_ambmc_df['type']
+generic_ambmc_df = generic_ambmc_df.loc[generic_ambmc_df['modality'].isin(['bold','cbv'])]
+generic_ambmc_df['uID'] = generic_ambmc_df['subject']+'_'+generic_ambmc_df['session']+'_'+generic_ambmc_df['modality']
 
 legacy_df = bids_autograb('~/ni_data/ofM.dr/preprocessing/legacy_collapsed')
 legacy_df = legacy_df.loc[~legacy_df['path'].str.endswith('.json')]
-legacy_df = legacy_df.loc[legacy_df['type'].isin(['bold','cbv'])]
-legacy_df['uID'] = legacy_df['subject']+'_'+legacy_df['session']+'_'+legacy_df['type']
+legacy_df = legacy_df.loc[legacy_df['modality'].isin(['bold','cbv'])]
+legacy_df['uID'] = legacy_df['subject']+'_'+legacy_df['session']+'_'+legacy_df['modality']
 
 legacy_dsurqec_df = bids_autograb('~/ni_data/ofM.dr/preprocessing/legacy_dsurqec_collapsed')
 legacy_dsurqec_df = legacy_dsurqec_df.loc[~legacy_dsurqec_df['path'].str.endswith('.json')]
-legacy_dsurqec_df = legacy_dsurqec_df.loc[legacy_dsurqec_df['type'].isin(['bold','cbv'])]
-legacy_dsurqec_df['uID'] = legacy_dsurqec_df['subject']+'_'+legacy_dsurqec_df['session']+'_'+legacy_dsurqec_df['type']
+legacy_dsurqec_df = legacy_dsurqec_df.loc[legacy_dsurqec_df['modality'].isin(['bold','cbv'])]
+legacy_dsurqec_df['uID'] = legacy_dsurqec_df['subject']+'_'+legacy_dsurqec_df['session']+'_'+legacy_dsurqec_df['modality']
 
 uids = base_df['uID'].unique()
 generic_df = generic_df.loc[generic_df['uID'].isin(uids)]
