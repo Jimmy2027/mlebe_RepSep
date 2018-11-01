@@ -100,8 +100,8 @@ for uid, template, processing in list(product(uids,templates,processings)):
 	df.loc[(df['uID']==uid) & (df['Processing']==processing) & (df['Template']==template), 'Volume Change Factor'] = volume/reference
 
 # Ready Strings for Printing
-df['type'] = df['type'].str.upper()
-df = df.rename(columns={'type': 'Contrast',})
+df['modality'] = df['modality'].str.upper()
+df = df.rename(columns={'modality': 'Contrast',})
 df.columns = map(str.title, df.columns)
 
 df.to_csv('../data/volumes.csv')
