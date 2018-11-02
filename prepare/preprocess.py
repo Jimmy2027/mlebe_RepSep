@@ -9,7 +9,6 @@ generic(bids_base, "~/ambmc_200micron.nii.gz",
 	functional_match={'acquisition':['EPIlowcov'],},
 	structural_match={'acquisition':['TurboRARElowcov'],},
 	actual_size=True,
-	keep_work=True,
 	out_base='~/ni_data/ofM.dr/preprocessing',
 	workflow_name='generic_ambmc',
 	)
