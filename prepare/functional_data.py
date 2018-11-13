@@ -31,6 +31,9 @@ for key in masks:
 		df_['Template'] = 'Legacy'
 	df = df.append(df_)
 
+# Create processing and template-independent unique identifiers
+df['uID'] = df['subject']+'_'+df['session']+'_'+df['modality']
+
 # Ready Strings for Printing
 df['modality'] = df['modality'].str.upper()
 df = df.rename(columns={'modality': 'Contrast',})
