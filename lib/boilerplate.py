@@ -7,6 +7,8 @@ from lib.utils import float_to_tex, inline_anova, inline_factor
 
 def fstatistic(factor,
 	df_path='data/volumes.csv',
+	dependent_variable='Volume Change Factor',
+	expression='Processing*Template',
 	**kwargs
 	):
 	df_path = path.abspath(df_path)
@@ -14,14 +16,16 @@ def fstatistic(factor,
 
 	df = df.loc[df['Processing']!='Unprocessed']
 
-	model='Q("Volume Change Factor") ~ Processing*Template'
-	ols = smf.ols(model, df).fit()
+	formula='Q("{}") ~ {}'.format(dependent_variable, expression)
+	ols = smf.ols(formula, df).fit()
 	anova = sm.stats.anova_lm(ols, typ=2)
 	tex = inline_anova(anova, factor, 'tex', **kwargs)
 	return tex
 
-def vc_factorci(factor,
+def factorci(factor,
 	df_path='data/volumes.csv',
+	dependent_variable='Volume Change Factor',
+	expression='Processing*Template',
 	**kwargs
 	):
 	df_path = path.abspath(df_path)
@@ -29,7 +33,8 @@ def vc_factorci(factor,
 
 	df = df.loc[df['Processing']!='Unprocessed']
 
-	model=smf.mixedlm('Q("Volume Change Factor") ~ Processing*Template', df, groups='Uid')
+	formula = 'Q("{}") ~ {}'.format(dependent_variable, expression)
+	model = smf.mixedlm(formula, df, groups='Uid')
 	fit = model.fit()
 	summary = fit.summary()
 	tex = inline_factor(summary, factor, 'tex', **kwargs)
