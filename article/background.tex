@@ -16,7 +16,7 @@ Human brain imaging uniquely benefits from high-level functions (shipped by most
 The availability and widespread use of such functions greatly mitigates the issues which would otherwise arise from lack of QC.
 In mouse brain imaging, however, registration is frequently performed using the selfsame high-level functions from human brain imaging; which are rendered usable for mouse brain data by a series of manipulations adjusting the nature of the data to fit function priors and optimized parameters (rather than vice-versa).
 
-This general approach entails numerous issues, and represents a notable hurdle for the methodological improvement of mouse brain imaging.
+This general approach entails numerous issues (e.g. as depicted in \cref{fig:md}), and represents a notable hurdle for the methodological improvement of mouse brain imaging.
 Furthermore, such solutions are intended as “fast fixes”, and are not thoroughly documented anywhere in the field.
 We thus explicitly describe current practices, in an effort to not only propose better solutions, but do so in a falsifiable manner which provides adequate reference for both the novel and the legacy methods.
 
@@ -35,6 +35,31 @@ This procedure consists in resetting the S-Form affine from the NIfTI header to 
 While it is true that the scanner affine reported for mouse data may be nonstandard (the confusion is two-fold: mice lie prone with the coronal plane progressing axially whereas higher primates lie supine with the horizontal plane progressing axially), it is equally true that affines of mouse brain templates may be nonstandard.
 A different but related manipulation is dimension swapping, which changes the order of the NIfTI data matirx rather than the affine.
 Occasionally, correct or automatically redressable affine parameters are thus deleted, and data reordered beyond easy recovery, in order to correspond to a malformed template.
+
+\begin{figure*}[h!]
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includedot[width=\textwidth]{data/metadata}
+		\vspace{-2.5em}
+		\caption{
+			Example of a flowchart providing metadata consistency. This minimizes operator interaction and ensures that all information accessible to the data format (e.g. NIfTI + BIDS) is correctly encapsulated at every step, and correctly interpretable by researchers familiar with the openly documented standards.
+			}
+		\label{fig:mdg}
+	\end{subfigure}
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includedot[width=\textwidth]{data/metadata_bad}
+		\vspace{-2.5em}
+		\caption{
+			Example of a flowchart employing ad hoc metadata substitution. This introduces additional operator interaction steps (colored brown), and renders the metadata encapsulated in standardized formats ambiguous (coloured red), and less well interpretable to researchers unfamiliar with the specific ad hoc convention.
+			}
+		\label{fig:mdb}
+	\end{subfigure}
+	\caption{
+		Simplified data flowcharts for generic (functional) MRI, contrasting ad hoc metadata substitution in animal MRI with consistent handling.
+		}
+	\label{fig:md}
+\end{figure*}
 
 \subsection{Templates}
 As the above eminently demonstrates, the template is a key component of a registration workflow.
