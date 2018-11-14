@@ -10,8 +10,8 @@ fig = plt.figure()
 scaled_plot(template,
 	cut=(0,0,0,),
 	threshold=200000,
-	cmap='gray',
+	cmap='binary',
 	scale=0.2,
-	dim=0.1,
+	#dim=0.1,
 	fig=fig
 	)
