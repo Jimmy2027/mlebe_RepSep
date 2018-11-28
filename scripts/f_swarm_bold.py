@@ -12,11 +12,12 @@ data_path = path.abspath('data/functional.csv')
 df = pd.read_csv(data_path)
 
 df = df.loc[df['Session']=='ofM']
+df = df.loc[df['Contrast']=='BOLD']
 
 ax = sns.swarmplot(
 	x="Processing",
 	y='Mean Significance',
-	data=df.loc[df['Contrast']=='BOLD'],
+	data=df,
 	hue="Template",
 	#saturation=1,
 	split=True,
