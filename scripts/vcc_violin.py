@@ -17,7 +17,7 @@ df.loc[df['Processing']=='Unprocessed', 'Template'] = ''
 ax = violinplot(
 	x='Processing',
 	y='Volume Change Factor',
-	data=df.loc[df['Processing']!='Unprocessed'],
+	data=df,
 	hue="Contrast",
 	saturation=1,
 	split=True,

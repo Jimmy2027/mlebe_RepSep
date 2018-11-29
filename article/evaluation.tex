@@ -51,7 +51,7 @@ Additionally we note a root mean squared error ratio strongly favouring the Gene
 ($\mathrm{RMSE_{L}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
 
 Descriptively, we observe that the effect with the greatest magnitude is that of the template variable, with its Legacy level introducing a notable volume loss
-(VCF of \py{boilerplate.vc_factorci('Template[T.Legacy]')}).
+(VCF of \py{boilerplate.factorci('Template[T.Legacy]')}).
 Further, we note that there is a variance increase in all conditions for the Legacy processing workflow
 (\py{boilerplate.varianceratio(template='Legacy')}-fold given the Legacy template, and \py{boilerplate.varianceratio(template='Generic')}-fold given the Generic template).
 
@@ -65,6 +65,52 @@ We do, however, report a notable effect for the contrast-template interaction, w
 Functional analysis in another suitable method to ascertain registration quality, as the metric being maximized in the registration process is not the same metric used for QC.
 This method is however primarily (and exceptionally) suited to demonstrate workflow relevance to higher-level applications, and less suited for wide-spread QC (as it is the most computationally intensive and only applicable to a subset of all mouse MRI data).
 
+\begin{sansmath}
+\py{pytex_subfigs(
+        [
+                {'script':'scripts/f_violin.py', 'label':'fv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+			'caption':'Comparison across workflows and target templates, considering both BOLD and CBV both functional contrasts.'
+                        ,},
+                {'script':'scripts/fc_violin.py', 'label':'fcv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
+                        ,},
+                ],
+        caption='Volume change relative to the original scan volume. Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
+        label='fig:vc',)}
+\end{sansmath}
+
+As seen in \cref{fig:fv}, we note that VCF is sensitive to both
+the processing workflow (\py{boilerplate.fstatistic('Processing', dependent_variable='Mean Significance', df_path='data/functional.csv', condensed=True)}),
+the template (\py{boilerplate.fstatistic('Template', dependent_variable='Mean Significance', df_path='data/functional.csv', condensed=True)}),
+and interaction thereof (\py{boilerplate.fstatistic('Processing:Template', dependent_variable='Mean Significance', df_path='data/functional.csv', condensed=True)}).
+
+Testing the core hypothesis of the comparison ---
+whether the Generic SAMRI workflow (with the Generic template) performs significantly different than the Legacy workflow (with the Legacy template) ---
+we note that it does
+(two-tailed p-value of \py{pytex_printonly('scripts/f_t.py')}).
+
+Descriptively, we observe that the effect with the greatest magnitude is that of the processing workflow variable, with its Legacy level introducing a notable volume loss
+(VCF of \py{boilerplate.factorci('Processing[T.Legacy]', dependent_variable='Mean Significance', df_path='data/functional.csv')}).
+
+With respect to the data break-up by contrast (from \cref{fig:vccv}), we see no notable main effect for the contrast variable
+(VCF of \py{boilerplate.vcc_factorci('Contrast[T.CBV]')}).
+We do, however, report a notable effect for the contrast-template interaction, with the Legacy workflow and CBV contrast interaction level introducing a volume loss
+(VCF of \py{boilerplate.vcc_factorci('Processing[T.Legacy]:Contrast[T.CBV]')}).
+
+\begin{sansmath}
+\py{pytex_subfigs(
+        [
+                {'script':'scripts/fdr_violin.py', 'label':'fdrv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+			'caption':'Comparison across workflows and target templates, considering both BOLD and CBV both functional contrasts.'
+                        ,},
+                {'script':'scripts/fdrc_violin.py', 'label':'fdrcv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
+                        ,},
+                ],
+        caption='Volume change relative to the original scan volume. Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
+        label='fig:vc',)}
+\end{sansmath}
+
 \begin{center}
         \textcolor{lg}{[...]}
 \end{center}
@@ -77,6 +123,7 @@ While the absolute value of image similarity metrics cannot be relied upon for Q
 The rationale of analysing similarity metric variance is that in healthy adult mice, there is no significant change in brain structure over time, but there are significant differences in individual anatomy.
 This proposition is further strengthened in our dataset, as each animal has a slightly different but temporally stable implant placement. 
 The corollary of this statement in terms of value distributions, is that the more variance is reduced across sessions without being reduced across subjects, the more stable a workflow is and the less likely it is for its performance to be derived from over-fitting.
+
 
 \color{lg}
 We use this metric to optimize our registration parameters, as it is uniquely suites to our dataset (as opposed to to other implant-less data sets), and allows us to leverage it to a maximum use for the community, while keeping other less intricate and unrelated metrics usable for transferable QC for external datasets.
