@@ -52,7 +52,7 @@ df['uID'] = df['subject']+'_'+df['session']+'_'+df['modality']
 
 # Ready Strings for Printing
 df['modality'] = df['modality'].str.upper()
-df.columins = map(str.title, df.columns)
+df.columns = map(str.title, df.columns)
 df = df.rename(
 	columns={
 		'Mean Dr T':'Mean DR t',
