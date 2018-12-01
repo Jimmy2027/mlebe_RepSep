@@ -75,7 +75,7 @@ This method is however primarily (and exceptionally) suited to demonstrate workf
                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
                 ],
-        caption='Volume change relative to the original scan volume. Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
+        caption='Mean per-animal significance. Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
         label='fig:vc',)}
 \end{sansmath}
 
@@ -107,14 +107,27 @@ We do, however, report a notable effect for the contrast-template interaction, w
                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
                 ],
-        caption='Volume change relative to the original scan volume. Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
+        caption='Mean per-animal significance in Dorsal Raphe. Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
+        label='fig:vc',)}
+\end{sansmath}
+
+\begin{sansmath}
+\py{pytex_subfigs(
+        [
+                {'script':'scripts/fdrt_violin.py', 'label':'fdrv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+			'caption':'Comparison across workflows and target templates, considering both BOLD and CBV both functional contrasts.'
+                        ,},
+                {'script':'scripts/fdrtc_violin.py', 'label':'fdrcv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
+                        ,},
+                ],
+        caption='Mean per-animal t-value in Dorsal Raphe. Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
         label='fig:vc',)}
 \end{sansmath}
 
 \begin{center}
         \textcolor{lg}{[...]}
 \end{center}
-
 
 % Move the color switch to the start of the remaining draft segment.
 \subsection{Variance Analysis}
