@@ -5,9 +5,9 @@ preprocess_base = '~/ni_data/ofM.dr/preprocessing/'
 
 masks = {
 	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
-	'generic_ambmc':'/usr/share/mouse-brain-atlases/ambmc_200micron_mask.nii.gz',
-	'legacy':'/usr/share/mouse-brain-atlases/lambmc_200micron_mask.nii.gz',
-	'legacy_dsurqec':'/usr/share/mouse-brain-atlases/ldsurqec_200micron_mask.nii.gz',
+	'generic_ambmc':'/usr/share/mouse-brain-atlases/ambmc_200micron_mask.nii',
+	'legacy':'/usr/share/mouse-brain-atlases/lambmc_200micron_mask.nii',
+	'legacy_dsurqec':'/usr/share/mouse-brain-atlases/ldsurqec_200micron_mask.nii',
 	}
 
 for key in masks:

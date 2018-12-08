@@ -11,9 +11,8 @@ palette = ['#80e050','#755575']
 data_path = path.abspath('data/functional.csv')
 df = pd.read_csv(data_path)
 
-#df = df.loc[df['Session']=='ofM']
-
-#df = df.loc[df['Contrast']=='CBV']
+df = df.loc[df['Session']=='ofM']
+df = df.loc[df['Contrast']=='BOLD']
 
 ax = sns.swarmplot(
 	x="Processing",
