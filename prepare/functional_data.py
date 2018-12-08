@@ -57,6 +57,8 @@ df = df.rename(
 	columns={
 		'Mean Dr T':'Mean DR t',
 		'Median Dr T':'Median DR t',
+		'Mean Dr Significance':'Mean DR Significance',
+		'Median Dr Significance':'Median DR Significance',
 		'Modality':'Contrast',
 		})
 
