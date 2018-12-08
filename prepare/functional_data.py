@@ -27,6 +27,9 @@ for key in masks:
 			'.*?_task-(?P<task>.+)_acq-(?P<acquisition>.+)_run-(?P<run>.+)_(?P<modality>cbv|bold)_pfstat\.nii.gz',
 		)
 	df_ = df_significant_signal(in_df,
+		mask_path=masks[key],
+		)
+	df_ = df_significant_signal(df_,
 		mask_path=masks_dr[key],
 		column_string='DR Significance',
 		)
@@ -63,7 +66,7 @@ for key in masks:
 		match_regex='.+sub-(?P<sub>.+)/ses-(?P<ses>.+)/'\
 			'.*?_task-(?P<task>.+)_acq-(?P<acquisition>.+)_run-(?P<run>.+)_(?P<modality>cbv|bold)_tstat\.nii.gz',
 		)
-	df_ = df_roi_data(df_,
+	df_ = df_roi_data(in_df,
 		mask_path=masks_dr[key],
 		column_string='DR t',
 		)
