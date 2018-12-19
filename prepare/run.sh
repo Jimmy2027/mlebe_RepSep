@@ -6,3 +6,4 @@ python collapse.py || exit 1
 python volume_data.py || exit 1
 python glm.py || exit 1
 python functional_data.py || exit 1
+python l2_maps.py || exit 1
