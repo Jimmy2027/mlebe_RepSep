@@ -8,7 +8,7 @@ from itertools import product
 # Style
 palette = ['#80e050','#755575']
 
-data_path = path.abspath('data/functional.csv')
+data_path = path.abspath('data/functional_significance.csv')
 df = pd.read_csv(data_path)
 
 df = df.loc[df['Session']=='ofM']

@@ -9,12 +9,16 @@ def fstatistic(factor,
 	df_path='data/volumes.csv',
 	dependent_variable='Volume Change Factor',
 	expression='Processing*Template',
+	exclusion_criteria={},
 	**kwargs
 	):
 	df_path = path.abspath(df_path)
 	df = pd.read_csv(df_path)
 
 	df = df.loc[df['Processing']!='Unprocessed']
+
+	for key in exclusion_criteria.keys():
+		df = df.loc[~df[key].isin(exclusion_criteria[key])]
 
 	formula='Q("{}") ~ {}'.format(dependent_variable, expression)
 	ols = smf.ols(formula, df).fit()
@@ -26,6 +30,7 @@ def factorci(factor,
 	df_path='data/volumes.csv',
 	dependent_variable='Volume Change Factor',
 	expression='Processing*Template',
+	exclusion_criteria={},
 	**kwargs
 	):
 	df_path = path.abspath(df_path)
@@ -33,10 +38,37 @@ def factorci(factor,
 
 	df = df.loc[df['Processing']!='Unprocessed']
 
+	for key in exclusion_criteria.keys():
+		df = df.loc[~df[key].isin(exclusion_criteria[key])]
+
 	formula = 'Q("{}") ~ {}'.format(dependent_variable, expression)
 	model = smf.mixedlm(formula, df, groups='Uid')
 	fit = model.fit()
 	summary = fit.summary()
+	tex = inline_factor(summary, factor, 'tex', **kwargs)
+	return tex
+
+def corecomparison_factorci(factor,
+	df_path='data/volumes.csv',
+	dependent_variable='Volume Change Factor',
+	expression='Processing*Contrast',
+	exclusion_criteria={},
+	**kwargs
+	):
+	df_path = path.abspath(df_path)
+	df = pd.read_csv(df_path)
+
+	df = df.loc[df['Processing']!='Unprocessed']
+	df = df.loc[((df['Processing']=='Legacy') & (df['Template']=='Legacy')) | ((df['Processing']=='Generic') & (df['Template']=='Generic'))]
+
+	for key in exclusion_criteria.keys():
+		df = df.loc[~df[key].isin(exclusion_criteria[key])]
+
+	formula = 'Q("{}") ~ {}'.format(dependent_variable, expression)
+	model = smf.mixedlm(formula, df, groups='Uid')
+	fit = model.fit()
+	summary = fit.summary()
+	#print(summary)
 	tex = inline_factor(summary, factor, 'tex', **kwargs)
 	return tex
 

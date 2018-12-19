@@ -8,11 +8,10 @@ from lib.categorical import violinplot
 # Style
 palette = ['#ffb66d','#009093']
 
-data_path = path.abspath('data/functional.csv')
+data_path = path.abspath('data/functional_t.csv')
 df = pd.read_csv(data_path)
 
-#df = df.loc[~df['Subject'].isin(['4003','4009','4002','4004','4006'])]
-
+df = df.loc[~df['Subject'].isin([4003,4006,4013])]
 df = df.loc[df['Processing']!='Unprocessed']
 df = df.loc[((df['Processing']=='Legacy') & (df['Template']=='Legacy')) | ((df['Processing']=='Generic') & (df['Template']=='Generic'))]
 
