@@ -115,8 +115,8 @@ Analogously, the \textcolor{mg}{\texttt{ambmc}} and \textcolor{mg}{\texttt{lambm
 
 \py{pytex_tab('scripts/stim_table.py',
 		label='stim',
-		caption='Stimulation protocol, as performed for functional scans.
-			Stimulus event spacing and parameters are constant across scans, but exact onset time is variable in the \SI{10}{\second} range due to scanner adjustment time variability.',
+		caption='Stimulation protocol, as delivered during functional scans.
+			Stimulus event spacing and parameters are constant across scans, but exact onset time is variable in the \SI{10}{\second} magnitude range due to scanner adjustment time variability.',
 		options_pre='\\scriptsize \\centering \\resizebox{\\columnwidth}{!}{',
 		data='data/JogB.tsv',
 		options_post='}',
@@ -124,14 +124,16 @@ Analogously, the \textcolor{mg}{\texttt{ambmc}} and \textcolor{mg}{\texttt{lambm
 
 
 For the quality control of the workflows, a dataset with an effective size of 102 scans is used.
-The dataset contains 11 adult animals, each recorded on up to 5 sessions (repeated at 14 day intervals).
+Data from 11 adult animals is included, each animal being recorded on up to 5 sessions (repeated at 14 day intervals).
 Each session contains an anatomical scan and two functional scans --- with Blood-Oxygen Level Dependent (BOLD) and Cerebral Blood Volume (CBV) contrast, respectively (for a total of 68 functional scans).
 
 Anatomical scans are acquired via a TurboRARE sequence, with a RARE factor of 8, an echo time (TE) of \SI{7}{\milli\second} and a repetition time (TR) of \SI{2500}{\milli\second}, sampled at a sagittal resolution of $\mathrm{\Delta x(\nu)=\SI{166.7}{\micro\meter}}$, a horizontal resolution of $\mathrm{\Delta y(\phi)=\SI{75}{\micro\meter}}$, and a coronal resolution of $\mathrm{\Delta z(t)=\SI{650}{\micro\meter}}$ (slice thickness of \SI{500}{\micro\meter}).
 The functional BOLD and CBV scans are acquired with a flip angle of \SI{60}{\degree} and with $\mathrm{TR/TE = \SI{1000}{\milli\second}/\SI{15}{\milli\second}}$ and $\mathrm{TR/TE = \SI{1000}{\milli\second}/\SI{5.5}{\milli\second}}$, respectively.
-Functional scans are sampled at $\mathrm{\Delta x(\nu)=\SI{312.5}{\micro\meter}}$, $\mathrm{\Delta y(\phi)=\SI{281.25}{\micro\meter}}$, and $\mathrm{\Delta z(t)=\SI{650}{\micro\meter}}$ (slice thickness of \SI{500}{\micro\meter}).
+Functional scans are sampled at $\mathrm{\Delta x(\nu)=\SI{312.5}{\micro\meter}}$, $\mathrm{\Delta y(\phi)=\SI{281.25}{\micro\meter}}$, and $\mathrm{\Delta z(t)=\SI{650}{\micro\meter}}$ (slice thickness of \SI{500}{\micro\meter}) --- the latter amounting to an effective axial coverage of \SI{2.55}{\milli\meter}.
 All aforementioned scans are acquired with a Bruker PharmaScan system (\SI{7}{\tesla}, \SI{16}{\centi\meter} bore), and an in-house T/R coil.
 
 The measured animals are fitted with an optic fiber implant ($\mathrm{l=\SI{3.2}{\milli\meter} \ d=\SI{400}{\micro\meter}}$) targeting the Dorsal Raphe (DR) nucleus in the brain stem.
-The nucleus is rendered sensitive to optical stimulation (see \cref{tab:stim} for protocol) due to transgenic expression of Cre recombinase under the ePet promoter \cite{Scott2005} and viral injection of rAAVs delivering a plasmid with Cre-conditional expression of Channelrhodopsin and YFP ---
+The nucleus is rendered sensitive to optical stimulation (see \cref{tab:stim} for protocol) by transgenic expression of Cre recombinase under the ePet promoter \cite{Scott2005} and viral injection of rAAVs delivering a plasmid with Cre-conditional expression of Channelrhodopsin and YFP ---
 pAAV-EF1a-double floxed-hChR2(H134R)-EYFP-WPRE-HGHpA, a gift from Karl Deisseroth (Addgene plasmid \#20298).
+
+The DR is stimulated via an Omicron LuxX 488-60 laser (\SI{488}{\nano\meter}) tuned to \SI{30}{\milli\watt} at contact with the fiber implant, according to the protocol listed in \cref{tab:stim}.
