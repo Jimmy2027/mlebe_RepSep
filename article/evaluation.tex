@@ -134,15 +134,21 @@ Hence we calculate the variance over different similiarity metrics for each subj
 We average for each workflow the results across subjects.
 We find that our new preprocessing pipeline has significantly less variance than the legacy workflow, while the optimised pipeline has even further decreased variance.
 
-%\py{pytex_subfigs(
-%	[
-%		{'script':'scripts/map_generic.py', 'label':'dsu', 'conf':'article/template.conf', 'options_pre':'{.48\\textwidth}',
-%			'caption':'The “Generic” template, which exemplifies $T_2$ contrast, a canonical MR \textit{and} stereotactc data matrix orientation, a standard header with an RAS orientation, and a realistic affine transformation.
-%				Note the origin at Bregma which provides histologically meaningful coordinates.'
-%			,},
-%		{'script':'scripts/map_generic_ambmc.py', 'label':'amb','conf':'article/template.conf', 'options_pre':'{.48\\textwidth}',
-%			'caption':'The “Legacy” template, which exemplifies histological contrast, the canonical histological template data matrix orientation (shared e.g. by the Allen Brain Institute template), alongside a non-standard header with features such as an RPS orientation and inflated affine transformation.'
-%			,},
-%		],
-%	caption='Multiplanar depcitions of the mouse brain templates, with slice coordinates centered at zero on all axes.',
-%	label='fig:t',)}
+\py{pytex_subfigs(
+	[
+		{'script':'scripts/map_generic.py', 'label':'dsu', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+			'caption':'The “Generic” template, which exemplifies $T_2$ contrast, a canonical MR \textit{and} stereotactc data matrix orientation, a standard header with an RAS orientation, and a realistic affine transformation.
+				Note the origin at Bregma which provides histologically meaningful coordinates.'
+			,},
+		{'script':'scripts/map_generic_ambmc.py', 'label':'amb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+			'caption':'The “Legacy” template, which exemplifies histological contrast, the canonical histological template data matrix orientation (shared e.g. by the Allen Brain Institute template), alongside a non-standard header with features such as an RPS orientation and inflated affine transformation.'
+			,},
+		{'script':'scripts/map_legacy.py', 'label':'amb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+			'caption':'The “Legacy” template, which exemplifies histological contrast, the canonical histological template data matrix orientation (shared e.g. by the Allen Brain Institute template), alongside a non-standard header with features such as an RPS orientation and inflated affine transformation.'
+			,},
+		{'script':'scripts/map_legacy.py', 'label':'amb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+			'caption':'The “Legacy” template, which exemplifies histological contrast, the canonical histological template data matrix orientation (shared e.g. by the Allen Brain Institute template), alongside a non-standard header with features such as an RPS orientation and inflated affine transformation.'
+			,},
+		],
+	caption='Multiplanar depcitions of the mouse brain templates, with slice coordinates centered at zero on all axes.',
+	label='fig:t',)}
