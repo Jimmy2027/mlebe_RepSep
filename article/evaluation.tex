@@ -136,19 +136,23 @@ We find that our new preprocessing pipeline has significantly less variance than
 
 \py{pytex_subfigs(
 	[
-		{'script':'scripts/map_generic.py', 'label':'dsu', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+		{'script':'scripts/map_generic.py', 'label':'mgd', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'The “Generic” template, which exemplifies $T_2$ contrast, a canonical MR \textit{and} stereotactc data matrix orientation, a standard header with an RAS orientation, and a realistic affine transformation.
 				Note the origin at Bregma which provides histologically meaningful coordinates.'
 			,},
-		{'script':'scripts/map_generic_ambmc.py', 'label':'amb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+		{'script':'scripts/map_generic_ambmc.py', 'label':'mga','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'The “Legacy” template, which exemplifies histological contrast, the canonical histological template data matrix orientation (shared e.g. by the Allen Brain Institute template), alongside a non-standard header with features such as an RPS orientation and inflated affine transformation.'
 			,},
-		{'script':'scripts/map_legacy.py', 'label':'amb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+		{'script':'scripts/map_legacy_dsurqec.py', 'label':'mld','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'The “Legacy” template, which exemplifies histological contrast, the canonical histological template data matrix orientation (shared e.g. by the Allen Brain Institute template), alongside a non-standard header with features such as an RPS orientation and inflated affine transformation.'
 			,},
-		{'script':'scripts/map_legacy.py', 'label':'amb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+		{'script':'scripts/map_legacy.py', 'label':'mla','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'The “Legacy” template, which exemplifies histological contrast, the canonical histological template data matrix orientation (shared e.g. by the Allen Brain Institute template), alongside a non-standard header with features such as an RPS orientation and inflated affine transformation.'
 			,},
 		],
-	caption='Multiplanar depcitions of the mouse brain templates, with slice coordinates centered at zero on all axes.',
-	label='fig:t',)}
+	caption='
+                Multiplanar depictions of the mouse brain templates, with the corresponding second-level omnibus statistical maps for all CBV scans, thresholded at $|t|\geq2$.
+                A low threshold is chosen so as to best depict both the statistic and the statistic coverage.
+                Note also that the statistic coverage is slightly underestimated, as the omnibus contrast is only defined for voxels captured in every functional scan. 
+                ',
+	label='fig:m',)}
