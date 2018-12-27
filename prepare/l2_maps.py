@@ -11,20 +11,15 @@ masks = {
 	}
 
 for key in masks:
-	#We filter by run, since the primary contrast is replaced by the statistic contrast in level2
+	#We filter by run, since the primary contrast is replaced by the statistic contrast in level2.
+	#We exclude animal 4006, as its slice positioning significantly diminishes statistic coverage.
 	glm.l2_common_effect(path.join(preprocess_base,key),
 		workflow_name=key,
 		mask=masks[key],
+		groupby='none',
 		keep_work=False,
 		n_jobs_percentage=.33,
-		match={'run':['1']},
-		out_base='~/ni_data/ofM.dr/l2'
-		)
-	glm.l2_common_effect(path.join(preprocess_base,key),
-		workflow_name=key,
-		mask=masks[key],
-		keep_work=False,
-		n_jobs_percentage=.33,
-		match={'run':['0']},
-		out_base='~/ni_data/ofM.dr/l2'
+		exclude={'subject':['4006'],},
+		include={'run':['1'],},
+		out_base='~/ni_data/ofM.dr/l2',
 		)
