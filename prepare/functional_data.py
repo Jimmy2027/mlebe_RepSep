@@ -24,7 +24,7 @@ for key in masks:
 		path_template='sub-{{subject}}/ses-{{session}}/'\
 			'sub-{{subject}}_ses-{{session}}_task-{{task}}_acq-{{acquisition}}_run-{{run}}_{{modality}}_pfstat.nii.gz',
 		match_regex='.+sub-(?P<sub>.+)/ses-(?P<ses>.+)/'\
-			'.*?_task-(?P<task>.+)_acq-(?P<acquisition>.+)_run-(?P<run>.+)_(?P<modality>cbv|bold)_pfstat\.nii.gz',
+			'.*?_task-(?P<task>.+)_acq-(?P<acquisition>.+)_run-(?P<run>.+)_(?P<modality>cbv|bold)_pfstat\.nii\.gz',
 		)
 	df_ = df_significant_signal(in_df,
 		mask_path=masks[key],
