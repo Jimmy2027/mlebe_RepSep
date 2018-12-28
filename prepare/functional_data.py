@@ -17,12 +17,6 @@ masks_dr = {
 	'legacy':'/usr/share/mouse-brain-atlases/lambmc_200micron_roi-dr.nii',
 	'legacy_dsurqec':'/usr/share/mouse-brain-atlases/ldsurqec_200micron_roi-dr.nii',
 	}
-#masks_dr = {
-#	'generic':'~/newrois/dsurqec_200micron_roi-dr.nii',
-#	'generic_ambmc':'~/newrois/ambmc_200micron_roi-dr.nii',
-#	'legacy':'~/newrois/lambmc_200micron_roi-dr.nii',
-#	'legacy_dsurqec':'~/newrois/ldsurqec_200micron_roi-dr.nii',
-#	}
 
 df = pd.DataFrame([])
 for key in masks:
