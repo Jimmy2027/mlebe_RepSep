@@ -69,7 +69,6 @@ for key in masks:
 	df_ = df_roi_data(in_df,
 		mask_path=masks_dr[key],
 		column_string='DR t',
-		exclude_zero=True,
 		)
 	if 'generic' in key:
 		df_['Processing'] = 'Generic'
