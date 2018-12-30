@@ -28,10 +28,12 @@ for key in masks:
 		)
 	df_ = df_significant_signal(in_df,
 		mask_path=masks[key],
+		exclude_ones=True,
 		)
 	df_ = df_significant_signal(df_,
 		mask_path=masks_dr[key],
 		column_string='DR Significance',
+		exclude_ones=True,
 		)
 	if 'generic' in key:
 		df_['Processing'] = 'Generic'
