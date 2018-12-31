@@ -2,7 +2,7 @@ import pandas as pd
 
 from samri.report.snr import df_significant_signal
 from samri.report.utilities import df_roi_data
-from samri.utilities import bids_autofind_df, bids_autograb
+from samri.utilities import bids_autofind_df
 
 # Total significance
 masks = {
