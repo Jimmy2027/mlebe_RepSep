@@ -14,9 +14,16 @@ df = pd.read_csv(data_path)
 #df = df.loc[~df['Subject'].isin(['4003','4009','4002','4004','4006'])]
 #df = df.loc[df['Session']=='ofMcF1']
 df.loc[df['Processing']=='Unprocessed', 'Template'] = ''
+df['Score'] = ''
+df['Score'] = df['Mean DR Significance'] - df['Mean Significance']
+#df['Score'] = df['Median DR Significance'] / df['Median Significance']
 ax = violinplot(
 	x="Processing",
-	y='Mean DR Significance',
+	#y='Median DR Significance',
+	#y='Median Significance',
+	y='Mean Significance',
+	#y='Mean DR Significance',
+	#y='Score',
 	data=df,
 	hue="Template",
 	saturation=1,
