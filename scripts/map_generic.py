@@ -1,7 +1,7 @@
 import samri.plotting.maps as maps
 from os import path
 
-stat_map = '/home/chymera/ni_data/ofM.dr/l2/generic/ses-ofM/acq-EPIlowcov_run-1_tstat.nii.gz'
+stat_map = '/home/chymera/ni_data/ofM.dr/l2/generic/acq-EPIlowcov_run-1_tstat.nii.gz'
 template = '/usr/share/mouse-brain-atlases/dsurqec_40micron_masked.nii'
 maps.stat(stat_maps=[stat_map],
 	template=template,
