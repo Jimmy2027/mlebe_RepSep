@@ -13,6 +13,6 @@ maps.stat(stat_maps=[stat_map],
 	interpolation=None,
 	draw_colorbar=True,
 	black_bg=False,
-	threshold=2,
+	threshold=1,
 	dim=0.2,
 	)

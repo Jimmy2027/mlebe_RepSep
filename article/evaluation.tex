@@ -10,17 +10,22 @@ Similarity metrics are ill-suited for QC because they are used internally by reg
 Indeed an extreme maximization, especially via nonlinear transformations, results in a distortion of the image, which should be penalized in QC, but in light of image similarity scores, is represented as better performance.
 Additionally, similarity metrics are not independent, so this issue cannot be circumvented by maximizing a subset of metrics and performing QC in via the remainder.
 We thus develop three alternative evaluation metrics: volume conservation, functional analysis, and variance analysis.
+In order to mitigate possible differences arising from qualitative template features, we perform a multivariate analysis of both template and workflow.
 
 \subsection{Volume Conservation}
 
-We have developed a simple, fast, and widely applicable metric to measure distortion introduced by preprocessing workflows.
+We present a simple, fast, and widely applicable metric to measure distortion introduced by preprocessing workflows.
 Volume conservation is based on the assumption that the total volume of the scanned segment of the brain should remain approximately identical after registration.
 A volume increase may indicate that the brain was stretched to fill in template brain space not covered by the scan, while a volume decrease might indicate that non-brain voxels were introduced into the template brain space.
 
-For the current implementation we define brain volume as estimated by the 66\textsuperscript{th} percentile of the unregistered scan.
-The arbitrary unit equivalent of this percentile threshold is recorded for each scan and applied to all registration workflow results for that particular scan, to obtain transformed brain volume estimates.
-In order to mitigate possible differences arising from template size, we perform a multivariate analysis of both template and workflow.
 In order to best analyze volume conservation, a Volume Change Factor (VCF) is computed for each processed scan, whereby volume conservation is highest for a VCF equal to 1.
+For the current implementation we define brain volume as estimated by the 66\textsuperscript{th} percentile of the unregistered scan.
+The arbitrary unit equivalent of this percentile threshold is recorded for each scan and applied to all registration workflow results for that particular scan, to obtain transformed brain volume estimates
+ --- as seen in \cref{eq:vcf}, where $v$ is the voxel volume in the original space, $v^\prime$ the voxel volume in the transformed space, $n$ the number of voxels in the original space, $m$ the number of voxels in the transformes space, $s$ a voxel value sampled from the vector $S$ containing all values in the original data, and $s^\prime$ a voxel value sampled from the transformed data.
+
+\begin{equation} \label{eq:vcf}
+        VCF = \frac{v\sum_{i=1}^n [s_i \geq P_{66}(S)]}{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}
+\end{equation}
 
 % This metric provides distortion checking rather than goodness-of-fit qantification, which is, as previously described, difficult to do in a lean automated fashion.
 
@@ -62,8 +67,8 @@ We do, however, report a notable effect for the contrast-template interaction, w
 
 \subsection{Functional Analysis}
 
-Functional analysis in another suitable method to ascertain registration quality, as the metric being maximized in the registration process is not the same metric used for QC.
-This method is however primarily (and exceptionally) suited to demonstrate workflow relevance to higher-level applications, and less suited for wide-spread QC (as it is the most computationally intensive and only applicable to a subset of all mouse MRI data).
+Functional analysis in another viable avenue for examining registration quality, as the metric being maximized in the registration process is not the same metric used for QC.
+This method is however primarily (and exceptionally) suited to examine workflow selection in light of higher-level applications, and less suited for wide-spread QC (as it is the most computationally intensive and only applicable to a subset of all mouse MRI data).
 
 \begin{sansmath}
 \py{pytex_subfigs(
@@ -79,14 +84,13 @@ This method is however primarily (and exceptionally) suited to demonstrate workf
         label='fig:fa',)}
 \end{sansmath}
 
-As seen in \cref{fig:fa}, we note that functional score is sensitive to both
-the processing workflow (
-\py{boilerplate.fstatistic('Processing', dependent_variable='Mean DR t', df_path='data/functional_t.csv', exclusion_criteria={'Subject':[4003,4006,4013]}, condensed=True)}
-), the template (
-\py{boilerplate.fstatistic('Template', dependent_variable='Mean DR t', df_path='data/functional_t.csv', exclusion_criteria={'Subject':[4003,4006,4013]}, condensed=True)}
-), and interaction thereof (
-\py{boilerplate.fstatistic('Processing:Template', dependent_variable='Mean DR t', df_path='data/functional_t.csv', exclusion_criteria={'Subject':[4003,4006,4013]}, condensed=True)}
-).
+As seen in \cref{fig:fa}, we note that functional score is sensitive to neither
+the processing workflow
+(\py{boilerplate.fstatistic('Processing', dependent_variable='Mean DR t', df_path='data/functional_t.csv', exclusion_criteria={'Subject':[4003,4006,4013]}, condensed=True)}),
+nor the template
+(\py{boilerplate.fstatistic('Template', dependent_variable='Mean DR t', df_path='data/functional_t.csv', exclusion_criteria={'Subject':[4003,4006,4013]}, condensed=True)}),
+nor the interaction thereof
+(\py{boilerplate.fstatistic('Processing:Template', dependent_variable='Mean DR t', df_path='data/functional_t.csv', exclusion_criteria={'Subject':[4003,4006,4013]}, condensed=True)}).
 
 Testing the core hypothesis of the comparison ---
 whether the Generic SAMRI workflow (with the Generic template) performs significantly different than the Legacy workflow (with the Legacy template) ---
@@ -94,7 +98,9 @@ we note that it does not
 (two-tailed p-value of
 \py{pytex_printonly('scripts/fa_t.py')}
 ).
-We observe however a slight positive offset from zero in the generic processing with the generic contrast condition of \cref{fig:fav}, but not in any of the others.
+We observe however a slight
+Further, we note that there is a variance increase in all conditions for the Legacy processing workflow
+(\py{boilerplate.varianceratio(template='Legacy')}-fold given the Legacy template, and \py{boilerplate.varianceratio(template='Generic')}-fold given the Generic template).
 
 With respect to the data break-up by contrast (from \cref{fig:facv}), we see a notable positive main effect for the contrast variable
 (Dorsal Raphe t-statistic mean of
@@ -159,6 +165,6 @@ We find that our new preprocessing pipeline has significantly less variance than
 	caption='
                 Multiplanar depictions of mouse brain templates, with the corresponding second-level omnibus statistical maps evaluating all CBV scans, and thresholded at $\mathrm{|t|\geq2}$
                 (a low threshold is chosen so as to best depict both statistic values and the spatial statistic coverage).
-                Note that the spatial statistic coverage is slightly underestimated, as the omnibus contrast is only defined for voxels captured in \textit{every} evaluated scan.
+                Note that the spatial statistic coverage is slightly underestimated, as the omnibus contrast is only defined for voxels captured in \\textit{every} evaluated scan.
                 ',
 	label='fig:m',)}

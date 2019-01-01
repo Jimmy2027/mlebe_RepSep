@@ -30,5 +30,4 @@ ax = violinplot(
 	inner_linewidth=1.0,
 	linewidth=mpl.rcParams['grid.linewidth'],
 	linecolor='w',
-	bw=0.3,
 	)
