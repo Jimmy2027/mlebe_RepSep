@@ -12,9 +12,9 @@ and (3) graphical or interactive interfaces are wholly avoided (as they impede r
 		\includedot[width=\textwidth]{data/generic}
 		\vspace{1.4em}
 		\caption{
-			“SAMRI Generic” (new) workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function, and making no use of empirical value thresholding, or destructive operations such as affine manipulation or data matrix reordering.
-			The pipeline uses a higher-resolution structural scan intermediary for registration (note the two processing streams).
-			The function used is highly parameterized, and both of its instances --- “s\niceus register” and “f\niceus register” --- are supplied in the workflow with defaults optimized for mouse brain registration).
+			“SAMRI Generic”  workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function.
+			The pipeline uses a higher-resolution structural scan intermediary for registration (note the two processing streams), which facilitates differential handling of anatomical variation and susceptibility artefacts.
+			The function used is highly parameterized, and both of its instances --- “s\niceus register” and “f\niceus register” --- are supplied in the workflow with defaults optimized for mouse brain registration.
 			}
 		\label{fig:wfgg}
 	\end{subfigure}\hfill
@@ -23,8 +23,7 @@ and (3) graphical or interactive interfaces are wholly avoided (as they impede r
 		\includedot[width=\textwidth]{data/legacy}
 		\vspace{-1.9em}
 		\caption{
-			“SAMRI Legacy” workflow, based on the \textcolor{mg}{\texttt{antsIntroduction.sh}} function, performing destructive affine manipulations, and not making use of a structural intermediary.
-			The function used has hard-coded parameters optimized for human brain registration.
+			“SAMRI Legacy” workflow, based on the \textcolor{mg}{\texttt{antsIntroduction.sh}} function (and other functions with hard-coded parameters optimized for human brain registration), while also performing destructive affine manipulations.
 			}
 		\label{fig:wfgl}
 	\end{subfigure}
@@ -92,7 +91,7 @@ As such, template quality needs to be ascertained, and a workflow-compliant defa
 Our recommended template (see \cref{fig:dsu}) is derived from the DSURQE template --- of the Toronto Hospital for Sick Children Mouse Imaging Center \cite{dsu}.
 The geometric origin of this derived template corresponds to the Bregma landmark, and provides integration with histological atlases and surgical procedures (commonly using Bregma for reference).
 The template is in the canonical orientation of the NIfTI format, RAS (left$\rightarrow$Right, posterior$\rightarrow$Anterior, inferior$\rightarrow$Superior), and has a coronal slice positioning reflective of both the typical animal head position in MR scanners and in stereotactic surgery frames.
-The template is provided in \SI{40}{\micro\meter} and \SI{200}{\micro\meter} isotropic resolutions; 
+The template is provided in \SI{40}{\micro\meter} and \SI{200}{\micro\meter} isotropic resolutions;
 and all of its associated mask and label files are identified with the prefix \textcolor{mg}{\texttt{dsurqec}} in the template packages.
 
 We bundle the aforementioned MR template with two additional histological templates, derived from the Australian Mouse Brain Mapping Consortium (AMBMC) \cite{amb}, and the Allen Brain Institute (ABI) \cite{abi} templates.
