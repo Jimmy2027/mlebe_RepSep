@@ -1,7 +1,9 @@
 from os import path
 from samri.pipelines import glm
 
-preprocess_base = '~/ni_data/ofM.dr/l1/'
+scratch_dir = '~/data_scratch/irsabi'
+
+preprocess_base = '{}/l1/'.format(scratch_dir)
 
 masks = {
 	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
@@ -20,6 +22,16 @@ for key in masks:
 		keep_work=False,
 		n_jobs_percentage=.33,
 		exclude={'subject':['4006'],},
+		include={'run':['0'],},
+		out_base='{}/l2'.format(scratch_dir),
+		)
+	glm.l2_common_effect(path.join(preprocess_base,key),
+		workflow_name=key,
+		mask=masks[key],
+		groupby='none',
+		keep_work=False,
+		n_jobs_percentage=.33,
+		exclude={'subject':['4006'],},
 		include={'run':['1'],},
-		out_base='~/ni_data/ofM.dr/l2',
+		out_base='{}/l2'.format(scratch_dir),
 		)
