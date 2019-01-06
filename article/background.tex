@@ -13,8 +13,8 @@ As a consequence of this marginal positioning in the preprocessing sequence, as 
 Registration QC is a notable issue for human as well as mouse brain imaging;
 and is not limited as much by a lack of reporting functions, as by a lack of reporting metrics which can easily be communicated for a population.
 Human brain imaging uniquely benefits from high-level functions (shipped by most software packages providing registration functionality), which are already optimized for the size and spatial features of the human brain.
-The availability and widespread use of such functions greatly mitigates the issues which would otherwise arise from lack of QC.
-In mouse brain imaging, however, registration is frequently performed using the selfsame high-level functions from human brain imaging; which are rendered usable for mouse brain data by a series of manipulations adjusting the nature of the data to fit function priors and optimized parameters (rather than vice-versa).
+The availability and widespread use of such functions greatly mitigates the issues which would otherwise arise from a lack of QC.
+In mouse brain imaging, however, registration is frequently performed using the selfsame high-level functions from human brain imaging; which are rendered usable for mouse brain data by a series of manipulations adjusting the nature of the data to fit the priors and optimized parameters of the functions (rather than vice-versa).
 
 This general approach entails numerous issues (e.g. as depicted in \cref{fig:md}), and represents a notable hurdle for the methodological improvement of mouse brain imaging.
 Furthermore, such solutions are intended as “fast fixes”, and are not thoroughly documented anywhere in the field.
@@ -22,7 +22,7 @@ We thus explicitly describe current practices, in an effort to not only propose 
 
 \subsection{Manipulations}
 The foremost data manipulation procedure in present-day mouse MRI is the adjustment of voxel dimensions.
-These dimensions are represented in the Neuroimaging Informatics Technology Initiative format (NIfTI) header \cite{nifti} by affine transformation parameters --- which map data matrix cordinates to gemoetrically meaningful spatial coordinates.
+These dimensions are represented in the Neuroimaging Informatics Technology Initiative format (NIfTI) header \cite{nifti} by affine transformation parameters --- which map data matrix cordinates to geometrically meaningful spatial coordinates.
 Manipulations of the affine parameters are performed in order to make the data represent not the physiological mouse brain dimensions, but volumes corresponding to what human-optimized brain extraction, bias correction, and registration interfaces expect (commonly this constitutes a 10-fold increase in each spatial dimension).
 
 Another notable data manipulation procedure consists in adjusting the data matrix content itself, so that human-prior based brain extraction will produce acceptable results.
@@ -34,7 +34,7 @@ Often, the orientation of the scan is also seen as problematic, and consequently
 This procedure consists in resetting the S-Form affine from the NIfTI header to zeroes, and is intended to mitigate a data orientation produced by the scanner which is incorrect with respect to the target template.
 While it is true that the scanner affine reported for mouse data may be nonstandard (the confusion is two-fold: mice lie prone with the coronal plane progressing axially whereas higher primates lie supine with the horizontal plane progressing axially), it is equally true that affines of mouse brain templates may be nonstandard.
 A different but related manipulation is dimension swapping, which changes the order of the NIfTI data matirx rather than the affine.
-Occasionally, correct or automatically redressable affine parameters are thus deleted, and data reordered beyond easy recovery, in order to correspond to a malformed template.
+Occasionally, correct or automatically redressable affine parameters are thus deleted and data is reordered beyond easy recovery, in order to correspond to a malformed template.
 
 \begin{figure*}[h!]
 	\begin{subfigure}{\textwidth}
@@ -42,7 +42,7 @@ Occasionally, correct or automatically redressable affine parameters are thus de
 		\includedot[width=\textwidth]{data/metadata}
 		\vspace{-2.5em}
 		\caption{
-			Example of a flowchart providing metadata consistency. This minimizes operator interaction and ensures that all information accessible to the data format (e.g. NIfTI + BIDS) is correctly encapsulated at every step, and correctly interpretable by researchers familiar with the openly documented standards.
+			Flowchart depicting consistent metadata handling. This minimizes operator interaction and ensures that all information accessible to the data format (e.g. NIfTI + BIDS) is correctly encapsulated at every step, and correctly interpretable by researchers familiar with the openly documented standards.
 			}
 		\label{fig:mdg}
 	\end{subfigure}
@@ -51,12 +51,12 @@ Occasionally, correct or automatically redressable affine parameters are thus de
 		\includedot[width=\textwidth]{data/metadata_bad}
 		\vspace{-2.5em}
 		\caption{
-			Example of a flowchart employing ad hoc metadata substitution. This introduces additional operator interaction steps (colored brown), and renders the metadata encapsulated in standardized formats ambiguous (coloured red), and less well interpretable to researchers unfamiliar with the specific ad hoc convention.
+			Flowchart depicting ad hoc metadata substitution. This introduces additional operator interaction steps (colored brown), and renders the metadata encapsulated in standardized formats ambiguous (coloured red), and less well interpretable to researchers unfamiliar with the specific ad hoc convention.
 			}
 		\label{fig:mdb}
 	\end{subfigure}
 	\caption{
-		Simplified data flowcharts for generic (functional) MRI, contrasting ad hoc metadata substitution in animal MRI with consistent handling.
+		Simplified fMRI data flowcharts, contrasting consistent and ad-hoc metadata management.
 		}
 	\label{fig:md}
 \end{figure*}
@@ -67,17 +67,17 @@ Templates used for mouse brain MRI registration are highly heterogeneous, and in
 
 Histological templates benefit from higher resolution and access to molecular imaging data in the same coordinate space.
 Such histological templates are however not produced in volumetric sampling analogous to MRI, and are often not assigned a meaningful affine after conversion to NIfTI.
-Histological contrast may only poorly correlate with any MR contrast, such as $T_1$, $T_2$, or $T_2^*$, making registration --- especially at lower resolutions --- less reliable, or necessitating the use of similarity metrics which impose additional restrictions.
+Histological contrast may only poorly correlate with any MR contrast, such as $T_1$, $T_2$, or $T_2^*$, making registration less reliable, or necessitating the use of similarity metrics which impose additional restrictions.
 Not least of all, histological templates may be severely deformed (and may lack distal parts of the brain such as the olfactory bulbs) due to the brain extraction and sampling process.
 Consequently, data registered to them may be particularly difficult to use for navigation in the intact mouse brain, e.g. during data acquisition or stereotactic surgery.
 
 Ex-vivo templates based on extracted brains share most of the deformation issues present in histological templates;
-they are, however available in native MR contrasts, commonly $T_2$, making registration far easier.
+they are, however, available in native MR contrasts (commonly $T_2$) making registration far easier.
 They suffer, in comparison, from a lower resolution, and would need to have any histological data from a histological atlas space first registered to them.
 Ex-vivo templates based on intact mouse heads provide both native MR contrast and brains free of deformation and supporting whole brain sampling.
 They share the resolution issues and the need for re-registered histological data, which is also seen in ex-vivo templates based on extracted brains.
 
 \subsection{Challenges}
-It thus becomes obvious that in addition to the issues shared with registration of human MRI data, the current challenges in mouse MRI registration consist in minimizing workarounds and reliance on high-level interfaces with inappropriate parameters and priors, as well as the reduction (perhaps through merger) of standard space templates.
-Information removal during preprocessing is a notable issue, since the loss of data at the onset of a neouroimaging workflow, will persist in all downstream steps and preclude numerous modes of analysis.
+It thus becomes obvious that the foremost challenges in mouse MRI registration consist in minimizing workarounds and reliance on high-level interfaces with inappropriate parameters and priors, as well as in the reduction (perhaps through merger) of standard space templates.
+Information removal during preprocessing is another notable issue, since the loss of data at the onset of a neouroimaging workflow will persist in all downstream steps and preclude numerous modes of analysis (as depicted in \cref{fig:md}).
 

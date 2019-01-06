@@ -9,12 +9,12 @@ if [ ! -d ~/data_scratch ]; then
 fi
 
 if [ ! -d ~/data_scratch/irsabi/bids ]; then
-	if [ -d "/usr/share/irsabi_bidsdata" ]; then
+	if [ -d '/usr/share/irsabi_bidsdata' ]; then
 		[ -d ~/data_scratch/irsabi ] || mkdir ~/data_scratch/irsabi
-		ln -s /usr/share/irsabi_bidsdata ~/data_scratch/irsabi/bids
+		ln -s '/usr/share/irsabi_bidsdata' ~/data_scratch/irsabi/bids
 	else
 		echo "No IRSABI BIDS data distribution found, processing from scanner IRSABI data:"
-		SAMRI bru2bids -o ~/data_scratch/irsabi/ -f '{"acquisition":["EPIlowcov"]}' -s '{"acquisition":["TurboRARElowcov"]}' /usr/share/irsabi_data/
+		SAMRI bru2bids -o ~/data_scratch/irsabi/ -f '{"acquisition":["EPIlowcov"]}' -s '{"acquisition":["TurboRARElowcov"]}' '/usr/share/irsabi_data/' 
 	fi
 fi
 

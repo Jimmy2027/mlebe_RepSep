@@ -11,7 +11,6 @@ palette = ['#ffb66d','#009093']
 data_path = path.abspath('data/functional_t.csv')
 df = pd.read_csv(data_path)
 
-df = df.loc[~df['Subject'].isin([4003,4006,4013])]
 df = df.loc[df['Processing']!='Unprocessed']
 df = df.loc[((df['Processing']=='Legacy') & (df['Template']=='Legacy')) | ((df['Processing']=='Generic') & (df['Template']=='Generic'))]
 
@@ -30,5 +29,4 @@ ax = violinplot(
 	inner_linewidth=1.0,
 	linewidth=mpl.rcParams['grid.linewidth'],
 	linecolor='w',
-	bw=0.3,
 	)

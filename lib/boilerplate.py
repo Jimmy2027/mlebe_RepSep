@@ -92,19 +92,20 @@ def vcc_factorci(factor,
 def varianceratio(
 	df_path='data/volumes.csv',
 	template=False,
+	dependent_variable='Volume Change Factor',
 	max_len=2,
 	**kwargs
 	):
 
-	volume_path = path.abspath('data/volumes.csv')
-	df = pd.read_csv(volume_path)
+	df_path = path.abspath(df_path)
+	df = pd.read_csv(df_path)
 
 	df = df.loc[df['Processing']!='Unprocessed']
 
 	if template:
 		df = df.loc[df['Template']==template]
-	legacy = np.var(df.loc[df['Processing']=='Legacy', 'Volume Change Factor'].tolist())
-	generic = np.var(df.loc[df['Processing']=='Generic', 'Volume Change Factor'].tolist())
+	legacy = np.var(df.loc[df['Processing']=='Legacy', dependent_variable].tolist())
+	generic = np.var(df.loc[df['Processing']=='Generic', dependent_variable].tolist())
 
 
 	ratio = legacy/generic

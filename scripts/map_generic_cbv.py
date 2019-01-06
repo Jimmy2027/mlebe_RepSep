@@ -5,14 +5,14 @@ stat_map = '/home/chymera/ni_data/ofM.dr/l2/generic/acq-EPIlowcov_run-1_tstat.ni
 template = '/usr/share/mouse-brain-atlases/dsurqec_40micron_masked.nii'
 maps.stat(stat_maps=[stat_map],
 	template=template,
-	overlays=['/usr/share/mouse-brain-atlases/dsurqec_200micron_roi-dr.nii'],
-	cut_coords=[(0,-4.5,-2.9)],
+	#overlays=['/usr/share/mouse-brain-atlases/dsurqec_200micron_roi-dr.nii'],
+	#cut_coords=[(0,-4.5,-2.9)],
 	annotate=True,
 	scale=0.2,
 	show_plot=False,
 	interpolation=None,
 	draw_colorbar=True,
 	black_bg=False,
-	threshold=2,
+	threshold=1,
 	dim=0.2,
 	)

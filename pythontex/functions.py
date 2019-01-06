@@ -80,11 +80,12 @@ def pytex_tab(script,
 def pytex_subfigs(scripts,
 	caption='',
 	label='',
+	placement='[h]',
 	):
 	"""
 	Executes a series of Python scripts, grabbing the figures individually, and placing them as subfigures in a figure environment
 	"""
-	subfigs = '\\begin{figure*}[ht]\n'
+	subfigs = '\\begin{{figure*}}{}\n'.format(placement)
 	for script in scripts:
 		try:
 			script_conf = script['conf']

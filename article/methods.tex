@@ -12,9 +12,9 @@ and (3) graphical or interactive interfaces are wholly avoided (as they impede r
 		\includedot[width=\textwidth]{data/generic}
 		\vspace{1.4em}
 		\caption{
-			“SAMRI Generic” (new) workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function, and making no use of empirical value thresholding, or destructive operations such as affine manipulation or data matrix reordering.
-			The pipeline uses a higher-resolution structural scan intermediary for registration (note the two processing streams).
-			The function used is highly parameterized, and both of its instances --- “s\niceus register” and “f\niceus register” --- are supplied in the workflow with defaults optimized for mouse brain registration).
+			“SAMRI Generic”  workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function.
+			The pipeline uses a higher-resolution structural scan intermediary for registration (note the two processing streams), which facilitates differential handling of anatomical variation and susceptibility artefacts.
+			The function used is highly parameterized, and both of its instances --- “s\niceus register” and “f\niceus register” --- are supplied in the workflow with defaults optimized for mouse brain registration.
 			}
 		\label{fig:wfgg}
 	\end{subfigure}\hfill
@@ -23,8 +23,7 @@ and (3) graphical or interactive interfaces are wholly avoided (as they impede r
 		\includedot[width=\textwidth]{data/legacy}
 		\vspace{-1.9em}
 		\caption{
-			“SAMRI Legacy” workflow, based on the \textcolor{mg}{\texttt{antsIntroduction.sh}} function, performing destructive affine manipulations, and not making use of a structural intermediary.
-			The function used has hard-coded parameters optimized for human brain registration.
+			“SAMRI Legacy” workflow, which is based on the \textcolor{mg}{\texttt{antsIntroduction.sh}} function (and other functions with hard-coded parameters optimized for human brain registration), and also performs destructive affine manipulations.
 			}
 		\label{fig:wfgl}
 	\end{subfigure}
@@ -53,9 +52,9 @@ Via Nipype we utilize basic MRI preprocessing functions from the FSL package \ci
 While there is theoretically no limit to the number of external packages usable with Nipype, we constrain our choice as much as possible in order to minimize the dependency graph.
 The choice of the ANTs package (in addition to FSL, which also provides registration functions) owes to the package providing registration functions which are more highly parameterized.
 This feature allows us to avoid maladaptive (for our specific use case) optimization choices, and instead adapt the registration to the brain images at hand.
-Additionally we use a number of functions specifically developed for our workflows, which aid in more case-specific tasks, such as BIDS \cite{bids} input, and dummy scans management.
+Additionally, we use a number of functions specifically developed for our workflows, which aid in more case-specific tasks, such as BIDS \cite{bids} input, and dummy scans management.
 
-Given the aforementioned guiding principles, and the hitherto listed technologies, we have constructed two registration workflows: The “Legacy” workflow (\cref{fig:wfgl}), which exhibits the common practices detailed in the \nameref{sec:bg}~section; and our novel “Generic” workflow.
+Given the aforementioned guiding principles, and the hitherto listed technologies, we have constructed two registration workflows: The “Legacy” workflow (\cref{fig:wfgl}), which exhibits the common practices detailed in the \nameref{sec:bg}~section; and our novel “Generic” workflow (\cref{fig:wfgg}).
 
 For Quality Control we distribute as part of this publication workflows using the NumPy \cite{numpy}, SciPy \cite{scipy}, and pandas \cite{pandas} packages, as well as Statsmodels \cite{statsmodels} for top-level statistics and matplotlib \cite{matplotlib} and Seaborn \cite{seaborn} for plotting.
 Specifically, distribution densities for plots are drawn using the Scott bandwidth density estimator \cite{Scott1979}.
@@ -66,14 +65,13 @@ Specifically, distribution densities for plots are drawn using the Scott bandwid
 
 As registration is a crucial step of a larger data analysis process (rather than an analysis process in its own right), the workflows are best distributed as part of a full stack (i.e. from raw data to statistical summaries) workflow package.
 We include the aforementioned Generic and Legacy workflows in the SAMRI (Small Animal Magnetic Resonance Imaging) data analysis package \cite{samri} of the ETH/UZH Institute for Biomedical Engineering.
-This Free and Open Source package handles data analysis for numerous collaborators, and applies the guiding principles relevant to the registration workflows throughout all processing steps.
 
 \subsection{Template Package}
 
 \py{pytex_subfigs(
 	[
 		{'script':'scripts/dsurqec.py', 'label':'dsu', 'conf':'article/template.conf', 'options_pre':'{.48\\textwidth}',
-			'caption':'The “Generic” template, which exemplifies $T_2$ contrast, a canonical MR \textit{and} stereotactc data matrix orientation, a standard header with an RAS orientation, and a realistic affine transformation.
+			'caption':'The “Generic” template, which exemplifies $T_2$ contrast, a canonical MR \\textit{and} stereotactic data matrix orientation, a standard header with an RAS orientation, and a realistic affine transformation.
 				Note the origin at Bregma which provides histologically meaningful coordinates.'
 			,},
 		{'script':'scripts/ambmc.py', 'label':'amb','conf':'article/template.conf', 'options_pre':'{.48\\textwidth}',
@@ -85,14 +83,14 @@ This Free and Open Source package handles data analysis for numerous collaborato
 
 The suitability of a registration workflow as a standard is contingent on the quality of the template being used.
 Particularly size and orientation of the template may pose constraints on the workflow.
-For example, an unrealistically inflated template size mandates according parameters for all functions which deal with the data in its affine-determined geometric space.
+For example, an unrealistically inflated template size mandates according parameters for all functions which deal with the data in its affine space.
 Additionally, if the template axis orientation deviates by more than \SI{45}{\degree} from the image to be registered (or, as is more often the case, an axis is flipped), the global maximum of the first (rigid) registration steps may not be correctly determined, and the image would then be skewed and nonlinearly deformed to match  the template at an incorrect orientation.
 As such, template quality needs to be ascertained, and a workflow-compliant default should be provided.
 
 Our recommended template (see \cref{fig:dsu}) is derived from the DSURQE template --- of the Toronto Hospital for Sick Children Mouse Imaging Center \cite{dsu}.
 The geometric origin of this derived template corresponds to the Bregma landmark, and provides integration with histological atlases and surgical procedures (commonly using Bregma for reference).
 The template is in the canonical orientation of the NIfTI format, RAS (left$\rightarrow$Right, posterior$\rightarrow$Anterior, inferior$\rightarrow$Superior), and has a coronal slice positioning reflective of both the typical animal head position in MR scanners and in stereotactic surgery frames.
-The template is provided in \SI{40}{\micro\meter} and \SI{200}{\micro\meter} isotropic resolutions; 
+The template is provided in \SI{40}{\micro\meter} and \SI{200}{\micro\meter} isotropic resolutions;
 and all of its associated mask and label files are identified with the prefix \textcolor{mg}{\texttt{dsurqec}} in the template packages.
 
 We bundle the aforementioned MR template with two additional histological templates, derived from the Australian Mouse Brain Mapping Consortium (AMBMC) \cite{amb}, and the Allen Brain Institute (ABI) \cite{abi} templates.
@@ -107,9 +105,8 @@ Lastly, due to data size considerations, we distribute \SI{15}{\micro\meter} iso
 The two packages which we thus distribute are called \textcolor{mg}{\texttt{mouse-brain-atlases}} and \textcolor{mg}{\texttt{mouse-brain-atlasesHD}};
 and up-to-date versions of these archives can be reproduced via a FOSS script collection (which handles download, reorienting, and resampling, and was written and released for the purpose of this publication).
 
-For the comparisons performed in this text, the \textcolor{mg}{\texttt{dsurqec}} and \textcolor{mg}{\texttt{ldsurqec}} template variations (which contain the same data matrix, but are matched to the orientation and size requirements of the \cref{fig:wfgg} and \cref{fig:wfgl} workflows, respectively) are referred to as the “Generic” template.
+For the comparisons performed in this text, the \textcolor{mg}{\texttt{dsurqec}} and \textcolor{mg}{\texttt{ldsurqec}} template variations (containing the same data matrix, but matched to the orientation and size requirements of the \cref{fig:wfgg} and \cref{fig:wfgl} workflows, respectively) are referred to as the “Generic” template.
 Analogously, the \textcolor{mg}{\texttt{ambmc}} and \textcolor{mg}{\texttt{lambmc}} template variations are referred to as the “Legacy” template.
-%These naming choices derive from the to the introduction as the default template for the Generic SAMRI preprocessing workflow of the former and the prevalent usage in the Legacy SAMRI preprocessing workflow of the latter template.
 
 \subsection{Testing Dataset}
 
@@ -129,7 +126,7 @@ Each session contains an anatomical scan and two functional scans --- with Blood
 
 Anatomical scans are acquired via a TurboRARE sequence, with a RARE factor of 8, an echo time (TE) of \SI{7}{\milli\second} and a repetition time (TR) of \SI{2500}{\milli\second}, sampled at a sagittal resolution of $\mathrm{\Delta x(\nu)=\SI{166.7}{\micro\meter}}$, a horizontal resolution of $\mathrm{\Delta y(\phi)=\SI{75}{\micro\meter}}$, and a coronal resolution of $\mathrm{\Delta z(t)=\SI{650}{\micro\meter}}$ (slice thickness of \SI{500}{\micro\meter}).
 The functional BOLD and CBV scans are acquired with a flip angle of \SI{60}{\degree} and with $\mathrm{TR/TE = \SI{1000}{\milli\second}/\SI{15}{\milli\second}}$ and $\mathrm{TR/TE = \SI{1000}{\milli\second}/\SI{5.5}{\milli\second}}$, respectively.
-Functional scans are sampled at $\mathrm{\Delta x(\nu)=\SI{312.5}{\micro\meter}}$, $\mathrm{\Delta y(\phi)=\SI{281.25}{\micro\meter}}$, and $\mathrm{\Delta z(t)=\SI{650}{\micro\meter}}$ (slice thickness of \SI{500}{\micro\meter}) --- the latter, in conjunction with an axial slice number of 14, amounting to an effective axial coverage of \SI{9.1}{\milli\meter}.
+Functional scans are sampled at $\mathrm{\Delta x(\nu)=\SI{312.5}{\micro\meter}}$, $\mathrm{\Delta y(\phi)=\SI{281.25}{\micro\meter}}$, and $\mathrm{\Delta z(t)=\SI{650}{\micro\meter}}$ (slice thickness of \SI{500}{\micro\meter}).
 All aforementioned scans are acquired with a Bruker PharmaScan system (\SI{7}{\tesla}, \SI{16}{\centi\meter} bore), and an in-house T/R coil.
 
 The measured animals are fitted with an optic fiber implant ($\mathrm{l=\SI{3.2}{\milli\meter} \ d=\SI{400}{\micro\meter}}$) targeting the Dorsal Raphe (DR) nucleus in the brain stem.
@@ -137,3 +134,8 @@ The nucleus is rendered sensitive to optical stimulation (see \cref{tab:stim} fo
 pAAV-EF1a-double floxed-hChR2(H134R)-EYFP-WPRE-HGHpA, a gift from Karl Deisseroth (Addgene plasmid \#20298).
 
 The DR is stimulated via an Omicron LuxX 488-60 laser (\SI{488}{\nano\meter}) tuned to \SI{30}{\milli\watt} at contact with the fiber implant, according to the protocol listed in \cref{tab:stim}.
+
+\subsection{Reproducibility}
+
+The source code for this document and all data analysis shown herein (including registration and QC workflow execution) is published according to the RepSeP specifications \cite{repsep}.
+The data analysis execution and document compilation has been tested repeatedly on numerous machines, and as such we attest that all figures and statistics presented can be reproduced based solely on the raw data, dependency list, and analysis scripts which we distribute.
