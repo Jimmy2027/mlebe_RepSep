@@ -18,9 +18,6 @@ if [ ! -d ~/data_scratch/irsabi/bids ]; then
 	fi
 fi
 
-echo "i"
-exit 1
-
 python preprocess.py || exit 1
 python collapse.py || exit 1
 python volume_data.py || exit 1
