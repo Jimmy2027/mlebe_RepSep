@@ -23,6 +23,7 @@ RDEPEND="
 	dev-texlive/texlive-latex
 	media-gfx/graphviz
 	sci-biology/nilearn
+	>=sci-biology/samri-0.2
 	scanner-data? ( sci-biology/samri_data )
 	!scanner-data? ( sci-biology/samri_bidsdata )
 "
