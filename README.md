@@ -2,6 +2,18 @@
 
 These are the content files used to generate scientific communication materials for the project originally titled “Improving Registration in Small Animal Brain Imaging”.
 
+## Dependencies
+
+A full list of unabmiguously identified dependency constraints is specified [here](.gentoo/sci-publications/irsabi/irsabi-99999.ebuild) (following the [Package Manager Specification format](https://dev.gentoo.org/~ulm/pms/head/pms.html#x1-690008.2)). 
+On a Gentoo Linux system, dependencies can be automatically managed with the included install script:
+
+```
+su -
+cd /path/to/irsabi
+cd .gentoo
+./install.sh
+```
+
 ## Compilation Instructions
 
 This is a [RepSeP](https://github.com/TheChymera/RepSeP)-style document.
