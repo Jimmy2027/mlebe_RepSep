@@ -20,7 +20,7 @@ RDEPEND="
 	dev-python/pandas
 	>=dev-python/statsmodels-0.9.0
 	>=dev-tex/pythontex-0.16
-	dev-texlive/texlive-latex
+	app-text/texlive[science,xetex]
 	media-gfx/graphviz
 	sci-biology/nilearn
 	>=sci-biology/samri-0.2
