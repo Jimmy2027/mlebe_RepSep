@@ -1,11 +1,23 @@
 from itertools import product
+from os import path
 from samri.report.snr import df_threshold_volume ,iter_threshold_volume
-from samri.utilities import bids_autograb
 import nibabel as nib
 import numpy as np
 import pandas as pd
+from bids.grabbids import BIDSLayout
+from bids.grabbids import BIDSValidator
 
 scratch_dir = '~/data_scratch/irsabi'
+
+def bids_autograb(bids_dir):
+	bids_dir = path.abspath(path.expanduser(bids_dir))
+	validate = BIDSValidator()
+	layout = BIDSLayout(bids_dir)
+	df = layout.as_data_frame()
+
+	# Unclear in current BIDS specification, we refer to BOLD/CBV as modalities and func/anat as types
+	df = df.rename(columns={'modality': 'type', 'type': 'modality'})
+	return df
 
 base_df = bids_autograb('{}/bids_collapsed'.format(scratch_dir))
 base_df = base_df.loc[~base_df['path'].str.endswith('.json')]
