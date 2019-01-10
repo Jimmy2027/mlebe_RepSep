@@ -1,12 +1,14 @@
 from os import path
 from samri.pipelines import glm
 
-preprocess_base = '~/ni_data/ofM.dr/preprocessing/'
+scratch_dir = '~/data_scratch/irsabi'
+
+preprocess_base = '{}/preprocessing/'.format(scratch_dir)
 
 masks = {
-#	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
-#	'generic_ambmc':'/usr/share/mouse-brain-atlases/ambmc_200micron_mask.nii',
-#	'legacy':'/usr/share/mouse-brain-atlases/lambmc_200micron_mask.nii',
+	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
+	'generic_ambmc':'/usr/share/mouse-brain-atlases/ambmc_200micron_mask.nii',
+	'legacy':'/usr/share/mouse-brain-atlases/lambmc_200micron_mask.nii',
 	'legacy_dsurqec':'/usr/share/mouse-brain-atlases/ldsurqec_200micron_mask.nii',
 	}
 
@@ -19,7 +21,7 @@ for key in masks:
 		n_jobs_percentage=.33,
 		match={'type':['cbv']},
 		invert=True,
-		out_base='~/ni_data/ofM.dr/l1'
+		out_base='{}/l1'.format(scratch_dir)
 		)
 	glm.l1(path.join(preprocess_base,key),
 		workflow_name=key,
@@ -29,5 +31,5 @@ for key in masks:
 		n_jobs_percentage=.33,
 		match={'type':['bold']},
 		invert=False,
-		out_base='~/ni_data/ofM.dr/l1'
+		out_base='{}/l1'.format(scratch_dir)
 		)

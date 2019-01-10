@@ -1,31 +1,45 @@
 from itertools import product
+from os import path
 from samri.report.snr import df_threshold_volume ,iter_threshold_volume
-from samri.utilities import bids_autograb
 import nibabel as nib
 import numpy as np
 import pandas as pd
+from bids.grabbids import BIDSLayout
+from bids.grabbids import BIDSValidator
 
-base_df = bids_autograb('~/ni_data/ofM.dr/bids_collapsed')
+scratch_dir = '~/data_scratch/irsabi'
+
+def bids_autograb(bids_dir):
+	bids_dir = path.abspath(path.expanduser(bids_dir))
+	validate = BIDSValidator()
+	layout = BIDSLayout(bids_dir)
+	df = layout.as_data_frame()
+
+	# Unclear in current BIDS specification, we refer to BOLD/CBV as modalities and func/anat as types
+	df = df.rename(columns={'modality': 'type', 'type': 'modality'})
+	return df
+
+base_df = bids_autograb('{}/bids_collapsed'.format(scratch_dir))
 base_df = base_df.loc[~base_df['path'].str.endswith('.json')]
 base_df = base_df.loc[base_df['modality'].isin(['bold','cbv'])]
 base_df['uID'] = base_df['subject']+'_'+base_df['session']+'_'+base_df['modality']
 
-generic_df = bids_autograb('~/ni_data/ofM.dr/preprocessing/generic_collapsed')
+generic_df = bids_autograb('{}/preprocessing/generic_collapsed'.format(scratch_dir))
 generic_df = generic_df.loc[~generic_df['path'].str.endswith('.json')]
 generic_df = generic_df.loc[generic_df['modality'].isin(['bold','cbv'])]
 generic_df['uID'] = generic_df['subject']+'_'+generic_df['session']+'_'+generic_df['modality']
 
-generic_ambmc_df = bids_autograb('~/ni_data/ofM.dr/preprocessing/generic_ambmc_collapsed')
+generic_ambmc_df = bids_autograb('{}/preprocessing/generic_ambmc_collapsed'.format(scratch_dir))
 generic_ambmc_df = generic_ambmc_df.loc[~generic_ambmc_df['path'].str.endswith('.json')]
 generic_ambmc_df = generic_ambmc_df.loc[generic_ambmc_df['modality'].isin(['bold','cbv'])]
 generic_ambmc_df['uID'] = generic_ambmc_df['subject']+'_'+generic_ambmc_df['session']+'_'+generic_ambmc_df['modality']
 
-legacy_df = bids_autograb('~/ni_data/ofM.dr/preprocessing/legacy_collapsed')
+legacy_df = bids_autograb('{}/preprocessing/legacy_collapsed'.format(scratch_dir))
 legacy_df = legacy_df.loc[~legacy_df['path'].str.endswith('.json')]
 legacy_df = legacy_df.loc[legacy_df['modality'].isin(['bold','cbv'])]
 legacy_df['uID'] = legacy_df['subject']+'_'+legacy_df['session']+'_'+legacy_df['modality']
 
-legacy_dsurqec_df = bids_autograb('~/ni_data/ofM.dr/preprocessing/legacy_dsurqec_collapsed')
+legacy_dsurqec_df = bids_autograb('{}/preprocessing/legacy_dsurqec_collapsed'.format(scratch_dir))
 legacy_dsurqec_df = legacy_dsurqec_df.loc[~legacy_dsurqec_df['path'].str.endswith('.json')]
 legacy_dsurqec_df = legacy_dsurqec_df.loc[legacy_dsurqec_df['modality'].isin(['bold','cbv'])]
 legacy_dsurqec_df['uID'] = legacy_dsurqec_df['subject']+'_'+legacy_dsurqec_df['session']+'_'+legacy_dsurqec_df['modality']

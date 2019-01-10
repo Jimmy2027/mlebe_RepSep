@@ -5,8 +5,10 @@ import os
 from joblib import Parallel, delayed
 from samri.pipelines.extra_functions import reset_background
 
-legacy = os.walk(os.path.expanduser('~/ni_data/ofM.dr/preprocessing/legacy'))
-legacy_dsurqec = os.walk(os.path.expanduser('~/ni_data/ofM.dr/preprocessing/legacy_dsurqec'))
+scratch_dir = '~/data_scratch/irsabi'
+
+legacy = os.walk(os.path.expanduser('{}/preprocessing/legacy'.format(scratch_dir)))
+legacy_dsurqec = os.walk(os.path.expanduser('{}/preprocessing/legacy_dsurqec'.format(scratch_dir)))
 in_files = []
 for r,_,fs in list(legacy)+list(legacy_dsurqec):
 	for f in fs:

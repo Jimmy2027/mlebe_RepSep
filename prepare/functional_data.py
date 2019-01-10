@@ -4,6 +4,8 @@ from samri.report.snr import df_significant_signal
 from samri.report.utilities import df_roi_data
 from samri.utilities import bids_autofind_df
 
+scratch_dir = '~/data_scratch/irsabi'
+
 # Total significance
 masks = {
 	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
@@ -20,7 +22,7 @@ masks_dr = {
 
 df = pd.DataFrame([])
 for key in masks:
-	in_df = bids_autofind_df('~/ni_data/ofM.dr/l1/{}/'.format(key),
+	in_df = bids_autofind_df('{}/l1/{}/'.format(scratch_dir,key),
 		path_template='sub-{{subject}}/ses-{{session}}/'\
 			'sub-{{subject}}_ses-{{session}}_task-{{task}}_acq-{{acquisition}}_run-{{run}}_{{modality}}_pfstat.nii.gz',
 		match_regex='.+sub-(?P<sub>.+)/ses-(?P<ses>.+)/'\
@@ -62,7 +64,7 @@ df.to_csv('../data/functional_significance.csv')
 
 df = pd.DataFrame([])
 for key in masks:
-	in_df = bids_autofind_df('~/ni_data/ofM.dr/l1/{}/'.format(key),
+	in_df = bids_autofind_df('{}/l1/{}/'.format(scratch_dir,key),
 		path_template='sub-{{subject}}/ses-{{session}}/'\
 			'sub-{{subject}}_ses-{{session}}_task-{{task}}_acq-{{acquisition}}_run-{{run}}_{{modality}}_tstat.nii.gz',
 		match_regex='.+sub-(?P<sub>.+)/ses-(?P<ses>.+)/'\

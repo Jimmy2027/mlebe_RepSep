@@ -16,8 +16,8 @@ import numpy as np
 
 # preprocess the data
 # ------------------
-bids_base = '~/ni_data/ofM.dr/bids/'
-template = "/usr/share/mouse-brain-atlases/dsurqec_200micron.nii"
+bids_base = '~/data_scratch/irsabi/bids/'
+template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
 
 full_prep(bids_base,
 	"mouse",
