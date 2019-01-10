@@ -14,6 +14,19 @@ cd .gentoo
 ./install.sh
 ```
 
+### Manual Data Download (only if automated Gentoo dependency management is unavailable)
+
+While other dependencies will very likely be available from your distribution's own package manager, the data package of this publication is likely not.
+You can manually install it via the following commands:
+
+```
+wget chymera.eu/distfiles/irsabi_bidsdata-1.0.tar.xz
+tar xf irsabi_bidsdata-1.0.tar.xz
+mv irsabi_bidsdata-1.0 /usr/share/irsabi_bidsdata
+```
+
+The latter command may require superuser access.
+
 ## Compilation Instructions
 
 This is a [RepSeP](https://github.com/TheChymera/RepSeP)-style document.
