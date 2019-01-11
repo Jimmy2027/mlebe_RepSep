@@ -12,12 +12,12 @@ digraph graphname {
     g_[label="Sharing", style="bold, rounded", color="#BBBBBB"];
     a[label="Analog  ", shape=cds, color="#BBBBBB", fillcolor=grey93, fontcolor="#999998"];
     m0[label="Manual  ", shape=cds, color="#BBBBBB", fillcolor=grey93, fontcolor="#999998"];
-    b[label="FID", shape=folder, color="#BBBBBB", fillcolor=grey93];
+    b[label="Free Induction\nDecay", shape=folder, color="#BBBBBB", fillcolor=grey93];
     m1[
         label=<<FONT COLOR="#45B000">Metadata</FONT>>,
         shape=folder, color="#BBBBBB", fillcolor=grey93,
         ];
-    c[label="2D Reconstruction\n(optional)", shape=folder, color="#BBBBBB", fillcolor=grey93];
+    c[label="Volumetric\nReconstruction", shape=folder, color="#BBBBBB", fillcolor=grey93];
     d[  label=<Raw Volumetric<BR/><FONT COLOR="#45B000">+Metadata</FONT>>,
         shape=folder, color="#BBBBBB", fillcolor=grey93,
         ];
