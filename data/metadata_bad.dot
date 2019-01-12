@@ -10,8 +10,8 @@ digraph graphname {
     f_[label="Sharing", style="bold, rounded", color="#BBBBBB"];
     g_[label="Sharing", style="bold, rounded", color="#BBBBBB"];
     a[label="Analog  ", shape=cds, color="#BBBBBB", fillcolor=grey93, fontcolor="#999998"];
-    b[label="FID", shape=folder, color="#BBBBBB", fillcolor=grey93];
-    c[label="2D Reconstruction\n(optional)", shape=folder, color="#BBBBBB", fillcolor=grey93];
+    b[label="Free Induction\nDecay", shape=folder, color="#BBBBBB", fillcolor=grey93];
+    c[label="Volumetric\nReconstruction", shape=folder, color="#BBBBBB", fillcolor=grey93];
     d[label="Raw Volumetric\n +M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#EF0533", fillcolor=grey93];
     e[label="Preprocessed Volumetric\n +M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#EF0533", fillcolor=grey93];
     f[label="volumetric Statistic\n +M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#EF0533", fillcolor=grey93];
