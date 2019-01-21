@@ -128,17 +128,17 @@ We note that the CBV contrast processed with the Generic template and either the
 			,},
 		{'script':'scripts/map_generic_ambmc_cbv.py', 'label':'mglc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-                                Generic workflow with Legacy template CBV map, showing incorrect slice orientation and coverage caudally extending beyond acquisition area.
+                                Generic workflow with Legacy template CBV map, showing incorrect slice orientation and coverage caudally extending beyond the acquisition area.
                                 '
 			,},
 		{'script':'scripts/map_legacy_dsurqec_cbv.py', 'label':'mlgc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-                                Legacy workflow with Generic template CBV map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
+                                Legacy workflow with Generic template CBV map, showing correct slice orientation and coverage caudally extending beyond the acquisition area.
                                 '
 			,},
 		{'script':'scripts/map_legacy_cbv.py', 'label':'mllc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-				Legacy workflow with Legacy template CBV map, showing incorrect slice orientation and coverage both caudally and rostrally extending far beyond acquisition area.
+				Legacy workflow with Legacy template CBV map, showing incorrect slice orientation and coverage both caudally and rostrally extending beyond acquisition area.
 				'
 			,},
 		{'script':'scripts/map_generic_bold.py', 'label':'mggb', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
@@ -148,7 +148,7 @@ We note that the CBV contrast processed with the Generic template and either the
 			,},
 		{'script':'scripts/map_generic_ambmc_bold.py', 'label':'mglb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-                                Generic workflow with Legacy template BOLD map, showing incorrect slice orientation and coverage caudally extending beyond acquisition area.
+                                Generic workflow with Legacy template BOLD map, showing incorrect slice orientation and coverage correctly bound to the acquisition area.
                                 '
 			,},
 		{'script':'scripts/map_legacy_dsurqec_bold.py', 'label':'mlgb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
@@ -158,12 +158,12 @@ We note that the CBV contrast processed with the Generic template and either the
 			,},
 		{'script':'scripts/map_legacy_bold.py', 'label':'mllb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-				Legacy workflow with Legacy template BOLD map, showing incorrect slice orientation and coverage both caudally and rostrally extending far beyond acquisition area.
+				Legacy workflow with Legacy template BOLD map, showing incorrect slice orientation and coverage both caudally and rostrally extending beyond acquisition area.
 			        '
                         ,},
 		],
 	caption='
                 Multiplanar depictions of mouse brain templates, with the corresponding second-level omnibus statistical maps separately evaluating CBV and BOLD scans, and thresholded at $\mathrm{|t|\geq2}$.
-                Note that the spatial statistic coverage is slightly underestimated, as the omnibus contrast is only defined for voxels captured in \\textit{every} evaluated scan.
+                The acquisition area is bracketed in pink, and in comparing it to statistic coverage it is important to note that the spatial coverage of the latter is slightly underestimated, as the omnibus contrast is only defined for voxels captured in \\textit{every} evaluated scan.
                 ',
 	label='fig:m',)}
