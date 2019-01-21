@@ -18,7 +18,7 @@ A volume increase may indicate that the brain was stretched to fill in template 
 In order to best analyze volume conservation, a Volume Change Factor (VCF) is computed for each processed scan, whereby volume conservation is highest for a VCF equal to 1.
 For the current implementation we define brain volume as estimated by the 66\textsuperscript{th} voxel intensity percentile of the unregistered scan.
 The arbitrary unit equivalent of this percentile threshold is recorded for each scan and applied to all registration workflow results for that particular scan, to obtain VCF esimates
- --- as seen in \cref{eq:vcf}, where $v$ is the voxel volume in the original space, $v^\prime$ the voxel volume in the transformed space, $n$ the number of voxels in the original space, $m$ the number of voxels in the transformed space, $s$ a voxel value sampled from the vector $S$ containing all values in the original data, and $s^\prime$ a voxel value sampled from the transformed data.
+ --- detailed in \cref{eq:vcf}, where $v$ is the voxel volume in the original space, $v^\prime$ the voxel volume in the transformed space, $n$ the number of voxels in the original space, $m$ the number of voxels in the transformed space, $s$ a voxel value sampled from the vector $S$ containing all values in the original data, and $s^\prime$ a voxel value sampled from the transformed data.
 
 \begin{equation} \label{eq:vcf}
         V\!C\!F
@@ -36,7 +36,7 @@ The arbitrary unit equivalent of this percentile threshold is recorded for each 
                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
                 ],
-        caption='Volume change relative to the original scan volume. Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
+        caption='Volume change relative to the original scan volume. The coloured patch width estimates distribution density, while solid lines indicate the sample mean and dashed lines indicate the inner quartiles.',
         label='fig:vc',
         )}
 \end{sansmath}
@@ -63,9 +63,9 @@ We do, however, report a notable effect for the contrast-template interaction, w
 \subsection{Functional Analysis}
 
 Functional analysis is a viable avenue for registration QC, as the metric being maximized in the registration process is not the same metric used for QC.
-This method is however primarily suited to examine workflow effects in light of higher-level applications, and less suited for wide-spread QC (as it is computationally intensive and only applicable to a subset of mouse MRI data).
-As a first step we examine statistical power, via the negative logarithm of p-value maps.
-We compute the per-scan average of these values, which we term Mean Significance --- as seen in \cref{eq:ms}, where $n$ represents the number of statistical estimates in the scan, and $p$ is a p-value.
+This method is however primarily suited to examine workflow effects in light of higher-level applications, and less suited for wide-spread QC (as it is computationally intensive and only applicable to stimulus-evoked functional data).
+As a first step we examine statistical power, via the negative logarithm of first-level p-value maps (i.e. voxelwise statistical estimates for the probability that each voxel time course is at least as well correlated with the stimulation regressor, by chance alone).
+We compute the per-scan average of these values, which we term Mean Significance --- detailed in \cref{eq:ms}, where $n$ represents the number of statistical estimates in the scan, and $p$ is a p-value.
 
 \begin{equation} \label{eq:ms}
         M\!S = \frac{\sum_{i=1}^n -log(p_i)}{n}
@@ -85,19 +85,15 @@ We compute the per-scan average of these values, which we term Mean Significance
         label='fig:ms',)}
 \end{sansmath}
 
-As seen in \cref{fig:ms}, we note that MS is sensitive to neither the processing workflow
+As seen in \cref{fig:ms}, MS is sensitive to neither the processing workflow
 (\py{boilerplate.fstatistic('Processing', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}),
 nor the template
 (\py{boilerplate.fstatistic('Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}),
 nor the interaction thereof
 (\py{boilerplate.fstatistic('Processing:Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}).
 
-Testing the core hypothesis of the comparison ---
-whether the performance of the Generic SAMRI workflow (with the Generic template) is significantly different from that of the Legacy workflow (with the Legacy template) ---
-we note that it is not
-(two-tailed p-value of
-\py{pytex_printonly('scripts/ms_t.py')}).
-As before, we note that there is a variance increase in all conditions for the Legacy processing workflow
+The Generic SAMRI workflow (with the Generic template) is not significantly different from that of the Legacy workflow (with the Legacy template), yielding a two-tailed p-value of \py{pytex_printonly('scripts/ms_t.py')}.
+There is again a variance increase in all conditions for the Legacy processing workflow
 (\py{boilerplate.varianceratio(df_path='data/functional_significance.csv', template='Legacy', dependent_variable='Mean Significance')}-fold
 given the Legacy template, and
 \py{boilerplate.varianceratio(df_path='data/functional_significance.csv', template='Generic', dependent_variable='Mean Significance')}-fold
@@ -106,18 +102,18 @@ given the Generic template).
 With respect to the data break-up by contrast (from \cref{fig:mscv}), we see no notable positive main effect for the contrast variable
 (MS of
 \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
-We do, however, report a notable effect for the contrast-template interaction, with the Legacy workflow and CBV contrast interaction level introducing a volume loss
+We do, however, report a notable effect for the contrast-template interaction, with the Legacy workflow and CBV contrast interaction level introducing a significance increase
 (MS of
 \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
 
-Overall statistical power is, however, independent of the mapping accuracy, and functional analysis effects can be further inspected by visualizing statistical maps.
+Overall statistical power is, however, independent of the mapping accuracy, and functional analysis effects can be further inspected by visualizing the statistic maps.
 For a succint overview capturing both amplitude and directionality of the signal, we present second-level t-statistic maps depicting the CBV and BOLD omnibus contrasts (across subjects and sessions) in \cref{fig:m}.
 While the most salient feature of this figure is the qualitative distribution difference between CBV and BOLD scans, we note that this is to be expected given the different nature of the processes.
 More relevant to registration quality is the differential coverage.
-We note that the Legacy template universally induces coverage overflow, extending to the cerebellum in all cases (\cref{fig:mglc,fig:mllc,fig:mglb,fig:mllb}), and to the olfactory bulbs when used in conjunction with the Legacy workflow (\cref{fig:mllc,fig:mllb}).
-Separately from the Legacy template, the Legacy workflow only causes coverage overflow (both rostrally into the base of the olfactory bulbs and caudally into the cerebellum) for the BOLD contrast (\cref{fig:mlgb}).
-Positive activation of the Raphe system, most clearly disambiguated from the surrounding tissue in the BOLD contrast is notably displaced very far caudally by the joint effects of the Legacy workflow and the Legacy template (\cref{fig:mllb}).
-We note that the CBV contrast processed with the Generic template and either the Generic or the Legacy workflows (\cref{fig:mggc,fig:mlgc}), as well as the BOLD contrast processed with the Generic template and the Generic workflow (\cref{fig:mggb}) do not show issues of statistic coverage.
+We note that the Legacy template induces coverage overflow, extending to the cerebellum (\cref{fig:mglc,fig:mllc,fig:mllb}), and to the olfactory bulbs when used in conjunction with the Legacy workflow (\cref{fig:mllc,fig:mllb}).
+Separately from the Legacy template, the Legacy workflow causes coverage overflow (both rostrally into the base of the olfactory bulbs and caudally into the cerebellum) even when used in conjunction with the Generic template (\cref{fig:mlgc,fig:mlgb}).
+Positive activation of the Raphe system, most clearly disambiguated from the surrounding tissue in the BOLD contrast, is notably displaced very far caudally by the joint effects of the Legacy workflow and the Legacy template (\cref{fig:mllb}).
+We note that processing with the Generic template the Generic workflow (\cref{fig:mggc,fig:mggb}), do not show issues of statistic coverage.
 
 \py{pytex_subfigs(
 	[
@@ -148,7 +144,7 @@ We note that the CBV contrast processed with the Generic template and either the
 			,},
 		{'script':'scripts/map_generic_ambmc_bold.py', 'label':'mglb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-                                Generic workflow with Legacy template BOLD map, showing incorrect slice orientation and coverage correctly bound to the acquisition area.
+                                Generic workflow with Legacy template BOLD map, showing incorrect slice orientation and coverage correctly bounded to the acquisition area.
                                 '
 			,},
 		{'script':'scripts/map_legacy_dsurqec_bold.py', 'label':'mlgb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
@@ -163,7 +159,7 @@ We note that the CBV contrast processed with the Generic template and either the
                         ,},
 		],
 	caption='
-                Multiplanar depictions of mouse brain templates, with the corresponding second-level omnibus statistical maps separately evaluating CBV and BOLD scans, and thresholded at $\mathrm{|t|\geq2}$.
+                Multiplanar depictions of mouse brain templates, with the corresponding second-level omnibus statistic maps separately evaluating CBV and BOLD scans, and thresholded at $\mathrm{|t|\geq2}$.
                 The acquisition area is bracketed in pink, and in comparing it to statistic coverage it is important to note that the spatial coverage of the latter is slightly underestimated, as the omnibus contrast is only defined for voxels captured in \\textit{every} evaluated scan.
                 ',
 	label='fig:m',)}
