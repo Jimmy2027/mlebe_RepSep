@@ -1,6 +1,6 @@
 digraph graphname {
     newrank = true;
-    size="26,10";
+    size="26,12";
     rankdir="LR";
     graph [fontname = "sans"];
     node [fontname = "sans", style=filled];
@@ -12,24 +12,24 @@ digraph graphname {
     a[label="Analog  ", shape=cds, color="#BBBBBB", fillcolor=grey93, fontcolor="#999998"];
     b[label="Free Induction\nDecay", shape=folder, color="#BBBBBB", fillcolor=grey93];
     c[label="Volumetric\nReconstruction", shape=folder, color="#BBBBBB", fillcolor=grey93];
-    d[label="Raw Volumetric\n +M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#EF0533", fillcolor=grey93];
-    e[label="Preprocessed Volumetric\n +M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#EF0533", fillcolor=grey93];
-    f[label="volumetric Statistic\n +M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#EF0533", fillcolor=grey93];
+    d[label="Raw Volumetric\n +M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#F00533", fillcolor=grey93];
+    e[label="Preprocessed Volumetric\n +M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#F00533", fillcolor=grey93];
+    f[label="volumetric Statistic\n +M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#F00533", fillcolor=grey93];
     g[label="Plot or Summary", shape=folder, color="#BBBBBB", fillcolor=grey93];
     m0[label="Manual  ", shape=cds, color="#BBBBBB", fillcolor=grey93, fontcolor="#999998"];
-    m1[label="M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#EF0533", fillcolor=grey93];
+    m1[label="M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#F00533", fillcolor=grey93];
     m_bad[
         label=<<FONT COLOR="#45B000">Metadata</FONT>>,
-        shape=folder, color="#BBBBBB", fillcolor=grey93,
+        shape=folder, color="#805010", fillcolor=grey93,
         ];
-    m0_bad[label="Manual  ", shape=cds, color="#8B4513", fillcolor=grey93, fontcolor="#8B4513"];
+    m0_bad[label="Manual  ", shape=cds, color="#805010", fillcolor=grey93, fontcolor="#805010"];
     
     m0 -> m1 ;
-    m0_bad -> m_bad[color="#8B4513"];
-    m_bad:e -> d:w[minlen=3, arrowhead=none, color="#8B4513"];
-    m_bad:e -> e:w[arrowhead=none, color="#8B4513"];
-    m_bad:e -> f:w[arrowhead=none, color="#8B4513"];
-    m_bad:e -> g:w[arrowhead=none, color="#8B4513"];
+    m0_bad -> m_bad[color="#805010"];
+    m_bad:e -> d:n[color="#805010"];
+    m_bad:e -> e:n[color="#805010"];
+    m_bad:e -> f:n[color="#805010"];
+    m_bad:e -> g:n[color="#805010"];
     a -> b ;
     subgraph cluster1 {
         b -> c ;
