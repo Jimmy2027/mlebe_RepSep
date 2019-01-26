@@ -140,7 +140,7 @@ df_generic['Processing'] = 'Generic'
 df_generic['Template'] = 'Generic'
 
 template = '/usr/share/mouse-brain-atlases/ambmc_200micron.nii'
-df_generic_legacy = reg_cc(path = scratch_dir + '/preprocessing/generic_collapsed/', save = '../data/' + "variance_data_generic", template=template, autofind=True)
+df_generic_legacy = reg_cc(path = scratch_dir + '/preprocessing/generic_ambmc_collapsed/', save = '../data/' + "variance_data_generic", template=template, autofind=True)
 df_generic_legacy['Processing'] = 'Generic'
 df_generic_legacy['Template'] = 'Legacy'
 
@@ -150,16 +150,16 @@ df_legacy['Processing'] = 'Legacy'
 df_legacy['Template'] = 'Legacy'
 
 template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
-df_legacy_generic = reg_cc(path = scratch_dir + '/preprocessing/legacy_collapsed/', save = '../data/' + "variance_data_legacy", template=template, autofind=True)
+df_legacy_generic = reg_cc(path = scratch_dir + '/preprocessing/legacy_dsurqec_collapsed/', save = '../data/' + "variance_data_legacy", template=template, autofind=True)
 df_legacy_generic['Processing'] = 'Legacy'
 df_legacy_generic['Template'] = 'Generic'
 
-template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
-df_bids = reg_cc(path = scratch_dir + '/bids_collapsed/', save = '../data/' + "variance_data_bids", template=template, autofind=True)
-df_bids['Processing'] = 'Unprocessed'
-df_bids['Template'] = 'Unprocessed'
+#template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
+#df_bids = reg_cc(path = scratch_dir + '/bids_collapsed/', save = '../data/' + "variance_data_bids", template=template, autofind=True)
+#df_bids['Processing'] = 'Unprocessed'
+#df_bids['Template'] = 'Unprocessed'
 
-df = pd.concat([df_generic, df_legacy, df_generic_legacy, df_legacy_generic, df_bids])
+df = pd.concat([df_generic, df_legacy, df_generic_legacy, df_legacy_generic])
 
 df['smoothness'] = df['path'].apply(avg_smoothness)
 df['acq'] = df['acquisition'].apply(acqname)
