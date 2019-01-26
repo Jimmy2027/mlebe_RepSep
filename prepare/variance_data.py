@@ -70,7 +70,7 @@ def reg_cc(
         radius=8,
         autofind=False,
         plot=False,
-        save = "f_reg_quality",
+        save_as = "f_reg_quality",
         #metrics = ['CC','GC'],
         metrics = ['CC','GC','MI'],
         ):
@@ -98,7 +98,6 @@ def reg_cc(
                 radius_or_number_of_bins=radius,
                 sampling_strategy="Regular",
                 sampling_percentage=0.95,
-                #save_as= save + "_" + metric +  ".csv",
                 save_as = False,
                 )
 
@@ -113,9 +112,9 @@ def reg_cc(
                         sampling_percentage=0.95,
                         save_as=False,
                         )
-                #df[metric]  = _df['similarity']
                 df[metric] = _df['similarity'].values
-        df.to_csv(save + ".csv")
+        if save_as:
+                df.to_csv(save_as + ".csv")
 
         return df
 
@@ -123,20 +122,15 @@ def reg_cc(
 scratch_dir = '~/data_scratch/irsabi'
 
 template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
-df_generic = reg_cc(path = scratch_dir + '/preprocessing/generic_collapsed/', save = '../data/' + "variance_data_generic", template=template, autofind=True)
+df_generic = reg_cc(path = scratch_dir + '/preprocessing/generic_collapsed/', template=template, autofind=True)
 df_generic['Processing'] = 'Generic'
 
 template = '/usr/share/mouse-brain-atlases/lambmc_200micron.nii'
-df_legacy = reg_cc(path = scratch_dir + '/preprocessing/legacy_collapsed/', save = '../data/' + "variance_data_legacy", template=template, autofind=True)
+df_legacy = reg_cc(path = scratch_dir + '/preprocessing/legacy_collapsed/', template=template, autofind=True)
 df_legacy['Processing'] = 'Legacy'
 
-template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
-df_bids = reg_cc(path = scratch_dir + '/bids_collapsed/', save = '../data/' + "variance_data_bids", template=template, autofind=True)
-df_bids['Processing'] = 'Unprocessed'
-
-df = pd.concat([df_generic, df_legacy, df_bids])
-df.to_csv('./data/variance_data.csv')
-
+df = pd.concat([df_generic, df_legacy], sort=False)
+df.to_csv('../data/variance_data.csv')
 
 df_cc = df.drop('GC', axis=1).drop('MI',axis=1)
 df_cc['Similarity Metric'] = 'CC'
@@ -148,5 +142,5 @@ df_mi = df.drop('GC', axis=1).drop('CC',axis=1)
 df_mi['Similarity Metric'] = 'MI'
 df_mi.rename(columns={'MI':'similarity'}, inplace=True)
 
-df = pd.concat([df_cc, df_gc, df_mi])
-df.to_csv('./data/variance_data_catplot.csv')
+df = pd.concat([df_cc, df_gc, df_mi], sort=False)
+df.to_csv('../data/variance_data_catplot.csv')
