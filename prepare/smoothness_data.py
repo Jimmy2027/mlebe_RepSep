@@ -132,8 +132,6 @@ def acqname(inp_entry):
         else:
                 return 'cbv'
 
-
-
 scratch_dir = '~/data_scratch/irsabi'
 
 template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
