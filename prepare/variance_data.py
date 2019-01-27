@@ -131,16 +131,3 @@ df_legacy['Processing'] = 'Legacy'
 
 df = pd.concat([df_generic, df_legacy], sort=False)
 df.to_csv('../data/variance_data.csv')
-
-df_cc = df.drop('GC', axis=1).drop('MI',axis=1)
-df_cc['Similarity Metric'] = 'CC'
-df_cc.rename(columns={'CC':'similarity'}, inplace=True)
-df_gc = df.drop('CC', axis=1).drop('MI',axis=1)
-df_gc['Similarity Metric'] = 'GC'
-df_gc.rename(columns={'GC':'similarity'}, inplace=True)
-df_mi = df.drop('GC', axis=1).drop('CC',axis=1)
-df_mi['Similarity Metric'] = 'MI'
-df_mi.rename(columns={'MI':'similarity'}, inplace=True)
-
-df = pd.concat([df_cc, df_gc, df_mi], sort=False)
-df.to_csv('../data/variance_data_catplot.csv')
