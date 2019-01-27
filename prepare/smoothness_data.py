@@ -1,5 +1,6 @@
 from itertools import product
 from os import path
+import os
 from samri.report.snr import df_threshold_volume ,iter_threshold_volume
 import nibabel as nib
 import numpy as np
@@ -74,3 +75,8 @@ mean_smoothness = bids_smoothness['smoothness'].mean()
 df['Smoothness Change Factor'] = df['smoothness'] / mean_smoothness
 
 df.to_csv('../data/smoothness_data.csv')
+
+files = os.listdir('./')
+for _file in files:
+        if(not _file.endswith(('.py','.md','.sh'))):
+                os.remove(path.abspath(path.expanduser(_file)))
