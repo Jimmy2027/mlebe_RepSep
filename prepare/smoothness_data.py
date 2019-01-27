@@ -168,4 +168,4 @@ bids_smoothness = df[df['Processing'] == 'Unprocessed']
 mean_smoothness = bids_smoothness['smoothness'].mean()
 df['Smoothness Change Factor'] = df['smoothness'] / mean_smoothness
 
-df.to_csv('./data/smoothness_data.csv')
+df.to_csv('../data/smoothness_data.csv')
