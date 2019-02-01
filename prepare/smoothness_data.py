@@ -78,5 +78,5 @@ df.to_csv('../data/smoothness_data.csv')
 
 files = os.listdir('./')
 for _file in files:
-        if(not _file.endswith(('.py','.md','.sh'))):
+        if  _file.endswith(('.out','.1D')):
                 os.remove(path.abspath(path.expanduser(_file)))
