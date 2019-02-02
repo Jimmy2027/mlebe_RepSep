@@ -25,9 +25,12 @@ def avg_smoothness(inp_file):
         fwhm = afni.FWHMx()
         fwhm.inputs.in_file = inp_file
         fwhm.inputs.acf = True
-        res = fwhm.run().outputs.fwhm
-        mean_smoothness = np.asarray(res).mean()
-        return mean_smoothness
+        fwhm_run = fwhm.run()
+        # It appears the new/correct FWHM is now located under the last position of the ACF estimates.
+        # https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dFWHMx.html
+        res = fwhm_run.outputs.acf_param[3]
+        #mean_smoothness = np.asarray(res).mean()
+        return res
 
 def acqname(inp_entry):
         if('bold' in  inp_entry):
@@ -58,6 +61,7 @@ df_bids['Processing'] = 'Unprocessed'
 df_bids['Template'] = 'Unprocessed'
 
 df = pd.concat([df_generic, df_legacy, df_generic_legacy, df_legacy_generic, df_bids])
+df['uID'] = df['subject']+'_'+df['session']+'_'+df['modality']
 
 df = df.loc[np.logical_or(df.modality == 'cbv', df.modality == 'bold')]
 df['acq'] = df['modality']
@@ -65,11 +69,11 @@ df['acq'] = df['modality']
 df['smoothness'] = df['path'].apply(avg_smoothness)
 #df['acq'] = df['acquisition'].apply(acqname)
 
-bids_smoothness = df[df['Processing'] == 'Unprocessed']
-mean_smoothness = bids_smoothness['smoothness'].mean()
-df['Smoothness Change Factor'] = df['smoothness'] / mean_smoothness
-
-df.to_csv('../data/smoothness_data.csv')
+df['Smoothness Change Factor'] = ''
+uids = df['uID'].unique()
+for uid in uids:
+	original = df.loc[(df['uID']==uid) & (df['Processing']=='Unprocessed'), 'smoothness'].item()
+	df.loc[(df['uID']==uid), 'Smoothness Change Factor'] = df.loc[(df['uID']==uid), 'smoothness'] / original
 
 files = os.listdir('./')
 for _file in files:
