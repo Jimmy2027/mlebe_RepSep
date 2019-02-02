@@ -37,27 +37,22 @@ def acqname(inp_entry):
 
 scratch_dir = '~/data_scratch/irsabi'
 
-template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
 df_generic = bids_autograb(scratch_dir + '/preprocessing/generic_collapsed/')
 df_generic['Processing'] = 'Generic'
 df_generic['Template'] = 'Generic'
 
-template = '/usr/share/mouse-brain-atlases/ambmc_200micron.nii'
 df_generic_legacy = bids_autograb(scratch_dir + '/preprocessing/generic_ambmc_collapsed/')
 df_generic_legacy['Processing'] = 'Generic'
 df_generic_legacy['Template'] = 'Legacy'
 
-template = '/usr/share/mouse-brain-atlases/lambmc_200micron.nii'
 df_legacy = bids_autograb(scratch_dir + '/preprocessing/legacy_collapsed/')
 df_legacy['Processing'] = 'Legacy'
 df_legacy['Template'] = 'Legacy'
 
-template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
 df_legacy_generic = bids_autograb(scratch_dir + '/preprocessing/legacy_dsurqec_collapsed/')
 df_legacy_generic['Processing'] = 'Legacy'
 df_legacy_generic['Template'] = 'Generic'
 
-template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
 df_bids = bids_autograb(scratch_dir + '/bids_collapsed/')
 df_bids['Processing'] = 'Unprocessed'
 df_bids['Template'] = 'Unprocessed'
