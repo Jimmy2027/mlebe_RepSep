@@ -2,6 +2,7 @@ import pandas as pd
 from os import path
 import numpy as np
 from lib.categorical import violinplot
+import matplotlib.pyplot as plt
 import matplotlib as mpl
 
 palette = ['#80e050','#755575']
@@ -11,9 +12,10 @@ df = pd.read_csv(path.abspath(df_path))
 df = df[df['Processing']!='Unprocessed']
 df = df[df['Template']!='Unprocessed']
 
+df[r'$\mathsf{log_{10}(Smoothness Change Factor)}$'] = np.log(df['Smoothness Change Factor'])
 ax = violinplot(
         x="Processing",
-        y='Smoothness Change Factor',
+        y=r'$\mathsf{log_{10}(Smoothness Change Factor)}$',
         data=df,
         hue="Template",
         saturation=1,
