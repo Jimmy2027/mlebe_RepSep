@@ -14,7 +14,7 @@ masks = {
 
 for key in masks:
 	glm.l1(path.join(preprocess_base,key),
-		bf_path='../data/chr_beta1.txt'
+		bf_path='../data/chr_beta1.txt',
 		workflow_name=key,
 		habituation="confound",
 		mask=masks[key],
@@ -25,7 +25,7 @@ for key in masks:
 		out_base='{}/l1'.format(scratch_dir)
 		)
 	glm.l1(path.join(preprocess_base,key),
-		bf_path='../data/chr_beta1.txt'
+		bf_path='../data/chr_beta1.txt',
 		workflow_name=key,
 		habituation="confound",
 		mask=masks[key],
