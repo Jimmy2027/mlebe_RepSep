@@ -25,7 +25,10 @@ def float_to_tex(f,
 		f_str = f_str_template.format(f)
 	else:
 		f_str = "{:e}".format(f)
-		f_decimals, f_exponent = f_str.split("e")
+		try:
+			f_decimals, f_exponent = f_str.split("e")
+		except ValueError:
+			return '${}$'.format(f_str)
 		truncated_decimals = f_decimals[:max_len].rstrip('.')
 		f_str = model_str.format(truncated_decimals,int(f_exponent))
 	if padding:
