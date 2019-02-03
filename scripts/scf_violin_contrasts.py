@@ -4,17 +4,20 @@ import numpy as np
 from lib.categorical import violinplot
 import matplotlib as mpl
 
-palette = ['#80e050','#755575']
+# Style
+palette = ['#ffb66d','#009093']
+
 df_path='data/smoothness_data.csv'
 df = pd.read_csv(path.abspath(df_path))
 
 df = df.loc[((df['Processing']=='Legacy') & (df['Template']=='Legacy')) | ((df['Processing']=='Generic') & (df['Template']=='Generic'))]
 
+df[r'$\mathsf{log_{10}(Smoothness Change Factor)}$'] = np.log(df['Smoothness Change Factor'])
 ax = violinplot(
         x="Processing",
-        y='Smoothness Change Factor',
+        y=r'$\mathsf{log_{10}(Smoothness Change Factor)}$',
         data=df,
-        hue="acq",
+        hue="Contrast",
         saturation=1,
         split=True,
         inner='quartile',

@@ -64,10 +64,9 @@ df = pd.concat([df_generic, df_legacy, df_generic_legacy, df_legacy_generic, df_
 df['uID'] = df['subject']+'_'+df['session']+'_'+df['modality']
 
 df = df.loc[np.logical_or(df.modality == 'cbv', df.modality == 'bold')]
-df['acq'] = df['modality']
+df['Contrast'] = df['modality']
 
 df['smoothness'] = df['path'].apply(avg_smoothness)
-#df['acq'] = df['acquisition'].apply(acqname)
 
 df['Smoothness Change Factor'] = ''
 uids = df['uID'].unique()
@@ -75,6 +74,7 @@ for uid in uids:
 	original = df.loc[(df['uID']==uid) & (df['Processing']=='Unprocessed'), 'smoothness'].item()
 	df.loc[(df['uID']==uid), 'Smoothness Change Factor'] = df.loc[(df['uID']==uid), 'smoothness'] / original
 
+df.to_csv('../data/smoothness_data.csv')
 files = os.listdir('./')
 for _file in files:
         if  _file.endswith(('.out','.1D')):
