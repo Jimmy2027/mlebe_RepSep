@@ -64,6 +64,7 @@ df = pd.concat([df_generic, df_legacy, df_generic_legacy, df_legacy_generic, df_
 df['uID'] = df['subject']+'_'+df['session']+'_'+df['modality']
 
 df = df.loc[np.logical_or(df.modality == 'cbv', df.modality == 'bold')]
+df['modality'] = df['modality'].str.upper()
 df['Contrast'] = df['modality']
 
 df['smoothness'] = df['path'].apply(avg_smoothness)
