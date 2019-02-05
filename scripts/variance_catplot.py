@@ -1,6 +1,5 @@
 import pandas as pd
 from os import path
-import matplotlib.pyplot as plt
 import seaborn as sns
 import matplotlib as mpl
 
