@@ -184,15 +184,15 @@ This comparison can be performed using a type 3 ANOVA modelling both the subject
 As similarity metrics are not equivalent, and since the main comparison of variance is performed across al of them, p-values for the variable effects are uncorrected.
 
 \Cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Legacy workflows (considering only the matching workflow-template combinations).
-We can see that MI between the Legacy workflow results and the corresponding template is significantly influenced by the session variable (\py{boilerplate.variance_test('C(session)','Legacy','MI', condensed=True)}) but not the subject variable (\py{boilerplate.variance_test('C(subject)','Legacy','MI', condensed=True)}).
+We can see that MI between the Legacy workflow results and the corresponding template is significantly influenced by the session variable (\py{boilerplate.variance_test('C(Session)','Legacy','MI', condensed=True)}) but not the subject variable (\py{boilerplate.variance_test('C(Subject)','Legacy','MI', condensed=True)}).
 For the other metrics, we find neither the session nor the subject variable significant, although the F-statistic is higher for the subject than for the session variable using both
-the CC metric (subject: \py{boilerplate.variance_test('C(subject)','Legacy','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(session)','Legacy','CC', condensed=True)})
-and the GC metric (subject: \py{boilerplate.variance_test('C(subject)','Legacy','GC', condensed=True)}, session:\py{boilerplate.variance_test('C(session)','Legacy','GC', condensed=True)}).
+the CC metric (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','CC', condensed=True)})
+and the GC metric (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','GC', condensed=True)}, session:\py{boilerplate.variance_test('C(Session)','Legacy','GC', condensed=True)}).
 Looking at the generic SAMRI workflow we find the opposite effect.
 Across metrics, F-statistics for the subject variable are consistently higher than for the session variable:
-CC (subject: \py{boilerplate.variance_test('C(subject)','Generic','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(session)','Generic','CC', condensed=True)}),
-GC (subject: \py{boilerplate.variance_test('C(subject)','Generic','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(session)','Generic','GC', condensed=True)}),
-and MI (subject: \py{boilerplate.variance_test('C(subject)','Generic','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(session)','Generic','MI', condensed=True)}).
+CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','CC', condensed=True)}),
+GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','GC', condensed=True)}),
+and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','MI', condensed=True)}).
 Notably, in the CC metric the subject-wise variance reaches significance, but not the session-wise variance.
 
 \subsection{Smoothness Conservation}

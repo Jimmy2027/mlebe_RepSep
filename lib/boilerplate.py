@@ -154,7 +154,7 @@ def variance_test(
         df = df.loc[df['Processing']==workflow]
         #contrast
         df = df.loc[df['acquisition'].str.contains('cbv')]
-        model= metric + '~ C(subject) + C(session)'
+        model= metric + '~ C(Subject) + C(Session)'
         ols = smf.ols(model, df).fit()
         anova = sm.stats.anova_lm(ols, typ=3, robust='hc3')
         tex = inline_anova(anova,  factor, 'tex', **kwargs)
