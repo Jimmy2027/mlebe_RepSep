@@ -181,14 +181,15 @@ Another way to assess registration quality is by looking at how much of the tota
 Crosscorrelation (CC), Mutual Information (MI), Global Correlation(GC).
 Since adult mouse brains in the absence of intervention are assumed to retain size and shape across the 8 week study period, more variation should be found across sessions rather than subjects.
 This comparison can be performed using a type 3 ANOVA modelling both the subject and the session variable.
+As similarity metrics are not equivalent, and since the main comparison of variance is performed across al of them, p-values for the variable effects are uncorrected.
 
-\Cref{fig:var} illustrates this the similarity metric scores for both the SAMRI Generic and Legacy workflows (considering only the matching workflow-template combinations).
-We can see that for the legacy workflow assessed by MI is significant for session variability (\py{boilerplate.variance_test('C(session)','Legacy','MI', condensed=True)}) but not for subject (\py{boilerplate.variance_test('C(subject)','Legacy','MI', condensed=True)}).
-For the other metrics, we find this effect not to be significant, although the F-statistic is consistently higher for subjects than for sessions using both
+\Cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Legacy workflows (considering only the matching workflow-template combinations).
+We can see that MI between the Legacy workflow results and the corresponding template is significantly influenced by the session variable (\py{boilerplate.variance_test('C(session)','Legacy','MI', condensed=True)}) but not the subject variable (\py{boilerplate.variance_test('C(subject)','Legacy','MI', condensed=True)}).
+For the other metrics, we find neither the session nor the subject variable significant, although the F-statistic is higher for the subject than for the session variable using both
 the CC metric (subject: \py{boilerplate.variance_test('C(subject)','Legacy','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(session)','Legacy','CC', condensed=True)})
 and the GC metric (subject: \py{boilerplate.variance_test('C(subject)','Legacy','GC', condensed=True)}, session:\py{boilerplate.variance_test('C(session)','Legacy','GC', condensed=True)}).
-Looking at the generic SAMRI workflow we find, as hypothesized, the opposite effect.
-That is, the F-statistics for subjects are consistently higher than sessions across all metrics:
+Looking at the generic SAMRI workflow we find the opposite effect.
+Across metrics, F-statistics for the subject variable are consistently higher than for the session variable:
 CC (subject: \py{boilerplate.variance_test('C(subject)','Generic','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(session)','Generic','CC', condensed=True)}),
 GC (subject: \py{boilerplate.variance_test('C(subject)','Generic','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(session)','Generic','GC', condensed=True)}),
 and MI (subject: \py{boilerplate.variance_test('C(subject)','Generic','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(session)','Generic','MI', condensed=True)}).
