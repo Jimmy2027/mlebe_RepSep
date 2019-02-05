@@ -169,28 +169,30 @@ We note that processing with the Generic template the Generic workflow (\cref{fi
 \subsection{Variance analysis}
 
 \begin{sansmath}
-\py{pytex_fig(
-        script='scripts/variance_catplot.py',
-        label='fig:variance',
+\py{pytex_fig('scripts/variance_catplot.py',
+        conf='article/varplot.conf',
+        label='var',
         caption='Swarmplots illustrating the variance across subjects for the different workflows and similiarity measures',
-        conf=['article/varplot.conf'],
         )}
 \end{sansmath}
 
-Another way to assess registration quality is by looking at how much of the total variance of registered samples is explained by either subject or session across different similiarity measures ( Crosscorrelation (CC), Mutual Information (MI), Global Correlation(GC) ). 
-Since individual brains should stay rather similar across sessions (no physicial intervention assumed), more variation should be found looking across the different subjects of the study. 
-\cref{fig:variance} illustrates this effect across the workflows legacy and generic and the similarity measures CC, MI, GC. 
-We can now systematically compare the legacy and generic SAMRI workflow using type 3 ANOVA across the different metrics. 
-We can see that for the legacy workflow assessed by MI is significant for session variability (\py{boilerplate.variance_test('C(session)','Legacy','MI', condensed=True)}) but not for subject (\py{boilerplate.variance_test('C(subject)','Legacy','MI', condensed=True)}). 
-For the other metrics, we find this effect not to be significant, although the F-statistic is consistently higher for subjects than for sessions using the CC metric (subject:(\py{boilerplate.variance_test('C(subject)','Legacy','CC', condensed=True)}), session: (\py{boilerplate.variance_test('C(session)','Legacy','CC', condensed=True)}) ) as well as the GC metric (subject: (\py{boilerplate.variance_test('C(subject)','Legacy','GC', condensed=True)}), session:(\py{boilerplate.variance_test('C(session)','Legacy','GC', condensed=True)}) ). 
-Looking at the generic SAMRI workflow we find, as hypothesized, the opposite effect. That is, although not significantly, the F-statistics for subjects are consistently higher than sessions across all metrics ( CC (subject) (\py{boilerplate.variance_test('C(subject)','Generic','CC', condensed=True)}), CC (session) (\py{boilerplate.variance_test('C(session)','Generic','CC', condensed=True)}); GC (subject) (\py{boilerplate.variance_test('C(subject)','Generic','GC', condensed=True)}), GC (session) (\py{boilerplate.variance_test('C(session)','Generic','GC', condensed=True)}); MI (subject) (\py{boilerplate.variance_test('C(subject)','Generic','MI', condensed=True)}), MI (session) (\py{boilerplate.variance_test('C(session)','Generic','MI', condensed=True)}) )
+Another way to assess registration quality is by looking at how much of the total variance of registered samples is explained by either subject or session across different similiarity measures
+(Crosscorrelation (CC), Mutual Information (MI), Global Correlation(GC)).
+Since adult mouse brains in the absence of intervention are assumed to retain size and shape across the 8 week study period, more variation should be found across sessions rather than subjects.
+This comparison can be performed using a type 3 ANOVA modelling both the subject and the session variable.
+
+\Cref{fig:var} illustrates this the similarity metric scores for both the SAMRI Generic and Legacy workflows (considering only the matching workflow-template combinations).
+We can see that for the legacy workflow assessed by MI is significant for session variability (\py{boilerplate.variance_test('C(session)','Legacy','MI', condensed=True)}) but not for subject (\py{boilerplate.variance_test('C(subject)','Legacy','MI', condensed=True)}).
+For the other metrics, we find this effect not to be significant, although the F-statistic is consistently higher for subjects than for sessions using the CC metric (subject:(\py{boilerplate.variance_test('C(subject)','Legacy','CC', condensed=True)}), session: (\py{boilerplate.variance_test('C(session)','Legacy','CC', condensed=True)}) ) as well as the GC metric (subject: (\py{boilerplate.variance_test('C(subject)','Legacy','GC', condensed=True)}), session:(\py{boilerplate.variance_test('C(session)','Legacy','GC', condensed=True)}) ).
+Looking at the generic SAMRI workflow we find, as hypothesized, the opposite effect.
+That is, although not significantly, the F-statistics for subjects are consistently higher than sessions across all metrics ( CC (subject) (\py{boilerplate.variance_test('C(subject)','Generic','CC', condensed=True)}), CC (session) (\py{boilerplate.variance_test('C(session)','Generic','CC', condensed=True)}); GC (subject) (\py{boilerplate.variance_test('C(subject)','Generic','GC', condensed=True)}), GC (session) (\py{boilerplate.variance_test('C(session)','Generic','GC', condensed=True)}); MI (subject) (\py{boilerplate.variance_test('C(subject)','Generic','MI', condensed=True)}), MI (session) (\py{boilerplate.variance_test('C(session)','Generic','MI', condensed=True)}) )
 
 \subsection{Smoothness Conservation}
 
-The final metric we consider is the smoothness of the image after registration. 
-Although smoothing can lead to an increase in SNR, it does decrease spatial resolution and is therefore associated with less anatomically aligned images, statistical maps and therefore less local functional analysis results (\cite{esteban2018fmriprep}). 
-Thus we introduce, similar to the Volume Change Factor, a Smoothness Change Factor (SCF), that normalizes the smoothness of the registered images with respect to the smoothness of the original images. 
-Our smoothness measure is the full-width at half-maximum (FWHM), averaged across x-y-z-dimensions of the average functional image. 
+The final metric we consider is the smoothness of the image after registration.
+Although smoothing can lead to an increase in SNR, it does decrease spatial resolution and is therefore associated with less anatomically aligned images, statistical maps and therefore less local functional analysis results \cite{fmriprep}.
+Thus we employ, analogously to the Volume Change Factor, a Smoothness Change Factor (SCF) which normalizes the smoothness of the registered images with respect to the smoothness of the original images.
+Our smoothness measure is the full-width at half-maximum (FWHM), averaged across x-y-z-dimensions of the average functional image.
 Since fMRI data usually doesn't have a Gaussian-shaped spatial AutoCorrelation (ACF), we fit the following function to the data in order to estimate the FWHM.
 
 \begin{equation} \label{eq:acf}
@@ -208,11 +210,14 @@ Since fMRI data usually doesn't have a Gaussian-shaped spatial AutoCorrelation (
                         'caption':'Comparison across of SCF workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
                 ],
-        caption='Smoothness change relative to the original smoothness. Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
+        caption='
+                Smoothness change relative to the original smoothness.
+                Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.
+                ',
         label='fig:scf',
         )}
 \end{sansmath}
 
-As seen in \cref{fig:scf}, the legacy workflow significantly alters the average smoothness, whereas the generic SAMRI workflow manages to preserve it, while keeping other metrics intact (see previous sections). 
-Both workflows differ significantly from each other with respect to the SCF (two-tailed p-value of \py{pytex_printonly('scripts/scf_t.py')}). 
+As seen in \cref{fig:scf}, the legacy workflow significantly alters the average smoothness, whereas the generic SAMRI workflow manages to preserve it, while keeping other metrics intact (see previous sections).
+Both workflows differ significantly from each other with respect to the SCF (two-tailed p-value of \py{pytex_printonly('scripts/scf_t.py')}).
 More precisely the SCF is significantly dependend on the processing workflow (\py{boilerplate.fstatistic_smoothness('Processing', condensed=True)}), not the template (\py{boilerplate.fstatistic_smoothness('Template', condensed=True)}) and neither the interaction thereof (\py{boilerplate.fstatistic_smoothness('Processing:Template', condensed=True)}).
