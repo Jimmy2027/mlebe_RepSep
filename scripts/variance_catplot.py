@@ -24,18 +24,18 @@ df = pd.concat([df_cc, df_gc, df_mi], sort=False)
 df = df.loc[df['acquisition'].str.contains('bold')]
 df['workflow subject'] = df['Processing'].astype(str) + ' ' + df['subject'].astype(str)
 df = df[df['Processing']!='Unprocessed']
+n_cols = len(df['Similarity Metric'].unique())
 
 ax = sns.catplot(
-	   #x='session',
-	   x='workflow subject',
-	   y='similarity',
-	   data=df,
-	   row = 'Similarity Metric',
-	   hue="Processing",
-	   #hue="session",
-	   size=mpl.rcParams['lines.markersize'],
-	   palette=palette,
-	   margin_titles=True,
-	   aspect=4,
-	   )
+	x='subject',
+	y='similarity',
+	hue='Processing',
+	data=df,
+	col='Similarity Metric',
+	palette=palette,
+	legend=True,
+	legend_out=False,
+	height=mpl.rcParams['figure.figsize'][1],
+	aspect=(mpl.rcParams['figure.figsize'][0]/n_cols)/mpl.rcParams['figure.figsize'][1],
+	)
 ax.set(xticklabels=[])
