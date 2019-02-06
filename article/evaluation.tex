@@ -169,7 +169,7 @@ We note that processing with the Generic template the Generic workflow (\cref{fi
 \begin{sansmath}
 \py{pytex_fig('scripts/variance_catplot.py',
         conf='article/varplot.conf',
-        label='var',
+        label='fig:variance',
         caption='Swarmplots illustrating the variance across subjects for the different workflows and similiarity measures',
         multicol=True,
         )}
@@ -216,14 +216,14 @@ Notably, in the CC metric the subject-wise variance reaches significance, but no
 The final metric we consider is the smoothness of the image after registration.
 Although smoothing can lead to an increase in signal-to-noise ratio (SNR), it does decrease spatial resolution and is therefore associated with less anatomically aligned images, statistical maps and therefore less local functional analysis results \cite{fmriprep}.
 Thus we employ, analogously to the Volume Change Factor, a Smoothness Change Factor (SCF) which normalizes the smoothness of the registered images with respect to the smoothness of the original images.
-Our smoothness measure is the full-width at half-maximum (FWHM), averaged across x-y-z-dimensions of the average functional image.
-Since fMRI data usually doesn't have a Gaussian-shaped spatial AutoCorrelation (ACF), we fit the following function to the data in order to estimate the FWHM.
+Our smoothness measure is the full-width at half-maximum (FWHM).
+Since fMRI data usually doesn't have a gaussian-shaped spatial AutoCorrelation (ACF) (\cite{eklund2016cluster}, \cite{cox2017fmri}), we fit the following function to the data in order to estimate the FWHM using AFNI \cite{cox1996afni}.
 
 \begin{equation} \label{eq:acf}
         ACF(r)
         = a * e^{ -r^{2}/ (2 * b^{2}) } + (1 - a) + e^{-r/c}
 \end{equation}
 
-As seen in \cref{fig:scf}, the legacy workflow significantly alters the average smoothness, whereas the generic SAMRI workflow manages to preserve it, while keeping other metrics intact (see previous sections).
-Both workflows differ significantly from each other with respect to the SCF (two-tailed p-value of \py{pytex_printonly('scripts/scf_t.py')}).
-More precisely the SCF is significantly dependend on the processing workflow (\py{boilerplate.fstatistic_smoothness('Processing', condensed=True)}), not the template (\py{boilerplate.fstatistic_smoothness('Template', condensed=True)}) and neither the interaction thereof (\py{boilerplate.fstatistic_smoothness('Processing:Template', condensed=True)}).
+Looking at \cref{fig:scf}, we find that the SCF is significantly altered by the Legacy ($p= $\py{pytex_printonly('scripts/scf_t_legacy.py')}) as well as the Generic work flow ($p= $\py{pytex_printonly('scripts/scf_t_generic.py')}). We note though, while the Legacy workflow massively inflates the SCF (\py{boilerplate.meanVar('mean', Processing='Legacy')}$\pm$\py{boilerplate.meanVar('sd', Processing='Legacy')}), the Generic only slightly increases the SCF (\py{boilerplate.meanVar('mean', Processing='Generic')}$\pm$\py{boilerplate.meanVar('sd', Processing='Generic')}).
+Moreover the Legacy has a substantial increas in variance compared to the Generic workflow across conditions (\py{boilerplate.varianceratio(df_path='data/smoothness_data.csv',dependent_variable='Smoothness Change Factor', max_len=3, template='Legacy')}-fold for the Legacy template and \py{boilerplate.varianceratio(df_path='data/smoothness_data.csv',dependent_variable='Smoothness Change Factor', template='Generic', max_len=3)}-fold for the Generic template).
+Overall the SCF is significantly dependend on the processing workflow (\py{boilerplate.fstatistic_smoothness('Processing', condensed=True)}), the template (\py{boilerplate.fstatistic_smoothness('Template', condensed=True)}) and their interaction (\py{boilerplate.fstatistic_smoothness('Processing:Template', condensed=True)}).

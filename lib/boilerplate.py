@@ -181,3 +181,24 @@ def fstatistic_smoothness(factor,
         tex = inline_anova(anova, factor, 'tex', **kwargs)
         return tex
 
+def meanVar(ret,
+        df_path='data/smoothness_data.csv',
+        factor = 'Smoothness Change Factor',
+        Processing = 'Legacy',
+        template=False,
+        max_len=2,
+        **kwargs
+        ):
+        df_path = path.abspath(df_path)
+        df = pd.read_csv(df_path)
+
+        df = df.loc[df['Processing']!='Unprocessed']
+        data = df.loc[df['Processing']==Processing, factor]
+
+        if(ret == 'mean'):
+                result = data.mean()
+        if(ret == 'sd'):
+                result = data.std()
+
+        return float_to_tex(result, max_len, **kwargs)
+
