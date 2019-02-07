@@ -22,7 +22,6 @@ df_mi.rename(columns={'MI':'Similarity'}, inplace=True)
 df = pd.concat([df_cc, df_gc, df_mi], sort=False)
 
 df = df.loc[df['acquisition'].str.contains('bold')]
-df['workflow subject'] = df['Processing'].astype(str) + ' ' + df['Subject'].astype(str)
 df = df[df['Processing']!='Unprocessed']
 n_cols = len(df['Similarity Metric'].unique())
 
@@ -37,6 +36,6 @@ ax = sns.catplot(
 	legend_out=False,
 	height=mpl.rcParams['figure.figsize'][1],
 	aspect=(mpl.rcParams['figure.figsize'][0]/n_cols)/mpl.rcParams['figure.figsize'][1],
-	s=3,
+	s=2,
 	)
 ax.set(xticklabels=[])
