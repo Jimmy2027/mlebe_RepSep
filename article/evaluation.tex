@@ -36,7 +36,7 @@ The arbitrary unit equivalent of this percentile threshold is recorded for each 
                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
                 ],
-        caption='\\textbf{SAMRI processed data has near-optimal conservation of volume compared to the Legacy workflow.}
+        caption='\\textbf{SAMRI Generic processed data optimally and reliably conserves scan volume --- unlike the Legacy workflow.}
         The coloured patch width estimates distribution density, while solid lines indicate the sample mean and dashed lines indicate the inner quartiles.',
         label='fig:vc',
         )}
@@ -172,9 +172,9 @@ We note that processing with the Generic template the Generic workflow (\cref{fi
 \begin{sansmath}
 \py{pytex_fig('scripts/variance_catplot.py',
         conf='article/varplot.conf',
-        label='fig:variance',
+        label='var',
         caption='
-                \\textbf{SAMRI decreases the across session variance per subject compared to the Legacy workflow.}
+                \\textbf{The SAMRI Generic workflow decreases the across session variance per subject compared to the Legacy workflow.}
                 Swarmplots illustrate similarity metric scores of registered images with respect to the corresponding workflow template, plotted across subjects (separated into x-axis bins) and sessions (individual points in each x-axis bin).
                 ',
         multicol=True,
@@ -212,7 +212,7 @@ Notably, in the CC metric, the subject-wise variance reaches significance, but n
                         ,},
                 ],
         caption='
-                \\textbf{SAMRI does not increase spatial smoothing, thereby increasing locality of functional analysis results.}
+                \\textbf{SAMRI Generic registration does not increase spatial smoothing, thereby increasing locality of functional analysis results.}
                 Smoothness change relative to the original scan, presented on a log scale due to considerable effect size in the comparison between workflows.
                 The coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.
                 ',
