@@ -28,7 +28,8 @@ We thus follow  a set of design guidelines:
 		\label{fig:wfgl}
 	\end{subfigure}
 	\caption{
-		Directed acyclic graphs depicting the two alternate MRI registration workflows and their constituent processing steps.
+		\textbf{The SAMRI workflow consitutes a functional to structural registration workflow.}
+		Shown are directed acyclic graphs depicting the two alternate MRI registration workflows and their constituent processing steps.
 		The package correspondence of each processing node is appended in parantheses to the node name.
 		The “utility” indication corresponds to nodes based on Python functions specific to the workflow, distributed alongside it, and dynamically wrapped via Nipype.
 		The “extra\niceus interfaces” indication corresponds to nodes using explicitly defined Nipype-style interfaces, which are specific to the workflow and distributed alongside it.
@@ -86,7 +87,9 @@ We include the aforementioned Generic and Legacy workflows in the SAMRI (Small A
 			'caption':'The “Legacy” template, which exemplifies histological contrast, the canonical histological template data matrix orientation (shared e.g. by the Allen Brain Institute template), alongside a non-standard header with features such as an RPS orientation and inflated affine transformation.'
 			,},
 		],
-	caption='Multiplanar depcitions of the mouse brain templates, with slice coordinates centered at zero on all axes.',
+	caption='
+		\\textbf{The "Generic" template provides canonical orientation and Bregma centering.}
+		Illustrated are multiplanar depcitions of the "Generic" and "Legacy" mouse brain templates, with slice coordinates centered at zero on all axes.',
 	label='fig:t',)}
 
 The suitability of a registration workflow as a standard is contingent on the quality of the template being used.

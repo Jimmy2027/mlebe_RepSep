@@ -36,7 +36,8 @@ The arbitrary unit equivalent of this percentile threshold is recorded for each 
                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
                 ],
-        caption='Volume change relative to the original scan volume. The coloured patch width estimates distribution density, while solid lines indicate the sample mean and dashed lines indicate the inner quartiles.',
+        caption='\\textbf{SAMRI processed data has near-optimal conservation of volume compared to the Legacy workflow.} 
+        The coloured patch width estimates distribution density, while solid lines indicate the sample mean and dashed lines indicate the inner quartiles.',
         label='fig:vc',
         )}
 \end{sansmath}
@@ -81,7 +82,8 @@ We compute the per-scan average of these values, which we term Mean Significance
                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
                 ],
-        caption='Mean per-animal significance distributions. Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
+        caption='\\textbf{Significance from functional analysis does not indicate registration quality.} 
+        Mean per-animal significance distributions. Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
         label='fig:ms',)}
 \end{sansmath}
 
@@ -159,7 +161,8 @@ We note that processing with the Generic template the Generic workflow (\cref{fi
                         ,},
 		],
 	caption='
-                Multiplanar depictions of mouse brain templates, with the corresponding second-level omnibus statistic maps separately evaluating CBV and BOLD scans, and thresholded at $\mathrm{|t|\geq2}$.
+                \\textbf{Legacy processing leads to a problematic overflow of the statistical-maps into adjacent anatomical regions, leaking beyond the acquistion area.} 
+                SAMRI mitigates this effect as illustrated by multiplanar depictions of mouse brain templates, with the corresponding second-level omnibus statistic maps separately evaluating CBV and BOLD scans, and thresholded at $\mathrm{|t|\geq2}$.
                 The acquisition area is bracketed in pink, and in comparing it to statistic coverage it is important to note that the spatial coverage of the latter is slightly underestimated, as the omnibus contrast is only defined for voxels captured in \\textit{every} evaluated scan.
                 ',
 	label='fig:m',)}
@@ -170,7 +173,10 @@ We note that processing with the Generic template the Generic workflow (\cref{fi
 \py{pytex_fig('scripts/variance_catplot.py',
         conf='article/varplot.conf',
         label='fig:variance',
-        caption='Swarmplots illustrating the variance across subjects for the different workflows and similiarity measures',
+        caption='
+                \\textbf{SAMRI decreases the across session variance per subject compared to the Legacy workflow.} 
+                Swarmplots illustrate the variance in similarity across sessions for each subject.
+                ',
         multicol=True,
         )}
 \end{sansmath}
@@ -206,6 +212,7 @@ Notably, in the CC metric the subject-wise variance reaches significance, but no
                         ,},
                 ],
         caption='
+                \\textbf{SAMRI does not increase spatial smoothing, thereby increasing locality of functional analysis results.} 
                 Smoothness change relative to the original smoothness.
                 Coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.
                 ',
