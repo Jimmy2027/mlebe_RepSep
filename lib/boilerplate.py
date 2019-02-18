@@ -68,7 +68,6 @@ def corecomparison_factorci(factor,
 	model = smf.mixedlm(formula, df, groups='Uid')
 	fit = model.fit()
 	summary = fit.summary()
-	#print(summary)
 	tex = inline_factor(summary, factor, 'tex', **kwargs)
 	return tex
 
