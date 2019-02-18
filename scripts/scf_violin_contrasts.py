@@ -12,7 +12,7 @@ df = pd.read_csv(path.abspath(df_path))
 
 df = df.loc[((df['Processing']=='Legacy') & (df['Template']=='Legacy')) | ((df['Processing']=='Generic') & (df['Template']=='Generic'))]
 
-df[r'$\mathsf{log_{10}(Smoothness Change Factor)}$'] = np.log(df['Smoothness Change Factor'])
+df[r'$\mathsf{log_{10}(Smoothness Change Factor)}$'] = np.log10(df['Smoothness Change Factor'])
 ax = violinplot(
         x="Processing",
         y=r'$\mathsf{log_{10}(Smoothness Change Factor)}$',
