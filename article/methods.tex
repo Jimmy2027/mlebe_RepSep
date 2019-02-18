@@ -121,16 +121,6 @@ Analogously, the \textcolor{mg}{\texttt{ambmc}} and \textcolor{mg}{\texttt{lambm
 
 \subsection{Testing Dataset}
 
-\py{pytex_tab('scripts/stim_table.py',
-		label='stim',
-		caption='Stimulation protocol, as delivered during functional scans.
-			Stimulus event spacing and parameters are constant across scans, but exact onset time is variable in the \SI{10}{\second} magnitude range due to scanner adjustment time variability.',
-		options_pre='\\scriptsize \\centering \\resizebox{\\columnwidth}{!}{',
-		data='data/JogB.tsv',
-		options_post='}',
-		)}
-
-
 For the quality control of the workflows, a dataset with an effective size of 102 scans is used.
 Data from 11 adult animals is included, each animal being recorded on up to 5 sessions (repeated at 14 day intervals).
 Each session contains an anatomical scan and two functional scans --- with Blood-Oxygen Level Dependent (BOLD) \cite{Ogawa1990} and Cerebral Blood Volume (CBV) \cite{Marota1999} contrast, respectively (for a total of 68 functional scans).

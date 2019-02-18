@@ -61,7 +61,7 @@ df_bids['Processing'] = 'Unprocessed'
 df_bids['Template'] = 'Unprocessed'
 
 df = pd.concat([df_generic, df_legacy, df_generic_legacy, df_legacy_generic, df_bids])
-df['uID'] = df['subject']+'_'+df['session']+'_'+df['modality']
+df['Uid'] = df['subject']+'_'+df['session']+'_'+df['modality']
 
 df = df.loc[np.logical_or(df.modality == 'cbv', df.modality == 'bold')]
 df['modality'] = df['modality'].str.upper()
@@ -70,10 +70,10 @@ df['Contrast'] = df['modality']
 df['smoothness'] = df['path'].apply(avg_smoothness)
 
 df['Smoothness Change Factor'] = ''
-uids = df['uID'].unique()
+uids = df['Uid'].unique()
 for uid in uids:
-	original = df.loc[(df['uID']==uid) & (df['Processing']=='Unprocessed'), 'smoothness'].item()
-	df.loc[(df['uID']==uid), 'Smoothness Change Factor'] = df.loc[(df['uID']==uid), 'smoothness'] / original
+	original = df.loc[(df['Uid']==uid) & (df['Processing']=='Unprocessed'), 'smoothness'].item()
+	df.loc[(df['Uid']==uid), 'Smoothness Change Factor'] = df.loc[(df['Uid']==uid), 'smoothness'] / original
 
 df.to_csv('../data/smoothness_data.csv')
 files = os.listdir('./')
