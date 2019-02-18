@@ -10,6 +10,8 @@ though --- depending on the workflow --- the actual image manipulation may only 
 % [[[paper which does this and says that it minimizes interpolation]]].
 As a consequence of this marginal positioning in the preprocessing sequence, as well as its general independence from experimental designs and hypotheses, registration is often relegated to default values and exempt from rigorous design efforts and QC.
 
+Failing to do proper registration and QC can result in irreproducible results or anatomical inaccuracies of subsequent statistical analyses. We demonstrate this effect due to the legacy workflow as well as the mitigating effect of the SAMRI generic workflow.  
+
 Registration QC is a notable issue for human as well as mouse brain imaging;
 and is not limited as much by a lack of reporting functions, as by a lack of reporting metrics which can easily be communicated for a population.
 Human brain imaging uniquely benefits from high-level functions (e.g.  \textcolor{mg}{\texttt{flirt}} and  \textcolor{mg}{\texttt{fnirt}} from the FSL package\cite{fsl}, or \textcolor{mg}{\texttt{antsIntroduction.sh}} from the ANTs package\cite{ants}), optimized for the size and spatial features of the human brain.
