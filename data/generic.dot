@@ -4,7 +4,7 @@ igraph generic_work{
   generic_work_s_biascorrect[label="Bias Correction"];
   generic_work_s_register[label="Registration to Template"];
   generic_work_s_warp[label="Apply Transformation"];
-  generic_work_dummy_scans[label="dummy_scans (utility)"];
+  generic_work_dummy_scans[label="Dummy Scan Correction"];
   generic_work_slicetimer[label="Slice Time Correction"];
   generic_work_temporal_mean[label="Mean Functional Image"];
   generic_work_f_biascorrect[label="Bias Correction"];
