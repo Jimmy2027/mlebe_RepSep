@@ -65,7 +65,7 @@ Following these data manipulation steps, a temporal mean is computed, and an emp
 Subsequently, the bias field is corrected using the \textcolor{mg}{\texttt{fast}} function of the FSL package, and parts of the image are masked using the \textcolor{mg}{\texttt{bet}} function from FSL. 
 The image is then warped into the template space using the \textcolor{mg}{\texttt{antsIntroduction.sh}} function of the ANTS package, and lastly the affine variants are harmonized.
 
-For Quality Control we distribute as part of this publication additional workflows using the NumPy \cite{numpy}, SciPy \cite{scipy}, and pandas \cite{pandas} packages, as well as Statsmodels \cite{statsmodels} for top-level statistics and matplotlib \cite{matplotlib} and Seaborn \cite{seaborn} for plotting.
+For Quality Control we distribute as part of this publication additional workflows using the NumPy \cite{numpy}, SciPy \cite{scipy}, pandas \cite{pandas}, matplotlib packages \cite{matplotlib} and Seaborn \cite{seaborn} for plotting, as well as Statsmodels \cite{statsmodels} for top-level statistics, using the HC3 heteroscedasticity consistent covariance matrix \cite{long2000using}.
 Specifically, distribution densities for plots are drawn using the Scott bandwidth density estimator \cite{Scott1979}.
 
 % Markus Marks !!! add short technology paragraph for optimization methods.
