@@ -28,7 +28,7 @@ digraph legacy_work{
       label="Preprocessed Volumetric\n +M̷e̷t̷a̷d̷a̷t̷a̷",
       shape=folder, color="#F00533", fillcolor=grey93,
       ];
-  d -> legacy_work_get_f_scan [arrowsize=0.9, penwidth=4, color="#DE9A00"];
+  d -> legacy_work_get_f_scan [arrowhead=none, arrowsize=0.9, penwidth=4, color="#DE9A00"];
   legacy_work_get_f_scan -> legacy_work_dummy_scans;
   legacy_work_get_f_scan -> legacy_work_f_rename;
   legacy_work_get_f_scan -> legacy_work_datasink;

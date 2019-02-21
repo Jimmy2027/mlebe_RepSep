@@ -24,7 +24,7 @@ digraph generic_work{
       label=<Preprocessed Volumetric<BR/><FONT COLOR="#45B000">+Metadata</FONT>>,
       shape=folder, color="#BBBBBB", fillcolor=grey93,
       ];
-  d -> generic_work_get_f_scan [arrowsize=0.9, penwidth=4, color="#DE9A00"];
+  d -> generic_work_get_f_scan [arrowhead=none, arrowsize=0.9, penwidth=4, color="#DE9A00"];
   generic_work_get_f_scan -> generic_work_f_warp;
   generic_work_get_f_scan -> generic_work_dummy_scans;
   generic_work_get_f_scan -> generic_work_datasink;

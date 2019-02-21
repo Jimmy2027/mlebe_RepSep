@@ -14,7 +14,7 @@ digraph graphname {
     c[label="Volumetric\nReconstruction", shape=folder, color="#BBBBBB", fillcolor=grey93];
     d[label="Raw Volumetric\n +M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#F00533", fillcolor=grey93];
     e[label="Preprocessed Volumetric\n +M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#F00533", fillcolor=grey93];
-    f[label="volumetric Statistic\n +M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#F00533", fillcolor=grey93];
+    f[label="Volumetric Statistic\n +M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#F00533", fillcolor=grey93];
     g[label="Plot or Summary", shape=folder, color="#BBBBBB", fillcolor=grey93];
     m0[label="Manual  ", shape=cds, color="#BBBBBB", fillcolor=grey93, fontcolor="#999998"];
     m1[label="M̷e̷t̷a̷d̷a̷t̷a̷", shape=folder, color="#F00533", fillcolor=grey93];
@@ -30,14 +30,14 @@ digraph graphname {
     
     m0 -> m1 ;
     m0_bad -> m_bad[color="#805010"];
-    m_bad:e -> d_branch[color="#805010", arrowhead=none];
-    d_branch -> d:n[color="#805010"];
-    d_branch -> e_branch[color="#805010", arrowhead=none];
-    e_branch -> e:n[color="#805010"];
-    e_branch -> f_branch[color="#805010", arrowhead=none];
-    f_branch -> f:n[color="#805010"];
-    f_branch -> g_branch[color="#805010", arrowhead=none];
-    g_branch -> g:n[color="#805010"];
+    m_bad:e -> d_branch[color="#805010", arrowhead=none, style=dashed];
+    d_branch -> d:n[color="#805010", style=dashed];
+    d_branch -> e_branch[color="#805010", arrowhead=none, style=dashed];
+    e_branch -> e:n[color="#805010", style=dashed];
+    e_branch -> f_branch[color="#805010", arrowhead=none, style=dashed];
+    f_branch -> f:n[color="#805010", style=dashed];
+    f_branch -> g_branch[color="#805010", arrowhead=none, style=dashed];
+    g_branch -> g:n[color="#805010", style=dashed];
     a -> b ;
     subgraph cluster1 {
         b -> c ;
