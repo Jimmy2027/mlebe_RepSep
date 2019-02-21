@@ -24,7 +24,7 @@ python volume_data.py || exit 1
 python variance_data.py || exit 1
 python smoothness_data.py || exit 1
 python legacy_background_fix.py || exit 1
-python glm.py || exit 1
+python l1.py || exit 1
 python functional_data.py || exit 1
-python l2_maps.py || exit 1
+python l2.py || exit 1
 python manual_overview.py || exit 1
