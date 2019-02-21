@@ -1,18 +1,47 @@
-\renewcommand{\thepage}{S\arabic{page}}
-\renewcommand{\thesection}{S\arabic{section}}
+% Depending on journal style:
+%\renewcommand{\thepage}{S\arabic{page}}
+%\renewcommand{\thesection}{S\arabic{section}}
 \renewcommand{\thetable}{S\arabic{table}}
+\setcounter{figure}{0}
 \renewcommand{\thefigure}{S\arabic{figure}}
 
 \section{Supplementary Materials}
 
-\subsection{Stimulation protocol}
-
+\begin{figure*}[h!]
+	\begin{subfigure}{.64\textwidth}
+		\centering
+		\includedot[width=\textwidth]{data/generic_nipype}
+		\vspace{1.4em}
+		\caption{
+			“SAMRI Generic”  workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function.
+			The pipeline uses a higher-resolution structural scan intermediary for registration (note the two processing streams), which facilitates differential handling of anatomical variation and susceptibility artefacts.
+			The function used is highly parameterized, and both of its instances --- “s\niceus register” and “f\niceus register” --- are supplied in the workflow with defaults optimized for mouse brain registration.
+			}
+		\label{fig:nwfgg}
+	\end{subfigure}\hfill
+	\begin{subfigure}{.34\textwidth}
+		\centering
+		\includedot[width=\textwidth]{data/legacy_nipype}
+		\vspace{-1.9em}
+		\caption{
+			“SAMRI Legacy” workflow, which is based on the \textcolor{mg}{\texttt{antsIntroduction.sh}} function (and other functions with hard-coded parameters optimized for human brain registration), and also performs destructive affine manipulations.
+			}
+		\label{fig:nwfgl}
+	\end{subfigure}
+	\caption{
+		Directed acyclic graphs detailing the precise node names (as seen in the SAMRI source code) for the two alternate MRI registration workflows.
+		The package correspondence of each processing node is appended in parentheses to the node name.
+		The “utility” indication corresponds to nodes based on Python functions specific to the workflow, distributed alongside it, and dynamically wrapped via Nipype.
+		The “extra\niceus interfaces” indication corresponds to nodes using explicitly defined Nipype-style interfaces, which are specific to the workflow and distributed alongside it.
+		}
+	\label{fig:nwfg}
+\end{figure*}
 
 \py{pytex_tab('scripts/stim_table.py',
                 label='stim',
                 caption='Stimulation protocol, as delivered during functional scans.
                         Stimulus event spacing and parameters are constant across scans, but exact onset time is variable in the \SI{10}{\second} magnitude range due to scanner adjustment time variability.',
-                options_pre='\\scriptsize \\centering \\resizebox{\\columnwidth}{!}{',
+                options_pre='[htp] \\scriptsize \\centering \\resizebox{\\columnwidth}{!}{',
                 data='data/JogB.tsv',
                 options_post='}',
                 )}

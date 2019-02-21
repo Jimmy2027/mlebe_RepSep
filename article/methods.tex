@@ -1,38 +1,55 @@
 \section{The Optimized Workflow}
 The complexity of MRI processing workflows should be manageable to prospective users with only cursory programming experience.
 It is however also important that workflow transparency, sustainability, and reproducibility are not compromised for trivial features.
-We thus follow  a set of design guidelines:
+We thus abide by the following design guidelines:
 (1) each workflow is represented by a high-level function, whose parameters correspond to operator-understandable concepts (i.e. describe the operations performed, rather than the computational implementation);
 (2) workflow functions are highly parameterized but include workable defaults (so that users \textit{can} change their function to a significant extent without needing to edit the constituent code);
 (3) graphical or interactive interfaces are avoided (as they impede reproducibility, encumber the dependency graph, and reduce the sustainability of the project).
 
 \begin{figure*}[h!]
-	\begin{subfigure}{.64\textwidth}
+	\vspace{-1.8em}
+	\begin{subfigure}{\textwidth}
 		\centering
-		\includedot[width=\textwidth]{data/generic}
-		\vspace{1.4em}
+		\includedot[width=\textwidth]{data/metadata}
+		\vspace{-3em}
 		\caption{
-			“SAMRI Generic”  workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function.
-			The pipeline uses a higher-resolution structural scan intermediary for registration (note the two processing streams), which facilitates differential handling of anatomical variation and susceptibility artefacts.
-			The function used is highly parameterized, and both of its instances --- “s\niceus register” and “f\niceus register” --- are supplied in the workflow with defaults optimized for mouse brain registration.
+			Nondestructive handling of metadata assures reusability and easy sharing throughout the analysis process.
+			}
+		\label{fig:mdg}
+	\vspace{-0.3em}
+	\end{subfigure}
+	\begin{subfigure}{\textwidth}
+		\centering
+		\includedot[width=\textwidth]{data/metadata_bad}
+		\vspace{-3em}
+		\caption{
+			Ad hoc metadata substitution irreversibly damages data and hinders reuse and sharing at all downstream levels.
+			}
+		\label{fig:mdb}
+	\vspace{-0.5em}
+	\end{subfigure}
+	\begin{subfigure}{.58\textwidth}
+		\centering
+		\includedot[width=0.91\textwidth]{data/generic}
+		\vspace{-2.1em}
+		\caption{
+			Non-destructive “SAMRI Generic” workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function, and including mouse-specific adaptations in nodes colored green.
 			}
 		\label{fig:wfgg}
 	\end{subfigure}\hfill
-	\begin{subfigure}{.34\textwidth}
+	\begin{subfigure}{.39\textwidth}
 		\centering
-		\includedot[width=\textwidth]{data/legacy}
-		\vspace{-1.9em}
+		\includedot[width=0.90\textwidth]{data/legacy}
+		\vspace{-1.0em}
 		\caption{
-			“SAMRI Legacy” workflow, which is based on the \textcolor{mg}{\texttt{antsIntroduction.sh}} function (and other functions with hard-coded parameters optimized for human brain registration), and also performs destructive affine manipulations.
+			“SAMRI Legacy” workflow, based on the \textcolor{mg}{\texttt{antsIntroduction.sh}}, and including desructive manipulations in nodes colored red.
 			}
 		\label{fig:wfgl}
 	\end{subfigure}
 	\caption{
-		\textbf{The SAMRI workflow consitutes a functional to structural registration workflow.}
-		Shown are directed acyclic graphs depicting the two alternate MRI registration workflows and their constituent processing steps.
-		The package correspondence of each processing node is appended in parantheses to the node name.
-		The “utility” indication corresponds to nodes based on Python functions specific to the workflow, distributed alongside it, and dynamically wrapped via Nipype.
-		The “extra\niceus interfaces” indication corresponds to nodes using explicitly defined Nipype-style interfaces, which are specific to the workflow and distributed alongside it.
+		\textbf{The SAMRI Generic workflow uses fine-tuned animal priors to enhance registration quality and preserve metadata integrity.}
+		Directed acyclic graphs depict both the overall context of MRI data processing and analysis (\textbf{a},\textbf{b}), as well as the internal structure of the two registration workflows compared in this article (\textbf{c},\textbf{d}) --- which insert into the broader context at the bold orange arrow positions.
+		Technical detail available in \cref{fig:nwfg}.
 		}
 	\label{fig:wfg}
 \end{figure*}

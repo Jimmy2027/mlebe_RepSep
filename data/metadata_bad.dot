@@ -2,13 +2,13 @@ digraph graphname {
     newrank = true;
     size="26,12";
     rankdir="LR";
-    graph [fontname = "sans"];
+    graph [splines=ortho, fontname="sans", pad="0.07", nodesep="0.175", ranksep="0.45"];
     node [fontname = "sans", style=filled];
     edge [fontname = "sans", color=gray50];
-    d_[label="Sharing", style="bold, rounded", color="#BBBBBB"];
-    e_[label="Sharing", style="bold, rounded", color="#BBBBBB"];
-    f_[label="Sharing", style="bold, rounded", color="#BBBBBB"];
-    g_[label="Sharing", style="bold, rounded", color="#BBBBBB"];
+    d_[label=<<FONT COLOR="#F00533">Share?</FONT>>, style="bold, rounded", color="#BBBBBB", shape="box"];
+    e_[label=<<FONT COLOR="#F00533">Share?</FONT>>, style="bold, rounded", color="#BBBBBB", shape="box"];
+    f_[label=<<FONT COLOR="#F00533">Share?</FONT>>, style="bold, rounded", color="#BBBBBB", shape="box"];
+    g_[label="Share!", style="bold, rounded", color="#BBBBBB", shape="box"];
     a[label="Analog  ", shape=cds, color="#BBBBBB", fillcolor=grey93, fontcolor="#999998"];
     b[label="Free Induction\nDecay", shape=folder, color="#BBBBBB", fillcolor=grey93];
     c[label="Volumetric\nReconstruction", shape=folder, color="#BBBBBB", fillcolor=grey93];
@@ -23,13 +23,21 @@ digraph graphname {
         shape=folder, color="#805010", fillcolor=grey93,
         ];
     m0_bad[label="Manual  ", shape=cds, color="#805010", fillcolor=grey93, fontcolor="#805010"];
+    d_branch[label = "d_branch", style = invis, shape=point, width=.0]
+    e_branch[label = "e_branch", style = invis, shape=point, width=.0]
+    f_branch[label = "f_branch", style = invis, shape=point, width=.0]
+    g_branch[label = "g_branch", style = invis, shape=point, width=.0]
     
     m0 -> m1 ;
     m0_bad -> m_bad[color="#805010"];
-    m_bad:e -> d:n[color="#805010"];
-    m_bad:e -> e:n[color="#805010"];
-    m_bad:e -> f:n[color="#805010"];
-    m_bad:e -> g:n[color="#805010"];
+    m_bad:e -> d_branch[color="#805010", arrowhead=none];
+    d_branch -> d:n[color="#805010"];
+    d_branch -> e_branch[color="#805010", arrowhead=none];
+    e_branch -> e:n[color="#805010"];
+    e_branch -> f_branch[color="#805010", arrowhead=none];
+    f_branch -> f:n[color="#805010"];
+    f_branch -> g_branch[color="#805010", arrowhead=none];
+    g_branch -> g:n[color="#805010"];
     a -> b ;
     subgraph cluster1 {
         b -> c ;
@@ -40,7 +48,7 @@ digraph graphname {
     }
     c -> d:w ;
     subgraph cluster2 {
-        d -> e ;
+        d -> e [arrowsize=0.9, penwidth=4, color="#DE9A00"];
         e -> f ;
         f -> g ;
         label = "Analysis System";
@@ -53,8 +61,8 @@ digraph graphname {
     g -> g_ [minlen=2];
     {rank=same; a; m0; m0_bad}
     {rank=same; c; m1; m_bad}
-    {rank=same; d; d_}
-    {rank=same; e; e_}
-    {rank=same; f; f_}
-    {rank=same; g; g_}
+    {rank=same; d; d_; d_branch}
+    {rank=same; e; e_; e_branch}
+    {rank=same; f; f_; f_branch}
+    {rank=same; g; g_; g_branch}
 }

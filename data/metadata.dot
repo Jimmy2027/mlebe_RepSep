@@ -3,13 +3,13 @@ digraph graphname {
     size="26,10";
     rankdir="LR";
     splines=ortho;
-    graph [fontname = "sans"];
-    node [fontname = "sans", style=filled];
-    edge [fontname = "sans", color=gray50];
-    d_[label="Sharing", style="bold, rounded", color="#BBBBBB"];
-    e_[label="Sharing", style="bold, rounded", color="#BBBBBB"];
-    f_[label="Sharing", style="bold, rounded", color="#BBBBBB"];
-    g_[label="Sharing", style="bold, rounded", color="#BBBBBB"];
+    graph [fontname="sans", pad="0.07", nodesep="0.175", ranksep="0.45"];
+    node [fontname="sans", style=filled];
+    edge [fontname="sans", color=gray50];
+    d_[label=<<FONT COLOR="#45B000">Share!</FONT>>, style="bold, rounded", color="#BBBBBB", shape="box"];
+    e_[label=<<FONT COLOR="#45B000">Share!</FONT>>, style="bold, rounded", color="#BBBBBB", shape="box"];
+    f_[label=<<FONT COLOR="#45B000">Share!</FONT>>, style="bold, rounded", color="#BBBBBB", shape="box"];
+    g_[label="Share!", style="bold, rounded", color="#BBBBBB", shape="box"];
     a[label="Analog  ", shape=cds, color="#BBBBBB", fillcolor=grey93, fontcolor="#999998"];
     m0[label="Manual  ", shape=cds, color="#BBBBBB", fillcolor=grey93, fontcolor="#999998"];
     b[label="Free Induction\nDecay", shape=folder, color="#BBBBBB", fillcolor=grey93];
@@ -18,7 +18,8 @@ digraph graphname {
         shape=folder, color="#BBBBBB", fillcolor=grey93,
         ];
     c[label="Volumetric\nReconstruction", shape=folder, color="#BBBBBB", fillcolor=grey93];
-    d[  label=<Raw Volumetric<BR/><FONT COLOR="#45B000">+Metadata</FONT>>,
+    d[
+        label=<Raw Volumetric<BR/><FONT COLOR="#45B000">+Metadata</FONT>>,
         shape=folder, color="#BBBBBB", fillcolor=grey93,
         ];
     e[
@@ -42,7 +43,7 @@ digraph graphname {
     c -> d ;
     m1 -> d;
     subgraph cluster2 {
-        d -> e ;
+        d -> e [arrowsize=0.9, penwidth=4, color="#DE9A00"];
         e -> f ;
         f -> g ;
         label = "Analysis System";

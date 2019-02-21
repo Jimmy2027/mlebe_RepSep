@@ -38,31 +38,6 @@ While it is true that the scanner affine reported for mouse data may be nonstand
 A related manipulation is dimension swapping, which changes the order of the NIfTI data matirx rather than the affine.
 Occasionally, correct or automatically redressable affine parameters are thus deleted and data is reordered beyond easy recovery, in order to correspond to a malformed template.
 
-\begin{figure*}[h!]
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includedot[width=\textwidth]{data/metadata}
-		\vspace{-2.5em}
-		\caption{
-			Flowchart depicting consistent metadata handling. This minimizes operator interaction and ensures that all information accessible to the data format (e.g. NIfTI + BIDS) is correctly encapsulated at every step, and correctly interpretable by researchers familiar with the openly documented standards.
-			}
-		\label{fig:mdg}
-	\end{subfigure}
-	\begin{subfigure}{\textwidth}
-		\centering
-		\includedot[width=\textwidth]{data/metadata_bad}
-		\vspace{-2.5em}
-		\caption{
-			Flowchart depicting ad hoc metadata substitution. This introduces additional operator interaction steps (colored brown), and renders the metadata encapsulated in standardized formats ambiguous (coloured red), and less well interpretable to researchers unfamiliar with the specific ad hoc convention.
-			}
-		\label{fig:mdb}
-	\end{subfigure}
-	\caption{
-		Simplified fMRI data flowcharts, depicting individual processing steps, highlighting the possibility of sharing data at every step during analysis, and contrasting consistent and ad-hoc metadata management.
-		}
-	\label{fig:md}
-\end{figure*}
-
 \subsection{Templates}
 As the above eminently demonstrates, the template is a key component of a registration workflow.
 Templates used for mouse brain MRI registration are highly heterogeneous, and include histological, as well as ex vivo MRI templates, scanned either inside the intact skull or after physical brain extraction.
@@ -80,5 +55,4 @@ Ex-vivo templates based on intact mouse heads provide both MR contrast and brain
 
 \subsection{Challenges}
 It thus becomes obvious that the foremost challenges in mouse MRI registration consist in minimizing workarounds and reliance on high-level interfaces with inappropriate optimizations, as well as in the reduction of the number of standard space templates.
-Information loss (e.g. pertaining to both the affine and the data matrix) during preprocessing is another notable issue, since the loss of data at the onset of a neouroimaging workflow will persist in all downstream steps and preclude numerous modes of analysis (as depicted in \cref{fig:md}).
-
+Information loss (e.g. pertaining to both the affine and the data matrix) during preprocessing is another notable issue, since the loss of data at the onset of a neouroimaging workflow will persist in all downstream steps and preclude numerous modes of analysis (as depicted in \cref{fig:mdb}).
