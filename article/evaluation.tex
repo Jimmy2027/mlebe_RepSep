@@ -1,13 +1,10 @@
 \section{Evaluation}
 
-%We evaluate the quality of the registration both in terms of spatial features, as well as in terms of its repercussion on higher-level functional analysis.
-
 A challenge of QC with regard to spatial features is that a perfect mapping to the template is undefined.
 Similarity metrics are ill-suited for QC because they are used internally by registration functions, whose main feature it is, that they maximize them.
 Indeed extreme maximization, especially via nonlinear transformations, results in distortion of the image, which should be penalized in QC, but in light of image similarity scores is represented as better performance.
 Additionally, similarity metrics are not independent, so this issue cannot be circumvented by maximizing a subset of metrics and performing QC via the remainder.
-%We thus develop three alternative evaluation metrics: volume conservation, functional analysis, and variance analysis.
-We thus develop two alternative evaluation metrics: volume conservation and functional analysis.
+We thus develop four alternative evaluation metrics: volume conservation, smoothness conservation, variance analysis, and functional analysis.
 In order to mitigate possible differences arising from qualitative template features, we perform a multivariate analysis of both templates and workflows.
 
 
@@ -19,7 +16,7 @@ A volume increase may indicate that the brain was stretched to fill in template 
 In order to best analyze volume conservation, a Volume Change Factor (VCF) is computed for each processed scan, whereby volume conservation is highest for a VCF equal to 1.
 For the current implementation we define brain volume as estimated by the 66\textsuperscript{th} voxel intensity percentile of the unregistered scan.
 The arbitrary unit equivalent of this percentile threshold is recorded for each scan and applied to all registration workflow results for that particular scan, to obtain VCF esimates
- --- detailed in \cref{eq:vcf}, where $v$ is the voxel volume in the original space, $v^\prime$ the voxel volume in the transformed space, $n$ the number of voxels in the original space, $m$ the number of voxels in the transformed space, $s$ a voxel value sampled from the vector $S$ containing all values in the original data, and $s^\prime$ a voxel value sampled from the transformed data.
+ --- as detailed in \cref{eq:vcf}, where $v$ is the voxel volume in the original space, $v^\prime$ the voxel volume in the transformed space, $n$ the number of voxels in the original space, $m$ the number of voxels in the transformed space, $s$ a voxel value sampled from the vector $S$ containing all values in the original data, and $s^\prime$ a voxel value sampled from the transformed data.
 
 \begin{equation} \label{eq:vcf}
         V\!C\!F
@@ -48,7 +45,7 @@ the processing workflow (\py{boilerplate.fstatistic('Processing', condensed=True
 the template (\py{boilerplate.fstatistic('Template', condensed=True)}),
 but not the interaction thereof (\py{boilerplate.fstatistic('Processing:Template', condensed=True)}).
 
-The performance of the Generic SAMRI workflow (with the Generic template) is significantly different from that of the Legacy workflow (with the Legacy template), yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}).
+The performance of the Generic SAMRI workflow (with the Generic template) is significantly different from that of the Legacy workflow (with the Legacy template), yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
 Additionally, the root mean squared error ratio strongly favours the Generic workflow
 ($\mathrm{RMSE_{L}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
 
@@ -84,9 +81,9 @@ We do, however, report a notable effect for the contrast-template interaction, w
         )}
 \end{sansmath}
 
-The final metric we consider is the smoothness of the image after registration.
-Although smoothing can lead to an increase in signal-to-noise ratio (SNR), it does decrease spatial resolution and is therefore associated with less anatomically aligned images and statistical maps \cite{fmriprep}.
-Thus we employ --- analogously to the Volume Change Factor --- a Smoothness Change Factor (SCF) which normalizes the smoothness of the registered images with respect to the smoothness of the original images.
+The next metric we consider is the smoothness of the image after registration.
+Although smoothing can lead to an increase in signal-to-noise ratio (SNR), it does decrease spatial resolution and is therefore associated with  worse anatomical alignment in images and statistical maps \cite{fmriprep}.
+Thus we employ --- analogously to the Volume Change Factor --- a Smoothness Change Factor (SCF), which normalizes the smoothness of the registered images with respect to the smoothness of the original images.
 Our smoothness measure is the full-width at half-maximum (FWHM).
 Since fMRI data usually does not have a gaussian-shaped spatial autocorrelation (ACF \cite{eklund2016cluster}, \cite{cox2017fmri}), we fit the following function to the data in order to estimate the FWHM using AFNI \cite{cox1996afni}.
 
@@ -236,7 +233,7 @@ We note that processing with the Generic template the Generic workflow (\cref{fi
                         ,},
 		],
 	caption='
-                \\textbf{Legacy processing leads to a problematic overflow of the statistical-maps into adjacent anatomical regions, leaking beyond the acquistion area.}
+                \\textbf{Legacy processing leads to a problematic overflow of the statistic maps into adjacent anatomical regions, leaking beyond the acquistion area.}
                 SAMRI mitigates this effect as illustrated by multiplanar depictions of mouse brain templates, with the corresponding second-level omnibus statistic maps separately evaluating CBV and BOLD scans, and thresholded at $\mathrm{|t|\geq2}$.
                 The acquisition area is bracketed in pink, and in comparing it to statistic coverage it is important to note that the spatial coverage of the latter is slightly underestimated, as the omnibus contrast is only defined for voxels captured in \\textit{every} evaluated scan.
                 ',

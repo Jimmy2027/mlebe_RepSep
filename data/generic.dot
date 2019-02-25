@@ -4,13 +4,13 @@ digraph generic_work{
   edge [fontname = "sans", color=gray80];
   generic_work_get_f_scan[label="Identify\n Functional Scan", color="#DDDDDD", fillcolor=grey95, fontcolor="#555555"];
   generic_work_get_s_scan[label="Identify\n Structural Scan", color="#DDDDDD", fillcolor=grey95, fontcolor="#555555"];
-  generic_work_s_biascorrect[label="Bias Correction", color="#DDDDDD", fillcolor=grey95, fontcolor="#45B000"];
+  generic_work_s_biascorrect[label="Correct\n Bias Field", color="#DDDDDD", fillcolor=grey95, fontcolor="#45B000"];
   generic_work_s_register[label="Register\n to Template", color="#DDDDDD", fillcolor=grey95, fontcolor="#45B000"];
   generic_work_s_warp[label="Transform", color="#DDDDDD", fillcolor=grey95, fontcolor="#45B000"];
-  generic_work_dummy_scans[label="Dummy Scan\n Correction", color="#DDDDDD", fillcolor=grey95, fontcolor="#555555"];
-  generic_work_slicetimer[label="Slice Time\n Correction", color="#DDDDDD", fillcolor=grey95, fontcolor="#555555"];
-  generic_work_temporal_mean[label="Temporal Mean", color="#DDDDDD", fillcolor=grey95, fontcolor="#555555"];
-  generic_work_f_biascorrect[label="Bias Correction", color="#DDDDDD", fillcolor=grey95, fontcolor="#45B000"];
+  generic_work_dummy_scans[label="Correct\n Dummy Scans", color="#DDDDDD", fillcolor=grey95, fontcolor="#555555"];
+  generic_work_slicetimer[label="Correct\n Slice Times", color="#DDDDDD", fillcolor=grey95, fontcolor="#555555"];
+  generic_work_temporal_mean[label="Average\n over Time", color="#DDDDDD", fillcolor=grey95, fontcolor="#555555"];
+  generic_work_f_biascorrect[label="Correct\n Bias Field", color="#DDDDDD", fillcolor=grey95, fontcolor="#45B000"];
   generic_work_f_register[label="Register to\n Structural Scan", color="#DDDDDD", fillcolor=grey95, fontcolor="#45B000"];
   generic_work_merge[label="Merge\n Transformations", color="#DDDDDD", fillcolor=grey95, fontcolor="#555555"];
   generic_work_f_warp[label="Transform", color="#DDDDDD", fillcolor=grey95, fontcolor="#45B000"];

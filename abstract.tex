@@ -1,8 +1,8 @@
-Given the need for inter-subject and inter-study comparability, the quality of spatial map registration to a standardized space is of vital importance to Magnetic Resonance Imaging (MRI), and in particular functional MRI (fMRI).
-Small Animal MRI workflows commonly utilize high-level interfaces optimized for human data --- and adapt the data to the interface rather than vice-versa.
-Quality control (QC) is commonly performed by interactive operator inspection, making it infrequent, open to bias, slow, and unreproducible.
-In this paper we present a novel registration workflow, accessible via both Bash and Python, which uses the full flexibility of low-level interfaces from one of the most popular normalization toolkits (ANTs).
-We provide an optimized set of parameters for mouse brain registration, and propose a standard space suited to harmonize mouse brain data across modalities.
-Additionally, we present QC workflows, which can automatically assess the registration quality of current as well as past processed datasets.
-With regard to both structural and functional considerations, we showcase the capabilities of this novel workflow compared to a legacy workflow (representative of common practices --- which we detail and comment).
-We find that across metrics our workflow outperforms legacy practices by up to an order of magnitude.
+Given the need for comparability across subjects and studies, the quality of registration to a standard space is crucial for the reliability of Magnetic Resonance Imaging (MRI), and in particular functional MRI (fMRI).
+Small Animal MRI workflows suffer from numerous issues, including the utilization of high-level scripts optimized for human data (adapting data to the scripts rather than vice-versa), and the reliance on interactive operator quality control (QC), which is infrequent, open to bias, slow, and unreproducible.
+In this fully reproducible article we showcase a novel mouse-brain-optimized workflow (accessible via Bash and Python), and a standard space suited to harmonize data between analysis and operation.
+Additionally, we present four separate metrics for automated QC, and a visualization method to aid operator inspection.
+Benchmarking this workflow against common legacy practices (which we detail and comment) reveals that it better conserves variance across subjects while minimizing variance across sessions, and improves volume conservation
+\py{pytex_printonly('scripts/vc_rmser.py')}-fold,
+and smoothness conservation \py{pytex_printonly('scripts/scf_rmser.py')}-fold.
+The “SAMRI Generic” workflow sets a new standard for small animal MRI registration, ensuring robustness, comparability, and validity of region assignment.

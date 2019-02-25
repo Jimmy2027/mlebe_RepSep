@@ -2,25 +2,23 @@
 \label{sec:bg}
 
 In order to make any generalizable statements regarding brain function and organization, an equivalence between brain areas across individuals needs to be established.
-This is most commonly done by spatial (rigid, affine, and non-linear) transformation of all brain maps in a study to a population or standard reference template.
+This is done by spatial (rigid, affine, and non-linear) transformation of all brain maps in a study to a population or standard reference template.
 This process, called registration, is consequently performed as part of any neuroimaging workflow attempting to produce results which are both spatially resolved and generalizable across the population.
 
 The computations required for registration are commonly performed at the very onset of the preprocessing workflow,
-though --- depending on the workflow --- the actual image manipulation may only take place much later, once inter-subject comparison becomes needed.
+though the actual image manipulation may only take place much later, once inter-subject comparison becomes needed.
 % [[[paper which does this and says that it minimizes interpolation]]].
 As a consequence of this marginal positioning in the preprocessing sequence, as well as its general independence from experimental designs and hypotheses, registration is often relegated to default values and exempt from rigorous design efforts and QC.
 
-Failing to do proper registration and QC can result in irreproducible results or anatomical inaccuracies of subsequent statistical analyses. We demonstrate this effect due to the legacy workflow as well as the mitigating effect of the SAMRI generic workflow.  
-
 Registration QC is a notable issue for human as well as mouse brain imaging;
-and is not limited as much by a lack of reporting functions, as by a lack of reporting metrics which can easily be communicated for a population.
-Human brain imaging uniquely benefits from high-level functions (e.g.  \textcolor{mg}{\texttt{flirt}} and  \textcolor{mg}{\texttt{fnirt}} from the FSL package\cite{fsl}, or \textcolor{mg}{\texttt{antsIntroduction.sh}} from the ANTs package\cite{ants}), optimized for the size and spatial features of the human brain.
+and is not limited by a lack of reporting metrics which can easily be communicated for a population.
+Human brain imaging uniquely benefits from high-level functions (e.g. \textcolor{mg}{\texttt{flirt}} and  \textcolor{mg}{\texttt{fnirt}} from the FSL package\cite{fsl}, or \textcolor{mg}{\texttt{antsIntroduction.sh}} from the ANTs package\cite{ants}), optimized for the size and spatial features of the human brain.
 The availability and widespread use of such functions mitigates issues which would otherwise arise from a lack of QC.
-In mouse brain imaging, however, registration is frequently performed using the selfsame high-level functions from human brain imaging which are rendered usable for mouse brain data by adjusting the nature of the data to fit the priors and optimized parameters of the functions (rather than vice-versa).
+In mouse brain imaging, however, registration is frequently performed using the selfsame high-level functions from human brain imaging --- rendered usable for mouse brain data by adjusting the nature of the data to fit the priors and optimized parameters of the functions (rather than vice-versa).
 
 This general approach represents a notable hurdle for the methodological improvement of mouse brain imaging.
 Furthermore, such solutions are intended as “fast fixes”, and are not thoroughly documented anywhere in the field.
-We thus explicitly describe current practices, in an effort to not only propose better solutions, but do so in a falsifiable manner which provides adequate reference for both the novel and the legacy methods.
+We thus explicitly describe current practices, in an effort to not only propose better solutions, but do so in a falsifiable manner which provides adequate detail for both the novel and the legacy methods.
 
 \subsection{Manipulations}
 The foremost data manipulation procedure in present-day mouse MRI is the adjustment of voxel dimensions.
@@ -49,10 +47,10 @@ Not least of all, histological templates may be severely deformed (and may lack 
 Consequently, data registered to them may be particularly difficult to use for navigation in the intact mouse brain, e.g. during data acquisition or stereotactic surgery.
 
 Ex-vivo templates based on extracted brains share most of the deformation issues present in histological templates;
-they are, however, available in MR contrasts making registration far easier.
+they are, however, available in MR contrasts, making registration far easier.
 They suffer from a lower resolution, and need to have any histological data relevant for downstream analysis first registered to them.
 Ex-vivo templates based on intact mouse heads provide both MR contrast and brains largely free of deformation and supporting whole brain registration.
 
 \subsection{Challenges}
-It thus becomes obvious that the foremost challenges in mouse MRI registration consist in minimizing workarounds and reliance on high-level interfaces with inappropriate optimizations, as well as in the reduction of the number of standard space templates.
-Information loss (e.g. pertaining to both the affine and the data matrix) during preprocessing is another notable issue, since the loss of data at the onset of a neouroimaging workflow will persist in all downstream steps and preclude numerous modes of analysis (as depicted in \cref{fig:mdb}).
+It is thus evident that the foremost challenges in mouse MRI registration consist in: eliminating data-degrading workarounds, reducing reliance on high-level interfaces with inappropriate optimizations, and reducing the number of standard space templates.
+Information loss (e.g. pertaining to both the affine and the data matrix) during preprocessing is a particularly besetting issue, since the loss of data at the onset of a neouroimaging workflow will persist in all downstream steps and preclude numerous modes of analysis (as depicted in \cref{fig:mdb}).
