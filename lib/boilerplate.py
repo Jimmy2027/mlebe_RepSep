@@ -71,23 +71,6 @@ def corecomparison_factorci(factor,
 	tex = inline_factor(summary, factor, 'tex', **kwargs)
 	return tex
 
-def vcc_factorci(factor,
-	df_path='data/volumes.csv',
-	**kwargs
-	):
-	df_path = path.abspath(df_path)
-	df = pd.read_csv(df_path)
-
-	df = df.loc[df['Processing']!='Unprocessed']
-	df = df.loc[((df['Processing']=='Legacy') & (df['Template']=='Legacy')) | ((df['Processing']=='Generic') & (df['Template']=='Generic'))]
-
-	model=smf.mixedlm('Q("Volume Change Factor") ~ Processing*Contrast', df, groups='Uid')
-
-	fit = model.fit()
-	summary = fit.summary()
-	tex = inline_factor(summary, factor, 'tex', **kwargs)
-	return tex
-
 def varianceratio(
 	df_path='data/volumes.csv',
 	template=False,
@@ -110,35 +93,6 @@ def varianceratio(
 	ratio = legacy/generic
 
 	return float_to_tex(ratio, max_len, **kwargs)
-	# Hypothesis test, but we are not, in current cases, testing a hypothesis.
-	#from scipy.stats import levene
-	#result = levene(
-	#	df.loc[df['Processing']=='Legacy', 'Volume Change Factor'].tolist(),
-	#	df.loc[df['Processing']=='Generic', 'Volume Change Factor'].tolist(),
-	#	)
-	#print(float_to_tex(result.pvalue, max_len=3))
-
-def variancep(
-	df_path='data/volumes.csv',
-	template=False,
-	max_len=2,
-	**kwargs
-	):
-	from scipy.stats import levene
-
-	volume_path = path.abspath('data/volumes.csv')
-	df = pd.read_csv(volume_path)
-
-	df = df.loc[df['Processing']!='Unprocessed']
-
-	if template:
-		df = df.loc[df['Template']==template]
-	result = levene(
-		df.loc[df['Processing']=='Legacy', 'Volume Change Factor'].tolist(),
-		df.loc[df['Processing']=='Generic', 'Volume Change Factor'].tolist(),
-		)
-
-	return float_to_tex(result.pvalue, max_len, **kwargs)
 
 def variance_test(
         factor,
@@ -158,46 +112,3 @@ def variance_test(
         anova = sm.stats.anova_lm(ols, typ=3, robust='hc3')
         tex = inline_anova(anova,  factor, 'tex', **kwargs)
         return tex
-
-def fstatistic_smoothness(factor,
-        df_path='data/smoothness_data.csv',
-        dependent_variable='Smoothness Change Factor',
-        expression='Processing*Template',
-        exclusion_criteria={},
-        **kwargs
-        ):
-        df_path = path.abspath(df_path)
-        df = pd.read_csv(df_path)
-
-        df = df.loc[df['Processing']!='Unprocessed']
-
-        for key in exclusion_criteria.keys():
-                df = df.loc[~df[key].isin(exclusion_criteria[key])]
-
-        formula='Q("{}") ~ {}'.format(dependent_variable, expression)
-        ols = smf.ols(formula, df).fit()
-        anova = sm.stats.anova_lm(ols, typ=2)
-        tex = inline_anova(anova, factor, 'tex', **kwargs)
-        return tex
-
-def meanVar(ret,
-        df_path='data/smoothness_data.csv',
-        factor = 'Smoothness Change Factor',
-        Processing = 'Legacy',
-        template=False,
-        max_len=2,
-        **kwargs
-        ):
-        df_path = path.abspath(df_path)
-        df = pd.read_csv(df_path)
-
-        df = df.loc[df['Processing']!='Unprocessed']
-        data = df.loc[df['Processing']==Processing, factor]
-
-        if(ret == 'mean'):
-                result = data.mean()
-        if(ret == 'sd'):
-                result = data.std()
-
-        return float_to_tex(result, max_len, **kwargs)
-
