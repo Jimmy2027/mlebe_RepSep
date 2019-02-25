@@ -73,7 +73,7 @@ We do, however, report a notable effect for the contrast-template interaction, w
                         ,},
                 ],
         caption='
-                \\textbf{SAMRI Generic registration does not increase spatial smoothing, thereby increasing locality of functional analysis results.}
+                \\textbf{SAMRI Generic registration vastly reduces spatial smoothing, thereby increasing locality of functional analysis results.}
                 Smoothness change relative to the original scan, presented on a log scale due to considerable effect size in the comparison between workflows.
                 The coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.
                 ',
@@ -92,12 +92,18 @@ Since fMRI data usually does not have a gaussian-shaped spatial autocorrelation 
         = a * e^{ -r^{2}/ (2 * b^{2}) } + (1 - a) + e^{-r/c}
 \end{equation}
 
-Since we introduce the VCF and SCF in a similar fashion, we analyze them similarly as well. The SCF is significantly different from 1 after processing with both the Legacy ($p= $\py{pytex_printonly('scripts/scf_t_legacy.py')}) and the Generic workflow ($p= $\py{pytex_printonly('scripts/scf_t_generic.py')}).
-The amplitude of this distortion is however notably higher for the Legacy (\py{boilerplate.meanVar('mean', Processing='Legacy')}$\pm$\py{boilerplate.meanVar('sd', Processing='Legacy')}), than for the Genericworkflow (\py{boilerplate.meanVar('mean', Processing='Generic')}$\pm$\py{boilerplate.meanVar('sd', Processing='Generic')}).
-Additionally, the root mean squared error ratio strongly favours the Generic workflow ($\mathrm{RMSE_{L}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
-Similarly to the VCF, we see no notable main effect for the contrast variable (\cref{fig:sccv}) (SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness_data.csv', dependent_variable='Smoothness Change Factor')}).
-We observe a notable effect for the CBV contrast-Legacy template interaction, introducing an increase in SCF (SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/smoothness_data.csv', dependent_variable='Smoothness Change Factor')}).
-Moreover, the Legacy workflow produces a substantial increase in SCF variance compared to the Generic workflow (\py{boilerplate.varianceratio(df_path='data/smoothness_data.csv',dependent_variable='Smoothness Change Factor', max_len=3, template='Legacy')}-fold for the Legacy template and \py{boilerplate.varianceratio(df_path='data/smoothness_data.csv',dependent_variable='Smoothness Change Factor', template='Generic', max_len=3)}-fold for the Generic template).
+With respect to the data shown in \cref{fig:scv}, we note that SCF is sensitive to
+the processing workflow (\py{boilerplate.fstatistic('Processing', condensed=True, df_path='data/smoothness_data.csv', dependent_variable='Smoothness Change Factor')}),
+the template (\py{boilerplate.fstatistic('Template', condensed=True, df_path='data/smoothness_data.csv', dependent_variable='Smoothness Change Factor')}),
+and the interaction thereof (\py{boilerplate.fstatistic('Processing:Template', condensed=True, df_path='data/smoothness_data.csv', dependent_variable='Smoothness Change Factor')}).
+
+The performance of the Generic SAMRI workflow (with the Generic template) is significantly different from that of the Legacy workflow (with the Legacy template), yielding a two-tailed p-value of \py{pytex_printonly('scripts/scf_t.py')}.
+Additionally, the root mean squared error ratio strongly favours the Generic workflow
+($\mathrm{RMSE_{L}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
+
+Given the break-up by contrast shown in \cref{fig:sccv}, we see no notable main effect for the contrast variable (SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness_data.csv', dependent_variable='Smoothness Change Factor')}).
+We observe a notable effect for the CBV contrast-Legacy template interaction, introducing a smoothness increase (SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/smoothness_data.csv', dependent_variable='Smoothness Change Factor')}).
+Additionally, the Legacy workflow produces a substantial increase in SCF variance compared to the Generic workflow (\py{boilerplate.varianceratio(df_path='data/smoothness_data.csv',dependent_variable='Smoothness Change Factor', max_len=3, template='Legacy')}-fold for the Legacy template and \py{boilerplate.varianceratio(df_path='data/smoothness_data.csv',dependent_variable='Smoothness Change Factor', template='Generic', max_len=3)}-fold for the Generic template).
 
 
 \subsection{Variance analysis}
@@ -114,30 +120,43 @@ Moreover, the Legacy workflow produces a substantial increase in SCF variance co
         )}
 \end{sansmath}
 
-Another way to assess registration quality is by looking at how much of the total variance of registered samples is explained by either subject or session across different similarity measures:
-Crosscorrelation (CC), Mutual Information (MI), and Global Correlation(GC).
-Since adult mouse brains in the absence of intervention are assumed to retain size and shape across the 8 week study period, more variation should be found across sessions rather than subjects.
+An additional way to assess registration quality focuses on the robustness to variability resulting from repeat experimentation, and whether this is be attained without compromising physiologically meaningful variability.
+The core assumption of this analysis of variance is that adult mouse brains in the absence of intervention are assumed to retain size, shape, and implant position across the 8 week study period.
+Consequently, when examining similarity scores of registered scans with respect to the target template, more variation should be found across the subject variable rather than session variable.
 This comparison can be performed using a type 3 ANOVA, modelling both the subject and the session variables.
+For this assessment we select three metrics with maximal sensitivity to different features:
+Crosscorrelation (CC, weighted towards localized correlation),
+Global Correlation (GC, weighted towards whole-image correlation),
+and Mutual Information (MI, weighted towards information similarity independently of a correlation assumption).
 As similarity metrics are not equivalent, and since the main comparison of variance is performed across al of them, p-values for the variable effects are uncorrected.
 
 \Cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Legacy workflows (considering only the matching workflow-template combinations).
-We can see that MI between the Legacy workflow results and the corresponding template is significantly influenced by the session variable (\py{boilerplate.variance_test('C(Session)','Legacy','MI', condensed=True)}) but not the subject variable (\py{boilerplate.variance_test('C(Subject)','Legacy','MI', condensed=True)}).
-For the other metrics, we find neither the session nor the subject variable significant, although the F-statistic is higher for the subject than for the session variable using both
-the CC metric (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','CC', condensed=True)})
-and the GC metric (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','GC', condensed=True)}).
-Looking at the generic SAMRI workflow we find the opposite effect.
-Across metrics, F-statistics for the subject variable are consistently higher than for the session variable:
-CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','CC', condensed=True)}),
+For all three metrics, in the case of the Legacy workflow we find that the F-statistic is consistently higher for the subject than for the session variable:
+CC (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','CC', condensed=True)}),
+GC (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','GC', condensed=True)}),
+and MI (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','MI', condensed=True)}).
+Notably, for the MI metric the effect of the session variable is significant, but not that of the subject variable. 
+
+%Looking at the Generic SAMRI workflow we find the opposite effect.
+%Across metrics, F-statistics for the subject variable are consistently higher than for the session variable:
+%CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','CC', condensed=True)}),
+%GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','GC', condensed=True)}),
+%and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','MI', condensed=True)}).
+%Notably, in the CC metric, the subject-wise variance reaches significance, but not the session-wise variance.
+
+Looking at the Generic SAMRI workflow we find a reversing trend.
+With the exception of CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','CC', condensed=True)}), F-statistics for the subject variable are consistently higher than for the session variable:
 GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','GC', condensed=True)}),
 and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','MI', condensed=True)}).
-Notably, in the CC metric, the subject-wise variance reaches significance, but not the session-wise variance.
 
 
 \subsection{Functional Analysis}
 
-Functional analysis is a viable avenue for registration QC, as the metric being maximized in the registration process is not the same metric used for QC.
+Functional analysis is a theoretically viable and frequently used avenue for registration QC.
+Its viability derives from the fact that the the metric being maximized in the registration process is not the same output metric as that used for QC.
 This method is however primarily suited to examine workflow effects in light of higher-level applications, and less suited for wide-spread QC (as it is computationally intensive and only applicable to stimulus-evoked functional data).
-As a first step we examine statistical power, via the negative logarithm of first-level p-value maps (i.e. voxelwise statistical estimates for the probability that each voxel time course is at least as well correlated with the stimulation regressor, by chance alone).
+
+As a first step we examine statistical power, via the negative logarithm of first-level p-value maps (i.e. voxelwise statistical estimates for the probability that each voxel time course is at least as well correlated with the stimulation regressor as the voxel time course measured --- by chance alone).
 We compute the per-scan average of these values, which we term Mean Significance --- detailed in \cref{eq:ms}, where $n$ represents the number of statistical estimates in the scan, and $p$ is a p-value.
 
 \begin{equation} \label{eq:ms}
@@ -166,28 +185,28 @@ nor the template
 nor the interaction thereof
 (\py{boilerplate.fstatistic('Processing:Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}).
 
-The Generic SAMRI workflow (with the Generic template) is not significantly different from that of the Legacy workflow (with the Legacy template), yielding a two-tailed p-value of \py{pytex_printonly('scripts/ms_t.py')}.
+The SAMRI Generic workflow (with the Generic template) does not perform significantly differently from the Legacy workflow (with the Legacy template), yielding a two-tailed p-value of \py{pytex_printonly('scripts/ms_t.py')}.
 There is again a variance increase in all conditions for the Legacy processing workflow
 (\py{boilerplate.varianceratio(df_path='data/functional_significance.csv', template='Legacy', dependent_variable='Mean Significance')}-fold
 given the Legacy template, and
 \py{boilerplate.varianceratio(df_path='data/functional_significance.csv', template='Generic', dependent_variable='Mean Significance')}-fold
 given the Generic template).
 
-With respect to the data break-up by contrast (from \cref{fig:mscv}), we see no notable positive main effect for the contrast variable
+With respect to the data break-up by contrast (from \cref{fig:mscv}), we see no notable main effect for the contrast variable
 (MS of
 \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
 We do, however, report a notable effect for the contrast-template interaction, with the Legacy workflow and CBV contrast interaction level introducing a significance increase
 (MS of
 \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
 
-Overall statistical power is, however, independent of the mapping accuracy, and functional analysis effects can be further inspected by visualizing the statistic maps.
-For a succint overview capturing both amplitude and directionality of the signal, we present second-level t-statistic maps depicting the CBV and BOLD omnibus contrasts (across subjects and sessions) in \cref{fig:m}.
-While the most salient feature of this figure is the qualitative distribution difference between CBV and BOLD scans, we note that this is to be expected given the different nature of the processes.
-More relevant to registration quality is the differential coverage.
+Overall statistical power is, however, independent of the mapping accuracy, and functional analysis effects can further be inspected by visualizing the statistic maps.
+For a succinct overview capturing both amplitude and directionality of the signal, we present second-level t-statistic maps depicting the CBV and BOLD omnibus contrasts (across all subjects and sessions) in \cref{fig:m}.
+While the most salient feature of this figure is the qualitative distribution difference between CBV and BOLD scans, we note that this is to be expected given the different nature of the processes, and is wholly orthogonal to the question of registration.
+Crucial to the examination of registration quality and its effects on functional read-outs is the differential coverage.
 We note that the Legacy template induces coverage overflow, extending to the cerebellum (\cref{fig:mglc,fig:mllc,fig:mllb}), and to the olfactory bulbs when used in conjunction with the Legacy workflow (\cref{fig:mllc,fig:mllb}).
 Separately from the Legacy template, the Legacy workflow causes coverage overflow (both rostrally into the base of the olfactory bulbs and caudally into the cerebellum) even when used in conjunction with the Generic template (\cref{fig:mlgc,fig:mlgb}).
 Positive activation of the Raphe system, most clearly disambiguated from the surrounding tissue in the BOLD contrast, is notably displaced very far caudally by the joint effects of the Legacy workflow and the Legacy template (\cref{fig:mllb}).
-We note that processing with the Generic template the Generic workflow (\cref{fig:mggc,fig:mggb}), do not show issues of statistic coverage.
+We note that processing with the Generic template the Generic workflow (\cref{fig:mggc,fig:mggb}), does not show issues with statistic coverage overflow.
 
 \py{pytex_subfigs(
 	[
