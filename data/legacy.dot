@@ -25,7 +25,7 @@ digraph legacy_work{
       shape=folder, color="#BBBBBB", fillcolor=grey93,
       ];
   e[
-      label="Preprocessed Volumetric\n +M̷e̷t̷a̷d̷a̷t̷a̷",
+      label=<Preprocessing Volumetric<BR/><FONT COLOR="#F00533">Metadata?</FONT>>,
       shape=folder, color="#F00533", fillcolor=grey93,
       ];
   d -> legacy_work_get_f_scan [arrowhead=none, arrowsize=0.9, penwidth=4, color="#DE9A00"];
