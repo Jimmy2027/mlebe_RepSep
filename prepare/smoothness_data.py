@@ -29,7 +29,6 @@ def avg_smoothness(inp_file):
         # It appears the new/correct FWHM is now located under the last position of the ACF estimates.
         # https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dFWHMx.html
         res = fwhm_run.outputs.acf_param[3]
-        #mean_smoothness = np.asarray(res).mean()
         return res
 
 def acqname(inp_entry):
@@ -68,6 +67,7 @@ df['modality'] = df['modality'].str.upper()
 df['Contrast'] = df['modality']
 
 df['smoothness'] = df['path'].apply(avg_smoothness)
+df.loc[df['Processing']=='Legacy', 'smoothness'] = df.loc[df['Processing']=='Legacy', 'smoothness']/10
 
 df['Smoothness Change Factor'] = ''
 uids = df['Uid'].unique()
@@ -75,7 +75,8 @@ for uid in uids:
 	original = df.loc[(df['Uid']==uid) & (df['Processing']=='Unprocessed'), 'smoothness'].item()
 	df.loc[(df['Uid']==uid), 'Smoothness Change Factor'] = df.loc[(df['Uid']==uid), 'smoothness'] / original
 
-df.to_csv('../data/smoothness_data.csv')
+
+df.to_csv('../data/smoothness.csv')
 files = os.listdir('./')
 for _file in files:
         if  _file.endswith(('.out','.1D')):

@@ -3,7 +3,7 @@ from os import path
 from scipy.stats import ttest_rel
 from lib.utils import float_to_tex
 
-volume_path = path.abspath('data/volumes.csv')
+volume_path = path.abspath('data/volume.csv')
 df = pd.read_csv(volume_path)
 
 summary =  ttest_rel(

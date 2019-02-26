@@ -6,7 +6,7 @@ import matplotlib as mpl
 workflows = ['Generic', 'Legacy']
 palette = ['#80e050','#755575']
 
-df_path='data/variance_data.csv'
+df_path='data/variance.csv'
 df = pd.read_csv(path.abspath(df_path))
 
 df_cc = df.drop('GC', axis=1).drop('MI',axis=1)

@@ -93,17 +93,17 @@ Since fMRI data usually does not have a gaussian-shaped spatial autocorrelation 
 \end{equation}
 
 With respect to the data shown in \cref{fig:scv}, we note that SCF is sensitive to
-the processing workflow (\py{boilerplate.fstatistic('Processing', condensed=True, df_path='data/smoothness_data.csv', dependent_variable='Smoothness Change Factor')}),
-the template (\py{boilerplate.fstatistic('Template', condensed=True, df_path='data/smoothness_data.csv', dependent_variable='Smoothness Change Factor')}),
-and the interaction thereof (\py{boilerplate.fstatistic('Processing:Template', condensed=True, df_path='data/smoothness_data.csv', dependent_variable='Smoothness Change Factor')}).
+the processing workflow (\py{boilerplate.fstatistic('Processing', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}),
+the template (\py{boilerplate.fstatistic('Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}),
+and the interaction thereof (\py{boilerplate.fstatistic('Processing:Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}).
 
 The performance of the Generic SAMRI workflow (with the Generic template) is significantly different from that of the Legacy workflow (with the Legacy template), yielding a two-tailed p-value of \py{pytex_printonly('scripts/scf_t.py')}.
 Additionally, the root mean squared error ratio strongly favours the Generic workflow
 ($\mathrm{RMSE_{L}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
 
-Given the break-up by contrast shown in \cref{fig:sccv}, we see no notable main effect for the contrast variable (SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness_data.csv', dependent_variable='Smoothness Change Factor')}).
-We observe a notable effect for the CBV contrast-Legacy template interaction, introducing a smoothness increase (SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/smoothness_data.csv', dependent_variable='Smoothness Change Factor')}).
-Additionally, the Legacy workflow produces a substantial increase in SCF variance compared to the Generic workflow (\py{boilerplate.varianceratio(df_path='data/smoothness_data.csv',dependent_variable='Smoothness Change Factor', max_len=3, template='Legacy')}-fold for the Legacy template and \py{boilerplate.varianceratio(df_path='data/smoothness_data.csv',dependent_variable='Smoothness Change Factor', template='Generic', max_len=3)}-fold for the Generic template).
+Given the break-up by contrast shown in \cref{fig:sccv}, we see no notable main effect for the contrast variable (SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}).
+We observe a notable effect for the CBV contrast-Legacy template interaction, introducing a smoothness increase (SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}).
+Additionally, the Legacy workflow produces a substantial increase in SCF variance compared to the Generic workflow (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Change Factor', max_len=3, template='Legacy')}-fold for the Legacy template and \py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Change Factor', template='Generic', max_len=3)}-fold for the Generic template).
 
 
 \subsection{Variance analysis}

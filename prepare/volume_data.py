@@ -118,4 +118,4 @@ df['modality'] = df['modality'].str.upper()
 df = df.rename(columns={'modality': 'Contrast',})
 df.columns = map(str.title, df.columns)
 
-df.to_csv('../data/volumes.csv')
+df.to_csv('../data/volume.csv')

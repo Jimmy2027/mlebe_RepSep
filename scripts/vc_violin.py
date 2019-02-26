@@ -8,7 +8,7 @@ from lib.categorical import violinplot
 # Style
 palette = ['#80e050','#755575']
 
-volume_path = path.abspath('data/volumes.csv')
+volume_path = path.abspath('data/volume.csv')
 df = pd.read_csv(volume_path)
 
 df.loc[df['Processing']=='Unprocessed', 'Template'] = ''

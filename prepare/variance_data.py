@@ -134,4 +134,4 @@ df = df.rename(columns={
 	'session': 'Session',
 	'subject': 'Subject',
 	})
-df.to_csv('../data/variance_data.csv')
+df.to_csv('../data/variance.csv')

@@ -4,7 +4,7 @@ from lib.utils import float_to_tex
 from sklearn.metrics import mean_squared_error
 from math import sqrt
 
-volume_path = path.abspath('data/smoothness_data.csv')
+volume_path = path.abspath('data/smoothness.csv')
 df = pd.read_csv(volume_path)
 
 legacy = df.loc[(df['Processing']=='Legacy') & (df['Template']=='Legacy'), 'Smoothness Change Factor'].tolist()
