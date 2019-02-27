@@ -18,9 +18,9 @@ for r,_,fs in list(legacy)+list(legacy_dsurqec):
 n_jobs = max(int(round(mp.cpu_count()*0.85)),2)
 iter_length = len(in_files)
 iter_data = Parallel(n_jobs=n_jobs, verbose=0, backend="threading")(map(delayed(reset_background),
-                in_files,
-                [0]*iter_length,
-                in_files,
-                [20]*iter_length,
-                ))
+	in_files,
+	[0]*iter_length,
+	in_files,
+	[20]*iter_length,
+	))
 

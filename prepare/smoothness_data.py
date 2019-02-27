@@ -9,33 +9,43 @@ from bids.grabbids import BIDSLayout
 from bids.grabbids import BIDSValidator
 import nipype.interfaces.io as nio
 
-def bids_autograb(bids_dir):
-        bids_dir = path.abspath(path.expanduser(bids_dir))
-        validate = BIDSValidator()
-        layout = BIDSLayout(bids_dir)
-        df = layout.as_data_frame()
+masks = {
+	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
+	'generic_ambmc':'/usr/share/mouse-brain-atlases/ambmc_200micron_mask.nii',
+	'legacy':'/usr/share/mouse-brain-atlases/lambmc_200micron_mask.nii',
+	'legacy_dsurqec':'/usr/share/mouse-brain-atlases/ldsurqec_200micron_mask.nii',
+	}
 
-        # Unclear in current BIDS specification, we refer to BOLD/CBV as modalities and func/anat as types
-        df = df.rename(columns={'modality': 'type', 'type': 'modality'})
-        return df
+def bids_autograb(bids_dir):
+	bids_dir = path.abspath(path.expanduser(bids_dir))
+	validate = BIDSValidator()
+	layout = BIDSLayout(bids_dir)
+	df = layout.as_data_frame()
+
+	# Unclear in current BIDS specification, we refer to BOLD/CBV as modalities and func/anat as types
+	df = df.rename(columns={'modality': 'type', 'type': 'modality'})
+	return df
 
 def avg_smoothness(inp_file):
-        from nipype.interfaces import afni
-        import numpy as np
-        fwhm = afni.FWHMx()
-        fwhm.inputs.in_file = inp_file
-        fwhm.inputs.acf = True
-        fwhm_run = fwhm.run()
-        # It appears the new/correct FWHM is now located under the last position of the ACF estimates.
-        # https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dFWHMx.html
-        res = fwhm_run.outputs.acf_param[3]
-        return res
+	from nipype.interfaces import afni
+	import numpy as np
+	fwhm = afni.FWHMx()
+	for key in masks:
+		if '/{}_collapsed/'.format(key) in inp_file:
+			fwhm.inputs.mask = masks[key]
+	fwhm.inputs.in_file = inp_file
+	fwhm.inputs.acf = True
+	fwhm_run = fwhm.run()
+	# It appears the new/correct FWHM is now located under the last position of the ACF estimates.
+	# https://afni.nimh.nih.gov/pub/dist/doc/program_help/3dFWHMx.html
+	res = fwhm_run.outputs.acf_param[3]
+	return res
 
 def acqname(inp_entry):
-        if('bold' in  inp_entry):
-                return 'bold'
-        else:
-                return 'cbv'
+	if('bold' in  inp_entry):
+		return 'bold'
+	else:
+		return 'cbv'
 
 scratch_dir = '~/data_scratch/irsabi'
 
@@ -79,5 +89,5 @@ for uid in uids:
 df.to_csv('../data/smoothness.csv')
 files = os.listdir('./')
 for _file in files:
-        if  _file.endswith(('.out','.1D')):
-                os.remove(path.abspath(path.expanduser(_file)))
+	if  _file.endswith(('.out','.1D')):
+		os.remove(path.abspath(path.expanduser(_file)))
