@@ -12,12 +12,12 @@ digraph graphname {
     a[label="Analog  ", shape=cds, color="#BBBBBB", fillcolor=grey93, fontcolor="#999998"];
     b[label="Free Induction\nDecay", shape=folder, color="#BBBBBB", fillcolor=grey93];
     c[label="Volumetric\nReconstruction", shape=folder, color="#BBBBBB", fillcolor=grey93];
-    d[label=<Raw Volumetric<BR/><FONT COLOR="#F00533">Metadata?</FONT>>, shape=folder, color="#F00533", fillcolor=grey93];
-    e[label=<Preprocessing Volumetric<BR/><FONT COLOR="#F00533">Metadata?</FONT>>, shape=folder, color="#F00533", fillcolor=grey93];
-    f[label=<Volumetric Statistic<BR/><FONT COLOR="#F00533">Metadata?</FONT>>, shape=folder, color="#F00533", fillcolor=grey93];
+    d[label=<Raw Volumetric<BR/><FONT COLOR="#F00533"><s>Metadata</s></FONT>>, shape=folder, color="#F00533", fillcolor=grey93];
+    e[label=<Preprocessing Volumetric<BR/><FONT COLOR="#F00533"><s>Metadata</s></FONT>>, shape=folder, color="#F00533", fillcolor=grey93];
+    f[label=<Volumetric Statistic<BR/><FONT COLOR="#F00533"><s>Metadata</s></FONT>>, shape=folder, color="#F00533", fillcolor=grey93];
     g[label="Plot or Summary", shape=folder, color="#BBBBBB", fillcolor=grey93];
     m0[label="Manual  ", shape=cds, color="#BBBBBB", fillcolor=grey93, fontcolor="#999998"];
-    m1[label=<<FONT COLOR="#F00533">Metadata?</FONT>>, shape=folder, color="#F00533", fillcolor=grey93];
+    m1[label=<<FONT COLOR="#F00533"><s>Metadata</s></FONT>>, shape=folder, color="#F00533", fillcolor=grey93];
     m_bad[
         label=<<FONT COLOR="#45B000">Metadata</FONT>>,
         shape=folder, color="#805010", fillcolor=grey93,
