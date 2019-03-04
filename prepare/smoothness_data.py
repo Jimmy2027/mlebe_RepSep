@@ -47,7 +47,7 @@ def acqname(inp_entry):
 	else:
 		return 'cbv'
 
-scratch_dir = '~/data_scratch/irsabi'
+scratch_dir = '~/.scratch/irsabi'
 
 df_generic = bids_autograb(scratch_dir + '/preprocessing/generic_collapsed/')
 df_generic['Processing'] = 'Generic'

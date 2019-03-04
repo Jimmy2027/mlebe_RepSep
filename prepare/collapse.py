@@ -1,7 +1,7 @@
 from samri.pipelines.preprocess import generic, legacy
 from samri.pipelines import manipulations
 
-scratch_dir = '~/data_scratch/irsabi'
+scratch_dir = '~/.scratch/irsabi'
 
 bids_base = '{}/bids'.format(scratch_dir)
 

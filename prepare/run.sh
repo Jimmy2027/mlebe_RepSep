@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
 
-if [ ! -d ~/data_scratch ]; then
-	echo "You seem to be lacking a ~/data_scratch/ directory."
+if [ ! -d ~/.scratch ]; then
+	echo "You seem to be lacking a ~/.scratch/ directory."
 	echo "We need this directory in order to process the data, and it needs to be on a volume with 200GB+ space."
 	echo "You can simply symlink to a location you would like this to happen (and then re-run this script):
-		ln -s /where/you/want/it ~/data_scratch"
+		ln -s /where/you/want/it ~/.scratch"
 	exit 1
 fi
 
-if [ ! -d ~/data_scratch/irsabi/bids ]; then
+if [ ! -d ~/.scratch/irsabi/bids ]; then
 	if [ -d '/usr/share/irsabi_bidsdata' ]; then
-		[ -d ~/data_scratch/irsabi ] || mkdir ~/data_scratch/irsabi
-		ln -s '/usr/share/irsabi_bidsdata' ~/data_scratch/irsabi/bids
+		[ -d ~/.scratch/irsabi ] || mkdir ~/.scratch/irsabi
+		ln -s '/usr/share/irsabi_bidsdata' ~/.scratch/irsabi/bids
 	else
 		echo "No IRSABI BIDS data distribution found, processing from scanner IRSABI data:"
-		SAMRI bru2bids -o ~/data_scratch/irsabi/ -f '{"acquisition":["EPIlowcov"]}' -s '{"acquisition":["TurboRARElowcov"]}' '/usr/share/irsabi_data/' 
+		SAMRI bru2bids -o ~/.scratch/irsabi/ -f '{"acquisition":["EPIlowcov"]}' -s '{"acquisition":["TurboRARElowcov"]}' '/usr/share/irsabi_data/'
 	fi
 fi
 

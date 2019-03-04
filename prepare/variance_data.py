@@ -119,7 +119,7 @@ def reg_cc(
 	return df
 
 
-scratch_dir = '~/data_scratch/irsabi'
+scratch_dir = '~/.scratch/irsabi'
 
 template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
 df_generic = reg_cc(path = scratch_dir + '/preprocessing/generic_collapsed/', template=template, autofind=True)

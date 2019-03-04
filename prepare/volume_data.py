@@ -7,7 +7,7 @@ import pandas as pd
 from bids.grabbids import BIDSLayout
 from bids.grabbids import BIDSValidator
 
-scratch_dir = '~/data_scratch/irsabi'
+scratch_dir = '~/.scratch/irsabi'
 
 def bids_autograb(bids_dir):
 	bids_dir = path.abspath(path.expanduser(bids_dir))

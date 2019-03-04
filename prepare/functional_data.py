@@ -4,7 +4,7 @@ from samri.report.snr import df_significant_signal
 from samri.report.utilities import df_roi_data
 from samri.utilities import bids_autofind_df
 
-scratch_dir = '~/data_scratch/irsabi'
+scratch_dir = '~/.scratch/irsabi'
 
 # Total significance
 masks = {
