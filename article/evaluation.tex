@@ -10,12 +10,12 @@ In order to mitigate possible differences arising from qualitative template feat
 
 \subsection{Volume Conservation}
 
-Volume conservation is based on the assumption that the total volume of the scanned segment of the brain should remain approximately identical after registration.
+Volume conservation is based on the assumption that the total volume of the scanned segment of the brain should remain approximately identical after preprocessing.
 A volume increase may indicate that the brain was stretched to fill in template brain space not covered by the scan, while a volume decrease might indicate that non-brain voxels were introduced into the template brain space.
 
 In order to best analyze volume conservation, a Volume Change Factor (VCF) is computed for each processed scan, whereby volume conservation is highest for a VCF equal to 1.
-For the current implementation we define brain volume as estimated by the 66\textsuperscript{th} voxel intensity percentile of the unregistered scan.
-The arbitrary unit equivalent of this percentile threshold is recorded for each scan and applied to all registration workflow results for that particular scan, to obtain VCF esimates
+For the current implementation we define brain volume as estimated by the 66\textsuperscript{th} voxel intensity percentile of the raw scan before any preprocessing.
+The arbitrary unit equivalent of this percentile threshold is recorded for each scan and applied to all preprocessing workflow results for that particular scan, to obtain VCF esimates
  --- as detailed in \cref{eq:vcf}, where $v$ is the voxel volume in the original space, $v^\prime$ the voxel volume in the transformed space, $n$ the number of voxels in the original space, $m$ the number of voxels in the transformed space, $s$ a voxel value sampled from the vector $S$ containing all values in the original data, and $s^\prime$ a voxel value sampled from the transformed data.
 
 \begin{equation} \label{eq:vcf}
@@ -73,7 +73,7 @@ We do, however, report a notable effect for the contrast-template interaction, w
                         ,},
                 ],
         caption='
-                \\textbf{SAMRI Generic registration vastly reduces spatial smoothing, thereby increasing locality of functional analysis results.}
+                \\textbf{SAMRI Generic preprocessing reduces spatial smoothing, thereby increasing locality of functional analysis results.}
                 Smoothness change relative to the original scan, presented on a log scale due to considerable effect size in the comparison between workflows.
                 The coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.
                 ',
@@ -81,9 +81,9 @@ We do, however, report a notable effect for the contrast-template interaction, w
         )}
 \end{sansmath}
 
-The next metric we consider is the smoothness of the image after registration.
+The next aspect of preprocessing quality we consider is the resulting image smoothness.
 Although smoothing can lead to an increase in signal-to-noise ratio (SNR), it does decrease spatial resolution and is therefore associated with  worse anatomical alignment in images and statistical maps \cite{fmriprep}.
-Thus we employ --- analogously to the Volume Change Factor --- a Smoothness Change Factor (SCF), which normalizes the smoothness of the registered images with respect to the smoothness of the original images.
+Thus we employ --- analogously to the Volume Change Factor --- a Smoothness Change Factor (SCF), which normalizes the smoothness of the preprocessed images with respect to the smoothness of the original images.
 Our smoothness measure is the full-width at half-maximum (FWHM).
 Since fMRI data usually does not have a gaussian-shaped spatial autocorrelation (ACF \cite{eklund2016cluster}, \cite{cox2017fmri}), we fit the following function to the data in order to estimate the FWHM using AFNI \cite{cox1996afni}.
 
@@ -114,24 +114,24 @@ Additionally, the Legacy workflow produces a substantial increase in SCF varianc
         label='var',
         caption='
                 \\textbf{The SAMRI Generic workflow conserves subject-wise variability and minimizes trial-to-trial variability compared to the Legacy workflow.}
-                Swarmplots illustrate similarity metric scores of registered images with respect to the corresponding workflow template, plotted across subjects (separated into x-axis bins) and sessions (individual points in each x-axis bin).
+                Swarmplots illustrate similarity metric scores of preprocessed images with respect to the corresponding workflow template, plotted across subjects (separated into x-axis bins) and sessions (individual points in each x-axis bin).
                 ',
         multicol=True,
         )}
 \end{sansmath}
 
-An additional way to assess registration quality focuses on the robustness to variability resulting from repeat experimentation, and whether this is be attained without compromising physiologically meaningful variability.
+An additional way to assess preprocessing quality focuses on the robustness to variability resulting from repeat experimentation, and whether this is attained without compromising physiologically meaningful variability (i.e. overfitting).
 The core assumption of this analysis of variance is that adult mouse brains in the absence of intervention are assumed to retain size, shape, and implant position across the 8 week study period.
-Consequently, when examining similarity scores of registered scans with respect to the target template, more variation should be found across the subject variable rather than session variable.
+Consequently, when examining similarity scores of preprocessed scans with respect to the target template, more variation should be found across the subject variable rather than session variable.
 This comparison can be performed using a type 3 ANOVA, modelling both the subject and the session variables.
 For this assessment we select three metrics with maximal sensitivity to different features:
-Crosscorrelation (CC, weighted towards localized correlation),
-Global Correlation (GC, weighted towards whole-image correlation),
-and Mutual Information (MI, weighted towards information similarity independently of a correlation assumption).
+Neighborhood Cross Correlation (CC, sensitive to localized correlation),
+Global Correlation (GC, sensitive to whole-image correlation),
+and Mutual Information (MI, sensitive to whole-image information similarity independently of a correlation assumption).
 As similarity metrics are not equivalent, and since the main comparison of variance is performed across al of them, p-values for the variable effects are uncorrected.
 
 \Cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Legacy workflows (considering only the matching workflow-template combinations).
-For all three metrics, in the case of the Legacy workflow we find that the F-statistic is consistently higher for the subject than for the session variable:
+For all three metrics, in the case of the Legacy workflow we find that the F-statistic is consistently higher for the session than for the subject variable:
 CC (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','CC', condensed=True)}),
 GC (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','GC', condensed=True)}),
 and MI (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','MI', condensed=True)}).
@@ -152,11 +152,11 @@ and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic','MI', cond
 
 \subsection{Functional Analysis}
 
-Functional analysis is a theoretically viable and frequently used avenue for registration QC.
-Its viability derives from the fact that the the metric being maximized in the registration process is not the same output metric as that used for QC.
+Functional analysis is a theoretically viable and frequently used avenue for preprocessing QC.
+Its viability derives from the fact that the metric being maximized in the registration process is not the same output metric as that used for QC.
 This method is however primarily suited to examine workflow effects in light of higher-level applications, and less suited for wide-spread QC (as it is computationally intensive and only applicable to stimulus-evoked functional data).
 
-As a first step we examine statistical power, via the negative logarithm of first-level p-value maps (i.e. voxelwise statistical estimates for the probability that each voxel time course is at least as well correlated with the stimulation regressor as the voxel time course measured --- by chance alone).
+As a first step we examine statistical power, via the negative logarithm of first-level p-value maps (i.e. voxelwise statistical estimates for the probability that each voxel time course is --- by chance alone --- at least as well correlated with the stimulation regressor as the voxel time course measured).
 We compute the per-scan average of these values, which we term Mean Significance --- detailed in \cref{eq:ms}, where $n$ represents the number of statistical estimates in the scan, and $p$ is a p-value.
 
 \begin{equation} \label{eq:ms}
