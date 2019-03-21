@@ -28,3 +28,5 @@ python l1.py || exit 1
 python functional_data.py || exit 1
 python l2.py || exit 1
 python manual_overview.py || exit 1
+cp ~/.scratch/irsabi/manual_overview/generic/coherence_4009_cbv.pdf ../data/ || exit 1
+cp ~/.scratch/irsabi/manual_overview/generic/4007_ofMcF2_cbv.pdf ../data/ || exit 1

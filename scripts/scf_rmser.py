@@ -7,6 +7,8 @@ from math import sqrt
 volume_path = path.abspath('data/smoothness.csv')
 df = pd.read_csv(volume_path)
 
+#legacy = df.loc[(df['Processing']=='Legacy') & (df['Template']=='Legacy'), 'Smoothness Change Factor'].tolist()
+#generic = df.loc[(df['Processing']=='Generic') & (df['Template']=='Generic'), 'Smoothness Change Factor'].tolist()
 legacy = df.loc[(df['Processing']=='Legacy') & (df['Template']=='Legacy'), 'Smoothness Change Factor'].tolist()
 generic = df.loc[(df['Processing']=='Generic') & (df['Template']=='Generic'), 'Smoothness Change Factor'].tolist()
 

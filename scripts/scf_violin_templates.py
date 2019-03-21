@@ -6,18 +6,23 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 
 palette = ['#80e050','#755575']
+v_path='data/volume.csv'
+v = pd.read_csv(path.abspath(v_path))
 df_path='data/smoothness.csv'
 df = pd.read_csv(path.abspath(df_path))
 
 df = df[df['Processing']!='Unprocessed']
 df = df[df['Template']!='Unprocessed']
 
-df.loc[df['Processing']=='Legacy','Smoothness Change Factor'] = df.loc[df['Processing']=='Legacy','Smoothness Change Factor']/10
+#df.loc[df['Processing']=='Legacy','Smoothness Change Factor'] = df.loc[df['Processing']=='Legacy','Smoothness Change Factor']/10
 #df[r'$\mathsf{log_{10}(Smoothness\,Change\,Factor)}$'] = np.log10(df['Smoothness Change Factor'])
+
 ax = violinplot(
         x="Processing",
         #y=r'$\mathsf{log_{10}(Smoothness\,Change\,Factor)}$',
+        #y='Smoothness Change Factor',
         y='Smoothness Change Factor',
+        #y='Smoothness',
         data=df,
         hue="Template",
         saturation=1,

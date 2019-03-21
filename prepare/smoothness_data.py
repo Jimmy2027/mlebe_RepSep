@@ -30,9 +30,9 @@ def avg_smoothness(inp_file):
 	from nipype.interfaces import afni
 	import numpy as np
 	fwhm = afni.FWHMx()
-	for key in masks:
-		if '/{}_collapsed/'.format(key) in inp_file:
-			fwhm.inputs.mask = masks[key]
+	#for key in masks:
+	#	if '/{}_collapsed/'.format(key) in inp_file:
+	#		fwhm.inputs.mask = masks[key]
 	fwhm.inputs.in_file = inp_file
 	fwhm.inputs.acf = True
 	fwhm_run = fwhm.run()
@@ -48,6 +48,10 @@ def acqname(inp_entry):
 		return 'cbv'
 
 scratch_dir = '~/.scratch/irsabi'
+
+df_bids = bids_autograb(scratch_dir + '/bids_collapsed/')
+df_bids['Processing'] = 'Unprocessed'
+df_bids['Template'] = 'Unprocessed'
 
 df_generic = bids_autograb(scratch_dir + '/preprocessing/generic_collapsed/')
 df_generic['Processing'] = 'Generic'
@@ -65,10 +69,6 @@ df_legacy_generic = bids_autograb(scratch_dir + '/preprocessing/legacy_dsurqec_c
 df_legacy_generic['Processing'] = 'Legacy'
 df_legacy_generic['Template'] = 'Generic'
 
-df_bids = bids_autograb(scratch_dir + '/bids_collapsed/')
-df_bids['Processing'] = 'Unprocessed'
-df_bids['Template'] = 'Unprocessed'
-
 df = pd.concat([df_generic, df_legacy, df_generic_legacy, df_legacy_generic, df_bids])
 df['Uid'] = df['subject']+'_'+df['session']+'_'+df['modality']
 
@@ -76,15 +76,24 @@ df = df.loc[np.logical_or(df.modality == 'cbv', df.modality == 'bold')]
 df['modality'] = df['modality'].str.upper()
 df['Contrast'] = df['modality']
 
-df['smoothness'] = df['path'].apply(avg_smoothness)
-df.loc[df['Processing']=='Legacy', 'smoothness'] = df.loc[df['Processing']=='Legacy', 'smoothness']/10
+df['Smoothness'] = df['path'].apply(avg_smoothness)
+df.loc[df['Processing']=='Legacy', 'Smoothness'] = df.loc[df['Processing']=='Legacy', 'Smoothness']/10
 
 df['Smoothness Change Factor'] = ''
 uids = df['Uid'].unique()
 for uid in uids:
-	original = df.loc[(df['Uid']==uid) & (df['Processing']=='Unprocessed'), 'smoothness'].item()
-	df.loc[(df['Uid']==uid), 'Smoothness Change Factor'] = df.loc[(df['Uid']==uid), 'smoothness'] / original
+	original = df.loc[(df['Uid']==uid) & (df['Processing']=='Unprocessed'), 'Smoothness'].item()
+	df.loc[(df['Uid']==uid), 'Smoothness Change Factor'] = df.loc[(df['Uid']==uid), 'Smoothness'] / original
 
+v_path='../data/volume.csv'
+v = pd.read_csv(path.abspath(v_path))
+df = df.reset_index()
+df['Volume-Normalized SCF'] = 0
+for uid in df['Uid'].unique():
+	for p, t in product(['Generic', 'Legacy'],['Generic','Legacy']):
+		scf = df.loc[(df['Uid']==uid)&(df['Processing']==p)&(df['Template']==t),'Smoothness Change Factor'].item()
+		vcf = v.loc[(v['Uid']==uid)&(v['Processing']==p)&(v['Template']==t),'Volume Change Factor'].item()
+		df.loc[(df['Uid']==uid)&(df['Processing']==p)&(df['Template']==t),'Volume-Normalized SCF'] = scf/(vcf**(1./3.))
 
 df.to_csv('../data/smoothness.csv')
 files = os.listdir('./')
