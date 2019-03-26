@@ -22,7 +22,7 @@ def fstatistic(factor,
 
 	formula='Q("{}") ~ {}'.format(dependent_variable, expression)
 	ols = smf.ols(formula, df).fit()
-	anova = sm.stats.anova_lm(ols, typ=2)
+	anova = sm.stats.anova_lm(ols, typ=3)
 	tex = inline_anova(anova, factor, 'tex', **kwargs)
 	return tex
 

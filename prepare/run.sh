@@ -28,11 +28,11 @@ python l1.py || exit 1
 python functional_data.py || exit 1
 python l2.py || exit 1
 python manual_overview.py || exit 1
-mkdir -p ../data/generic
-cp ~/.scratch/irsabi/manual_overview/generic/coherence_4008_cbv.pdf ../data/generic/ || exit 1
-cp ~/.scratch/irsabi/manual_overview/generic/4008_ofMcF1_T2w.pdf ../data/generic/ || exit 1
-cp ~/.scratch/irsabi/manual_overview/generic/4008_ofMcF1_cbv.pdf ../data/generic/ || exit 1
-mkdir -p ../data/legacy_dsurqec
-cp ~/.scratch/irsabi/manual_overview/legacy_dsurqec/4008_ofMcF1_cbv.pdf ../data/legacy_dsurqec/ || exit 1
-mkdir -p ../data/legacy
-cp ~/.scratch/irsabi/manual_overview/legacy/4008_ofMcF1_cbv.pdf ../data/legacy/ || exit 1
+mkdir -p ../data/manual_overview/generic
+cp ~/.scratch/irsabi/manual_overview/generic/coherence_4008_cbv.pdf ../data/manual_overview/generic/ || exit 1
+cp ~/.scratch/irsabi/manual_overview/generic/4008_ofMcF1_T2w.pdf ../data/manual_overview/generic/ || exit 1
+cp ~/.scratch/irsabi/manual_overview/generic/4008_ofMcF1_cbv.pdf ../data/manual_overview/generic/ || exit 1
+mkdir -p ../data/manual_overview/legacy_dsurqec
+cp ~/.scratch/irsabi/manual_overview/legacy_dsurqec/4008_ofMcF1_cbv.pdf ../data/manual_overview/legacy_dsurqec/ || exit 1
+mkdir -p ../data/manual_overview/legacy
+cp ~/.scratch/irsabi/manual_overview/legacy/4008_ofMcF1_cbv.pdf ../data/manual_overview/legacy/ || exit 1

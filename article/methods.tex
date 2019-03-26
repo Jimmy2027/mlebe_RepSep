@@ -155,8 +155,10 @@ The operation and stimulation procedure, as well as general picture of obtained 
 
 \subsection{Interactive Operator Inspection}
 
-Augmenting the automated whole-dataset evaluation metrics detailed at length in this article, we provide convenience functions which produce clean, well-paginated, and visually pleasing slice-by-slice views of the registered data, in order to ease interactive operator if it is still desired.
-We showcase two different view concepts, which highlight single-session registration quality (\cref{fig:fit} --- where the registered data is plotted as greyscale bitmap, and the target atlas is plotted as a coloured contour) and multi-session registration coherence (\cref{fig:coherence} --- where the template is plotted as a greyscale bitmap, and the individual session percentile contours are plotted in colour).
+We complement the automated whole-dataset evaluation metrics detailed at length in this article, with convenience functions which also ease and improve interactive operator inspection.
+These functions produce clean, well-paginated, and visually pleasing slice-by-slice views of the registered data, and emphasize one of two different quality assessments.
+The first view mode highlights single-session registration quality, by plotting the registered data as a greyscale bitmap, and the target atlas as a coloured contour (\cref{fig:fit_gg,fig:fit_gga,fig:fit_ll,fig:fit_lg}).
+The second view mode highlights multi-session registration coherence, by plotting the target template as a greyscale bitmap, and the individual session percentile contours in colour (\cref{fig:coherence}).
 
 \subsection{Reproducibility}
 

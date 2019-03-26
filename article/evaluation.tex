@@ -1,28 +1,14 @@
 \section{Evaluation}
 
 A challenge of QC with regard to spatial features is that a perfect mapping to the template is undefined.
-Similarity metrics are ill-suited for QC because they are used internally by registration functions, whose main feature it is, that they maximize them.
-Indeed extreme maximization, especially via nonlinear transformations, results in distortion of the image, which should be penalized in QC, but in light of image similarity scores is represented as better performance.
+Similarity metrics are ill-suited for QC because they are used internally by registration functions, whose main feature it is that they maximize them.
+Extreme similarity score maximization is not a desired outcome, and especially if nonlinear transformations are employed, manifests in image distortion which should be penalized in QC.
 Additionally, similarity metrics are not independent, so this issue cannot be circumvented by maximizing a subset of metrics and performing QC via the remainder.
-We thus develop four alternative evaluation metrics: volume conservation, smoothness conservation, variance analysis, and functional analysis.
-In order to mitigate possible differences arising from qualitative template features, we perform a multivariate analysis of both templates and workflows.
+To address this challenge we developed four alternative evaluation metrics: volume conservation, smoothness conservation, variance analysis, and functional analysis.
+In order to mitigate possible differences arising from qualitative template features, we use these metrics in a multivariate analysis of both templates and workflows.
 
 
 \subsection{Volume Conservation}
-
-Volume conservation is based on the assumption that the total volume of the scanned segment of the brain should remain approximately identical after preprocessing.
-A volume increase may indicate that the brain was stretched to fill in template brain space not covered by the scan, while a volume decrease might indicate that non-brain voxels were introduced into the template brain space.
-
-In order to best analyze volume conservation, a Volume Change Factor (VCF) is computed for each processed scan, whereby volume conservation is highest for a VCF equal to 1.
-For the current implementation we define brain volume as estimated by the 66\textsuperscript{th} voxel intensity percentile of the raw scan before any preprocessing.
-The arbitrary unit equivalent of this percentile threshold is recorded for each scan and applied to all preprocessing workflow results for that particular scan, to obtain VCF esimates
- --- as detailed in \cref{eq:vcf}, where $v$ is the voxel volume in the original space, $v^\prime$ the voxel volume in the transformed space, $n$ the number of voxels in the original space, $m$ the number of voxels in the transformed space, $s$ a voxel value sampled from the vector $S$ containing all values in the original data, and $s^\prime$ a voxel value sampled from the transformed data.
-
-\begin{equation} \label{eq:vcf}
-        V\!C\!F
-        = \frac{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}{v\sum_{i=1}^n [s_i \geq P_{66}(S)]}
-        = \frac{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}{v \lceil0.66n\rceil}
-\end{equation}
 
 \begin{sansmath}
 \py{pytex_subfigs(
@@ -35,10 +21,25 @@ The arbitrary unit equivalent of this percentile threshold is recorded for each 
                         ,},
                 ],
         caption='\\textbf{Registration via the SAMRI Generic workflow and template optimally and reliably conserves scan volume --- unlike with the Legacy workflow and template.}
-        The coloured patch width estimates distribution density, while solid lines indicate the sample mean and dashed lines indicate the inner quartiles.',
+        Volume change relative to each original scan volume, with coloured patch widths estimating distribution density, solid lines indicating the sample mean,and dashed lines indicate the inner quartiles.
+        ',
         label='fig:vc',
         )}
 \end{sansmath}
+
+Volume conservation is based on the assumption that the total volume of the scanned segment of the brain should remain approximately identical after preprocessing.
+Beyond just size differences between the acquired data and the target template, a volume increase may indicate that the brain was stretched to fill in template brain space not covered by the scan, while a volume decrease might indicate that non-brain voxels were introduced into the template brain space.
+
+In order to best analyze volume conservation, a Volume Change Factor (VCF) is computed for each processed scan, whereby volume conservation is highest for a VCF equal to 1.
+For the current implementation we define brain volume as estimated by the 66\textsuperscript{th} voxel intensity percentile of the raw scan before any preprocessing.
+The arbitrary unit equivalent of this percentile threshold is recorded for each scan and applied to all preprocessing workflow results for that particular scan, to obtain VCF esimates
+ --- as detailed in \cref{eq:vcf}, where $v$ is the voxel volume in the original space, $v^\prime$ the voxel volume in the transformed space, $n$ the number of voxels in the original space, $m$ the number of voxels in the transformed space, $s$ a voxel value sampled from the vector $S$ containing all values in the original data, and $s^\prime$ a voxel value sampled from the transformed data.
+
+\begin{equation} \label{eq:vcf}
+        V\!C\!F
+        = \frac{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}{v\sum_{i=1}^n [s_i \geq P_{66}(S)]}
+        = \frac{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}{v \lceil0.66n\rceil}
+\end{equation}
 
 As seen in \cref{fig:vcv}, we note that VCF is sensitive to
 the processing workflow (\py{boilerplate.fstatistic('Processing', condensed=True)}),
@@ -49,9 +50,11 @@ The performance of the Generic SAMRI workflow (with the Generic template) is sig
 Additionally, the root mean squared error ratio strongly favours the Generic workflow
 ($\mathrm{RMSE_{L}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
 
-Descriptively, we observe that the effect with the greatest magnitude is that of the template variable, with its Legacy level introducing a notable volume loss
-(VCF of \py{boilerplate.factorci('Template[T.Legacy]')}).
-Further, we note that there is a variance increase in all conditions for the Legacy processing workflow
+Descriptively, we observe that the Legacy level of the template variable introduces a notable volume loss
+(VCF of \py{boilerplate.factorci('Template[T.Legacy]')}),
+while the Legacy level of the preprocessing variable introduces a volume gain
+(VCF of \py{boilerplate.factorci('Processing[T.Legacy]')}).
+Further, we note that there is a very strong variance increase in all conditions for the Legacy processing workflow
 (\py{boilerplate.varianceratio(template='Legacy')}-fold given the Legacy template, and \py{boilerplate.varianceratio(template='Generic')}-fold given the Generic template).
 
 With respect to the data break-up by contrast (from \cref{fig:vccv}), we see no notable main effect for the contrast variable
@@ -72,10 +75,9 @@ We do, however, report a notable effect for the contrast-template interaction, w
                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
                 ],
-        caption='
-                \\textbf{SAMRI Generic preprocessing reduces spatial smoothing, thereby increasing locality of functional analysis results.}
-                Smoothness change relative to the original scan, presented on a log scale due to considerable effect size in the comparison between workflows.
-                The coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.
+        caption='i
+                \\textbf{Difference in smoothness conservation are mainly driven by the Template, with SAMRI Generic preprocessing only very slightly reducing spatial smoothing.}
+                Smoothness change relative to each original scan volume, with coloured patch widths estimating distribution density, solid lines indicating the sample mean,and dashed lines indicate the inner quartiles.
                 ',
         label='fig:sc',
         )}
@@ -85,7 +87,7 @@ The next aspect of preprocessing quality we consider is the resulting image smoo
 Although smoothing can lead to an increase in signal-to-noise ratio (SNR), it does decrease spatial resolution and is therefore associated with  worse anatomical alignment in images and statistical maps \cite{fmriprep}.
 Thus we employ --- analogously to the Volume Change Factor --- a Smoothness Change Factor (SCF), which normalizes the smoothness of the preprocessed images with respect to the smoothness of the original images.
 Our smoothness measure is the full-width at half-maximum (FWHM).
-Since fMRI data usually does not have a gaussian-shaped spatial autocorrelation (ACF \cite{eklund2016cluster}, \cite{cox2017fmri}), we fit the following function to the data in order to estimate the FWHM using AFNI \cite{cox1996afni}.
+Since fMRI data usually does not have a gaussian-shaped spatial autocorrelation (ACF \cite{eklund2016cluster}, \cite{cox2017fmri}), we use AFNI \cite{cox1996afni} to fit the following function to in order to estimate the FWHM.
 
 \begin{equation} \label{eq:acf}
         ACF(r)
@@ -93,17 +95,26 @@ Since fMRI data usually does not have a gaussian-shaped spatial autocorrelation 
 \end{equation}
 
 With respect to the data shown in \cref{fig:scv}, we note that SCF is sensitive to
-the processing workflow (\py{boilerplate.fstatistic('Processing', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}),
 the template (\py{boilerplate.fstatistic('Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}),
-and the interaction thereof (\py{boilerplate.fstatistic('Processing:Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}).
+but not
+the processing workflow (\py{boilerplate.fstatistic('Processing', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}),
+or the interaction of the factors (\py{boilerplate.fstatistic('Processing:Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}).
 
 The performance of the Generic SAMRI workflow (with the Generic template) is significantly different from that of the Legacy workflow (with the Legacy template), yielding a two-tailed p-value of \py{pytex_printonly('scripts/scf_t.py')}.
-Additionally, the root mean squared error ratio strongly favours the Generic workflow
+In this comparison, the root mean squared error ratio favours the Legacy workflow
 ($\mathrm{RMSE_{L}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
 
-Given the break-up by contrast shown in \cref{fig:sccv}, we see no notable main effect for the contrast variable (SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}).
-We observe a notable effect for the CBV contrast-Legacy template interaction, introducing a smoothness increase (SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}).
-Additionally, the Legacy workflow produces a substantial increase in SCF variance compared to the Generic workflow (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Change Factor', max_len=3, template='Legacy')}-fold for the Legacy template and \py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Change Factor', template='Generic', max_len=3)}-fold for the Generic template).
+Descriptively, we observe that the Legacy level of the template variable introduces a notable smoothness reduction
+(SCF of \py{boilerplate.factorci('Template[T.Legacy]', df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}),
+while the Legacy level of the preprocessing variable introduces a minimal smoothness gain
+(SCF of \py{boilerplate.factorci('Processing[T.Legacy]', df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}).
+Further, we note that there is a trend towards variance increase for the Legacy processing workflow
+(\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Change Factor', max_len=3, template='Legacy')}-fold given the Legacy template and \py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Change Factor', template='Generic', max_len=3)}-fold given the Generic template).
+
+Given the break-up by contrast shown in \cref{fig:sccv}, we see a notable main effect for the contrast variable
+(SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}),
+but no notable effect for the contrast-template interaction 
+(SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Change Factor')}).
 
 
 \subsection{Variance analysis}
@@ -120,15 +131,15 @@ Additionally, the Legacy workflow produces a substantial increase in SCF varianc
         )}
 \end{sansmath}
 
-An additional way to assess preprocessing quality focuses on the robustness to variability resulting from repeat experimentation, and whether this is attained without compromising physiologically meaningful variability (i.e. overfitting).
-The core assumption of this analysis of variance is that adult mouse brains in the absence of intervention are assumed to retain size, shape, and implant position across the 8 week study period.
+An additional way to assess preprocessing quality focuses on the robustness to variability resulting from repeat experimentation, and whether this is attained without overfitting (i.e. compromising physiologically meaningful variability).
+The core assumption of this analysis of variance is that adult mouse brains in the absence of intervention retain size, shape, and implant position across the 8 week study period.
 Consequently, when examining similarity scores of preprocessed scans with respect to the target template, more variation should be found across the subject variable rather than session variable.
 This comparison can be performed using a type 3 ANOVA, modelling both the subject and the session variables.
 For this assessment we select three metrics with maximal sensitivity to different features:
 Neighborhood Cross Correlation (CC, sensitive to localized correlation),
 Global Correlation (GC, sensitive to whole-image correlation),
 and Mutual Information (MI, sensitive to whole-image information similarity independently of a correlation assumption).
-As similarity metrics are not equivalent, and since the main comparison of variance is performed across al of them, p-values for the variable effects are uncorrected.
+%As similarity metrics are not equivalent, and since the main comparison of variance is performed across all of them, p-values for the variable effects are uncorrected.
 
 \Cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Legacy workflows (considering only the matching workflow-template combinations).
 For all three metrics, in the case of the Legacy workflow we find that the F-statistic is consistently higher for the session than for the subject variable:
@@ -145,9 +156,11 @@ Notably, for the MI metric the effect of the session variable is significant, bu
 %Notably, in the CC metric, the subject-wise variance reaches significance, but not the session-wise variance.
 
 Looking at the Generic SAMRI workflow we find a reversing trend.
-With the exception of CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','CC', condensed=True)}), F-statistics for the subject variable are consistently higher than for the session variable:
-GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','GC', condensed=True)}),
-and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','MI', condensed=True)}).
+With the exception
+of MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','MI', condensed=True)}),
+F-statistics for the subject variable are consistently higher than for the session variable:
+CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','CC', condensed=True)}),
+and GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','GC', condensed=True)}).
 
 
 \subsection{Functional Analysis}
@@ -157,7 +170,7 @@ Its viability derives from the fact that the metric being maximized in the regis
 This method is however primarily suited to examine workflow effects in light of higher-level applications, and less suited for wide-spread QC (as it is computationally intensive and only applicable to stimulus-evoked functional data).
 
 As a first step we examine statistical power, via the negative logarithm of first-level p-value maps (i.e. voxelwise statistical estimates for the probability that each voxel time course is --- by chance alone --- at least as well correlated with the stimulation regressor as the voxel time course measured).
-We compute the per-scan average of these values, which we term Mean Significance --- detailed in \cref{eq:ms}, where $n$ represents the number of statistical estimates in the scan, and $p$ is a p-value.
+We compute the per-scan average of these values, which we term Mean Significance (MS) --- detailed in \cref{eq:ms}, where $n$ represents the number of statistical estimates in the scan, and $p$ is a p-value.
 
 \begin{equation} \label{eq:ms}
         M\!S = \frac{\sum_{i=1}^n -log(p_i)}{n}
@@ -173,40 +186,46 @@ We compute the per-scan average of these values, which we term Mean Significance
                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
                 ],
-        caption='\\textbf{Per-scan significance from functional analysis does not indicate registration quality.}
+        caption='\\textbf{Per-scan significance from functional analysis is not strongly susceptible to the preprocessing variants examined:.}
                 The coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
         label='fig:ms',)}
 \end{sansmath}
 
-As seen in \cref{fig:ms}, MS is sensitive to neither the processing workflow
+As seen in \cref{fig:ms}, MS is not sensitive to
+the processing workflow
 (\py{boilerplate.fstatistic('Processing', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}),
-nor the template
+but is sensitive to the template
 (\py{boilerplate.fstatistic('Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}),
-nor the interaction thereof
+and the interaction of both factors
 (\py{boilerplate.fstatistic('Processing:Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}).
 
-The SAMRI Generic workflow (with the Generic template) does not perform significantly differently from the Legacy workflow (with the Legacy template), yielding a two-tailed p-value of \py{pytex_printonly('scripts/ms_t.py')}.
-There is again a variance increase in all conditions for the Legacy processing workflow
+The SAMRI Generic workflow (with the Generic template) does not significantly differ from the Legacy workflow (with the Legacy template) in terms of MS, yielding a two-tailed p-value of \py{pytex_printonly('scripts/ms_t.py')}.
+
+Descriptively, we observe that the Legacy level of the template variable introduces a notable significance increase
+(MS of \py{boilerplate.factorci('Template[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}),
+while the Legacy level of the preprocessing variable introduces no significant change
+(MS of \py{boilerplate.factorci('Processing[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}),
+and the interaction of the Legacy template and Legacy processing introduces a significance loss
+(MS of \py{boilerplate.factorci('Processing[T.Legacy]:Template[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}),
+Furthermore, we again note a variance increase in all conditions for the Legacy processing workflow
 (\py{boilerplate.varianceratio(df_path='data/functional_significance.csv', template='Legacy', dependent_variable='Mean Significance')}-fold
 given the Legacy template, and
 \py{boilerplate.varianceratio(df_path='data/functional_significance.csv', template='Generic', dependent_variable='Mean Significance')}-fold
 given the Generic template).
 
 With respect to the data break-up by contrast (from \cref{fig:mscv}), we see no notable main effect for the contrast variable
-(MS of
-\py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
-We do, however, report a notable effect for the contrast-template interaction, with the Legacy workflow and CBV contrast interaction level introducing a significance increase
-(MS of
-\py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
+(MS of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')})
+and no notable effect for the contrast-template interaction
+(MS of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
 
 Overall statistical power is, however, independent of the mapping accuracy, and functional analysis effects can further be inspected by visualizing the statistic maps.
 For a succinct overview capturing both amplitude and directionality of the signal, we present second-level t-statistic maps depicting the CBV and BOLD omnibus contrasts (across all subjects and sessions) in \cref{fig:m}.
-While the most salient feature of this figure is the qualitative distribution difference between CBV and BOLD scans, we note that this is to be expected given the different nature of the processes, and is wholly orthogonal to the question of registration.
+%While the most salient feature of this figure is the qualitative distribution difference between CBV and BOLD scans, we note that this is to be expected given the different nature of the processes, and is wholly orthogonal to the question of registration.
 Crucial to the examination of registration quality and its effects on functional read-outs is the differential coverage.
-We note that the Legacy template induces coverage overflow, extending to the cerebellum (\cref{fig:mglc,fig:mllc,fig:mllb}), and to the olfactory bulbs when used in conjunction with the Legacy workflow (\cref{fig:mllc,fig:mllb}).
-Separately from the Legacy template, the Legacy workflow causes coverage overflow (both rostrally into the base of the olfactory bulbs and caudally into the cerebellum) even when used in conjunction with the Generic template (\cref{fig:mlgc,fig:mlgb}).
+We note that the Legacy workflow induces coverage overflow, extending to the cerebellum (\cref{fig:mlgc,fig:mllc,fig:mlgb,fig:mllb}), as well as to more rostral areas when used in conjunction with the Legacy template (\cref{fig:mllc,fig:mllb}).
+Separately from the Legacy workflow, the Legacy template causes acquisition slice misalignment (\cref{fig:mglc,fig:mllc,fig:mglc,fig:mllb}).
 Positive activation of the Raphe system, most clearly disambiguated from the surrounding tissue in the BOLD contrast, is notably displaced very far caudally by the joint effects of the Legacy workflow and the Legacy template (\cref{fig:mllb}).
-We note that processing with the Generic template the Generic workflow (\cref{fig:mggc,fig:mggb}), does not show issues with statistic coverage overflow.
+We note that processing with the Generic template and workflow (\cref{fig:mggc,fig:mggb}), does not show issues with statistic coverage alignment and overflow.
 
 \py{pytex_subfigs(
 	[
@@ -217,7 +236,7 @@ We note that processing with the Generic template the Generic workflow (\cref{fi
 			,},
 		{'script':'scripts/map_generic_ambmc_cbv.py', 'label':'mglc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-                                Generic workflow with Legacy template CBV map, showing incorrect slice orientation and coverage caudally extending beyond the acquisition area.
+                                Generic workflow with Legacy template CBV map, showing incorrect slice orientation and coverage correctly bounded to the acquisition area.
                                 '
 			,},
 		{'script':'scripts/map_legacy_dsurqec_cbv.py', 'label':'mlgc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
@@ -253,7 +272,7 @@ We note that processing with the Generic template the Generic workflow (\cref{fi
 		],
 	caption='
                 \\textbf{Legacy processing leads to a problematic overflow of the statistic maps into adjacent anatomical regions, leaking beyond the acquistion area.}
-                SAMRI mitigates this effect as illustrated by multiplanar depictions of mouse brain templates, with the corresponding second-level omnibus statistic maps separately evaluating CBV and BOLD scans, and thresholded at $\mathrm{|t|\geq2}$.
-                The acquisition area is bracketed in pink, and in comparing it to statistic coverage it is important to note that the spatial coverage of the latter is slightly underestimated, as the omnibus contrast is only defined for voxels captured in \\textit{every} evaluated scan.
+                SAMRI mitigates this effect as illustrated by multiplanar depictions of second-level omnibus statistic maps separately evaluating CBV and BOLD scans, and thresholded at $\mathrm{|t|\geq2}$.
+                The acquisition area is bracketed in pink, and in comparing it to statistic coverage it is important to note that the spatial coverage of the latter is always underestimated, as the omnibus contrast is only defined for voxels captured in \\textit{every} evaluated scan.
                 ',
 	label='fig:m',)}
