@@ -24,8 +24,8 @@ The variance analysis comparing subject-wise and session-wise variance is an ele
 These metrics are of significant relevance to improving mouse brain MRI workflows, and could themselves be further optimized (e.g. by developing percentile selection heuristics based on a priori documented data distortions for VCF).
 
 Global statistical power is not (at least in the range of workflows at hand) sensitive to registration.
-It is thus not a reliable metric for optimization, though regrettably, it may be the most prevalently used if results are only inspected at a higher level --- and thus lead to analysis biasing in favour of a hypothesis.
-This is demonstrated by the positive effect of the Legacy template level seen in \cref{fig:mscv}.
+It is thus not a reliable metric for optimization, though regrettably, it may be the most prevalently used if results are only inspected at a higher level --- and could bias analysis.
+This is exemplified by the positive effect of the Legacy template level seen in \cref{fig:msv}.
 In this particular case, optimizing for statistical power alone would give a misleading indication.
 We do not discount this measure entirely, however, as it is strongly sensitive to workflow parameter variations which we have excluded for the sake of brevity in this comparison (such as registration interpolation method).
 

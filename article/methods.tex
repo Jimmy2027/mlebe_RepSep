@@ -83,7 +83,7 @@ Subsequently, the bias field is corrected using the \textcolor{mg}{\texttt{fast}
 The image is then warped into the template space using the \textcolor{mg}{\texttt{antsIntroduction.sh}} function of the ANTs package.
 Lastly, the affine variants are harmonized.
 
-For Quality Control we distribute as part of this publication additional workflows using the NumPy \cite{numpy}, SciPy \cite{scipy}, pandas \cite{pandas}, matplotlib packages \cite{matplotlib} and Seaborn \cite{seaborn} for plotting, as well as Statsmodels \cite{statsmodels} for top-level statistics, using the HC3 heteroscedasticity consistent covariance matrix \cite{long2000using}.
+For Quality Control we distribute as part of this publication additional workflows using the NumPy \cite{numpy}, SciPy \cite{scipy}, pandas \cite{pandas}, and matplotlib packages \cite{matplotlib}, as well as Seaborn \cite{seaborn} for plotting, and Statsmodels \cite{statsmodels} for top-level statistics, using the HC3 heteroscedasticity consistent covariance matrix \cite{long2000}.
 Specifically, distribution densities for plots are drawn using the Scott bandwidth density estimator \cite{Scott1979}.
 
 \subsection{Distribution}
@@ -115,7 +115,7 @@ Additionally, if the template axis orientation deviates by more than \SI{45}{\de
 Consequently, template quality needs to be ascertained, and a workflow-compliant default should be provided.
 
 Our recommended template (\cref{fig:dsu}) is derived from the DSURQE template --- of the Toronto Hospital for Sick Children Mouse Imaging Center \cite{dsu}.
-The geometric origin of this derived template corresponds to the Bregma landmark, and provides integration with histological atlases and surgical procedures, which commonly use Bregma as a reference.
+The geometric origin of this template is shifted to match the Bregma landmark, and thus provide integration with histological atlases and surgical procedures, which commonly use Bregma as a reference.
 The template is in the canonical orientation of the NIfTI format, RAS (left$\rightarrow$Right, posterior$\rightarrow$Anterior, inferior$\rightarrow$Superior), and has a coronal slice positioning reflective of both the typical animal head position in MR scanners and in stereotactic surgery frames.
 The template is provided at \SI{40}{\micro\meter} and \SI{200}{\micro\meter} isotropic resolutions,
 and all of its associated mask and label files are identified with the prefix \textcolor{mg}{\texttt{dsurqec}} in the template packages.

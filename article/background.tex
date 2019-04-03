@@ -2,22 +2,20 @@
 \label{sec:bg}
 
 In order to make any generalizable statements regarding brain function and organization, an equivalence between brain areas across individuals needs to be established.
-This is done by spatial (rigid, affine, and non-linear) transformation of all brain maps in a study to a population or standard reference template.
+This is done by spatial transformation of all brain maps in a study to a population or standard reference template.
 This process, called registration, is consequently performed as part of any neuroimaging workflow attempting to produce results which are both spatially resolved and generalizable across the population.
 
 The computations required for registration are commonly performed at the very onset of the preprocessing workflow,
 though the actual image manipulation may only take place much later, once inter-subject comparison becomes needed.
 % [[[paper which does this and says that it minimizes interpolation]]].
-As a consequence of this marginal positioning in the preprocessing sequence, as well as its general independence from experimental designs and hypotheses, registration is often relegated to default values and exempt from rigorous design efforts and QC.
+As a consequence of this peripheral positioning in the preprocessing sequence, as well as its general independence from experimental designs and hypotheses, registration is often relegated to default values and exempt from rigorous design efforts and QC.
 
-Registration QC is a notable issue for human as well as mouse brain imaging;
-and is not limited by a lack of reporting metrics which can easily be communicated for a population.
 Human brain imaging uniquely benefits from high-level functions (e.g. \textcolor{mg}{\texttt{flirt}} and  \textcolor{mg}{\texttt{fnirt}} from the FSL package\cite{fsl}, or \textcolor{mg}{\texttt{antsIntroduction.sh}} from the ANTs package\cite{ants}), optimized for the size and spatial features of the human brain.
 The availability and widespread use of such functions mitigates issues which would otherwise arise from a lack of QC.
 In mouse brain imaging, however, registration is frequently performed using the selfsame high-level functions from human brain imaging --- rendered usable for mouse brain data by adjusting the nature of the data to fit the priors and optimized parameters of the functions (rather than vice-versa).
 
 This general approach represents a notable hurdle for the methodological improvement of mouse brain imaging.
-Furthermore, such solutions are intended as “fast fixes”, and are not thoroughly documented anywhere in the field.
+Furthermore, such solutions are implemented ad hoc and are not thoroughly documented anywhere in the field.
 We thus explicitly describe current practices, in an effort to not only propose better solutions, but do so in a falsifiable manner which provides adequate detail for both the novel and the legacy methods.
 
 \subsection{Manipulations}
@@ -27,7 +25,7 @@ Manipulations of the affine parameters are performed in order to make the data r
 
 Another notable data manipulation procedure consists in adjusting the data matrix content itself, so that human-prior based brain extraction will produce acceptable results.
 While conceptually superior solutions adapting parameters and priors to animal data are available \cite{rbet,Oguz2014} and might remove the need for data adaptation at this step, rudimentary solutions remain popular.
-Many consist of applying an empirically determined percentile threshold to clear non-brain or distal brain tissue by intensity, and to leave a more spherical brain for the human masking function to operate on.
+Many consist of applying an ad-hoc percentile threshold to clear non-brain or distal brain tissue by intensity, and to leave a more spherical brain for the human masking function to operate on.
 Notably, both the function adaptations for animal data and the animal data matrix adaptations for use with human brain extraction functions are known to wholly or partly remove the olfactory bulbs --- which is why sometimes the choice is made to instead simply forego brain extraction.
 
 Often, the orientation of the scan is seen as problematic, and consequently deleted.

@@ -84,8 +84,9 @@ We do, however, report a notable effect for the contrast-template interaction, w
 \end{sansmath}
 
 The next aspect of preprocessing quality we consider is the resulting image smoothness.
-Although smoothing can lead to an increase in signal-to-noise ratio (SNR), it does decrease spatial resolution and is therefore associated with  worse anatomical alignment in images and statistical maps \cite{fmriprep}.
-Thus we employ --- analogously to the Volume Change Factor --- a Smoothness Change Factor (SCF), which normalizes the smoothness of the preprocessed images with respect to the smoothness of the original images.
+Although controlled smoothing is a valuable preprocessing tool, which can be used to increase the signal-to-noise ratio (SNR), uncontrolled smoothness limits operator discretion for the trade-off between signal-to-noise, and feature granularity.
+Uncontrolled smoothness can thus lead to undocumented and implicit loss of spatial resolution and is therefore associated with worse anatomical alignment in images and statistical maps \cite{fmriprep}.
+We employ --- analogously to the Volume Change Factor --- a Smoothness Change Factor (SCF), which normalizes the smoothness of the preprocessed images with respect to the smoothness of the original images.
 Our smoothness measure is the full-width at half-maximum (FWHM).
 Since fMRI data usually does not have a gaussian-shaped spatial autocorrelation (ACF \cite{eklund2016cluster}, \cite{cox2017fmri}), we use AFNI \cite{cox1996afni} to fit the following function to in order to estimate the FWHM.
 
