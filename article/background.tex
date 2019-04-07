@@ -2,8 +2,8 @@
 \label{sec:bg}
 
 In order to make any generalizable statements regarding brain function and organization, an equivalence between brain areas across individuals needs to be established.
-This is done by spatial transformation of all brain maps in a study to a population or standard reference template.
-This process, called registration, is consequently performed as part of any neuroimaging workflow attempting to produce results which are both spatially resolved and generalizable across the population.
+This is done by spatial transformation of brain maps in a study to a population or standard reference template.
+This process, called registration, is performed as part of any neuroimaging workflow attempting to produce results which are both spatially resolved and generalizable across the population.
 
 The computations required for registration are commonly performed at the very onset of the preprocessing workflow,
 though the actual image manipulation may only take place much later, once inter-subject comparison becomes needed.
@@ -12,16 +12,16 @@ As a consequence of this peripheral positioning in the preprocessing sequence, a
 
 Human brain imaging uniquely benefits from high-level functions (e.g. \textcolor{mg}{\texttt{flirt}} and  \textcolor{mg}{\texttt{fnirt}} from the FSL package\cite{fsl}, or \textcolor{mg}{\texttt{antsIntroduction.sh}} from the ANTs package\cite{ants}), optimized for the size and spatial features of the human brain.
 The availability and widespread use of such functions mitigates issues which would otherwise arise from a lack of QC.
-In mouse brain imaging, however, registration is frequently performed using the selfsame high-level functions from human brain imaging --- rendered usable for mouse brain data by adjusting the nature of the data to fit the priors and optimized parameters of the functions (rather than vice-versa).
+In mouse brain imaging, however, registration is frequently performed using the selfsame high-level functions from human brain imaging --- rendered usable for mouse brain data by adjusting the nature of the data to fit the priors and optimized parameters of the functions, rather than vice-versa.
 
-This general approach represents a notable hurdle for the methodological improvement of mouse brain imaging.
+This general approach compromises data veracity, limits the degree to which processing can be optimized for mouse brain applications, and thus represents a notable hurdle for the methodological improvement of mouse brain imaging.
 Furthermore, such solutions are implemented ad hoc and are not thoroughly documented anywhere in the field.
 We thus explicitly describe current practices, in an effort to not only propose better solutions, but do so in a falsifiable manner which provides adequate detail for both the novel and the legacy methods.
 
 \subsection{Manipulations}
 The foremost data manipulation procedure in present-day mouse MRI is the adjustment of voxel dimensions.
 These dimensions are represented in the Neuroimaging Informatics Technology Initiative format (NIfTI) header \cite{nifti} by affine transformation parameters --- which map data matrix cordinates to geometrically meaningful spatial coordinates.
-Manipulations of the affine parameters are performed in order to make the data represent not the physiological mouse brain dimensions, but volumes corresponding to what human-optimized brain extraction, bias correction, and registration interfaces expect (commonly this constitutes a 10-fold increase in each spatial dimension).
+Manipulations of the affine parameters are performed in order to make the data represent not the physiological mouse brain dimensions, but volumes corresponding to what human-optimized brain extraction, bias correction, and registration interfaces expect (commonly constituting a 10-fold increase in each spatial dimension).
 
 Another notable data manipulation procedure consists in adjusting the data matrix content itself, so that human-prior based brain extraction will produce acceptable results.
 While conceptually superior solutions adapting parameters and priors to animal data are available \cite{rbet,Oguz2014} and might remove the need for data adaptation at this step, rudimentary solutions remain popular.
@@ -31,18 +31,18 @@ Notably, both the function adaptations for animal data and the animal data matri
 Often, the orientation of the scan is seen as problematic, and consequently deleted.
 This consists in resetting the S-Form affine from the NIfTI header to zeroes, and is intended to mitigate a data orientation produced by the scanner which is incorrect with respect to the target template.
 While it is true that the scanner affine reported for mouse data may be nonstandard (the confusion is two-fold: mice lie prone with the coronal plane progressing axially whereas higher primates lie supine with the horizontal plane progressing axially), affines of mouse brain templates may be nonstandard as well.
-A related manipulation is dimension swapping, which changes the order of the NIfTI data matirx rather than the affine.
+A related manipulation is dimension swapping, which changes the order of the NIfTI data matrix rather than the affine.
 Occasionally, correct or automatically redressable affine parameters are thus deleted and data is reordered beyond easy recovery, in order to correspond to a malformed template.
 
 \subsection{Templates}
 As the above eminently demonstrates, the template is a key component of a registration workflow.
-Templates used for mouse brain MRI registration are highly heterogeneous, and include histological, as well as ex vivo MRI templates, scanned either inside the intact skull or after physical brain extraction.
+Templates used for mouse brain MRI registration are heterogeneous and include histological, as well as ex vivo MRI templates, scanned either inside the intact skull or after physical brain extraction.
 
 Histological templates benefit from higher resolution and access to molecular imaging data in the same coordinate space.
 Such templates are not produced in volumetric sampling analogous to MRI, and are often not assigned a meaningful affine after conversion to NIfTI.
 Histological contrast may only poorly correlate with any MR contrast, making registration less reliable, or necessitating the use of similarity metrics which impose additional restrictions.
-Not least of all, histological templates may be severely deformed (and may lack distal parts of the brain such as the olfactory bulbs) due to the extraction and sampling process.
-Consequently, data registered to them may be particularly difficult to use for navigation in the intact mouse brain, e.g. during data acquisition or stereotactic surgery.
+Not least of all, histological templates may be severely deformed and may lack distal parts of the brain such as the olfactory bulbs due to the extraction and sampling process.
+Data registered to them may be particularly difficult to use for navigation in the intact mouse brain, e.g. during data acquisition or stereotactic surgery.
 
 Ex vivo templates based on extracted brains share most of the deformation issues present in histological templates;
 they are, however, available in MR contrasts, making registration far easier.
@@ -50,5 +50,5 @@ They suffer from a lower resolution, and need to have any histological data rele
 Ex vivo templates based on intact mouse heads provide both MR contrast and brains largely free of deformation and supporting whole brain registration.
 
 \subsection{Challenges}
-It is thus evident that the foremost challenges in mouse MRI registration consist in: eliminating data-degrading workarounds, reducing reliance on high-level interfaces with inappropriate optimizations, and reducing the number of standard space templates.
+The foremost challenges in mouse MRI registration consist in: eliminating data-degrading workarounds, reducing reliance on high-level interfaces with inappropriate optimizations, and reducing the number of standard space templates.
 Information loss (e.g. pertaining to both the affine and the data matrix) during preprocessing is a particularly besetting issue, since the loss of data at the onset of a neouroimaging workflow will persist in all downstream steps and preclude numerous modes of analysis (as depicted in \cref{fig:mdb}).
