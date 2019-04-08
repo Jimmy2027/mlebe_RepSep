@@ -7,7 +7,7 @@ from lib.utils import float_to_tex, inline_anova, inline_factor
 
 def fstatistic(factor,
 	df_path='data/volume.csv',
-	dependent_variable='Volume Change Factor',
+	dependent_variable='Volume Conservation Factor',
 	expression='Processing*Template',
 	exclusion_criteria={},
 	**kwargs
@@ -28,7 +28,7 @@ def fstatistic(factor,
 
 def factorci(factor,
 	df_path='data/volume.csv',
-	dependent_variable='Volume Change Factor',
+	dependent_variable='Volume Conservation Factor',
 	expression='Processing*Template',
 	exclusion_criteria={},
 	**kwargs
@@ -50,7 +50,7 @@ def factorci(factor,
 
 def corecomparison_factorci(factor,
 	df_path='data/volume.csv',
-	dependent_variable='Volume Change Factor',
+	dependent_variable='Volume Conservation Factor',
 	expression='Processing*Contrast',
 	exclusion_criteria={},
 	**kwargs
@@ -74,7 +74,7 @@ def corecomparison_factorci(factor,
 def varianceratio(
 	df_path='data/volume.csv',
 	template=False,
-	dependent_variable='Volume Change Factor',
+	dependent_variable='Volume Conservation Factor',
 	max_len=2,
 	**kwargs
 	):

@@ -1,4 +1,4 @@
-,Path,Acq,Acquisition,Type,Run,Session,Subject,Task,Contrast,Uid,Processing,Template,Threshold,Thresholded Volume,Volume Change Factor
+,Path,Acq,Acquisition,Type,Run,Session,Subject,Task,Contrast,Uid,Processing,Template,Threshold,Thresholded Volume,Volume Conservation Factor
 0,/home/chymera/.scratch/irsabi/bids_collapsed/sub-4011/ses-ofMcF1/func/sub-4011_ses-ofMcF1_task-JogB_acq-EPIlowcov_run-1_cbv.nii.gz,EPIlowcov,EPIlowcov,func,1,ofMcF1,4011,JogB,CBV,4011_ofMcF1_cbv,Unprocessed,Unprocessed,15.787374570034446,557.375,-1.0
 1,/home/chymera/.scratch/irsabi/bids_collapsed/sub-4011/ses-ofMcF1/func/sub-4011_ses-ofMcF1_task-JogB_acq-EPIlowcov_run-0_bold.nii.gz,EPIlowcov,EPIlowcov,func,0,ofMcF1,4011,JogB,BOLD,4011_ofMcF1_bold,Unprocessed,Unprocessed,8.522747204336339,557.375,-1.0
 3,/home/chymera/.scratch/irsabi/bids_collapsed/sub-4011/ses-ofMcF2/func/sub-4011_ses-ofMcF2_task-JogB_acq-EPIlowcov_run-1_cbv.nii.gz,EPIlowcov,EPIlowcov,func,1,ofMcF2,4011,JogB,CBV,4011_ofMcF2_cbv,Unprocessed,Unprocessed,11.634222518792377,557.298,-1.0

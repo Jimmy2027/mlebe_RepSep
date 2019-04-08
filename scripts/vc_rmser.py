@@ -7,8 +7,8 @@ from math import sqrt
 volume_path = path.abspath('data/volume.csv')
 df = pd.read_csv(volume_path)
 
-legacy = df.loc[(df['Processing']=='Legacy') & (df['Template']=='Legacy'), 'Volume Change Factor'].tolist()
-generic = df.loc[(df['Processing']=='Generic') & (df['Template']=='Generic'), 'Volume Change Factor'].tolist()
+legacy = df.loc[(df['Processing']=='Legacy') & (df['Template']=='Legacy'), 'Volume Conservation Factor'].tolist()
+generic = df.loc[(df['Processing']=='Generic') & (df['Template']=='Generic'), 'Volume Conservation Factor'].tolist()
 
 rmse_legacy = sqrt(mean_squared_error([1]*len(legacy), legacy))
 rmse_generic = sqrt(mean_squared_error([1]*len(generic), generic))

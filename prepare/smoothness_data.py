@@ -79,11 +79,11 @@ df['Contrast'] = df['modality']
 df['Smoothness'] = df['path'].apply(avg_smoothness)
 df.loc[df['Processing']=='Legacy', 'Smoothness'] = df.loc[df['Processing']=='Legacy', 'Smoothness']/10
 
-df['Smoothness Change Factor'] = ''
+df['Smoothness Conservation Factor'] = ''
 uids = df['Uid'].unique()
 for uid in uids:
 	original = df.loc[(df['Uid']==uid) & (df['Processing']=='Unprocessed'), 'Smoothness'].item()
-	df.loc[(df['Uid']==uid), 'Smoothness Change Factor'] = df.loc[(df['Uid']==uid), 'Smoothness'] / original
+	df.loc[(df['Uid']==uid), 'Smoothness Conservation Factor'] = df.loc[(df['Uid']==uid), 'Smoothness'] / original
 
 v_path='../data/volume.csv'
 v = pd.read_csv(path.abspath(v_path))
@@ -91,8 +91,8 @@ df = df.reset_index()
 df['Volume-Normalized SCF'] = 0
 for uid in df['Uid'].unique():
 	for p, t in product(['Generic', 'Legacy'],['Generic','Legacy']):
-		scf = df.loc[(df['Uid']==uid)&(df['Processing']==p)&(df['Template']==t),'Smoothness Change Factor'].item()
-		vcf = v.loc[(v['Uid']==uid)&(v['Processing']==p)&(v['Template']==t),'Volume Change Factor'].item()
+		scf = df.loc[(df['Uid']==uid)&(df['Processing']==p)&(df['Template']==t),'Smoothness Conservation Factor'].item()
+		vcf = v.loc[(v['Uid']==uid)&(v['Processing']==p)&(v['Template']==t),'Volume Conservation Factor'].item()
 		df.loc[(df['Uid']==uid)&(df['Processing']==p)&(df['Template']==t),'Volume-Normalized SCF'] = scf/(vcf**(1./3.))
 
 df.to_csv('../data/smoothness.csv')

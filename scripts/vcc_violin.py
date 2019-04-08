@@ -16,7 +16,7 @@ df = df.loc[((df['Processing']=='Legacy') & (df['Template']=='Legacy')) | ((df['
 df.loc[df['Processing']=='Unprocessed', 'Template'] = ''
 ax = violinplot(
 	x='Processing',
-	y='Volume Change Factor',
+	y='Volume Conservation Factor',
 	data=df,
 	hue="Contrast",
 	saturation=1,

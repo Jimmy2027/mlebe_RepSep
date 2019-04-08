@@ -14,14 +14,14 @@ df = pd.read_csv(path.abspath(df_path))
 df = df[df['Processing']!='Unprocessed']
 df = df[df['Template']!='Unprocessed']
 
-#df.loc[df['Processing']=='Legacy','Smoothness Change Factor'] = df.loc[df['Processing']=='Legacy','Smoothness Change Factor']/10
-#df[r'$\mathsf{log_{10}(Smoothness\,Change\,Factor)}$'] = np.log10(df['Smoothness Change Factor'])
+#df.loc[df['Processing']=='Legacy','Smoothness Conservation Factor'] = df.loc[df['Processing']=='Legacy','Smoothness Conservation Factor']/10
+#df[r'$\mathsf{log_{10}(Smoothness\,Change\,Factor)}$'] = np.log10(df['Smoothness Conservation Factor'])
 
 ax = violinplot(
         x="Processing",
         #y=r'$\mathsf{log_{10}(Smoothness\,Change\,Factor)}$',
-        #y='Smoothness Change Factor',
-        y='Smoothness Change Factor',
+        #y='Smoothness Conservation Factor',
+        y='Smoothness Conservation Factor',
         #y='Smoothness',
         data=df,
         hue="Template",

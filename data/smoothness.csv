@@ -1,4 +1,4 @@
-,index,path,acq,acquisition,type,run,session,subject,task,modality,Processing,Template,Uid,Contrast,Smoothness,Smoothness Change Factor,Volume-Normalized SCF
+,index,path,acq,acquisition,type,run,session,subject,task,modality,Processing,Template,Uid,Contrast,Smoothness,Smoothness Conservation Factor,Volume-Normalized SCF
 0,0,/home/chymera/.scratch/irsabi/preprocessing/generic_collapsed/sub-4011/ses-ofMcF1/func/sub-4011_ses-ofMcF1_task-JogB_acq-EPIlowcov_run-1_cbv.nii.gz,EPIlowcov,EPIlowcov,func,1,ofMcF1,4011,JogB,CBV,Generic,Generic,4011_ofMcF1_cbv,CBV,6.23457,1.1787983179930874,1.1608964881503083
 1,1,/home/chymera/.scratch/irsabi/preprocessing/generic_collapsed/sub-4011/ses-ofMcF1/func/sub-4011_ses-ofMcF1_task-JogB_acq-EPIlowcov_run-0_bold.nii.gz,EPIlowcov,EPIlowcov,func,0,ofMcF1,4011,JogB,BOLD,Generic,Generic,4011_ofMcF1_bold,BOLD,6.41255,1.1266057850426572,1.099807135158558
 2,3,/home/chymera/.scratch/irsabi/preprocessing/generic_collapsed/sub-4011/ses-ofMcF2/func/sub-4011_ses-ofMcF2_task-JogB_acq-EPIlowcov_run-1_cbv.nii.gz,EPIlowcov,EPIlowcov,func,1,ofMcF2,4011,JogB,CBV,Generic,Generic,4011_ofMcF2_cbv,CBV,6.35121,1.276053146027007,1.2592864749957373

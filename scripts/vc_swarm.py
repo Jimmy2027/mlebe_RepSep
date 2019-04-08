@@ -13,7 +13,7 @@ df = pd.read_csv(volume_path)
 df.loc[df['Processing']=='Unprocessed', 'Template'] = ''
 ax = sns.swarmplot(
 	x='Processing',
-	y='Volume Change Factor',
+	y='Volume Conservation Factor',
 	data=df.loc[df['Processing']!='Unprocessed'],
 	hue="Template",
 	size=mpl.rcParams['lines.markersize'],

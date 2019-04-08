@@ -7,10 +7,10 @@ from math import sqrt
 volume_path = path.abspath('data/smoothness.csv')
 df = pd.read_csv(volume_path)
 
-#legacy = df.loc[(df['Processing']=='Legacy') & (df['Template']=='Legacy'), 'Smoothness Change Factor'].tolist()
-#generic = df.loc[(df['Processing']=='Generic') & (df['Template']=='Generic'), 'Smoothness Change Factor'].tolist()
-legacy = df.loc[(df['Processing']=='Legacy') & (df['Template']=='Legacy'), 'Smoothness Change Factor'].tolist()
-generic = df.loc[(df['Processing']=='Generic') & (df['Template']=='Generic'), 'Smoothness Change Factor'].tolist()
+#legacy = df.loc[(df['Processing']=='Legacy') & (df['Template']=='Legacy'), 'Smoothness Conservation Factor'].tolist()
+#generic = df.loc[(df['Processing']=='Generic') & (df['Template']=='Generic'), 'Smoothness Conservation Factor'].tolist()
+legacy = df.loc[(df['Processing']=='Legacy') & (df['Template']=='Legacy'), 'Smoothness Conservation Factor'].tolist()
+generic = df.loc[(df['Processing']=='Generic') & (df['Template']=='Generic'), 'Smoothness Conservation Factor'].tolist()
 
 rmse_legacy = sqrt(mean_squared_error([1]*len(legacy), legacy))
 rmse_generic = sqrt(mean_squared_error([1]*len(generic), generic))
