@@ -89,7 +89,7 @@ Although controlled smoothing is a valuable preprocessing tool, which can be use
 Uncontrolled smoothness can thus lead to undocumented and implicit loss of spatial resolution and is therefore associated with worse anatomical alignment in images and statistical maps \cite{fmriprep}.
 We employ --- analogously to the Volume Change Factor --- a Smoothness Change Factor (SCF), which normalizes the smoothness of the preprocessed images with respect to the smoothness of the original images.
 Our smoothness measure is the full-width at half-maximum (FWHM) of the signal intensity spatial autocorrelation function (ACF \cite{eklund2016cluster}, \cite{cox2017fmri}).
-Since fMRI data usually does not have a gaussian-shaped spatial ACF, we use AFNI \cite{cox1996afni} to fit the following function to in order to estimate the FWHM.
+Since fMRI data usually does not have a gaussian-shaped spatial ACF, we use AFNI \cite{cox1996afni} to fit the following function to in order to estimate the FWHM \cref{eq:acf}. It's composed of the weighted sum of a gaussian and a mono-exponential as a function of the radius $r$ and fitted parameters $a,b,c$.
 
 \begin{equation} \label{eq:acf}
         ACF(r)
