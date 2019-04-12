@@ -75,7 +75,7 @@
 		\includegraphics[width=\textwidth]{data/manual_overview/generic/coherence_4008_cbv} 
  		}
 	\caption{
-		\textbf{The SAMRI Generic workflow consistently maps high-salience features such as the implant site across sessions}
+		\textbf{The SAMRI Generic workflow consistently maps high-salience features such as the implant site across sessions.}
 		Automatically created operator overview graphic, allowing a slice-by-slice (spacing analogous to acquisition) inspection of registration coherence.
 		This representation permits a coarse assessment of registration consistency for multiple sessions --- though at the cost of some clarity.
 		Particularly, this visualization, allows an operator to track the position of high-amplitude fixed features across scans in order to ascertain coherence (similarly to what is automatically assessed by the Variance analysis of the session factor).
@@ -84,6 +84,15 @@
 \end{figure*}
 
 \begin{figure*}[h!]
+	\begin{subfigure}{.34\textwidth}
+		\centering
+		\includedot[width=\textwidth]{data/legacy_nipype}
+		\vspace{-1.9em}
+		\caption{
+			“SAMRI Legacy” workflow, which is based on the \textcolor{mg}{\texttt{antsIntroduction.sh}} function (and other functions with hard-coded parameters optimized for human brain registration), and also performs destructive affine manipulations.
+			}
+		\label{fig:nwfgl}
+	\end{subfigure}\hfill
 	\begin{subfigure}{.64\textwidth}
 		\centering
 		\includedot[width=\textwidth]{data/generic_nipype}
@@ -94,15 +103,6 @@
 			The function used is highly parameterized, and both of its instances --- “s\niceus register” and “f\niceus register” --- are supplied in the workflow with defaults optimized for mouse brain registration.
 			}
 		\label{fig:nwfgg}
-	\end{subfigure}\hfill
-	\begin{subfigure}{.34\textwidth}
-		\centering
-		\includedot[width=\textwidth]{data/legacy_nipype}
-		\vspace{-1.9em}
-		\caption{
-			“SAMRI Legacy” workflow, which is based on the \textcolor{mg}{\texttt{antsIntroduction.sh}} function (and other functions with hard-coded parameters optimized for human brain registration), and also performs destructive affine manipulations.
-			}
-		\label{fig:nwfgl}
 	\end{subfigure}
 	\caption{
 		Directed acyclic graphs detailing the precise node names (as seen in the SAMRI source code) for the two alternate MRI registration workflows.

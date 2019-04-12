@@ -2,6 +2,6 @@ Given the need for comparability across subjects and studies, the quality of reg
 Present small animal MRI workflows fall short in terms of quality and reliability, commonly utilizing high-level scripts optimized for human data (adapting data to the scripts rather than vice-versa), and relying on interactive operator quality control (QC), which is infrequent, open to bias, slow, and unreproducible.
 In this fully reproducible article we showcase a novel mouse-brain-optimized workflow (accessible via Bash and Python), and a standard space suited to harmonize data between analysis and operation.
 We present four separate metrics for automated QC, and a visualization method to aid operator inspection.
-Benchmarking this workflow against common legacy practices (which we detail and comment) reveals that it performs more consistently, better conserves variance across subjects while minimizing variance across sessions, and improves volume conservation
+Benchmarking this workflow against common legacy practices (which we detail and comment) reveals that it performs more consistently, better conserves variance across subjects while minimizing variance across sessions, and improves volume conservation RMSE
 \py{pytex_printonly('scripts/vc_rmser.py')}-fold.
 The “SAMRI Generic” workflow sets a new standard for small animal MRI registration, ensuring robustness, comparability, and validity of region assignment.
