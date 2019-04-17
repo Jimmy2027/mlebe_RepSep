@@ -76,8 +76,8 @@ We do, however, report a notable effect for the contrast-template interaction, w
                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
                 ],
-        caption='i
-                \\textbf{Difference in smoothness conservation are mainly driven by the Template, with SAMRI Generic preprocessing only very slightly reducing spatial smoothing.}
+        caption='
+                \\textbf{Registration via SAMRI generic workflow and template conserves smoothness, enabling analysis with higher granularity, while the legacy workflow increases smoothing}
                 Smoothness change relative to each original scan volume, with coloured patch widths estimating distribution density, solid lines indicating the sample mean,and dashed lines indicate the inner quartiles.
                 ',
         label='fig:sc',
@@ -88,9 +88,9 @@ A furher aspect of preprocessing quality is the resulting image smoothness.
 Although controlled smoothing is a valuable preprocessing tool, which can be used to increase the signal-to-noise ratio (SNR), uncontrolled smoothness limits operator discretion for the trade-off between signal-to-noise, and feature granularity.
 Uncontrolled smoothness can thus lead to undocumented and implicit loss of spatial resolution and is therefore associated with worse anatomical alignment in images and statistical maps \cite{fmriprep}.
 We employ --- analogously to the Volume Conservation Factor --- a Smoothness Conservation Factor (SCF), which normalizes the smoothness of the preprocessed images with respect to the smoothness of the original images.
-Our smoothness measure is the full-width at half-maximum (FWHM) of the signal intensity spatial autocorrelation function (ACF \cite{eklund2016cluster}, \cite{cox2017fmri}).
-Since fMRI data usually does not have a gaussian-shaped spatial ACF, we use AFNI \cite{cox1996afni} to fit the following function to in order to estimate the FWHM ---
-\cref{eq:acf}, the weighted sum of a gaussian and a mono-exponential as a function of the radius $r$ and fitted parameters $a,b,c$.
+Our smoothness measure is the full-width at half-maximum (FWHM) of the signal intensity spatial autocorrelation function (ACF \cite{eklund2016cluster}).
+Since fMRI data usually does not have a gaussian-shaped spatial ACF, we use AFNI \cite{cox1996afni} to fit the following function in order to compute the FWHM ---
+\cref{eq:acf}, where $r$ is the distance of two noise samples, $a$ controls the weight of the gaussian term, $b$ the width of the gaussian and $c$ the decay of the mono-exponential term \cite{cox2017fmri}.
 
 \begin{equation} \label{eq:acf}
         ACF(r)
@@ -99,26 +99,24 @@ Since fMRI data usually does not have a gaussian-shaped spatial ACF, we use AFNI
 
 With respect to the data shown in \cref{fig:scv}, we note that SCF is sensitive to
 the template (\py{boilerplate.fstatistic('Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}),
-but not
 the processing workflow (\py{boilerplate.fstatistic('Processing', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}),
-or the interaction of the factors (\py{boilerplate.fstatistic('Processing:Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
+and the interaction of the factors (\py{boilerplate.fstatistic('Processing:Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
 The performance of the Generic SAMRI workflow (with the Generic template) is significantly different from that of the Legacy workflow (with the Legacy template), yielding a two-tailed p-value of \py{pytex_printonly('scripts/scf_t.py')}.
-In this comparison, the root mean squared error ratio favours the Legacy workflow
+In this comparison, the root mean squared error ratio favours the Generic workflow
 ($\mathrm{RMSE_{L}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
 
-Descriptively, we observe that the Legacy level of the template variable introduces a notable smoothness reduction
+Descriptively, we observe that the Legacy level of the template variable introduces a smoothness reduction
 (SCF of \py{boilerplate.factorci('Template[T.Legacy]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}),
-while the Legacy level of the preprocessing variable introduces a minimal smoothness gain
+while the Legacy level of the preprocessing variable introduces a smoothness gain
 (SCF of \py{boilerplate.factorci('Processing[T.Legacy]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
-Further, we note that there is a trend towards variance increase for the Legacy processing workflow
+Further, we note that there is a variance increase for the Legacy processing workflow
 (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3, template='Legacy')}-fold given the Legacy template and \py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', template='Generic', max_len=3)}-fold given the Generic template).
 
-Given the break-up by contrast shown in \cref{fig:sccv}, we see a notable main effect for the contrast variable
-(SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}),
-but no notable effect for the contrast-template interaction
+Given the break-up by contrast shown in \cref{fig:sccv}, we see no effect for the contrast variable
+(SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
+We do, however, report an effect for the contrast-template interaction, with Legacy workflow and CBV contrast interaction level introducing an increase in smoothness
 (SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
-
 
 \subsection{Variance analysis}
 

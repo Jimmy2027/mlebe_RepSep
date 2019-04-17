@@ -33,6 +33,15 @@ def avg_smoothness(inp_file):
 	#for key in masks:
 	#	if '/{}_collapsed/'.format(key) in inp_file:
 	#		fwhm.inputs.mask = masks[key]
+	#if('bids_collapsed' in inp_file):
+	#	fwhm.inputs.automask = True
+
+	## use automask for all so it's consistent for raw as well as preprocessed data
+	fwhm.inputs.automask = True
+
+	# detrending option
+	fwhm.inputs.detrend = True
+	
 	fwhm.inputs.in_file = inp_file
 	fwhm.inputs.acf = True
 	fwhm_run = fwhm.run()
@@ -71,6 +80,7 @@ df_legacy_generic['Template'] = 'Generic'
 
 df = pd.concat([df_generic, df_legacy, df_generic_legacy, df_legacy_generic, df_bids])
 df['Uid'] = df['subject']+'_'+df['session']+'_'+df['modality']
+df = df[df['type']=='func']
 
 df = df.loc[np.logical_or(df.modality == 'cbv', df.modality == 'bold')]
 df['modality'] = df['modality'].str.upper()
