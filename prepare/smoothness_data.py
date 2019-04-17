@@ -30,18 +30,13 @@ def avg_smoothness(inp_file):
 	from nipype.interfaces import afni
 	import numpy as np
 	fwhm = afni.FWHMx()
-	#for key in masks:
-	#	if '/{}_collapsed/'.format(key) in inp_file:
-	#		fwhm.inputs.mask = masks[key]
-	#if('bids_collapsed' in inp_file):
-	#	fwhm.inputs.automask = True
 
-	## use automask for all so it's consistent for raw as well as preprocessed data
+	# use automask so it's consistent for raw as well as preprocessed data
 	fwhm.inputs.automask = True
 
 	# detrending option
 	fwhm.inputs.detrend = True
-	
+
 	fwhm.inputs.in_file = inp_file
 	fwhm.inputs.acf = True
 	fwhm_run = fwhm.run()
