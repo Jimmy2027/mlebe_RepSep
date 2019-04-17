@@ -1,6 +1,6 @@
 \section{Evaluation}
 
-A challenge of QC with regard to spatial features is that a perfect mapping to the template is undefined.
+A major challenge of registration QC is that a perfect mapping from the measured image to the template is undefined.
 Similarity metrics are ill-suited for QC because they are used internally by registration functions, whose mode of operation is based on maximizing them.
 Extreme similarity score maximization is not a desired outcome.
 Particularly if nonlinear transformations are employed, this may result in image distortion which should be penalized in QC.
@@ -77,20 +77,20 @@ We do, however, report a notable effect for the contrast-template interaction, w
                         ,},
                 ],
         caption='
-                \\textbf{Registration via SAMRI generic workflow and template conserves smoothness, enabling analysis with higher granularity, while the legacy workflow increases smoothing}
+                \\textbf{Registration via the SAMRI Generic workflow and template conserves smoothness, which increases control over feature detection.}
                 Smoothness change relative to each original scan volume, with coloured patch widths estimating distribution density, solid lines indicating the sample mean,and dashed lines indicate the inner quartiles.
                 ',
         label='fig:sc',
         )}
 \end{sansmath}
 
-A furher aspect of preprocessing quality is the resulting image smoothness.
-Although controlled smoothing is a valuable preprocessing tool, which can be used to increase the signal-to-noise ratio (SNR), uncontrolled smoothness limits operator discretion for the trade-off between signal-to-noise, and feature granularity.
-Uncontrolled smoothness can thus lead to undocumented and implicit loss of spatial resolution and is therefore associated with worse anatomical alignment in images and statistical maps \cite{fmriprep}.
-We employ --- analogously to the Volume Conservation Factor --- a Smoothness Conservation Factor (SCF), which normalizes the smoothness of the preprocessed images with respect to the smoothness of the original images.
-Our smoothness measure is the full-width at half-maximum (FWHM) of the signal intensity spatial autocorrelation function (ACF \cite{eklund2016cluster}).
+A further aspect of preprocessing quality is the resulting image smoothness.
+Although controlled smoothing is a valuable preprocessing tool used to increase the signal-to-noise ratio (SNR), uncontrolled smoothness limits operator discretion in the trade-off between SNR and feature granularity.
+Uncontrolled smoothness can thus lead to undocumented and implicit loss of spatial resolution and is therefore associated with worse anatomical alignment \cite{fmriprep}.
+We employ a Smoothness Conservation Factor (SCF), which normalizes the smoothness of the preprocessed images with respect to the smoothness of the original images.
+Our smoothness measure is the full-width at half-maximum (FWHM) of the signal amplitude spatial autocorrelation function (ACF \cite{eklund2016cluster}).
 Since fMRI data usually does not have a gaussian-shaped spatial ACF, we use AFNI \cite{cox1996afni} to fit the following function in order to compute the FWHM ---
-\cref{eq:acf}, where $r$ is the distance of two noise samples, $a$ controls the weight of the gaussian term, $b$ the width of the gaussian and $c$ the decay of the mono-exponential term \cite{cox2017fmri}.
+\cref{eq:acf}, where $r$ is the distance of two amplitude distribution samples, $a$ is the relative weight of the gaussian term in the model, $b$ is the width of the gaussian and $c$ the decay of the mono-exponential term \cite{cox2017fmri}.
 
 \begin{equation} \label{eq:acf}
         ACF(r)
@@ -110,12 +110,12 @@ Descriptively, we observe that the Legacy level of the template variable introdu
 (SCF of \py{boilerplate.factorci('Template[T.Legacy]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}),
 while the Legacy level of the preprocessing variable introduces a smoothness gain
 (SCF of \py{boilerplate.factorci('Processing[T.Legacy]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
-Further, we note that there is a variance increase for the Legacy processing workflow
+Further, we note that there is a strong variance increase for the Legacy processing workflow
 (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3, template='Legacy')}-fold given the Legacy template and \py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', template='Generic', max_len=3)}-fold given the Generic template).
 
 Given the break-up by contrast shown in \cref{fig:sccv}, we see no effect for the contrast variable
 (SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
-We do, however, report an effect for the contrast-template interaction, with Legacy workflow and CBV contrast interaction level introducing an increase in smoothness
+We do, however, report an effect for the contrast-template interaction, with the Legacy workflow and CBV contrast interaction level introducing an increase in smoothness
 (SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
 \subsection{Variance analysis}
@@ -143,7 +143,7 @@ and Mutual Information (MI, sensitive to whole-image information similarity inde
 %As similarity metrics are not equivalent, and since the main comparison of variance is performed across all of them, p-values for the variable effects are uncorrected.
 
 \Cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Legacy workflows (considering only the matching workflow-template combinations).
-For all three metrics, using the Legacy workflow, that the F-statistic is consistently higher for the session than for the subject variable:
+The Legacy workflow produces results which consistently show a higher F-statistic for the session than for the subject variable:
 CC (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','CC', condensed=True)}),
 GC (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','GC', condensed=True)}),
 and MI (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','MI', condensed=True)}).
@@ -157,7 +157,7 @@ Notably, for the MI metric the effect of the session variable is significant, bu
 %Notably, in the CC metric, the subject-wise variance reaches significance, but not the session-wise variance.
 
 The Generic SAMRI workflow shows a reversing trend.
-F-statistics for the subject variable are consistently higher than for the session variable:
+Resulting data F-statistics are consistently higher for the subject variable than for the session variable:
 CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','CC', condensed=True)}),
 GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','GC', condensed=True)}),
 and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','MI', condensed=True)}).
@@ -186,7 +186,7 @@ We compute the per-scan average of these values, which we term Mean Significance
                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
                 ],
-        caption='\\textbf{Per-scan significance from functional analysis is not strongly susceptible to the preprocessing variants examined:.}
+        caption='\\textbf{Per-scan significance from functional analysis is not strongly susceptible to the preprocessing variants examined.}
                 The coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
         label='fig:ms',)}
 \end{sansmath}
