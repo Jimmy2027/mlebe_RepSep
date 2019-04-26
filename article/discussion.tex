@@ -19,7 +19,7 @@ The fully transparent nature of the workflow, however, is conducive to continued
 
 \subsection{Quality Control}
 
-A major contribution of this work is the implementation of multiple metrics providing simple, powerful and robust QC for registration performance (VCF, SCF, and Variance Analysis) and the release of a dataset suitable for such multifaceted benchmarking.
+A major contribution of this work is the implementation of multiple metrics providing simple, powerful and robust QC for registration performance (VCF, SCF, and Variance Analysis) and the release of a dataset \cite{irsabi_bidsdata} suitable for such multifaceted benchmarking.
 The VCF and SCF provide good quantitative estimates of distortion prevalence.
 The variance analysis comparing subject-wise and session-wise variance is an elegant avenue allowing the operator to ascertain how much a registration workflow is potentially overfitting.
 These metrics are relevant to both preclinical and clinical MRI workflow improvements, and could themselves be further optimized (e.g. by developing percentile selection heuristics based on a priori documented data distortions for VCF).
@@ -32,7 +32,7 @@ We do not discount this measure entirely, however, as it is strongly sensitive t
 
 Overall we suggest that a VCF, SCF and Variance based comparison, coupled with visual inspection of a small number of omnibus statistic maps is a feasible and sufficient tool for benchmarking workflows, with MS usable as an additional sanity check.
 We recommend reuse of the presented data for workflow benchmarking, as it includes (a) multiple sources of variation (contrast, session, subjects), (b) functional activity with broad coverage but spatially distinct features, and (c) significant distortions due to implant properties --- which are appropriate for testing workflow robustness.
-Owing to the RepSeP-compilant executable source code, which reproduces the statistics and figures in this document, our processing and data analysis is not only is fully transparent, but also reusable with further data and further workflows.
+Owing to the RepSeP-compilant executable source code \cite{source}, which reproduces the statistics and figures in this document, our processing and data analysis is not only is fully transparent, but also reusable with further data and further workflows.
 
 \subsection{Conclusion}
 
