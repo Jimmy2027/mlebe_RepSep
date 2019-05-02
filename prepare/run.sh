@@ -14,7 +14,7 @@ if [ ! -d ~/.scratch/irsabi/bids ]; then
 		ln -s '/usr/share/irsabi_bidsdata' ~/.scratch/irsabi/bids
 	else
 		echo "No IRSABI BIDS data distribution found, processing from scanner IRSABI data:"
-		SAMRI bru2bids -o ~/.scratch/irsabi/ -f '{"acquisition":["EPIlowcov"]}' -s '{"acquisition":["TurboRARElowcov"]}' '/usr/share/irsabi_data/'
+		python make_bids.py
 	fi
 fi
 
