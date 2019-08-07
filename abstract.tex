@@ -1,9 +1,14 @@
-Given the need for comparability across subjects and studies, the quality of registration to a standard space is crucial for the reliability of Magnetic Resonance Imaging (MRI), and in particular functional MRI (fMRI).
-Present small animal MRI workflows fall short in terms of quality and reliability, commonly utilizing high-level scripts optimized for human data (adapting data to the scripts rather than vice-versa), and relying on interactive operator quality control (QC), which is infrequent, open to bias, slow, and unreproducible.
-In this fully reproducible article we showcase a novel mouse-brain-optimized workflow (accessible via Bash and Python), and a standard space suited to harmonize data between analysis and operation.
+The quality and reliability of scientific results critically depends on reproducible and transparent data processing.
+Cross-subject and cross-study comparability of imaging data in general, and magnetic resonance imaging (MRI) data in particular, relies on the quality of registration to a standard reference space.
+%%% MRI rather than fMRI
+This is not adequately provided by currently used processing workflows, which utilize high-level scripts optimized for human data, and adapt animal data to fit the scripts, rather than vice-versa.
+Quality control (QC) in such workflows is operator-interactive, making it infrequent, open to bias, slow, and unreproducible.
+In this fully reproducible article we showcase a generic workflow optimized for the mouse brain and a standard reference space suited to harmonize data between analysis and operation.
 We present four separate metrics for automated QC, and a visualization method to aid operator inspection.
-Benchmarking this workflow against common legacy practices (which we detail and comment) reveals that it performs more consistently, better preserves variance across subjects while minimizing variance across sessions, and improves volume conservation RMSE
+Benchmarking this workflow against common legacy practices reveals that it performs more consistently, better preserves variance across subjects while minimizing variance across sessions, and improves volume conservation RMSE
 \py{pytex_printonly('scripts/vc_rmser.py')}-fold,
 and smoothness conservation RMSE
 \py{pytex_printonly('scripts/sc_rmser.py')}-fold.
-The “SAMRI Generic” workflow sets a new standard for small animal MRI registration, ensuring robustness, comparability, and validity of region assignment.
+We propose this open architecture and in-built QC as a new standard for small animal MRI registration, ensuring robustness, comparability, and validity of region assignment, important criteria for the comparability of scientific results across centers.
+%This workflow sets a new standard for small animal MRI registration, ensuring robustness, comparability, and validity of region assignment, important criteria for the comparability of scientific results across centers.
+%%% Stronger statement and less repetition/overt speculation

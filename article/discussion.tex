@@ -1,44 +1,55 @@
 \section{Discussion}
 
 The workflow and template design presented herein offer significant advantages in terms of reducing coverage overestimation, uncontrolled smoothness, and guaranteeing session-to-session consistency.
-This is most clearly highlighted by Volume Conservation (\cref{fig:vc}), Smoothness Conservation (\cref{fig:sc}), and Variance Analysis (\cref{fig:var}), where the joint usage of the SAMRI Generic workflow and template outperforms all other combinations of the multivariate analysis.
-This spatial robustness is also revealed in a qualitative examination of higher-level functional maps (\cref{fig:m}), where only the combination of the Generic workflow and template provides accurate coverage for both BOLD and CBV modalities.
-These benefits are provided without compromising statistical power (\cref{fig:ms}), and also hold for both CBV and BOLD contrasts (\cref{fig:vccv,fig:sccv,fig:mscv} --- where the Generic workflow-template combination is less or equally susceptible to the contrast variable).
+This is most clearly highlighted by Volume Conservation (\cref{fig:vc}), Smoothness Conservation (\cref{fig:sc}), and Variance Analysis (\cref{fig:var}), where the combined usage of the SAMRI Generic workflow and template outperforms all other combinations of the multivariate analysis.
+Spatial robustness is also revealed in a qualitative examination of higher-level functional maps (\cref{fig:m}), where only the combination of the Generic workflow and template provides accurate coverage of the sampled volume for both BOLD and CBV fMRI data.
+These benefits are provided without compromising statistical power (\cref{fig:ms}), and are robust to the functional contrast (\cref{fig:vccv,fig:sccv,fig:mscv} --- where the Generic workflow-template combination is less or equally susceptible to the contrast variable, when compared to the Legacy workflow-template combination).
 The performance of the Generic workflow is more consistent across all metrics, as demonstrated by notable reductions of the standard deviation for both VCS, SCF, as well as MS (\cref{fig:vcv,fig:scv,fig:msv}).
 
-Closer model inspection, however, reveals that the strongest source of variability is not the processing factor but the template factor.
-The Legacy level of the template factor induces both a volume and a smoothness decrease beyond the original data values (\cref{fig:vcv,fig:scv}).
+Closer model inspection, however, reveals that in addition to the processing factor, the template factor is also a strong source of variability.
+The Legacy template induces both a volume and a smoothness decrease beyond the original data values (\cref{fig:vcv,fig:scv}).
 This clearly indicates a whole-volume effect, whereby a target template smaller than the recoded brain size causes a contraction of the brain during registration, resulting both in a volume and a smoothness loss.
 This effect can also be observed qualitatively in \cref{fig:m}.
 We thus highlight the importance of an appropriate template choice, and strongly recommend usage of the Generic template on account of its better scale similarity to data acquired in adult mice.
 
 The volume conservation, smoothness conservation, and session-to-session consistency of the SAMRI Generic workflow and template combination are further augmented by numerous design benefits (\cref{fig:wfg,fig:t}).
 These include increased transparency and parameterization of the workflow (which can more easily be inspected and further improved or customized by the end user), veracity of resulting data headers, and spatial coordinates more meaningful for surgery and histology.
-We acknowledge that, though the SAMRI Generic workflow performs better by comparison, it does not attain a perfect score on any of the target metrics.
+%%%!!! not commendable
 The fully transparent nature of the workflow, however, is conducive to continued augmentation in excess of the already commendable performance.
 
 \subsection{Quality Control}
 
-A major contribution of this work is the implementation of multiple metrics providing simple, powerful and robust QC for registration performance (VCF, SCF, and Variance Analysis) and the release of a dataset \cite{irsabi_bidsdata} suitable for such multifaceted benchmarking.
+A major contribution of this work is the implementation of multiple metrics providing simple, powerful and robust QC for registration performance (VCF, SCF, and Variance Analysis) and the release of a dataset \cite{irsabi_bidsdata} suitable for such multifaceted benchmarking --- such as the analysis of session-wise and subject-wise variability.
 The VCF and SCF provide good quantitative estimates of distortion prevalence.
-The variance analysis comparing subject-wise and session-wise variance is an elegant avenue allowing the operator to ascertain how much a registration workflow is potentially overfitting.
-These metrics are relevant to both preclinical and clinical MRI workflow improvements, and could themselves be further optimized (e.g. by developing percentile selection heuristics based on a priori documented data distortions for VCF).
+The analysis comparing subject-wise and session-wise variance is an elegant avenue allowing the operator to ascertain how much a registration workflow is potentially overfitting, by differentiating between meaningful (inter-subject) and confounding (inter-session) variability.
+These metrics are relevant to both preclinical and clinical MRI workflow improvements, and could themselves be further optimized.
+One particular metric refinement we propose is developing percentile selection heuristics based on a priori documented data distortions for VCF, as metric sensitivity may be contingent on the percentile, and the present choice of the \nth{66} percentile may not have the highest sensitivity.
 
+%%% !!!! for the workflows considered
 Global statistical power is not (in the range of workflows at hand) sensitive to registration.
 It is thus not a reliable metric for optimization, though regrettably, it may be the most prevalently used if results are only inspected at a higher level --- and could bias analysis.
-This is exemplified by the positive effect of the Legacy template level seen in \cref{fig:msv}.
+This is exemplified by the positive main effect of the Legacy template level seen in \cref{fig:msv}.
 In this particular case, optimizing for statistical power alone would give a misleading indication.
-We do not discount this measure entirely, however, as it is strongly sensitive to workflow parameter variations which we have excluded for the sake of brevity in this comparison, such as the registration interpolation method.
+We do not discount this measure entirely, however, as it is strongly sensitive to workflow parameter variations, such as the registration interpolation method.
 
 Overall we suggest that a VCF, SCF and Variance based comparison, coupled with visual inspection of a small number of omnibus statistic maps is a feasible and sufficient tool for benchmarking workflows, with MS usable as an additional sanity check.
-We recommend reuse of the presented data for workflow benchmarking, as it includes (a) multiple sources of variation (contrast, session, subjects), (b) functional activity with broad coverage but spatially distinct features, and (c) significant distortions due to implant properties --- which are appropriate for testing workflow robustness.
-Owing to the RepSeP-compilant executable source code \cite{source}, which reproduces the statistics and figures in this document, our processing and data analysis is not only is fully transparent, but also reusable with further data and further workflows.
+We recommend reuse of the presented data for workflow benchmarking, as they include (a) multiple sources of variation (contrast, session, subjects), (b) functional activity with broad coverage but spatially distinct features, and (c) significant distortions due to implant properties --- which are appropriate for testing workflow robustness.
+%%% !!! not reusable
+Owing to the RepSeP-compilant executable source code \cite{source}, which reproduces the statistics and figures in this document, our benchmarking data analysis (in addition to the workflow it documents) is not only fully transparent, but also reusable with further data and further workflows.
 
 \subsection{Conclusion}
 
-The SAMRI Generic workflow and Generic template presented in this article constitute a notable leap from the prevailing ad hoc paradigms of mouse brain imaging analysis.
-This is attested by an in-depth multivariate comparison of this novel design with a thoroughly documented Legacy pipeline representing alternative practices.
-For workflow comparison, we introduced metrics that can be used beyond the scope of this work for registration Quality Control.
-The optimized registration parameters of our workflow are accessible in the source code and transferable to any other workflows making use of the ANTs package.
-The software engineering choices in both the workflow and this article's source code empower users to better verify, understand, remix, and reuse our work.
-Overall we believe that the insights summarized and technologies showcased herein will have a significant role in improving computational mouse brain imaging methodology.
+%%% Are you sure? We certainly motivate this
+%The SAMRI Generic workflow and Generic template presented in this article constitute a notable leap from the prevailing ad hoc paradigms of mouse brain imaging analysis.
+%This is attested by an in-depth multivariate comparison of this novel design with a thoroughly documented Legacy pipeline representing alternative practices.
+
+In this article we have described a novel workflow for processing brain imaging data, entitled SAMRI Generic, which offers several advantages compared to the ad hoc approaches commonly used for processing mouse imaging data.
+%%% Couldn't read your suggestions
+In-depth multivariate comparison of this novel design revealed superior performance as compared to a thoroughly documented Legacy pipeline representing alternative practices.
+%%% Both animal and human?
+%%% The VCF and VC metric are afaict wholly novel with regards to registration QC, and although in man other regards human MRI and MRI registration are ahead, they might also find significant use for this.
+%%% The fMRI prep in Nature Methods e.g. uses only one metric (SCF), I find that's by comparison quite superficial.
+The metrics introduced for registration QC are not restricted to processing fMRI data, but can be readily expanded to other brain imaging applications.
+The optimized registration parameters of the SAMRI Generic Workflow are accessible in the source code and transferable to any other workflows making use of the ANTs package.
+The open source software choices in both the workflow and this article's source code empower users to better verify, understand, remix, and reuse our work.
+Overall we believe that the SAMRI Generic workflow should facilitate and help harmonize processing of mouse brain imaging data, across studies and centers.
