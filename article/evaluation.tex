@@ -21,6 +21,18 @@ In order to mitigate possible differences arising from qualitative template feat
                 {'script':'scripts/vcc_violin.py', 'label':'vccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
+                {'script':'scripts/scf_violin_templates.py', 'label':'scv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                        'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
+                        ,},
+                {'script':'scripts/scf_violin_contrasts.py', 'label':'sccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
+                        ,},
+                {'script':'scripts/ms_violin.py', 'label':'msv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+			'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
+                        ,},
+                {'script':'scripts/msc_violin.py', 'label':'mscv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
+                        ,},
                 ],
         caption='\\textbf{Registration via the SAMRI Generic workflow and template optimally and reliably conserves scan volume --- unlike with the Legacy workflow and template.}
         Volume change relative to each original scan volume, with coloured patch widths estimating distribution density, solid lines indicating the sample mean,and dashed lines indicate the inner quartiles.
@@ -67,23 +79,23 @@ We do, however, report a notable effect for the contrast-template interaction, w
 
 \subsection{Smoothness Conservation}
 
-\begin{sansmath}
-\py{pytex_subfigs(
-        [
-                {'script':'scripts/scf_violin_templates.py', 'label':'scv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
-                        'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
-                        ,},
-                {'script':'scripts/scf_violin_contrasts.py', 'label':'sccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
-                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
-                        ,},
-                ],
-        caption='
-                \\textbf{Registration via the SAMRI Generic workflow and template conserves smoothness, which increases control over feature detection.}
-                Smoothness change relative to each original scan volume, with coloured patch widths estimating distribution density, solid lines indicating the sample mean,and dashed lines indicate the inner quartiles.
-                ',
-        label='fig:sc',
-        )}
-\end{sansmath}
+%\begin{sansmath}
+%\py{pytex_subfigs(
+%        [
+%                {'script':'scripts/scf_violin_templates.py', 'label':'scv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+%                        'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
+%                        ,},
+%                {'script':'scripts/scf_violin_contrasts.py', 'label':'sccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+%                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
+%                        ,},
+%                ],
+%        caption='
+%                \\textbf{Registration via the SAMRI Generic workflow and template conserves smoothness, which increases control over feature detection.}
+%                Smoothness change relative to each original scan volume, with coloured patch widths estimating distribution density, solid lines indicating the sample mean,and dashed lines indicate the inner quartiles.
+%                ',
+%        label='fig:sc',
+%        )}
+%\end{sansmath}
 
 A further aspect of preprocessing quality is the resulting image smoothness.
 Although controlled smoothing is a valuable preprocessing tool used to increase the signal-to-noise ratio (SNR), uncontrolled smoothness limits operator discretion in the trade-off between SNR and feature granularity.
@@ -178,20 +190,20 @@ We compute the per-scan average of these values, which we term Mean Significance
         M\!S = \frac{\sum_{i=1}^n -log(p_i)}{n}
 \end{equation}
 
-\begin{sansmath}
-\py{pytex_subfigs(
-        [
-                {'script':'scripts/ms_violin.py', 'label':'msv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
-			'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
-                        ,},
-                {'script':'scripts/msc_violin.py', 'label':'mscv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
-                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
-                        ,},
-                ],
-        caption='\\textbf{Per-scan significance from functional analysis is not strongly susceptible to the preprocessing variants examined.}
-                The coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
-        label='fig:ms',)}
-\end{sansmath}
+%\begin{sansmath}
+%\py{pytex_subfigs(
+%        [
+%                {'script':'scripts/ms_violin.py', 'label':'msv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+%			'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
+%                        ,},
+%                {'script':'scripts/msc_violin.py', 'label':'mscv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+%                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
+%                        ,},
+%                ],
+%        caption='\\textbf{Per-scan significance from functional analysis is not strongly susceptible to the preprocessing variants examined.}
+%                The coloured patch width estimates distribution density, while continuous markers indicate the sample mean and dashed markers indicate the inner quartiles.',
+%        label='fig:ms',)}
+%\end{sansmath}
 
 As seen in \cref{fig:ms}, MS is not sensitive to
 the processing workflow
