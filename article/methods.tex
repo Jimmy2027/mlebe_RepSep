@@ -15,3 +15,49 @@ pAAV-EF1a-double floxed-hChR2(H134R)-EYFP-WPRE-HGHpA, a gift from Karl Deisserot
 
 The DR was stimulated via an Omicron LuxX 488-60 laser (\SI{488}{\nano\meter}) tuned to \SI{30}{\milli\watt} at contact with the fiber implant, according to the protocol listed in \cref{tab:stim}.
 The operation and stimulation procedure, as well as general picture of obtained activation is consistent with previous results \cite{Grandjean2019}, and is not further commented in this study.
+
+\subsection{Metrics}
+
+For the current VCF implementation we define brain volume as estimated by the 66\textsuperscript{th} voxel intensity percentile of the raw scan before any processing.
+The arbitrary unit equivalent of this percentile threshold is recorded for each scan and applied to all preprocessing workflow results for that particular scan, to obtain VCF estimates
+ --- \cref{eq:vcf}, where $v$ is the voxel volume in the original space, $v^\prime$ the voxel volume in the transformed space, $n$ the number of voxels in the original space, $m$ the number of voxels in the transformed space, $s$ a voxel value sampled from the vector $S$ containing all values in the original data, and $s^\prime$ a voxel value sampled from the transformed data.
+
+\begin{equation} \label{eq:vcf}
+        V\!C\!F
+        = \frac{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}{v\sum_{i=1}^n [s_i \geq P_{66}(S)]}
+        = \frac{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}{v \lceil0.66n\rceil}
+\end{equation}
+
+The SCF metric is based on the ratio of smoothness before and after processing.
+The smoothness measure is the full-width at half-maximum (FWHM) of the signal amplitude spatial autocorrelation function (ACF \cite{eklund2016cluster}).
+Since fMRI data usually do not have a Gaussian-shaped spatial ACF, we use AFNI \cite{cox1996afni} to fit the following function in order to compute the FWHM ---
+\cref{eq:acf}, where $r$ is the distance of two amplitude distribution samples, $a$ is the relative weight of the Gaussian term in the model, $b$ is the width of the Gaussian and $c$ the decay of the mono-exponential term \cite{cox2017fmri}.
+
+\begin{equation} \label{eq:acf}
+        ACF(r)
+        = a * e^{ -r^{2}/ (2 * b^{2}) } + (1 - a) + e^{-r/c}
+\end{equation}
+
+We examine statistical power as relevant for the MS metric via the negative logarithm of first-level p-value maps.
+This produces voxelwise statistical estimates for the probability that a time course could --- by chance alone --- be at least as well correlated with the stimulation regressor as the voxel time course measured.
+We compute the per-scan average of these values as seen in \cref{eq:ms}, where $n$ represents the number of statistical estimates in the scan, and $p$ is a p-value.
+
+\begin{equation} \label{eq:ms}
+        M\!S = \frac{\sum_{i=1}^n -log(p_i)}{n}
+\end{equation}
+
+\subsection{Software}
+
+The workflow functions make use of the Nipype \cite{nipype} package, which provides high-level workflow management and execution features.
+Via this package, functions provided by any other package can be encapsulated in a node (complete with error reporting and isolated re-execution support) and integrated into a directed workflow graph.
+Parallelization can also be managed via a number of execution plugins, allowing scalability.
+Most importantly, Nipype can generate graph descriptor language (DOT) summaries, as well as visual workflow representations suitable for operator inspection, graph theoretical analysis, and programmatic comparison between workflow variants.
+
+Via Nipype, we utilize basic MRI preprocessing functions from the FSL package \cite{fsl} and registration functions from the ANTs package \cite{ants}.
+While there is theoretically no limit to the number of external packages usable with Nipype, we constrain our choice as much as possible in order to minimize the dependency graph.
+The choice of the ANTs package (in addition to FSL, which also provides registration functions) owes to the package's functions being more highly parameterized.
+This feature allows us to avoid maladaptive optimization choices, and instead fine-tune the registration to the overarching characteristics of the brain type at hand.
+Additionally, we have implemented a number of functions in our workflow directly, e.g. to read BIDS \cite{bids} inputs, and perform dummy scans management.
+
+For Quality Control we distribute as part of this publication additional workflows using the NumPy \cite{numpy}, SciPy \cite{scipy}, pandas \cite{pandas}, and matplotlib packages \cite{matplotlib}, as well as Seaborn \cite{seaborn} for plotting, and Statsmodels \cite{statsmodels} for top-level statistics, using the HC3 heteroscedasticity consistent covariance matrix \cite{long2000}.
+Specifically, distribution densities for plots are drawn using the Scott bandwidth density estimator \cite{Scott1979}.

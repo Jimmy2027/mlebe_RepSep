@@ -12,7 +12,7 @@ digraph graphname {
     g_[label="Share!", style="bold, rounded", color="#BBBBBB", shape="box"];
     a[label="Analog  ", shape=cds, color="#BBBBBB", fillcolor=grey93, fontcolor="#999998"];
     m0[label="Manual  ", shape=cds, color="#BBBBBB", fillcolor=grey93, fontcolor="#999998"];
-    b[label="Free Induction\nDecay", shape=folder, color="#BBBBBB", fillcolor=grey93];
+    b[label="Time-domain\nk-space Data", shape=folder, color="#BBBBBB", fillcolor=grey93];
     m1[
         label=<<FONT COLOR="#45B000">Metadata</FONT>>,
         shape=folder, color="#BBBBBB", fillcolor=grey93,

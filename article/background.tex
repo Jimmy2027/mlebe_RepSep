@@ -3,7 +3,7 @@
 
 Correspondence of brain areas across individuals is a prerequisite for making generalizable statements regarding brain function and organization.
 This is achieved by spatial transformation of brain maps in a study to a population or standard reference template.
-This process, called registration, is an integral constituent of any neuroimaging workflow attempting to produce results which are both spatially resolved and generalizable across a population.
+This process, called registration, is an integral constituent of any neuroimaging workflow attempting to produce results which are both spatially resolved and meaningful at the population level.
 
 The computations required for registration are commonly performed at the very onset of the preprocessing workflow,
 though the actual image manipulation may only take place much later, once inter-subject comparison becomes needed.
@@ -14,22 +14,18 @@ Registration in human brain imaging benefits from high-level functions (e.g. \te
 The availability and widespread use of such functions mitigate issues which would otherwise arise from a lack of QC.
 In mouse brain imaging, however, registration is frequently performed using the selfsame high-level functions from human brain imaging --- rendered usable for mouse brain data by adjusting the data to fit the priors and optimized parameters of the functions, rather than vice-versa.
 
-%%% Could not read note
-This general approach compromises data veracity, limits the degree to which processing can be optimized for mouse brain applications, and thus represents a notable hurdle for the methodological improvement of mouse brain imaging.
-%This general approach suffers from methodological shortcomings that will be outlined in detail below, as well as insufficient documentation and quality control, as they are typically implemented ad hoc.
-%Based on current practices we propose an improved solution, which includes rigorous QC.
+This general approach compromises data veracity and limits the degree to which processing can be optimized for mouse brain applications.
+As such, it represents a notable hurdle for the methodological improvement of mouse brain imaging.
 
-We thus explicitly describe current practices, in an effort to not only propose better solutions, but do so in a falsifiable manner which provides adequate detail for both the novel and the legacy methods.
+Below, we explicitly describe current practices, in an effort to not only propose better solutions, but do so in a falsifiable manner which provides adequate detail for both the novel and the legacy methods.
 
 \subsection{Manipulations}
 The foremost data manipulation procedure in present-day mouse MRI is the adjustment of voxel dimensions.
 These dimensions are represented in the Neuroimaging Informatics Technology Initiative format (NIfTI) header \cite{nifti} by affine transformation parameters, which map data matrix cordinates to geometrically meaningful spatial coordinates.
 Manipulations of the affine parameters are performed in order to make the data represent volumes corresponding to what human-optimized brain extraction, bias correction, and registration interfaces expect (rather than the physiological mouse brain dimensions).
 Commonly, this manipulation constitutes a 10-fold increase in each spatial dimension.
-%%% !!! Should I really go into detail on why exactly changing the data size is bad? In the background?
-%%% Analogy to marker in microscopy
 
-In order to produce acceptable results from brain extraction based on human priors, it may necessary to additionally adjust the data matrix content itself.
+In order to produce acceptable results from brain extraction based on human priors, it may be necessary to additionally adjust the data matrix content itself.
 This may involve applying an ad-hoc intensity-based percentile threshold to clear non-brain or anterior/posterior brain tissue and leave a more spherical brain for the human masking functions to operate on.
 While conceptually superior solutions adapting parameters and priors to animal data are available \cite{rbet,Oguz2014} and might remove the need for this step of data adaptation, rudimentary solutions remain popular.
 Both these function adaptations for animal data and the animal data matrix content adaptations for use with human brain extraction functions are, however, known to completely or partially remove the olfactory bulbs.
@@ -54,8 +50,7 @@ Data registered to such templates may be particularly difficult to use for navig
 Ex vivo templates based on extracted brains share most of the deformation issues present in histological templates;
 they are, however, available in MR contrasts, making registration far easier.
 Ex vivo templates based on intact mouse heads provide both MR contrast and brains largely free of deformation and supporting whole brain registration.
-%%% !!! Mention resolution issue separately, only when histological info is needed
-They suffer from a lower spatial resolution, and need to have any histological or molecular information relevant for downstream analysis first registered to them.
+Independently of brain extraction, MR templates need to have any histological or molecular information relevant for downstream analysis first registered to them.
 
 \subsection{Challenges}
 The foremost challenges in mouse MRI registration consist in eliminating data-degrading workarounds, reducing reliance on high-level interfaces with inappropriate optimizations, and reducing the number of standard space templates.
