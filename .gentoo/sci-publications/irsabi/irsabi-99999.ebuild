@@ -15,15 +15,19 @@ KEYWORDS=""
 
 DEPEND=""
 RDEPEND="
-	dev-python/matplotlib
-	dev-python/numpy
-	dev-python/pandas
-	>=dev-python/statsmodels-0.9.0
-	>=dev-tex/pythontex-0.16
-	app-text/texlive[science,xetex]
+	app-text/texlive[publishers,science,xetex]
+	dev-python/joblib[${PYTHON_USEDEP}]
+	dev-python/matplotlib[${PYTHON_USEDEP}]
+	dev-python/numpy[${PYTHON_USEDEP}]
+	dev-python/pandas[${PYTHON_USEDEP}]
+	>=dev-python/seaborn-0.9.0[${PYTHON_USEDEP}]
+	>=dev-python/statsmodels-0.9.0[${PYTHON_USEDEP}]
+	>=dev-tex/pythontex-0.16[${PYTHON_USEDEP}]
 	media-gfx/graphviz
-	sci-biology/nilearn
-	>=sci-biology/samri-0.2
+	sci-biology/nilearn[${PYTHON_USEDEP}]
+	>=sci-biology/samri-0.3[${PYTHON_USEDEP}]
+	sci-libs/scikits_learn[${PYTHON_USEDEP}]
+	sci-libs/pybids[${PYTHON_USEDEP}]
 	scanner-data? ( sci-biology/samri_data )
 	!scanner-data? ( sci-biology/samri_bidsdata )
 "
