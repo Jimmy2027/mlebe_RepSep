@@ -33,7 +33,7 @@ Total install time will take upwards of an hour on personal computers with no pr
 This is a [RepSeP](https://github.com/TheChymera/RepSeP)-style document.
 The data processing step is run asynchronously from the document compilation, and you may choose to reproduce either the top-level statistics (“demo” reproduction) or the entire analysis starting from the raw data (“full analysis stack” reproduction).
 
-The data processing for the full analysis stack will by default take place in `~/.scratch`, which we suggest can be created as a symlink to a volume which has more space:
+The data processing for the full analysis stack will by default take place in `~/.scratch`, which we suggest can be created as a symlink to a volume which has more space (at least 400GB):
 
 ```
 mkdir /mnt/largevolume/.scratch
