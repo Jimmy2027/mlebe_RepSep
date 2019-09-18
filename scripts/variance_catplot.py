@@ -21,7 +21,7 @@ df_mi.rename(columns={'MI':'Similarity'}, inplace=True)
 
 df = pd.concat([df_cc, df_gc, df_mi], sort=False)
 
-df = df.loc[df['acquisition'].str.contains('bold')]
+df = df.loc[df['acquisition'].str.contains('cbv')]
 df = df[df['Processing']!='Unprocessed']
 n_cols = len(df['Similarity Metric'].unique())
 
