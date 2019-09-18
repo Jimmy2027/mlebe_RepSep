@@ -16,7 +16,7 @@ cd .gentoo
 
 ### Manual Data Download (only if automated Gentoo dependency management is unavailable)
 
-While other dependencies will very likely be available from your distribution's own package manager, the data package of this publication is likely not.
+While other dependencies will very likely be available from your distribution's own package manager, the data package of this publication is probably not.
 You can manually install it via the following commands:
 
 ```
