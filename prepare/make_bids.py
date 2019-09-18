@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import os
 from samri.pipelines.reposit import bru2bids
@@ -21,8 +22,18 @@ bru2bids(data_dir,
 	)
 
 # Add irregularity metadata
-subjects = [i[4:] for i in os.listdir('{}/irsabi/bids'.format(scratch_dir)) if i.startswith('sub')]
-subjects = [animal_id(db_path, 'ETH/AIC', i) for i in subjects]
+subjects_ldb = [i[4:] for i in os.listdir('{}/irsabi/bids'.format(scratch_dir)) if i.startswith('sub')]
+subjects = [animal_id(db_path, 'ETH/AIC', i) for i in subjects_ldb]
+
+subjects_info = parameterized(db_path, 'animals info', animal_filter=subjects)
+convert_column_names = {
+	'AnimalExternalIdentifier_identifier':'subject',
+	'Animal_birth_date': 'birth_date',
+	'Animal_sex': 'sex',
+	}
+subjects_info = subjects_info.loc[subjects_info['AnimalExternalIdentifier_database']=='ETH/AIC', convert_column_names.keys()]
+subjects_info = subjects_info.rename(columns=convert_column_names)
+subjects_info['age [wk]'] = ''
 
 irregularities = parameterized(db_path,'animals measurements irregularities',animal_filter=subjects)
 
@@ -34,9 +45,18 @@ for sub_dir in os.listdir(bids_dir):
 		if os.path.isfile(sessions_file):
 			sessions = pd.read_csv(sessions_file, sep='\t')
 			sessions['irregularities']=''
+			first_session_date = sessions['acq_time'].min()
+			first_session_date = datetime.strptime(first_session_date,'%Y-%m-%dT%H:%M:%S')
+			age = first_session_date - subjects_info.loc[subjects_info['subject']==sub_dir[4:],'birth_date']
+			age = age/np.timedelta64(1, 'D')
+			age = np.round(age)
+			subjects_info.loc[subjects_info['subject']==sub_dir[4:],'age [wk]'] = age
 			for mydate in sessions['acq_time'].unique():
 				mydate_date = datetime.strptime(mydate,'%Y-%m-%dT%H:%M:%S')
 				irregularity_list = irregularities.loc[irregularities['Measurement_date']==mydate_date,'Irregularity_description'].tolist()
 				irregularity_list = '; '.join(irregularity_list)
 				sessions.loc[sessions['acq_time']==mydate,'irregularities'] = irregularity_list
 			sessions.to_csv(sessions_file, sep='\t', index=False)
+
+subjects_info = subjects_info.drop('birth_date', 1)
+subjects_info.to_csv('{}/participants.tsv'.format(bids_dir), sep='\t', index=False)
