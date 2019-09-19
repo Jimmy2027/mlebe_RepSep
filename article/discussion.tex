@@ -1,7 +1,7 @@
 \section{Discussion}
 
 The workflow and template design presented herein offer significant advantages in terms of reducing coverage overestimation, uncontrolled smoothness, and guaranteeing session-to-session consistency.
-This is most clearly highlighted by Volume Conservation (\cref{fig:vcv}), Smoothness Conservation (\cref{fig:scv}), and Variance Analysis (\cref{fig:var}), where the combined usage of the SAMRI Generic workflow and template outperforms all other combinations of the multivariate analysis.
+This is most clearly highlighted by Volume Conservation (\cref{fig:vcv}), Smoothness Conservation (\cref{fig:scv}), and Variance Analysis (\cref{fig:var}), where the combined usage of the SAMRI Generic workflow and template outperforms all other combinations of the multi-factorial analysis.
 Increased region assignment validity is also revealed in a qualitative examination of higher-level functional maps (\cref{fig:m}), where only the combination of the Generic workflow and template provides accurate coverage of the sampled volume for both BOLD and CBV fMRI data.
 i%These benefits are provided without constraining statistical power (\cref{fig:msv}) in excess of what may be expected due to smoothness conservation.
 These benefits are robust to the functional contrast (\cref{fig:vccv,fig:sccv,fig:mscv}), with the Generic workflow-template combination being less or equally susceptible to the contrast variable, when compared to the Legacy workflow-template combination.
@@ -18,7 +18,7 @@ These include increased transparency and parameterization of the workflow (which
 
 \subsection{Quality Control}
 
-A major contribution of this work is the implementation of multiple metrics providing simple, powerful and robust QC for registration performance (VCF, SCF, and Variance Analysis) and the release of a dataset \cite{irsabi_bidsdata} suitable for such multifaceted benchmarking --- including the analysis of session-wise and subject-wise variability.
+A major contribution of this work is the implementation of multiple metrics providing simple, powerful and robust QC for registration performance (VCF, SCF, MS, and Variance Analysis) and the release of a dataset \cite{irsabi_bidsdata} suitable for such multifaceted benchmarking --- including the analysis of session-wise and subject-wise variability.
 
 The VCF and SCF provide good quantitative estimates of distortion prevalence.
 The analysis comparing subject-wise and session-wise variance is an elegant avenue allowing the operator to ascertain how much a registration workflow is potentially overfitting, by differentiating between meaningful (inter-subject) and confounding (inter-session) variability.
@@ -32,11 +32,12 @@ In this particular case, optimizing for statistical power alone would give a mis
 
 We suggest that a VCF, SCF and Variance based comparison, coupled with visual inspection of a small number of omnibus statistic maps is a feasible and sufficient tool for benchmarking workflows.
 We recommend reuse of the presented data for workflow benchmarking, as they include (a) multiple sources of variation (contrast, session, subjects), (b) functional activity with broad coverage but spatially distinct features, and (c) significant distortions due to implant properties --- which are appropriate for testing workflow robustness.
-Owing to the RepSeP-compilant executable source code \cite{source}, which reproduces the statistics and figures in this document, our benchmarking data analysis (in addition to the workflow it documents) is not only fully transparent, but also reusable with further data and further workflows.
+In addition to the workflow code \cite{samri}, we openly release the re-executable source code \cite{source} for all statistics and figures in this document.
+It is thus not just the novel method, but also the benchmarking process which is fully transparent and reusable with further data.
 
 \subsection{Conclusion}
 
-we present a novel registration workflow, entitled SAMRI Generic, which offers several advantages compared to the ad hoc approaches commonly used for small animal MRI.
+We present a novel registration workflow, entitled SAMRI Generic, which offers several advantages compared to the ad hoc approaches commonly used for small animal MRI.
 In depth multivariate comparison with a thoroughly documented Legacy pipeline revealed superior performance of the SAMRI Generic workflow in terms of volume and smoothness conservation, as well as variance structure across subjects and sessions.
 The metrics introduced for registration QC are not restricted to the processing of small animal fMRI data, but can be readily expanded to other brain imaging applications.
 The optimized registration parameters of the SAMRI Generic Workflow are easily accessible in the source code and transferable to any other workflows making use of the ANTs package.
