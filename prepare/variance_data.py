@@ -92,8 +92,9 @@ def reg_cc(
 			acquisitions=['EPI','EPIlowcov'],
 			validate_for_template=path_template,
 			)
-	df = iter_measure_sim(path_template, substitutions,
+	df = iter_measure_sim(path_template,
 		template,
+		substitutions,
 		metric=metrics[0],
 		radius_or_number_of_bins=radius,
 		sampling_strategy="Regular",
@@ -104,8 +105,9 @@ def reg_cc(
 	df = df.rename(columns={'similarity': metrics[0],})
 
 	for metric in metrics[1:]:
-		_df = iter_measure_sim(path_template, substitutions,
+		_df = iter_measure_sim(path_template,
 			template,
+			substitutions,
 			metric=metric,
 			radius_or_number_of_bins=radius,
 			sampling_strategy="Regular",
