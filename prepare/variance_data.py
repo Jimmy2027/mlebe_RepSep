@@ -42,7 +42,9 @@ def bids_autofind(bids_dir,
 		match_regex = '.+/sub-(?P<sub>.+)/ses-(?P<ses>.+)/anat/.*?_(?P<task>.+).*?_acq-(?P<acquisition>.+)\.nii.gz'
 
 	path_template = path_template.format(bids_dir=bids_dir, modality=modality)
-
+	print('bids_dir: ', bids_dir)
+	print('match regex: ', match_regex)
+	print('path template: ', path_template)
 	datafind = nio.DataFinder()
 	datafind.inputs.root_paths = bids_dir
 	datafind.inputs.match_regex = match_regex
@@ -80,7 +82,7 @@ def reg_cc(
 	from samri.utilities import bids_substitution_iterator
 
 	if autofind:
-		path_template, substitutions = bids_autofind(path,"func")
+		path_template, substitutions = bids_autofind(path, "func")
 	else:
 		path_template = "{data_dir}/preprocessing/{preprocessing_dir}/sub-{subject}/ses-{session}/func/sub-{subject}_ses-{session}_acq-{acquisition}_task-{task}_cbv.nii.gz"
 		substitutions = bids_substitution_iterator(
@@ -89,7 +91,7 @@ def reg_cc(
 			["CogB","JogB"],
 			"~/ni_data/ofM.dr/",
 			"composite",
-			acquisitions=['EPI','EPIlowcov'],
+			acquisitions=['EPI', 'EPIlowcov'],
 			validate_for_template=path_template,
 			)
 	df = iter_measure_sim(path_template,
@@ -121,17 +123,17 @@ def reg_cc(
 	return df
 
 
-scratch_dir = '~/.scratch/irsabi'
+scratch_dir = '~/.scratch/mlebe'
 
 template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
 df_generic = reg_cc(path = scratch_dir + '/preprocessing/generic_collapsed/', template=template, autofind=True)
 df_generic['Processing'] = 'Generic'
 
-template = '/usr/share/mouse-brain-atlases/lambmc_200micron.nii'
-df_legacy = reg_cc(path = scratch_dir + '/preprocessing/legacy_collapsed/', template=template, autofind=True)
-df_legacy['Processing'] = 'Legacy'
+template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
+df_masked = reg_cc(path = scratch_dir + '/preprocessing/generic_masked_collapsed/', template=template, autofind=True)
+df_masked['Processing'] = 'Generic Masked'
 
-df = pd.concat([df_generic, df_legacy], sort=False)
+df = pd.concat([df_generic, df_masked], sort=False)
 df = df.rename(columns={
 	'session': 'Session',
 	'subject': 'Subject',

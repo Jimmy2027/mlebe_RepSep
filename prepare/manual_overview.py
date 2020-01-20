@@ -40,7 +40,7 @@ runs={
 	1:'cbv'
 	}
 
-data_dir='~/.scratch/irsabi'
+data_dir='~/.scratch/mlebe'
 cmap = plt.get_cmap('tab20').colors
 
 def func_contour_slices(substitution,file_path,data_dir,key,i,spacing):

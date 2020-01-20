@@ -51,7 +51,7 @@ def acqname(inp_entry):
 	else:
 		return 'cbv'
 
-scratch_dir = '~/.scratch/irsabi'
+scratch_dir = '~/.scratch/mlebe'
 
 df_bids = bids_autograb(scratch_dir + '/bids_collapsed/')
 df_bids['Processing'] = 'Unprocessed'

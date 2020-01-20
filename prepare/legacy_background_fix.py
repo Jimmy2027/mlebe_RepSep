@@ -5,7 +5,7 @@ import os
 from joblib import Parallel, delayed
 from samri.pipelines.extra_functions import reset_background
 
-scratch_dir = '~/.scratch/irsabi'
+scratch_dir = '~/.scratch/mlebe'
 
 legacy = os.walk(os.path.expanduser('{}/preprocessing/legacy'.format(scratch_dir)))
 legacy_dsurqec = os.walk(os.path.expanduser('{}/preprocessing/legacy_dsurqec'.format(scratch_dir)))

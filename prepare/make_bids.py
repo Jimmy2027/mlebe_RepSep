@@ -8,7 +8,7 @@ from datetime import datetime
 db_path = '~/syncdata/meta.db'
 data_dir = '/usr/share/irsabi_data/'
 scratch_dir = os.path.expanduser('~/.scratch')
-base_dir = '{}/irsabi'.format(scratch_dir)
+base_dir = '{}/mlebe'.format(scratch_dir)
 bru2bids(data_dir,
 	inflated_size=False,
 	functional_match={
@@ -22,7 +22,7 @@ bru2bids(data_dir,
 	)
 
 # Add irregularity metadata
-subjects_ldb = [i[4:] for i in os.listdir('{}/irsabi/bids'.format(scratch_dir)) if i.startswith('sub')]
+subjects_ldb = [i[4:] for i in os.listdir('{}/mlebe/bids'.format(scratch_dir)) if i.startswith('sub')]
 subjects = [animal_id(db_path, 'ETH/AIC', i) for i in subjects_ldb]
 
 subjects_info = parameterized(db_path, 'animals info', animal_filter=subjects)

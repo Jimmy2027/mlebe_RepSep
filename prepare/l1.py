@@ -1,7 +1,7 @@
 from os import path
 from samri.pipelines import glm
 
-scratch_dir = '~/.scratch/irsabi'
+scratch_dir = '~/.scratch/mlebe'
 
 preprocess_base = '{}/preprocessing/'.format(scratch_dir)
 

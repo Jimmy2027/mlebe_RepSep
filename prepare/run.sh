@@ -8,10 +8,10 @@ if [ ! -d ~/.scratch ]; then
 	exit 1
 fi
 
-if [ ! -d ~/.scratch/irsabi/bids ]; then
+if [ ! -d ~/.scratch/mlebe/bids ]; then
 	if [ -d '/usr/share/irsabi_bidsdata' ]; then
-		[ -d ~/.scratch/irsabi ] || mkdir ~/.scratch/irsabi
-		ln -s '/usr/share/irsabi_bidsdata' ~/.scratch/irsabi/bids
+		[ -d ~/.scratch/mlebe ] || mkdir ~/.scratch/mlebe
+		ln -s '/usr/share/irsabi_bidsdata' ~/.scratch/mlebe/bids
 	else
 		echo "No IRSABI BIDS data distribution found, processing from scanner IRSABI data:"
 		python make_bids.py
@@ -23,16 +23,16 @@ python collapse.py || exit 1
 python volume_data.py || exit 1
 python variance_data.py || exit 1
 python smoothness_data.py || exit 1
-python legacy_background_fix.py || exit 1
+#python legacy_background_fix.py || exit 1
 python l1.py || exit 1
 python functional_data.py || exit 1
 python l2.py || exit 1
 python manual_overview.py || exit 1
 mkdir -p ../data/manual_overview/generic
-cp ~/.scratch/irsabi/manual_overview/generic/coherence_4008_cbv.pdf ../data/manual_overview/generic/ || exit 1
-cp ~/.scratch/irsabi/manual_overview/generic/4008_ofMcF1_T2w.pdf ../data/manual_overview/generic/ || exit 1
-cp ~/.scratch/irsabi/manual_overview/generic/4008_ofMcF1_cbv.pdf ../data/manual_overview/generic/ || exit 1
+cp ~/.scratch/mlebe/manual_overview/generic/coherence_4008_cbv.pdf ../data/manual_overview/generic/ || exit 1
+cp ~/.scratch/mlebe/manual_overview/generic/4008_ofMcF1_T2w.pdf ../data/manual_overview/generic/ || exit 1
+cp ~/.scratch/mlebe/manual_overview/generic/4008_ofMcF1_cbv.pdf ../data/manual_overview/generic/ || exit 1
 mkdir -p ../data/manual_overview/legacy_dsurqec
-cp ~/.scratch/irsabi/manual_overview/legacy_dsurqec/4008_ofMcF1_cbv.pdf ../data/manual_overview/legacy_dsurqec/ || exit 1
+cp ~/.scratch/mlebe/manual_overview/legacy_dsurqec/4008_ofMcF1_cbv.pdf ../data/manual_overview/legacy_dsurqec/ || exit 1
 mkdir -p ../data/manual_overview/legacy
-cp ~/.scratch/irsabi/manual_overview/legacy/4008_ofMcF1_cbv.pdf ../data/manual_overview/legacy/ || exit 1
+cp ~/.scratch/mlebe/manual_overview/legacy/4008_ofMcF1_cbv.pdf ../data/manual_overview/legacy/ || exit 1
