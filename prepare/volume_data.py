@@ -34,10 +34,10 @@ generic_masked_df = generic_masked_df.loc[~generic_masked_df['path'].str.endswit
 generic_masked_df = generic_masked_df.loc[generic_masked_df['modality'].isin(['bold','cbv'])]
 generic_masked_df['uID'] = generic_masked_df['subject']+'_'+generic_masked_df['session']+'_'+generic_masked_df['modality']
 
-generic_masked_df = bids_autograb('{}/preprocessing/generic_masked_collapsed'.format(scratch_dir))
-generic_masked_df = generic_masked_df.loc[~generic_masked_df['path'].str.endswith('.json')]
-generic_masked_df = generic_masked_df.loc[generic_masked_df['modality'].isin(['bold','cbv'])]
-generic_masked_df['uID'] = generic_masked_df['subject']+'_'+generic_masked_df['session']+'_'+generic_masked_df['modality']
+# generic_masked_df = bids_autograb('{}/preprocessing/generic_masked_collapsed'.format(scratch_dir))
+# generic_masked_df = generic_masked_df.loc[~generic_masked_df['path'].str.endswith('.json')]
+# generic_masked_df = generic_masked_df.loc[generic_masked_df['modality'].isin(['bold','cbv'])]
+# generic_masked_df['uID'] = generic_masked_df['subject']+'_'+generic_masked_df['session']+'_'+generic_masked_df['modality']
 
 # legacy_df = bids_autograb('{}/preprocessing/legacy_collapsed'.format(scratch_dir))
 # legacy_df = legacy_df.loc[~legacy_df['path'].str.endswith('.json')]
@@ -60,9 +60,9 @@ generic_masked_df['Processing'] = 'Generic Masked'
 # legacy_df['Processing'] = 'Legacy'
 # legacy_dsurqec_df['Processing'] = 'Legacy'
 
-base_df['Template'] = 'Unprocessed'
-generic_df['Template'] = 'Generic'
-generic_masked_df['Template'] = 'Generic Masked'
+# base_df['Template'] = 'Unprocessed'
+# generic_df['Template'] = 'Generic'
+# generic_masked_df['Template'] = 'Generic Masked'
 # legacy_df['Template'] = 'Legacy'
 # legacy_dsurqec_df['Template'] = 'Generic'
 
@@ -97,13 +97,13 @@ df = df.append(df_)
 # df_ = df_threshold_volume(legacy_df,
 # 	threshold='Threshold',
 # 	)
-df_['Thresholded Volume'] = df_['Thresholded Volume']/1000.
-df = df.append(df_)
+# df_['Thresholded Volume'] = df_['Thresholded Volume']/1000.
+# df = df.append(df_)
 # df_ = df_threshold_volume(legacy_dsurqec_df,
 # 	threshold='Threshold',
 # 	)
-df_['Thresholded Volume'] = df_['Thresholded Volume']/1000.
-df = df.append(df_)
+# df_['Thresholded Volume'] = df_['Thresholded Volume']/1000.
+# df = df.append(df_)
 
 # Ar a voxel size of 0.2mm isotropic we are only sensitive to about 0.008mm^3
 df = df.round({'Volume':3,'Thresholded Volume':3})
@@ -111,17 +111,14 @@ df = df.round({'Volume':3,'Thresholded Volume':3})
 # Calculate Volume Conservation Factor
 df['Volume Conservation Factor']=-1
 uids = df['uID'].unique()
-templates = [i for i in df['Template'].unique() if i != 'Unprocessed']
+# templates = [i for i in df['Template'].unique() if i != 'Unprocessed']
 processings = [i for i in df['Processing'].unique() if i != 'Unprocessed']
 
-for uid, template, processing in list(product(uids,templates,processings)):
+for uid, processing in list(product(uids,processings)):
 	reference = df.loc[(df['uID']==uid) & (df['Processing']=='Unprocessed'), 'Thresholded Volume'].item()
-	print(uid)
-	print(template)
-	print(processing)
-	print(df.loc[(df['uID']==uid) & (df['Processing']==processing) & (df['Template']==template), 'Thresholded Volume'])
-	volume = df.loc[(df['uID']==uid) & (df['Processing']==processing) & (df['Template']==template), 'Thresholded Volume'].item()
-	df.loc[(df['uID']==uid) & (df['Processing']==processing) & (df['Template']==template), 'Volume Conservation Factor'] = volume/reference
+
+	volume = df.loc[(df['uID']==uid) & (df['Processing']==processing), 'Thresholded Volume'].item()
+	df.loc[(df['uID']==uid) & (df['Processing']==processing), 'Volume Conservation Factor'] = volume/reference
 
 # Ready Strings for Printing
 df['modality'] = df['modality'].str.upper()
