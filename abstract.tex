@@ -1,8 +1,8 @@
-The reliability of scientific results critically depends on reproducible and transparent data processing.
-Cross-subject and cross-study comparability of imaging data in general, and magnetic resonance imaging (MRI) data in particular, is contingent on the quality of registration to a standard reference space.
-In small animal MRI this is not adequately provided by currently used processing workflows, which utilize high-level scripts optimized for human data, and adapt animal data to fit the scripts, rather than vice-versa.
-In this fully reproducible article we showcase a generic workflow optimized for the mouse brain, alongside a standard reference space suited to harmonize data between analysis and operation.
-We present four separate metrics for automated quality control (QC), and a visualization method to aid operator inspection.
-Benchmarking this workflow against common legacy practices reveals that it performs more consistently, better preserves variance across subjects while minimizing variance across sessions, and improves both volume and smoothness conservation RMSE approximately
-\py{pytex_printonly('scripts/abstract_rmser.py')}.
-We propose this open source workflow and the QC metrics as a new standard for small animal MRI registration, ensuring workflow robustness, data comparability, and region assignment validity, important criteria for the comparability of scientific results across experiments and centers.
+%%briefly explain why
+%%  - extraction ROI 
+%%  - registration into a standard reference space
+As part of the analysis of high-field mouse MRI data, relevant brain tissue needs to be selected via a mask.
+For this process to be performed automatically, brain voxels need to be classified based both on their signal intensity and position in the image.
+Nowadays, deep neural networks are the state-of-the-art methods for tissue segmentation in biomedical imaging, and thus constitute a promising method for preclinical neuroscience.
+%% outperforms current methods is a pretty high bar. We haven't really compared it to e.g. BET and other heuristic human-MRI-derived classifiers. You can still make the case that it is better, but that's a case you need to make on theoretical grounds unless you have data for the comparison.
+We present a deep learning enabled framework for segmentation of brain tissue in functional and structural MR images, \textit{that outperforms \textbf{current methods}, requiring only a fraction of the processing time needed by them}. \todo{not true}

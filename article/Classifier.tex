@@ -1,0 +1,94 @@
+\section{The Classifier}
+\subsection{Model}
+As the architecture of the classifier, the U-Net from Ronneberger et al \cite{ronneberger_u-net:_2015} was chosen based on its high performance in the field of biomedical image segmentation.
+This is a convolutional neural network that consists of a contracting path that captures context in addition to a symmetric expanding path that enables precise localisation.
+Localisation in this context means that a class label is assigned to each pixel.
+We used the U-Net implementation from zhixuhao \cite{zhixuhao_zhixuhao/unet_2020}, written in Keras.
+Keras is a high-level neural networks API, written in Python and capable of running on top of TensorFlow, CNTK, or Theano.
+It allows for a easily readable code and makes it thus easier to reproduce.
+
+The implementation of the U-Net from zhixuhao has two drop-out layers in addition to the original one.
+A drop-out layer randomly sets a fraction of input units from the layer to 0 at each update during training time.
+The set fraction rate is 0.5.
+It is known that dropout helps prevent overfitting and greatly improves the performance of deep learning models \cite{srivastava_dropout:_nodate}.
+
+Three losses were tested for the training of the model, namely the Dice-loss, the binary-cross-entropy loss and the sum of both.
+
+The Dice-loss is computed from the Dice score. It calculates the similarity of two binary samples X and Y with
+$$D_{coef} = \frac{2|X\cap Y|}{|X|+|Y|}$$
+It is a quantity ranging from 0 to 1 that is to be maximised.
+The loss is then calculated with $1-D_{coef}$.
+Because the Dice loss is not differentiable, small changes need to be made.
+In our case, the two samples to be compared are normalised, grey valued images  and are thus not binary but have values between 0 and 1. 
+Additionally, instead of using the logical operation \textit{and}, element wise products are used to approximate the non-differentiable intersection operation.
+To avoid a division by zero, $+1$ is added on the numerator and denominator.
+
+Because many more pixels in the masks are 0 than 1, there is a class imbalance problem.
+It is a problem, because in this case a false positive gives a much higher loss than a false negative.
+For example, predicting only black would give an acceptable loss, while predicting only white pixels would not.
+Using the Dice coefficient as a loss function for training should make it invariant to this class imbalance problem as stated by Fausto Milletari et al. in \cite{milletari_v-net:_2016}.
+
+The binary cross-entropy loss, also called Log loss, is defined by:
+$$H_p (q) = -\frac{1}{N} \sum ^N _{i=1} y_i \cdot log(p(y_i))+(1-y_i) \cdot log(1-p(y_i))$$
+For pixel values of 0 and 1, it adds $log(p(y))$ for each white pixel (y=1) and $log(1-p(y))$ for every black pixel (y=0) to the loss.
+
+We quickly realised that the Dice-loss gives the best results for our problem and therefore used it to train the model. \todo{compare results}
+
+\subsection{Data Set}
+The data set consists of 3D MR images taken from an aggregation of three studies; irsabi , opfvta \cite{ioanas_whole-brain_nodate}, drlfom \cite{ioanas_effects_nodate} and other unpublished data, acquired with similar parameters. \todo{cite} 
+
+The images are transformed into a standard space with one defined mask via SAMRI \cite{noauthor_ibt-fmi/samri_2019} and are thus defined in the same affine space.
+SAMRI is a data analysis package of the ETH/UZH Institute for Biomedical Engineering.
+It is equipped with an optimized registration workflow and standard geometric space for small animal brain imaging \cite{ioanas_optimized_2019}.
+
+Because of variance in mouse brain anatomy and in the experiment setup, some of the transformed data do not overlap perfectly with the reference template.
+To filter these images out, most of the incongruent slices were removed manually from the data set.
+
+For the registration of the images, a padding was needed to make the originally not affine space affine. 
+Due to this, the 3D volumes present many zero-valued slices, some of them overlapping with the mask.\todo{show example}
+\begin{sansmath}
+\py{pytex_subfigs(
+        [
+                {'script':'scripts/vc_violin.py', 'label':'vcv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+                        'options_pre_caption':'\\vspace{-1.5em}',
+                        'options_post':'\\vspace{1em}',
+                        'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
+                        ,}
+                ],
+        caption='\\textbf{The SAMRI Generic workflow and template optimally and reliably conserve volume and smoothness --- unlike the Legacy workflow and template.}
+        Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.
+        ',
+        label='fig:vc',
+        )}
+\end{sansmath}
+Since it is not wanted for the model to predict a mask on black slices, the mask is set to zero where the image is as well.
+Because some pixels representing the brain tissue are zero-valued, holes result from this operation.
+To patch these, the function binary\_fill\_holes from scipy.ndimage.morphology \cite{noauthor_multi-dimensional_nodate} is used.
+
+In the coronal view, each slice of the transformed data is originally of shape (63, 48), matching the reference space resolution of \SI{200}{\micro\metre}.
+It is then reshaped into (64, 64) by adding a zero padding to the border.
+
+Finally, the images are normalised by first clipping them from the minimum to the \nth{99} percentile of the data in order to remove outliers and then divided by the maximum.
+
+\subsection{Data Augmentation} \label{Data Augmentation}
+
+Because of diverse settings in the experiment setup, including animal manipulations causing artifacts, MR image quality can differ substantially between labs and even individual study populations.
+To account for these variations, we apply an extensive set of transformations to our data.
+This includes rotations of up to 90$^{\circ}$, a width and height shift range of 30 pixels, a shear range of 5 pixels, zoom range of 0.2 and horizontal as well as vertical flips.
+
+This not only increases the data set size but also makes it more representative of the general data distribution of Mice brain MR images and results in a model with a better generalisation capability.
+
+Many more sophisticated methods have been tested, but it has been shown that one of the more successful data augmentation strategies is the simple transformations mentioned above \cite{perez_effectiveness_2017}.
+
+
+\subsection{Training}
+The model was trained slice wise, with the coronal view and 600 as the maximum number of epochs.
+The coronal view was chosen over the axial one, because the shapes of the masks are much simpler in the coronal view and thus easier to learn for the network.
+Additionally the coronal view has the advantage of higher resolution as the MR images were recorded coronally.
+
+Because of the extensive transformations on the images (see \cref{Data Augmentation}), the augmented data presents much variation.
+To alleviate the learning process of the model, we have first trained it on the data without augmentation and then on the augmented data.
+This has been shown to give better results: \todo{compare results}
+
+To improve the learning process of the network, two callbacks from Keras were used \cite{noauthor_callbacks_nodate}. "ReduceLROnPlateau" reduces the learning rate when the validation loss has stopped improving and "EarlyStopping" stops the training when the validation loss has stopped improving for a number of epochs.
+The latter reduces computation time and prevents overfitting.

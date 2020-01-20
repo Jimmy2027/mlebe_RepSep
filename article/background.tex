@@ -1,57 +1,24 @@
 \section{Background}
-\label{sec:bg}
+In order to make meaningful comparisons across subjects inside a study, it is imperative that the images lie in a standard reference frame.
+Because of positioning imprecision and anatomical animal variations, this is not the case for the original MR acquired images.
+To solve this issue, the images need to be projected into the reference frame via registration \cite{maintz_overview_nodate, sotiras_deformable_2013}. 
+Intensities outside the brain region of a mouse MR image present high variations and bias the registration process.
+As a remedy, it would be useful to extract the region of interest and perform the registration on it.
+For this purpose, we propose a machine learning enabled brain extraction in an additional node to the workflow presented by Ioanas et al. \cite{ioanas_optimized_2019}.
+The additional node creates a mask of the brain region with segmentation using a classifier and masks the image such that only the region of interest remains.
+\todo{registration on masked image is much better: show results}
 
-Correspondence of brain areas across individuals is a prerequisite for making generalizable statements regarding brain function and organization.
-This is achieved by spatial transformation of brain maps in a study to a population or standard reference template.
-This process, called registration, is an integral constituent of any neuroimaging workflow attempting to produce results which are both spatially resolved and meaningful at the population level.
 
-The computations required for registration are commonly performed at the very onset of the preprocessing workflow,
-though the actual image manipulation may only take place much later, once inter-subject comparison becomes needed.
-% [[[paper which does this and says that it minimizes interpolation]]].
-As a consequence of this peripheral positioning in the preprocessing sequence, and of its general independence from experimental designs and hypotheses, registration is often relegated to default values and exempt from rigorous design efforts and QC.
+\subsection{Convolutional Neural Networks} \label{sec:Convolutional Neural Networks}
+In recent years it has been shown that convolutional neural network give the best results for semantic image segmentation in terms of precision and flexibility \cite{geng_survey_2018} \cite{ronneberger_u-net:_2015}.
+Training a convolutional neural network into a classifier is a supervised method, meaning that the model needs to learn its parameters based on observations of data.
 
-Registration in human brain imaging benefits from high-level functions (e.g. \textcolor{mg}{\texttt{flirt}} and  \textcolor{mg}{\texttt{fnirt}} from the FSL package\cite{fsl}, or \textcolor{mg}{\texttt{antsIntroduction.sh}} from the ANTs package\cite{ants}), optimized for the size and spatial features of the human brain.
-The availability and widespread use of such functions mitigate issues which would otherwise arise from a lack of QC.
-In mouse brain imaging, however, registration is frequently performed using the selfsame high-level functions from human brain imaging --- rendered usable for mouse brain data by adjusting the data to fit the priors and optimized parameters of the functions, rather than vice-versa.
+The training data set of a classifier is as important as the architecture of the model itself.
+To improve general-purpose application, training examples need to be drawn from a usually unknown probability distribution, that is expected to be representative of the space of occurrences.
+We define the space of occurrences as the space of which the data of interest is drawn from.
+In our case this consists of all the different mouse brain MRI data sets coming from multiple experiments, with their corresponding labels. 
+Ideally experiment setups are uniform and the resulting data does not differ much, but small variations in the experiment setup and animal size are unavoidable.
+Based on an approximation of the occurrence space, the network has to build a general model that enables it to extrapolate and produce sufficiently accurate predictions in new cases.
+Manually creating annotations as required to train a deep-learning classifier for high-resolution data is often infeasible, as it requires manual expert segmentation of vast amounts of slices.
 
-This general approach compromises data veracity and limits the degree to which processing can be optimized for mouse brain applications.
-As such, it represents a notable hurdle for the methodological improvement of mouse brain imaging.
-
-Below, we explicitly describe current practices, in an effort to not only propose better solutions, but do so in a falsifiable manner which provides adequate detail for both the novel and the legacy methods.
-
-\subsection{Manipulations}
-The foremost data manipulation procedure in present-day mouse MRI is the adjustment of voxel dimensions.
-These dimensions are represented in the Neuroimaging Informatics Technology Initiative format (NIfTI) header \cite{nifti} by affine transformation parameters, which map data matrix cordinates to geometrically meaningful spatial coordinates.
-Manipulations of the affine parameters are performed in order to make the data represent volumes corresponding to what human-optimized brain extraction, bias correction, and registration interfaces expect (rather than the physiological mouse brain dimensions).
-Commonly, this manipulation constitutes a 10-fold increase in each spatial dimension.
-
-In order to produce acceptable results from brain extraction based on human priors, it may be necessary to additionally adjust the data matrix content itself.
-This may involve applying an ad-hoc intensity-based percentile threshold to clear non-brain or anterior/posterior brain tissue and leave a more spherical brain for the human masking functions to operate on.
-While conceptually superior solutions adapting parameters and priors to animal data are available \cite{rbet,Oguz2014} and might remove the need for this step of data adaptation, rudimentary solutions remain popular.
-Both these function adaptations for animal data and the animal data matrix content adaptations for use with human brain extraction functions are, however, known to completely or partially remove the olfactory bulbs.
-For this reason, the choice is sometimes made to instead simply forego brain extraction.
-
-Often, the orientation of the scan is seen as problematic, and consequently deleted.
-This consists in resetting the S-Form affine from the NIfTI header to zeroes, and is intended to mitigate a data orientation produced by the scanner which is incorrect with respect to the target template.
-While it is true that the scanner affine space reported for mouse data may be nonstandard (the confusion is two-fold: mice lie prone with the coronal plane progressing axially whereas higher primates lie supine with the horizontal plane progressing axially), the affine spaces of mouse brain templates may be nonstandard as well.
-A related manipulation is dimension swapping, which changes the order of the NIfTI data matrix dimensions rather than the affine metadata.
-Occasionally, correct or automatically redressable affine parameters are thus deleted and data is reordered beyond easy recovery, in order to correspond to a malformed template.
-
-\subsection{Templates}
-As the above demonstrates, the template is a key component of a registration workflow.
-Templates used for mouse brain MRI registration are heterogeneous and include histological, as well as ex vivo MRI templates, scanned either inside the intact skull or after physical brain extraction.
-
-Histological templates benefit from high spatial resolution and access to molecular information in the same coordinate space.
-Such templates are not produced in volumetric sampling analogous to MRI, and are often not assigned a meaningful affine transformation after conversion to NIfTI.
-Histological contrast may only poorly correlate with any MR contrast, making registration less reliable, or necessitating the use of similarity metrics which impose additional restrictions.
-Not least of all, histological templates may be severely deformed and lack distal parts of the brain (such as the olfactory bulbs) due to the extraction and sampling process.
-Data registered to such templates may be particularly difficult to use for navigation in the intact mouse brain, e.g. during stereotactic surgery.
-
-Ex vivo templates based on extracted brains share most of the deformation issues present in histological templates;
-they are, however, available in MR contrasts, making registration far easier.
-Ex vivo templates based on intact mouse heads provide both MR contrast and brains largely free of deformation and supporting whole brain registration.
-Independently of brain extraction, MR templates need to have any histological or molecular information relevant for downstream analysis first registered to them.
-
-\subsection{Challenges}
-The foremost challenges in mouse MRI registration consist in eliminating data-degrading workarounds, reducing reliance on high-level interfaces with inappropriate optimizations, and reducing the number of standard space templates.
-Information loss (e.g. pertaining to both the affine and the data matrix) during preprocessing is a particularly besetting issue, since the loss of data at the onset of a neouroimaging workflow will persist throughout all downstream steps and preclude numerous modes of analysis (\cref{fig:mdb}).
+While our purpose was to create a workflow that generates better masks than the ones used for registration\todo{this is wrong, cite where the mask comes from}, we showed that the latter could be used as training data for the deep-learning model, by applying small changes to them.
