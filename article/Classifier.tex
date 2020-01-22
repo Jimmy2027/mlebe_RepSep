@@ -34,6 +34,21 @@ For pixel values of 0 and 1, it adds $log(p(y))$ for each white pixel (y=1) and 
 
 We quickly realised that the Dice-loss gives the best results for our problem and therefore used it to train the model. \todo{compare results}
 
+\begin{sansmath}
+\sessionpy{pytex_fig(
+        'scripts/prepro_example.py',
+        conf='article/main.conf',
+        caption='
+                Distribution densities of t-statistics, showing the regions were VTA structural projections exceed functional activation most strongly.
+                \\vspace{-1em}
+                ',
+        label='dffn',
+        options_pre='\\centering\n',
+        environment='figure', %can do 'figure*' for figure on both columns
+        figure_format='pdf',
+        )}
+\end{sansmath}
+
 \subsection{Data Set}
 The data set consists of 3D MR images taken from an aggregation of three studies; irsabi , opfvta \cite{ioanas_whole-brain_nodate}, drlfom \cite{ioanas_effects_nodate} and other unpublished data, acquired with similar parameters. \todo{cite} 
 

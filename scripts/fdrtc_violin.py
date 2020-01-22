@@ -16,17 +16,17 @@ df = df.loc[((df['Processing']=='Legacy') & (df['Template']=='Legacy')) | ((df['
 
 df.loc[df['Processing']=='Unprocessed', 'Template'] = ''
 ax = violinplot(
-	x="Processing",
-	y='Mean DR t',
-	data=df,
-	hue="Contrast",
-	saturation=1,
-	split=True,
-	inner='quartile',
-	palette=palette,
-	scale='area',
-	dodge=False,
-	inner_linewidth=1.0,
-	linewidth=mpl.rcParams['grid.linewidth'],
-	linecolor='w',
-	)
+x = "Processing",
+y = 'Mean DR t',
+data = df,
+hue = "Contrast",
+saturation = 1,
+split = True,
+inner = 'quartile',
+palette = palette,
+scale = 'area',
+dodge = False,
+inner_linewidth = 1.0,
+linewidth = mpl.rcParams['grid.linewidth'],
+linecolor = 'w',
+)

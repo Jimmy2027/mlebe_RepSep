@@ -11,9 +11,10 @@ import nipype.interfaces.io as nio
 
 masks = {
 	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
-	'generic_ambmc':'/usr/share/mouse-brain-atlases/ambmc_200micron_mask.nii',
-	'legacy':'/usr/share/mouse-brain-atlases/lambmc_200micron_mask.nii',
-	'legacy_dsurqec':'/usr/share/mouse-brain-atlases/ldsurqec_200micron_mask.nii',
+	'generic_masked':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
+	# 'generic_ambmc':'/usr/share/mouse-brain-atlases/ambmc_200micron_mask.nii',
+	# 'legacy':'/usr/share/mouse-brain-atlases/lambmc_200micron_mask.nii',
+	# 'legacy_dsurqec':'/usr/share/mouse-brain-atlases/ldsurqec_200micron_mask.nii',
 	}
 
 def bids_autograb(bids_dir):
@@ -55,25 +56,27 @@ scratch_dir = '~/.scratch/mlebe'
 
 df_bids = bids_autograb(scratch_dir + '/bids_collapsed/')
 df_bids['Processing'] = 'Unprocessed'
-df_bids['Template'] = 'Unprocessed'
+# df_bids['Template'] = 'Unprocessed'
 
 df_generic = bids_autograb(scratch_dir + '/preprocessing/generic_collapsed/')
 df_generic['Processing'] = 'Generic'
-df_generic['Template'] = 'Generic'
+# df_generic['Template'] = 'Generic'
 
-df_generic_legacy = bids_autograb(scratch_dir + '/preprocessing/generic_ambmc_collapsed/')
-df_generic_legacy['Processing'] = 'Generic'
-df_generic_legacy['Template'] = 'Legacy'
+df_generic_masked = bids_autograb(scratch_dir + '/preprocessing/generic_masked_collapsed/')
+df_generic_masked['Processing'] = 'Generic Masked'
+# df_generic_legacy['Template'] = 'LGeneric MAsked'
+# df_generic_legacy['Template'] = 'Legacy'
 
-df_legacy = bids_autograb(scratch_dir + '/preprocessing/legacy_collapsed/')
-df_legacy['Processing'] = 'Legacy'
-df_legacy['Template'] = 'Legacy'
+# df_legacy = bids_autograb(scratch_dir + '/preprocessing/legacy_collapsed/')
+# df_legacy['Processing'] = 'Legacy'
+# df_legacy['Template'] = 'Legacy'
+#
+# df_legacy_generic = bids_autograb(scratch_dir + '/preprocessing/legacy_dsurqec_collapsed/')
+# df_legacy_generic['Processing'] = 'Legacy'
+# df_legacy_generic['Template'] = 'Generic'
 
-df_legacy_generic = bids_autograb(scratch_dir + '/preprocessing/legacy_dsurqec_collapsed/')
-df_legacy_generic['Processing'] = 'Legacy'
-df_legacy_generic['Template'] = 'Generic'
-
-df = pd.concat([df_generic, df_legacy, df_generic_legacy, df_legacy_generic, df_bids])
+# df = pd.concat([df_generic, df_generic_masked, df_generic_legacy, df_legacy_generic, df_bids])
+df = pd.concat([df_generic, df_generic_masked, df_bids])
 df['Uid'] = df['subject']+'_'+df['session']+'_'+df['modality']
 df = df[df['type']=='func']
 
@@ -82,7 +85,7 @@ df['modality'] = df['modality'].str.upper()
 df['Contrast'] = df['modality']
 
 df['Smoothness'] = df['path'].apply(avg_smoothness)
-df.loc[df['Processing']=='Legacy', 'Smoothness'] = df.loc[df['Processing']=='Legacy', 'Smoothness']/10
+# df.loc[df['Processing']=='Legacy', 'Smoothness'] = df.loc[df['Processing']=='Legacy', 'Smoothness']/10
 
 df['Smoothness Conservation Factor'] = ''
 uids = df['Uid'].unique()
@@ -95,10 +98,14 @@ v = pd.read_csv(path.abspath(v_path))
 df = df.reset_index()
 df['Volume-Normalized SCF'] = 0
 for uid in df['Uid'].unique():
-	for p, t in product(['Generic', 'Legacy'],['Generic','Legacy']):
-		scf = df.loc[(df['Uid']==uid)&(df['Processing']==p)&(df['Template']==t),'Smoothness Conservation Factor'].item()
-		vcf = v.loc[(v['Uid']==uid)&(v['Processing']==p)&(v['Template']==t),'Volume Conservation Factor'].item()
-		df.loc[(df['Uid']==uid)&(df['Processing']==p)&(df['Template']==t),'Volume-Normalized SCF'] = scf/(vcf**(1./3.))
+	# for p, t in product(['Generic', 'Legacy'],['Generic','Legacy']):
+	for p, t in product(['Generic', 'Generic Masked'], ['Generic', 'Generic Masked']):
+		# scf = df.loc[(df['Uid']==uid)&(df['Processing']==p)&(df['Template']==t),'Smoothness Conservation Factor'].item()
+		# vcf = v.loc[(v['Uid']==uid)&(v['Processing']==p)&(v['Template']==t),'Volume Conservation Factor'].item()
+		# df.loc[(df['Uid']==uid)&(df['Processing']==p)&(df['Template']==t),'Volume-Normalized SCF'] = scf/(vcf**(1./3.))
+		scf = df.loc[(df['Uid']==uid)&(df['Processing']==p),'Smoothness Conservation Factor'].item()
+		vcf = v.loc[(v['Uid']==uid)&(v['Processing']==p),'Volume Conservation Factor'].item()
+		df.loc[(df['Uid']==uid)&(df['Processing']==p),'Volume-Normalized SCF'] = scf/(vcf**(1./3.))
 
 df.to_csv('../data/smoothness.csv')
 files = os.listdir('./')

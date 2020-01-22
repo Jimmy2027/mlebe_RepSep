@@ -49,7 +49,7 @@ for o in os.listdir(dir):
                             plt.imshow(np.squeeze(image), cmap='gray')
                             plt.imshow(np.squeeze(mask), alpha=0.6, cmap='Blues')
                             plt.axis('off')
-                            plt.savefig('{name}_{it}.pdf'.format(name = example ,it=slice), format='pdf')
-                            plt.close()
+                            # plt.savefig('{name}_{it}.pdf'.format(name = example ,it=slice), format='pdf')
+                            # plt.close()
 
 
