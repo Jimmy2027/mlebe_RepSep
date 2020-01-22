@@ -24,6 +24,13 @@
 \usepackage{nth}
 \usepackage{todonotes}
 
+% Single-session PythonTeX codeblocks
+\newcounter{pysessioncounter}
+\newcommand{\sessionpy}{%
+	  \edef\sessionpysession{session\arabic{pysessioncounter}}%
+	    \stepcounter{pysessioncounter}%
+	      \expandafter\py\expandafter[\sessionpysession]}
+
 %VARIABLES
 %set up a more stable buffers (the normal ones gets blanked after the titlepage is invoked)
 \makeatletter

@@ -5,13 +5,4 @@
 \BOOKMARK [2][-]{subsection.2.2}{Data Set}{section.2}% 5
 \BOOKMARK [2][-]{subsection.2.3}{Data Augmentation}{section.2}% 6
 \BOOKMARK [2][-]{subsection.2.4}{Training}{section.2}% 7
-\BOOKMARK [1][-]{section.3}{Evaluation}{}% 8
-\BOOKMARK [2][-]{subsection.3.1}{Volume Conservation}{section.3}% 9
-\BOOKMARK [2][-]{subsection.3.2}{Smoothness Conservation}{section.3}% 10
-\BOOKMARK [2][-]{subsection.3.3}{Functional Analysis}{section.3}% 11
-\BOOKMARK [2][-]{subsection.3.4}{Variance Analysis}{section.3}% 12
-\BOOKMARK [1][-]{section.4}{Discussion}{}% 13
-\BOOKMARK [2][-]{subsection.4.1}{Quality Control}{section.4}% 14
-\BOOKMARK [2][-]{subsection.4.2}{Conclusion}{section.4}% 15
-\BOOKMARK [1][-]{section.5}{Methods}{}% 16
-\BOOKMARK [1][-]{section.6}{Supplementary Materials}{}% 17
+\BOOKMARK [1][-]{section.3}{Methods}{}% 8

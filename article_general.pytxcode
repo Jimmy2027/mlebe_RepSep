@@ -294,7 +294,7 @@ def latex_figure(name, environment,
 		)
 
 =>PYTHONTEX#CC:py:end#none#none#0#code####functions.py#297#
-=>PYTHONTEX#CC:py:begin#none#none#1#code#####104#
+=>PYTHONTEX#CC:py:begin#none#none#1#code#####111#
 DOC_STYLE = 'article/main.conf'
 pytex.add_dependencies(DOC_STYLE,
 	'article/3dplot.conf',

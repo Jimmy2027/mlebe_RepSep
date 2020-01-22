@@ -1,4 +1,38 @@
 \section{The Classifier}
+\begin{sansmath}
+\py{pytex_subfigs(
+        [
+                {'script':'scripts/prepex.py', 'label':'vcv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+                        'options_pre_caption':'\\vspace{-1.5em}',
+                        'options_post':'\\vspace{1em}',
+                        'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
+                        ,},
+                {'script':'scripts/uprepex.py', 'label':'vcv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+                        'options_pre_caption':'\\vspace{-1.5em}',
+                        'options_post':'\\vspace{1em}',
+                        'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
+                        ,}
+                ],
+        caption='\\textbf{The SAMRI Generic workflow and template optimally and reliably conserve volume and smoothness --- unlike the Legacy workflow and template.}
+        Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.
+        ',
+        label='fig:vc',
+        )}
+\end{sansmath}
+%\begin{sansmath}
+%\sessionpy{pytex_fig(
+%        'scripts/prepex.py',
+%        conf='article/1col.conf',
+%        caption='
+%                Distribution densities of t-statistics, showing the regions were VTA structural projections exceed functional activation most strongly.
+%                \\vspace{-1em}
+%                ',
+%        label='dffn',
+%        options_pre='\\centering\n',
+%        environment='figure',
+%        figure_format='pdf',
+%        )}
+%\end{sansmath}
 \subsection{Model}
 As the architecture of the classifier, the U-Net from Ronneberger et al \cite{ronneberger_u-net:_2015} was chosen based on its high performance in the field of biomedical image segmentation.
 This is a convolutional neural network that consists of a contracting path that captures context in addition to a symmetric expanding path that enables precise localisation.
@@ -32,25 +66,47 @@ The binary cross-entropy loss, also called Log loss, is defined by:
 $$H_p (q) = -\frac{1}{N} \sum ^N _{i=1} y_i \cdot log(p(y_i))+(1-y_i) \cdot log(1-p(y_i))$$
 For pixel values of 0 and 1, it adds $log(p(y))$ for each white pixel (y=1) and $log(1-p(y))$ for every black pixel (y=0) to the loss.
 
-We quickly realised that the Dice-loss gives the best results for our problem and therefore used it to train the model. \todo{compare results}
+We quickly realised that the Dice-loss gives the best results for our problem and therefore used it to train the model. %\todo{compare results}
 
-\begin{sansmath}
-\sessionpy{pytex_fig(
-        'scripts/prepro_example.py',
-        conf='article/main.conf',
-        caption='
-                Distribution densities of t-statistics, showing the regions were VTA structural projections exceed functional activation most strongly.
-                \\vspace{-1em}
-                ',
-        label='dffn',
-        options_pre='\\centering\n',
-        environment='figure', %can do 'figure*' for figure on both columns
-        figure_format='pdf',
-        )}
-\end{sansmath}
+%\begin{sansmath}
+%\sessionpy{pytex_figs(
+%        'scripts/prepro_example.py',
+%        conf='article/1col.conf',
+%        caption='
+%                Distribution densities of t-statistics, showing the regions were VTA structural projections exceed functional activation most strongly.
+%                \\vspace{-1em}
+%                ',
+%        label='dffn',
+%        options_pre='\\centering\n',
+%        environment='figure',
+%        figure_format='pdf',
+%        )}
+%\end{sansmath}
+%\begin{sansmath}
+%\py{pytex_subfigs(
+%        [
+%                {'script':'scripts/prepex.py', 'label':'vcv', 'conf':'article/1col.conf',                              'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+%                        'options_pre_caption':'\\vspace{-1.5em}',
+%                        'options_post':'\\vspace{1em}',
+%                        'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
+%                        ,},
+%                {'script':'scripts/uprepex.py', 'label':'vccv','conf':'article/1col.conf',                                'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+%                        'options_pre_caption':'\\vspace{-1.5em}',
+%                        'options_post':'\\vspace{1em}',
+%                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
+%                        ,},
+%
+%                ],
+%        caption='\\textbf{The SAMRI Generic workflow and template optimally and reliably conserve volume and smoothness --- unlike the Legacy workflow and template.}
+%        Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.
+%        ',
+%        label='fig:vc',
+%        )}
+%\end{sansmath}
 
 \subsection{Data Set}
-The data set consists of 3D MR images taken from an aggregation of three studies; irsabi , opfvta \cite{ioanas_whole-brain_nodate}, drlfom \cite{ioanas_effects_nodate} and other unpublished data, acquired with similar parameters. \todo{cite} 
+The data set consists of 3D MR images taken from an aggregation of three studies; irsabi , opfvta \cite{ioanas_whole-brain_nodate}, drlfom \cite{ioanas_effects_nodate} and other unpublished data, acquired with similar parameters.
+%\todo{cite}
 
 The images are transformed into a standard space with one defined mask via SAMRI \cite{noauthor_ibt-fmi/samri_2019} and are thus defined in the same affine space.
 SAMRI is a data analysis package of the ETH/UZH Institute for Biomedical Engineering.
@@ -60,22 +116,23 @@ Because of variance in mouse brain anatomy and in the experiment setup, some of 
 To filter these images out, most of the incongruent slices were removed manually from the data set.
 
 For the registration of the images, a padding was needed to make the originally not affine space affine. 
-Due to this, the 3D volumes present many zero-valued slices, some of them overlapping with the mask.\todo{show example}
-\begin{sansmath}
-\py{pytex_subfigs(
-        [
-                {'script':'scripts/vc_violin.py', 'label':'vcv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
-                        'options_pre_caption':'\\vspace{-1.5em}',
-                        'options_post':'\\vspace{1em}',
-                        'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
-                        ,}
-                ],
-        caption='\\textbf{The SAMRI Generic workflow and template optimally and reliably conserve volume and smoothness --- unlike the Legacy workflow and template.}
-        Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.
-        ',
-        label='fig:vc',
-        )}
-\end{sansmath}
+Due to this, the 3D volumes present many zero-valued slices, some of them overlapping with the mask.
+%\todo{show example}
+%\begin{sansmath}
+%\py{pytex_subfigs(
+%        [
+%                {'script':'scripts/vc_violin.py', 'label':'vcv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+%                        'options_pre_caption':'\\vspace{-1.5em}',
+%                        'options_post':'\\vspace{1em}',
+%                        'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
+%                        ,}
+%                ],
+%        caption='\\textbf{The SAMRI Generic workflow and template optimally and reliably conserve volume and smoothness --- unlike the Legacy workflow and template.}
+%        Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.
+%        ',
+%        label='fig:vc',
+%        )}
+%\end{sansmath}
 Since it is not wanted for the model to predict a mask on black slices, the mask is set to zero where the image is as well.
 Because some pixels representing the brain tissue are zero-valued, holes result from this operation.
 To patch these, the function binary\_fill\_holes from scipy.ndimage.morphology \cite{noauthor_multi-dimensional_nodate} is used.

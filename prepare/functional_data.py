@@ -14,13 +14,14 @@ masks = {
 	}
 masks_dr = {
 	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_roi-dr.nii',
-	'generic_masked':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
+	'generic_masked':'/usr/share/mouse-brain-atlases/dsurqec_200micron_roi-dr.nii',
 	# 'legacy':'/usr/share/mouse-brain-atlases/lambmc_200micron_roi-dr.nii',
 	# 'legacy_dsurqec':'/usr/share/mouse-brain-atlases/ldsurqec_200micron_roi-dr.nii',
 	}
 
 df = pd.DataFrame([])
 for key in masks:
+
 	in_df = bids_autofind_df('{}/l1/{}/'.format(scratch_dir,key),
 		path_template='sub-{{subject}}/ses-{{session}}/'\
 			'sub-{{subject}}_ses-{{session}}_task-{{task}}_acq-{{acquisition}}_run-{{run}}_{{modality}}_pfstat.nii.gz',
@@ -39,11 +40,11 @@ for key in masks:
 	if 'generic' in key:
 		df_['Processing'] = 'Generic'
 	else:
-		df_['Processing'] = 'Legacy'
-	if key in ['generic', 'legacy_dsurqec']:
-		df_['Template'] = 'Generic'
-	elif key in ['legacy', 'generic_ambmc']:
-		df_['Template'] = 'Legacy'
+		df_['Processing'] = 'Generic Masked'
+	# if key in ['generic', 'legacy_dsurqec']:
+	# 	df_['Template'] = 'Generic'
+	# elif key in ['legacy', 'generic_ambmc']:
+	# 	df_['Template'] = 'Legacy'
 	df = df.append(df_)
 
 # Create processing and template-independent unique identifiers
@@ -76,11 +77,11 @@ for key in masks:
 	if 'generic' in key:
 		df_['Processing'] = 'Generic'
 	else:
-		df_['Processing'] = 'Legacy'
-	if key in ['generic', 'legacy_dsurqec']:
-		df_['Template'] = 'Generic'
-	elif key in ['legacy', 'generic_ambmc']:
-		df_['Template'] = 'Legacy'
+		df_['Processing'] = 'Generic Masked'
+	# if key in ['generic', 'legacy_dsurqec']:
+	# 	df_['Template'] = 'Generic'
+	# elif key in ['legacy', 'generic_ambmc']:
+	# 	df_['Template'] = 'Legacy'
 	df = df.append(df_)
 
 # Create processing and template-independent unique identifiers

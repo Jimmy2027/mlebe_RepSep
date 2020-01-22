@@ -294,7 +294,7 @@ def latex_figure(name, environment,
 		)
 
 =>PYTHONTEX#CC:py:end#none#none#0#code####functions.py#297#
-=>PYTHONTEX#CC:py:begin#none#none#1#code#####104#
+=>PYTHONTEX#CC:py:begin#none#none#1#code#####111#
 DOC_STYLE = 'article/main.conf'
 pytex.add_dependencies(DOC_STYLE,
 	'article/3dplot.conf',
@@ -302,106 +302,8 @@ pytex.add_dependencies(DOC_STYLE,
 	'lib/categorical.py',
 	'data/volume.csv'
 	)
-=>PYTHONTEX#py#default#default#0#i####Classifier.tex#77#
-pytex_subfigs(         [                 {'script':'scripts/vc_violin.py', 'label':'vcv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',                         'options_pre_caption':'\\vspace{-1.5em}',                         'options_post':'\\vspace{1em}',                         'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'                         ,}                 ],         caption='\\textbf{The SAMRI Generic workflow and template optimally and reliably conserve volume and smoothness --- unlike the Legacy workflow and template.}         Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.         ',         label='fig:vc',         )
-=>PYTHONTEX#py#default#default#1#i####evaluation.tex#49#
-pytex_subfigs(         [                 {'script':'scripts/vc_violin.py', 'label':'vcv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',                         'options_pre_caption':'\\vspace{-1.5em}',                         'options_post':'\\vspace{1em}',                         'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'                         ,},                 {'script':'scripts/vcc_violin.py', 'label':'vccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',                         'options_pre_caption':'\\vspace{-1.5em}',                         'options_post':'\\vspace{1em}',                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'                         ,},                 {'script':'scripts/scf_violin_templates.py', 'label':'scv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',                         'options_pre_caption':'\\vspace{-1.5em}\\',                         'options_post':'\\vspace{1em}',                         'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'                         ,},                 {'script':'scripts/scf_violin_contrasts.py', 'label':'sccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',                         'options_pre_caption':'\\vspace{-1.5em}\\',                         'options_post':'\\vspace{1em}',                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'                         ,},                 {'script':'scripts/ms_violin.py', 'label':'msv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',                         'options_pre_caption':'\\vspace{-1.5em}', 			'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'                         ,},                 {'script':'scripts/msc_violin.py', 'label':'mscv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',                         'options_pre_caption':'\\vspace{-1.5em}',                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'                         ,},                 ],         caption='\\textbf{The SAMRI Generic workflow and template optimally and reliably conserve volume and smoothness --- unlike the Legacy workflow and template.}         Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.         ',         label='fig:vc',         )
-=>PYTHONTEX#py#default#default#2#i####evaluation.tex#57#
-boilerplate.fstatistic('Processing', condensed=True)
-=>PYTHONTEX#py#default#default#3#i####evaluation.tex#58#
-boilerplate.fstatistic('Template', condensed=True)
-=>PYTHONTEX#py#default#default#4#i####evaluation.tex#59#
-boilerplate.fstatistic('Processing:Template', condensed=True)
-=>PYTHONTEX#py#default#default#5#i####evaluation.tex#61#
-pytex_printonly('scripts/vc_t.py')
-=>PYTHONTEX#py#default#default#6#i####evaluation.tex#63#
-pytex_printonly('scripts/vc_rmser.py')
-=>PYTHONTEX#py#default#default#7#i####evaluation.tex#66#
-boilerplate.factorci('Template[T.Legacy]')
-=>PYTHONTEX#py#default#default#8#i####evaluation.tex#68#
-boilerplate.factorci('Processing[T.Legacy]')
-=>PYTHONTEX#py#default#default#9#i####evaluation.tex#70#
-boilerplate.varianceratio(template='Legacy')
-=>PYTHONTEX#py#default#default#10#i####evaluation.tex#70#
-boilerplate.varianceratio(template='Generic')
-=>PYTHONTEX#py#default#default#11#i####evaluation.tex#73#
-boilerplate.corecomparison_factorci('Contrast[T.CBV]')
-=>PYTHONTEX#py#default#default#12#i####evaluation.tex#75#
-boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]')
-=>PYTHONTEX#py#default#default#13#i####evaluation.tex#86#
-boilerplate.fstatistic('Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')
-=>PYTHONTEX#py#default#default#14#i####evaluation.tex#87#
-boilerplate.fstatistic('Processing', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')
-=>PYTHONTEX#py#default#default#15#i####evaluation.tex#88#
-boilerplate.fstatistic('Processing:Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')
-=>PYTHONTEX#py#default#default#16#i####evaluation.tex#90#
-pytex_printonly('scripts/scf_t.py')
-=>PYTHONTEX#py#default#default#17#i####evaluation.tex#92#
-pytex_printonly('scripts/scf_rmser.py')
-=>PYTHONTEX#py#default#default#18#i####evaluation.tex#95#
-boilerplate.factorci('Template[T.Legacy]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')
-=>PYTHONTEX#py#default#default#19#i####evaluation.tex#97#
-boilerplate.factorci('Processing[T.Legacy]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')
-=>PYTHONTEX#py#default#default#20#i####evaluation.tex#99#
-boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3, template='Legacy')
-=>PYTHONTEX#py#default#default#21#i####evaluation.tex#99#
-boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', template='Generic', max_len=3)
-=>PYTHONTEX#py#default#default#22#i####evaluation.tex#102#
-boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')
-=>PYTHONTEX#py#default#default#23#i####evaluation.tex#104#
-boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')
-=>PYTHONTEX#py#default#default#24#i####evaluation.tex#116#
-boilerplate.fstatistic('Processing', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)
-=>PYTHONTEX#py#default#default#25#i####evaluation.tex#118#
-boilerplate.fstatistic('Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)
-=>PYTHONTEX#py#default#default#26#i####evaluation.tex#120#
-boilerplate.fstatistic('Processing:Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)
-=>PYTHONTEX#py#default#default#27#i####evaluation.tex#122#
-pytex_printonly('scripts/ms_t.py')
-=>PYTHONTEX#py#default#default#28#i####evaluation.tex#125#
-boilerplate.factorci('Processing[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')
-=>PYTHONTEX#py#default#default#29#i####evaluation.tex#127#
-boilerplate.factorci('Template[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')
-=>PYTHONTEX#py#default#default#30#i####evaluation.tex#129#
-boilerplate.factorci('Processing[T.Legacy]:Template[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')
-=>PYTHONTEX#py#default#default#31#i####evaluation.tex#132#
-boilerplate.varianceratio(df_path='data/functional_significance.csv', template='Legacy', dependent_variable='Mean Significance')
-=>PYTHONTEX#py#default#default#32#i####evaluation.tex#134#
-boilerplate.varianceratio(df_path='data/functional_significance.csv', template='Generic', dependent_variable='Mean Significance')
-=>PYTHONTEX#py#default#default#33#i####evaluation.tex#138#
-boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')
-=>PYTHONTEX#py#default#default#34#i####evaluation.tex#140#
-boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')
-=>PYTHONTEX#py#default#default#35#i####evaluation.tex#199#
-pytex_subfigs( 	[ 		{'script':'scripts/map_generic_cbv.py', 'label':'mggc', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}', 			'caption':'                                 Generic workflow with Generic template CBV map, showing correct slice orientation and coverage correctly bounded to the acquisition area.                                 ' 			,}, 		{'script':'scripts/map_generic_ambmc_cbv.py', 'label':'mglc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}', 			'caption':'                                 Generic workflow with Legacy template CBV map, showing incorrect slice orientation and coverage correctly bounded to the acquisition area.                                 ' 			,}, 		{'script':'scripts/map_legacy_dsurqec_cbv.py', 'label':'mlgc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}', 			'caption':'                                 Legacy workflow with Generic template CBV map, showing correct slice orientation and coverage caudally extending beyond the acquisition area.                                 ' 			,}, 		{'script':'scripts/map_legacy_cbv.py', 'label':'mllc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}', 			'caption':' 				Legacy workflow with Legacy template CBV map, showing incorrect slice orientation and coverage both caudally and rostrally extending beyond acquisition area. 				' 			,}, 		{'script':'scripts/map_generic_bold.py', 'label':'mggb', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}', 			'caption':'                                 Generic workflow with Generic template BOLD map, showing correct slice orientation and coverage correctly bounded to the acquisition area.                                 ' 			,}, 		{'script':'scripts/map_generic_ambmc_bold.py', 'label':'mglb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}', 			'caption':'                                 Generic workflow with Legacy template BOLD map, showing incorrect slice orientation and coverage correctly bounded to the acquisition area.                                 ' 			,}, 		{'script':'scripts/map_legacy_dsurqec_bold.py', 'label':'mlgb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}', 			'caption':'                                 Legacy workflow with Generic template BOLD map, showing correct slice orientation and coverage caudally extending beyond acquisition area.                                 ' 			,}, 		{'script':'scripts/map_legacy_bold.py', 'label':'mllb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}', 			'caption':' 				Legacy workflow with Legacy template BOLD map, showing incorrect slice orientation and coverage both caudally and rostrally extending beyond acquisition area. 			        '                         ,}, 		], 	caption='                 \\textbf{Legacy workflow processing leads to a problematic overflow of the statistic maps into adjacent anatomical regions, leaking beyond the acquistion area.}                 SAMRI mitigates this effect as illustrated by multiplanar depictions of second-level omnibus statistic maps separately evaluating CBV and BOLD scans, and thresholded at $\mathrm{|t|\geq2}$.                 The acquisition area is bracketed in pink, and in comparing it to statistic coverage it is important to note that the latter is always underestimated, as the omnibus statistic contrast is only defined for voxels captured in \\textit{every} evaluated scan.                 ', 	label='fig:m',)
-=>PYTHONTEX#py#default#default#36#i####evaluation.tex#212#
-pytex_fig('scripts/variance_catplot.py',         conf='article/varplot.conf',         label='var',         caption='                 \\textbf{The SAMRI Generic workflow conserves subject-wise variability and minimizes trial-to-trial variability compared to the Legacy workflow.}                 Swarmplots illustrate similarity metric scores of preprocessed images with respect to the corresponding workflow template, plotted across subjects (separated into x-axis bins) and sessions (individual points in each x-axis bin), for the CBV contrast.                 ',         multicol=True,         )
-=>PYTHONTEX#py#default#default#37#i####evaluation.tex#227#
-boilerplate.variance_test('C(Subject)','Legacy','CC', condensed=True)
-=>PYTHONTEX#py#default#default#38#i####evaluation.tex#227#
-boilerplate.variance_test('C(Session)','Legacy','CC', condensed=True)
-=>PYTHONTEX#py#default#default#39#i####evaluation.tex#228#
-boilerplate.variance_test('C(Subject)','Legacy','GC', condensed=True)
-=>PYTHONTEX#py#default#default#40#i####evaluation.tex#228#
-boilerplate.variance_test('C(Session)','Legacy','GC', condensed=True)
-=>PYTHONTEX#py#default#default#41#i####evaluation.tex#229#
-boilerplate.variance_test('C(Subject)','Legacy','MI', condensed=True)
-=>PYTHONTEX#py#default#default#42#i####evaluation.tex#229#
-boilerplate.variance_test('C(Session)','Legacy','MI', condensed=True)
-=>PYTHONTEX#py#default#default#43#i####evaluation.tex#233#
-boilerplate.variance_test('C(Subject)','Generic','CC', condensed=True)
-=>PYTHONTEX#py#default#default#44#i####evaluation.tex#233#
-boilerplate.variance_test('C(Session)','Generic','CC', condensed=True)
-=>PYTHONTEX#py#default#default#45#i####evaluation.tex#234#
-boilerplate.variance_test('C(Subject)','Generic','GC', condensed=True)
-=>PYTHONTEX#py#default#default#46#i####evaluation.tex#234#
-boilerplate.variance_test('C(Session)','Generic','GC', condensed=True)
-=>PYTHONTEX#py#default#default#47#i####evaluation.tex#235#
-boilerplate.variance_test('C(Subject)','Generic','MI', condensed=True)
-=>PYTHONTEX#py#default#default#48#i####evaluation.tex#235#
-boilerplate.variance_test('C(Session)','Generic','MI', condensed=True)
-=>PYTHONTEX#py#default#default#49#i####supplementary.tex#120#
-pytex_tab('scripts/stim_table.py',                 label='stim',                 caption='Stimulation protocol, as delivered during functional scans.                         Stimulus event spacing and parameters are constant across scans, but the exact onset time is variable in the \SI{10}{\second} magnitude range due to scanner adjustment time variability.',                 options_pre='[htp] \\scriptsize \\centering \\resizebox{\\columnwidth}{!}{',                 data='data/JogB.tsv',                 options_post='}',                 )
+=>PYTHONTEX#py#default#default#0#i####Classifier.tex#20#
+pytex_subfigs(         [                 {'script':'scripts/prepex.py', 'label':'vcv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',                         'options_pre_caption':'\\vspace{-1.5em}',                         'options_post':'\\vspace{1em}',                         'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'                         ,},                 {'script':'scripts/uprepex.py', 'label':'vcv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',                         'options_pre_caption':'\\vspace{-1.5em}',                         'options_post':'\\vspace{1em}',                         'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'                         ,}                 ],         caption='\\textbf{The SAMRI Generic workflow and template optimally and reliably conserve volume and smoothness --- unlike the Legacy workflow and template.}         Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.         ',         label='fig:vc',         )
 =>PYTHONTEX:SETTINGS#
 version=0.16
 outputdir=pythontex-files-article

@@ -93,14 +93,12 @@ yfile.close()
 x_test, x_test_affines, x_test_headers, file_names = x_test_struct['x_test'], x_test_struct['x_test_affines'], x_test_struct['x_test_headers'], x_test_struct['file_names']
 y_test, y_test_affines, y_test_headers = y_test_struct['y_test'], y_test_struct['y_test_affines'], y_test_struct['y_test_headers']
 
-print(x_test[0].shape)
-print(len(x_test))
-x_test = [x_test[0]]
-y_test = [y_test[0]]
-x_test = [i[0::12] for i in x_test]
-y_test = [i[0::12] for i in y_test]
-print(len(x_test))
-print(x_test[0].shape)
+
+x_test = [x_test[3]]
+y_test = [y_test[3]]
+x_test = [i[1::12] for i in x_test]
+y_test = [i[1::12] for i in y_test]
+
 y_pred = []   #predictions of the test set
 dice_scores_string = []
 dice_scores = []
@@ -151,10 +149,13 @@ for thr in thresholds:
         row_titles.append('thr: ' + str(thr) + '\n ' + 'Dice: ' + str(np.round(np.median(dice_temp), 3)) + '\n corr: ' + str(np.round(np.median(corr_temp),3)))
 
 utils.compute_correlation(np.concatenate(x_test), np.concatenate(y_test),np.concatenate(outputs[0]), save_dir)
-list = [x_test, y_test]
+
+list = [[x_test[0][:4]], [y_test[0][:4]]]
 for o in outputs:
-    list.append(o)
+    list.append([o[0][:4]])
 slice_titles[-1] = dice_scores_thr
+
+
 
 utils.save_datavisualisation_plt(list, save_dir, normalized=True, file_names=file_names, slice_titles=slice_titles, row_titles=row_titles)
 
