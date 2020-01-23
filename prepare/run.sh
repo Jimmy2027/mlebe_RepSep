@@ -18,9 +18,9 @@ if [ ! -d ~/.scratch/mlebe/bids ]; then
 	fi
 fi
 
-#python preprocess.py || exit 1
-#python collapse.py || exit 1
-#python volume_data.py || exit 1
+python preprocess.py || exit 1
+python collapse.py || exit 1
+python volume_data.py || exit 1
 python variance_data.py || exit 1
 python smoothness_data.py || exit 1
 #python legacy_background_fix.py || exit 1

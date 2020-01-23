@@ -112,3 +112,8 @@ def variance_test(
         anova = sm.stats.anova_lm(ols, typ=3, robust='hc3')
         tex = inline_anova(anova,  factor, 'tex', **kwargs)
         return tex
+
+def print_dice():
+	textfile = open('mlebe_figs/dice_score.txt', 'r')
+	dice_score = textfile.readline()
+	return np.round(float(dice_score), 3)

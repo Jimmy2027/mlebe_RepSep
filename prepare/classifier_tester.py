@@ -123,7 +123,9 @@ for i in y_test:
 
 temp = np.concatenate(y_pred, 0)
 dice_score = np.median(dice_scores)
-
+textfile = open(save_dir + 'dice_score.txt', 'w+')
+textfile.write(str(dice_score))
+textfile.close()
 
 thresholds = [0]
 outputs = []
@@ -159,8 +161,8 @@ slice_titles[-1] = dice_scores_thr
 
 utils.save_datavisualisation_plt(list, save_dir, normalized=True, file_names=file_names, slice_titles=slice_titles, row_titles=row_titles)
 
-dice_score = np.median(dice_scores)
-print('median Dice score: ', dice_score)
+
+
 
 
 # np.save(save_dir + 'y_pred_{}dice'.format(np.round(dice_score, 4)), y_pred)
