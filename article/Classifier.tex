@@ -49,7 +49,10 @@ It is known that dropout helps prevent overfitting and greatly improves the perf
 Three losses were tested for the training of the model, namely the Dice-loss, the binary-cross-entropy loss and the sum of both.
 
 The Dice-loss is computed from the Dice score. It calculates the similarity of two binary samples X and Y with
-$$D_{coef} = \frac{2|X\cap Y|}{|X|+|Y|}$$
+\begin{equation}\label{eqDcoef}
+D_{coef} = \frac{2|X\cap Y|}{|X|+|Y|}   
+\end{equation}
+
 It is a quantity ranging from 0 to 1 that is to be maximised.
 The loss is then calculated with $1-D_{coef}$.
 Because the Dice loss is not differentiable, small changes need to be made.
@@ -63,7 +66,10 @@ For example, predicting only black would give an acceptable loss, while predicti
 Using the Dice coefficient as a loss function for training should make it invariant to this class imbalance problem as stated by Fausto Milletari et al. in \cite{milletari_v-net:_2016}.
 
 The binary cross-entropy loss, also called Log loss, is defined by:
-$$H_p (q) = -\frac{1}{N} \sum ^N _{i=1} y_i \cdot log(p(y_i))+(1-y_i) \cdot log(1-p(y_i))$$
+\begin{equation}\label{eq_bincross}
+    H_p (q) = -\frac{1}{N} \sum ^N _{i=1} y_i \cdot log(p(y_i))+(1-y_i) \cdot log(1-p(y_i))
+\end{equation}
+
 For pixel values of 0 and 1, it adds $log(p(y))$ for each white pixel (y=1) and $log(1-p(y))$ for every black pixel (y=0) to the loss.
 
 We quickly realised that the Dice-loss gives the best results for our problem and therefore used it to train the model. %\todo{compare results}
@@ -141,6 +147,9 @@ In the coronal view, each slice of the transformed data is originally of shape (
 It is then reshaped into (64, 64) by adding a zero padding to the border.
 
 Finally, the images are normalised by first clipping them from the minimum to the \nth{99} percentile of the data in order to remove outliers and then divided by the maximum.
+
+The data set is separated into Training, Validation and Test sets such that 90\% of the total data are used for training and 10\% for testing.
+The Validation set is used for the optimisation of hyper parameters while the Test set is used as a measure of extrapolation capability.
 
 \subsection{Data Augmentation} \label{Data Augmentation}
 
