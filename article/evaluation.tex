@@ -1,5 +1,21 @@
 \section{Evaluation}
+Quality control of our classifier is difficult in the sense that it should predict a better mask than the template.
+Nevertheless, it is use-full to verify if the output is similar, which it should.
+As a similarity metric we have used the Dice-score (see \cref{eqDcoef}).
+The classifier has a dice score of (\py{boilerplate.print_dice()}) on the test set.
 
+\begin{figure}
+    \centering
+    \includegraphics{mlebe_figs/sub-6542_ses-ofMaF_acq-TurboRARE_T2w1.pdf}
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}
+
+
+
+
+
+\iffalse
 A major challenge of registration QC is that a perfect mapping from the measured image to the template is undefined.
 Similarity metrics are ill-suited for QC because they are used internally by registration functions, whose mode of operation is based on maximizing them.
 Extreme similarity score maximization is not a desired outcome, particularly if nonlinear transformations are employed, as this may result in image distortions which should be penalized in QC.
@@ -234,3 +250,4 @@ CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','CC', condense
 GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','GC', condensed=True)}),
 and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','MI', condensed=True)}).
 
+\fi
