@@ -1,0 +1,9 @@
+*.out
+*.blg
+*.aux
+*.log
+*.pdf
+*.pgf
+*.pyc
+*.pytxcode
+
