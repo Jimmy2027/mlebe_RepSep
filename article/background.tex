@@ -6,7 +6,6 @@ Intensities outside the brain region of a mouse MR image present high variations
 As a remedy, it would be useful to extract the region of interest and perform the registration on it.
 For this purpose, we propose a machine learning enabled brain extraction in an additional node to the workflow presented by Ioanas et al. \cite{ioanas_optimized_2019}.
 The additional node creates a mask of the brain region with segmentation using a classifier and masks the image such that only the region of interest remains.
-\todo{registration on masked image is much better: show results}
 
 
 \subsection{Convolutional Neural Networks} \label{sec:Convolutional Neural Networks}
@@ -19,6 +18,8 @@ We define the space of occurrences as the space of which the data of interest is
 In our case this consists of all the different mouse brain MRI data sets coming from multiple experiments, with their corresponding labels. 
 Ideally experiment setups are uniform and the resulting data does not differ much, but small variations in the experiment setup and animal size are unavoidable.
 Based on an approximation of the occurrence space, the network has to build a general model that enables it to extrapolate and produce sufficiently accurate predictions in new cases.
-Manually creating annotations as required to train a deep-learning classifier for high-resolution data is often infeasible, as it requires manual expert segmentation of vast amounts of slices.
+Manually creating annotations as required to train a deep-learning classifier for high-resolution data is often infeasible, since it requires manual expert segmentation of vast amounts of slices.
 
-While our purpose was to create a workflow that generates better masks than the ones used for registration\todo{this is wrong, cite where the mask comes from}, we showed that the latter could be used as training data for the deep-learning model, by applying small changes to them.
+Here we take as data set, images that were registered through the SAMRI workflow into a reference frame defined by Toronto Hospital for Sick Children Mouse Imaging Center %TODO:cite(15 in old bib)
+together with a template mask.
+While our purpose was to create a workflow that generates better masks than the ones used for registration, we showed that the latter could be used as training data for the deep-learning model, by applying small changes to them.

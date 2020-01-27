@@ -8,7 +8,8 @@ from lib.utils import float_to_tex, inline_anova, inline_factor
 def fstatistic(factor,
 	df_path='data/volume.csv',
 	dependent_variable='Volume Conservation Factor',
-	expression='Processing*Template',
+	# expression='Processing*Template',
+	expression='Processing',
 	exclusion_criteria={},
 	**kwargs
 	):
@@ -29,7 +30,8 @@ def fstatistic(factor,
 def factorci(factor,
 	df_path='data/volume.csv',
 	dependent_variable='Volume Conservation Factor',
-	expression='Processing*Template',
+	# expression='Processing*Template',
+	expression='Processing',
 	exclusion_criteria={},
 	**kwargs
 	):
@@ -55,11 +57,12 @@ def corecomparison_factorci(factor,
 	exclusion_criteria={},
 	**kwargs
 	):
+
 	df_path = path.abspath(df_path)
 	df = pd.read_csv(df_path)
 
 	df = df.loc[df['Processing']!='Unprocessed']
-	df = df.loc[((df['Processing']=='Legacy') & (df['Template']=='Legacy')) | ((df['Processing']=='Generic') & (df['Template']=='Generic'))]
+	df = df.loc[((df['Processing']=='Generic Masked')) | ((df['Processing']=='Generic'))]
 
 	for key in exclusion_criteria.keys():
 		df = df.loc[~df[key].isin(exclusion_criteria[key])]
@@ -73,7 +76,6 @@ def corecomparison_factorci(factor,
 
 def varianceratio(
 	df_path='data/volume.csv',
-	template=False,
 	dependent_variable='Volume Conservation Factor',
 	max_len=2,
 	**kwargs
@@ -84,13 +86,11 @@ def varianceratio(
 
 	df = df.loc[df['Processing']!='Unprocessed']
 
-	if template:
-		df = df.loc[df['Template']==template]
-	legacy = np.var(df.loc[df['Processing']=='Legacy', dependent_variable].tolist())
+	generic_masked = np.var(df.loc[df['Processing']=='Generic Masked', dependent_variable].tolist())
 	generic = np.var(df.loc[df['Processing']=='Generic', dependent_variable].tolist())
 
 
-	ratio = legacy/generic
+	ratio = generic_masked/generic
 
 	return float_to_tex(ratio, max_len, **kwargs)
 
@@ -117,3 +117,23 @@ def print_dice():
 	textfile = open('mlebe_figs/dice_score.txt', 'r')
 	dice_score = textfile.readline()
 	return np.round(float(dice_score), 3)
+
+def print_testcorr_ytrue():
+	corr_df = pd.read_csv('data/classifier/test_correlation_dataframe.csv')
+	# corr = corr_df.loc[['x_test'], ['y_test']]
+	return np.round(corr_df.values[1][1], 3)
+
+def print_testcorr_ypred():
+	corr_df = pd.read_csv('data/classifier/test_correlation_dataframe.csv')
+	# corr = corr_df.loc[['x_test'], ['y_pred']]
+	return np.round(corr_df.values[2][1], 3)
+
+def print_blcorr_ytrue():
+	corr_df = pd.read_csv('data/classifier/bl_correlation_dataframe.csv', index_col = 0)
+	corr = corr_df.loc[['x_bl'], ['y_bl']]
+	return np.round(corr.values[0][0], 3)
+
+def print_blcorr_ypred():
+	corr_df = pd.read_csv('data/classifier/bl_correlation_dataframe.csv', index_col = 0)
+	corr = corr_df.loc[['x_bl'], ['y_pred']]
+	return np.round(corr.values[0][0], 3)

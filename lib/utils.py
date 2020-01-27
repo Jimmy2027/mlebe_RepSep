@@ -121,6 +121,7 @@ def inline_factor(summary,
 	if style == "python":
 		# The `max_len` formatting does not take effect due to the `g` string formatter.
 		string_template="{{:.{}g}}, CI{{:g}}%=[{{:.{}G}}, {{:.{}G}}]".format(max_len, max_len, max_len)
+
 		inline = "{:g}, CI{:g}%=[{:2G}, {:2G}]".format(
 			float(summary.tables[1]['Coef.'][factor]),
 			percentile,
@@ -136,6 +137,7 @@ def inline_factor(summary,
 			'{{{{{{:.{}f}}}}}}'\
 			'{{{{{{:.{}f}}}}}}'
 		string_template = string_template.format(max_len,max_len,max_len)
+
 		factor_value = float(summary.tables[1]['Coef.'][factor])
 		lower_bound = float(summary.tables[1]['[0.025'][factor])
 		upper_bound = float(summary.tables[1]['0.975]'][factor])

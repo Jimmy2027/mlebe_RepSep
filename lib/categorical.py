@@ -723,6 +723,7 @@ class _ViolinPlotter(_CategoricalPlotter):
     def fit_kde(self, x, bw):
         """Estimate a KDE for a vector of data with flexible bandwidth."""
         # Allow for the use of old scipy where `bw` is fixed
+        x = x.astype(float)
         try:
             kde = stats.gaussian_kde(x, bw)
         except TypeError:

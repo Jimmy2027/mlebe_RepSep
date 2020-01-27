@@ -3,9 +3,6 @@
 TARGET="${1}"
 WHITELIST="
 	article.tex
-	article_general.tex
-	poster.tex
-	slides.tex
 	"
 
 if [[ $TARGET = "all" ]] || [[ "$TARGET" == "" ]]; then

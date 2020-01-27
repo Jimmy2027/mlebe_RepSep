@@ -11,9 +11,9 @@ volume_path = path.abspath('data/volume.csv')
 df = pd.read_csv(volume_path)
 
 df = df.loc[df['Processing']!='Unprocessed']
-df = df.loc[((df['Processing']=='Legacy') & (df['Template']=='Legacy')) | ((df['Processing']=='Generic') & (df['Template']=='Generic'))]
+df = df.loc[((df['Processing']=='Generic Masked') | (df['Processing']=='Generic'))]
 
-df.loc[df['Processing']=='Unprocessed', 'Template'] = ''
+df.loc[df['Processing']=='Unprocessed'] = ''
 ax = violinplot(
 	x='Processing',
 	y='Volume Conservation Factor',

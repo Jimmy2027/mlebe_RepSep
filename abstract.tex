@@ -1,8 +1,13 @@
 %%briefly explain why
 %%  - extraction ROI 
 %%  - registration into a standard reference space
-As part of the analysis of high-field mouse MRI data, relevant brain tissue needs to be selected via a mask.
-For this process to be performed automatically, brain voxels need to be classified based both on their signal intensity and position in the image.
-Nowadays, deep neural networks are the state-of-the-art methods for tissue segmentation in biomedical imaging, and thus constitute a promising method for preclinical neuroscience.
-%% outperforms current methods is a pretty high bar. We haven't really compared it to e.g. BET and other heuristic human-MRI-derived classifiers. You can still make the case that it is better, but that's a case you need to make on theoretical grounds unless you have data for the comparison.
-We present a deep learning enabled framework for segmentation of brain tissue in functional and structural MR images, \textit{that outperforms \textbf{current methods}, requiring only a fraction of the processing time needed by them}. \todo{not true}
+Cross-subject and cross-study comparability of imaging data in general, and magnetic resonance imaging (MRI) data in particular, is contingent on the quality of registration to a standard reference space.
+Current methods rely on full image processing, with high varying intensities outside the Region Of Interest that interfere with registration.
+Applying the processing to a masked image improves the quality of the latter.
+Here, we present a deep learning enabled framework for segmentation of brain tissue in functional and structural MR images, as an additional step in the SAMRI registration workflow.
+
+
+%As part of the analysis of high-field mouse MRI data, relevant brain tissue needs to be selected via a mask.
+%For this process to be performed automatically, brain voxels need to be classified based both on their signal intensity and position in the image.
+%Nowadays, deep neural networks are the state-of-the-art methods for tissue segmentation in biomedical imaging, and thus constitute a promising method for preclinical neuroscience.
+

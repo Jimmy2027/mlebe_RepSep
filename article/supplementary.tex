@@ -37,10 +37,10 @@
 		\setlength{\fboxsep}{0pt}%
 		\setlength{\fboxrule}{0.2pt}%
 		\fbox{
-			\includegraphics[width=\textwidth]{data/manual_overview/legacy/4008_ofMcF1_cbv} 
+			\includegraphics[width=\textwidth]{data/manual_overview/generic_masked/4008_ofMcF1_cbv}
 			}
 		\caption{
-			SAMRI Legacy workflow with Legacy template, note the strong smoothing and the mapping distortion in the rostral and caudal areas.
+			SAMRI Generic Masked workflow, note the strong smoothing and the mapping distortion in the rostral and caudal areas.
 			}
 		\label{fig:fit_ll}
 	\end{subfigure}\hfill
@@ -49,10 +49,10 @@
 		\setlength{\fboxsep}{0pt}%
 		\setlength{\fboxrule}{0.2pt}%
 		\fbox{
-			\includegraphics[width=\textwidth]{data/manual_overview/legacy_dsurqec/4008_ofMcF1_cbv} 
+			\includegraphics[width=\textwidth]{data/manual_overview/generic_masked/4008_ofMcF1_T2w}
 			}
 		\caption{
-			SAMRI Legacy workflow with Generic template, note the strong smoothing and the mapping distortion in the rostral and caudal areas.
+			SAMRI Generic Masked workflow, note the strong smoothing and the mapping distortion in the rostral and caudal areas.
 			}
 		\label{fig:fit_lg}
 	\end{subfigure}
@@ -81,12 +81,28 @@
 \end{figure*}
 
 \begin{figure*}[h!]
+	\centering
+	\setlength{\fboxsep}{0pt}%
+	\setlength{\fboxrule}{0.2pt}%
+	\fbox{
+		\includegraphics[width=\textwidth]{data/manual_overview/generic_masked/coherence_4008_cbv}
+ 		}
+	\caption{
+		\textbf{The SAMRI Generic Masked workflow consistently maps high-salience features such as the implant site across sessions.}
+		Automatically created operator overview graphic, allowing a slice-by-slice (spacing analogous to acquisition) inspection of registration coherence.
+		This representation permits a coarse assessment of registration consistency for multiple sessions --- though at the cost of some clarity.
+		Particularly, this visualization, allows an operator to track the position of high-amplitude fixed features across scans in order to ascertain coherence (similarly to what is automatically assessed by the Variance analysis of the session factor).
+		}
+ 	\label{fig:coherence}
+\end{figure*}
+
+\begin{figure*}[h!]
 	\begin{subfigure}{.34\textwidth}
 		\centering
-		\includedot[width=\textwidth]{data/legacy_nipype}
+		\includedot[width=\textwidth]{data/generic_masked_nipype}
 		\vspace{-1.9em}
 		\caption{
-			“SAMRI Legacy” workflow, which is based on the \textcolor{mg}{\texttt{antsIntroduction.sh}} function (and other functions with hard-coded parameters optimized for human brain registration), and also performs destructive affine manipulations.
+			“SAMRI Generic Mased” workflow, which is based on the \textcolor{mg}{\texttt{antsIntroduction.sh}} function (and other functions with hard-coded parameters optimized for human brain registration), and also performs destructive affine manipulations.
 			}
 		\label{fig:nwfgl}
 	\end{subfigure}\hfill
@@ -110,12 +126,12 @@
 	\label{fig:nwfg}
 \end{figure*}
 
-\py{pytex_tab('scripts/stim_table.py',
-                label='stim',
-                caption='Stimulation protocol, as delivered during functional scans.
-                        Stimulus event spacing and parameters are constant across scans, but the exact onset time is variable in the \SI{10}{\second} magnitude range due to scanner adjustment time variability.',
-                options_pre='[htp] \\scriptsize \\centering \\resizebox{\\columnwidth}{!}{',
-                data='data/JogB.tsv',
-                options_post='}',
-                )}
+%\py{pytex_tab('scripts/stim_table.py',
+%                label='stim',
+%                caption='Stimulation protocol, as delivered during functional scans.
+%                        Stimulus event spacing and parameters are constant across scans, but the exact onset time is variable in the \SI{10}{\second} magnitude range due to scanner adjustment time variability.',
+%                options_pre='[htp] \\scriptsize \\centering \\resizebox{\\columnwidth}{!}{',
+%                data='data/JogB.tsv',
+%                options_post='}',
+%                )}
 

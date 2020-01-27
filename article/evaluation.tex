@@ -1,59 +1,77 @@
 \section{Evaluation}
+For the quality control of the workflow, we first evaluate the segmentation process and then the registration.
+The segmentations of the classifier should be as precise as possible for the masking process, which in return is then used to improve the registration.
+
+As stated by Ioanas et al. in TODO:cite a major challenge of registration QC is that a perfect mapping from the measured image to the template is undefined.
+To address this challenge, they developed four alternative evaluation metrics: volume conservation, smoothness conservation, functional analysis, and variance analysis.
+We will use these metrics to benchmark our workflow against theirs.
+
+\subsection{Segmentation}
 Quality control of our classifier is difficult in the sense that it should predict a better mask than the template.
-Nevertheless, it is use-full to verify if the output is similar, which it should.
-As a similarity metric we have used the Dice-score (see \cref{eqDcoef}).
-The classifier has a dice score of (\py{boilerplate.print_dice()}) on the test set.
+Nevertheless, it is use-full to verify if the output is similar, as it should be.
+As a similarity metric we have used the Dice score (see \cref{eqDcoef}).
+The median Dice score taken on every slice of the test data set is $D_{coef}= $ \py{boilerplate.print_dice()} $\sim 1$.
+The prediction thus have only minor changes in comparison with the template, which should represent small improvements.
 
-\begin{figure}
-    \centering
-    \includegraphics{mlebe_figs/sub-6542_ses-ofMaF_acq-TurboRARE_T2w1.pdf}
-    \caption{Caption}
-    \label{fig:my_label}
-\end{figure}
+\begin{sansmath}
+\py{pytex_subfigs(
+        [
+                {'script':'scripts/classifier/plot_test_corr_df.py', 'label':'subfig:test_corr','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+                        'options_pre_caption':'\\vspace{-1.5em}',
+                        'options_post':'\\vspace{1em}',
+                        'label':'subfig:test_corr',
+                        'caption':'Cross Correlations between the Test Set and the predictions.'
+                        ,},
+                {'script':'scripts/classifier/plot_bl_corr.py', 'label':'subfig:bl_corr','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                        'options_pre_caption':'\\vspace{-1.5em}\\',
+                        'options_post':'\\vspace{1em}',
+                        'caption':'Cross Correlations between the blacklisted slices and the predictions.'
+                        ,},
+                ],
+        caption='\\textbf{Overall the predictions of the classifier correlate better with the images, when taking the blacklisted slices into account.}
+        Two tables comparing the correlation of the classifiers prediction and the template mask with the images.
+        ',
+        label='fig:corr',
+        )}
+\end{sansmath}
 
 
+It is hard to measure how much better the predicted masks from the classifier are, compared with the template, because both are very accurate.
+They both correlate similarily with the images for example, as can be seen in \cref{subfig:test_corr}:
+\py{boilerplate.print_testcorr_ytrue()} against \py{boilerplate.print_testcorr_ypred()}.
+
+Where the classifier clearly has the advantage is on the blacklisted slices.
+Due to the data agumentation on the training set, the classifier is trained to predict well on incongruent data and thus has a better correlation with the blacklisted slices than the template (\py{boilerplate.print_blcorr_ypred()} against \py{boilerplate.print_blcorr_ytrue()}).
+Here the argument could be brought that one could do the inverse: taking all the bad predictions of the classifier and comparing them to the template.
+However, in total, the classifier has less predicitons with a lower correlation than: compared to the template: TODO
 
 
+%\begin{figure}
+%    \centering
+%    \includegraphics{mlebe_figs/sub-6542_ses-ofMaF_acq-TurboRARE_T2w1.pdf}
+%    \caption{Caption}
+%    \label{fig:my_label}
+%\end{figure}
 
-\iffalse
-A major challenge of registration QC is that a perfect mapping from the measured image to the template is undefined.
-Similarity metrics are ill-suited for QC because they are used internally by registration functions, whose mode of operation is based on maximizing them.
-Extreme similarity score maximization is not a desired outcome, particularly if nonlinear transformations are employed, as this may result in image distortions which should be penalized in QC.
-Moreover, similarity metrics are not independent, so the issues arising from similarity score maximization cannot be circumvented by maximizing a subset of metrics and performing QC via the remainder.
-To address this challenge, we developed four alternative evaluation metrics: volume conservation, smoothness conservation, functional analysis, and variance analysis.
-In order to mitigate possible differences arising from template features, we use these metrics for multi-factorial analyses --- including both a template and a workflow factor.
 
+As an evaluation of the registration, we make use of the quality control from TODO:cite
 
 \subsection{Volume Conservation}
 
 \begin{sansmath}
 \py{pytex_subfigs(
         [
-                {'script':'scripts/vc_violin.py', 'label':'vcv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
-                        'options_pre_caption':'\\vspace{-1.5em}',
-                        'options_post':'\\vspace{1em}',
-                        'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
-                        ,},
                 {'script':'scripts/vcc_violin.py', 'label':'vccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
                         'options_pre_caption':'\\vspace{-1.5em}',
                         'options_post':'\\vspace{1em}',
                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
-                        ,},
-                {'script':'scripts/scf_violin_templates.py', 'label':'scv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
-                        'options_pre_caption':'\\vspace{-1.5em}\\',
-                        'options_post':'\\vspace{1em}',
-                        'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
                         ,},
                 {'script':'scripts/scf_violin_contrasts.py', 'label':'sccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
                         'options_pre_caption':'\\vspace{-1.5em}\\',
                         'options_post':'\\vspace{1em}',
                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
-                {'script':'scripts/ms_violin.py', 'label':'msv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
-                        'options_pre_caption':'\\vspace{-1.5em}',
-			'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
-                        ,},
-                {'script':'scripts/msc_violin.py', 'label':'mscv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                        {'script':'scripts/msc_violin.py', 'label':'mscv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
                         'options_pre_caption':'\\vspace{-1.5em}',
                         'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
                         ,},
@@ -69,26 +87,35 @@ Volume conservation is based on the assumption that the total volume of the scan
 Beyond just size differences between the acquired data and the target template, a volume increase may indicate that the brain was stretched to fill in template brain space not covered by the scan, while a volume decrease might indicate that non-brain voxels were introduced into the template brain space.
 For this analysis we compute a Volume Conservation Factor (VCF), whereby volume conservation is highest for a VCF equal to 1.
 
-As seen in \cref{fig:vcv}, we note that in the described dataset VCF is sensitive to
+%As seen in \cref{fig:vcv},
+we note that in the described dataset VCF is sensitive to
 the workflow (\py{boilerplate.fstatistic('Processing', condensed=True)}),
-the template (\py{boilerplate.fstatistic('Template', condensed=True)}),
-but not the interaction thereof (\py{boilerplate.fstatistic('Processing:Template', condensed=True)}).
+%the template (\py{boilerplate.fstatistic('Template', condensed=True)}),
+%but not the interaction thereof (\py{boilerplate.fstatistic('Processing:Template', condensed=True)}).
 
-The performance of the Generic SAMRI workflow in conjunction with the Generic template is significantly different from that of the Legacy workflow in conjunction with the Legacy template, yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
+The performance of the Generic SAMRI workflow in conjunction with the Generic template is significantly different from that of the Generic SAMRI workflow with the additional masking node, yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
 Moreover, the root mean squared error ratio strongly favours the Generic workflow
-($\mathrm{RMSE_{L}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
+\\
+\\
+($\mathrm{RMSE_{GM}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
+\\
+\\
 
-Descriptively, we observe that the Legacy level of the template variable introduces a notable volume loss
-(VCF of \py{boilerplate.factorci('Template[T.Legacy]')}),
+
+Descriptively, we observe that the Generic level of the template variable introduces a notable volume loss
+(VCF of  ?? %\py{boilerplate.factorci('Template[T.Legacy]')}),
 while the Legacy level of the workflow variable introduces a volume gain
-(VCF of \py{boilerplate.factorci('Processing[T.Legacy]')}).
-Further, we note that there is a very strong variance increase in all conditions for the Legacy workflow
-(\py{boilerplate.varianceratio(template='Legacy')}-fold given the Legacy template, and \py{boilerplate.varianceratio(template='Generic')}-fold given the Generic template).
+(VCF of \py{boilerplate.factorci('Processing[T.Generic Masked]')}).
+%Further, we note that there is a very strong variance increase in all conditions for the Legacy workflow
+%(\py{boilerplate.varianceratio(template='Legacy')}-fold given the Legacy template, and \py{boilerplate.varianceratio(template='Generic')}-fold given the Generic template).
+
+
 
 With respect to the data break-up by contrast (CBV versus BOLD, \cref{fig:vccv}), we see no notable main effect for the contrast variable
 (VCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]')}).
-We do, however, report a notable effect for the contrast-template interaction, with the Legacy workflow and CBV contrast interaction level introducing a volume loss
-(VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]')}).
+%We do, however, report a notable effect for the contrast-template interaction, with the Legacy workflow and CBV contrast interaction level introducing a volume loss
+%(VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]')}).
+
 
 
 \subsection{Smoothness Conservation}
@@ -99,26 +126,34 @@ Uncontrolled smoothness can thus lead to undocumented and implicit loss of spati
 We employ a Smoothness Conservation Factor (SCF), expressing the ratio between the smoothness of the preprocessed images and the smoothness of the original images.
 
 With respect to the data shown in \cref{fig:scv}, we note that SCF is sensitive to
-the template (\py{boilerplate.fstatistic('Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}),
+%the template (\py{boilerplate.fstatistic('Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}),
 the workflow (\py{boilerplate.fstatistic('Processing', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}),
-and the interaction of the factors (\py{boilerplate.fstatistic('Processing:Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
+%and the interaction of the factors (\py{boilerplate.fstatistic('Processing:Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
 The performance of the Generic SAMRI workflow in conjunction with the Generic template is significantly different from that of the Legacy workflow in conjunction with the Legacy template, yielding a two-tailed p-value of \py{pytex_printonly('scripts/scf_t.py')}.
 In this comparison, the root mean squared error ratio favours the Generic workflow
-($\mathrm{RMSE_{L}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
+\\
+\\
+($\mathrm{RMSE_{GM}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
+\\
+\\
 
 Descriptively, we observe that the Legacy level of the template variable introduces a smoothness reduction
-(SCF of \py{boilerplate.factorci('Template[T.Legacy]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}),
+%(SCF of \py{boilerplate.factorci('Template[T.Legacy]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}),
 while the Legacy level of the workflow variable introduces a smoothness gain
-(SCF of \py{boilerplate.factorci('Processing[T.Legacy]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
+(SCF of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 Further, we note that there is a strong variance increase for the Legacy workflow
-(\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3, template='Legacy')}-fold given the Legacy template and \py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', template='Generic', max_len=3)}-fold given the Generic template).
+\\
+ratio $= generic_masked/generic =$ (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3)}
+\\
+
+%-fold given the Legacy template and \py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', template='Generic', max_len=3)}-fold given the Generic template).
 
 Given the break-up by contrast shown in \cref{fig:sccv}, we see only very weak effect sizes for the contrast variable
 (SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')})
-and the contrast-template interaction
-(SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
-
+%and the contrast-template interaction
+%(SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
+\iffalse
 \subsection{Functional Analysis}
 
 Functional analysis is a frequently used avenue for preprocessing QC.

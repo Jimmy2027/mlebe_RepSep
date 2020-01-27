@@ -13,9 +13,9 @@ df = pd.read_csv(data_path)
 
 #df = df.loc[~df['Subject'].isin([4003,4006,4013])]
 df = df.loc[df['Processing']!='Unprocessed']
-df = df.loc[((df['Processing']=='Legacy') & (df['Template']=='Legacy')) | ((df['Processing']=='Generic') & (df['Template']=='Generic'))]
+df = df.loc[((df['Processing']=='Generic Masked')) | ((df['Processing']=='Generic') )]
 
-df.loc[df['Processing']=='Unprocessed', 'Template'] = ''
+df.loc[df['Processing']=='Unprocessed'] = ''
 ax = violinplot(
 	x="Processing",
 	y='Mean Significance',
