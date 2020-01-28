@@ -144,7 +144,7 @@ while the Legacy level of the workflow variable introduces a smoothness gain
 (SCF of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 Further, we note that there is a strong variance increase for the Legacy workflow
 \\
-ratio $= generic_masked/generic =$ (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3)}
+ratio $= generic\_masked/generic =$ (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3)}
 \\
 
 %-fold given the Legacy template and \py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', template='Generic', max_len=3)}-fold given the Generic template).
@@ -163,32 +163,32 @@ Additionally, functional analysis significance is documented to be sensitive to 
 For this analysis we compute the Mean Significance (MS), expressing the significance detected across all voxels of a scan.
 
 As seen in \cref{fig:msv}, MS is sensitive to
-the workflow
+the workflow TODO:NotYetWorking
 (\py{boilerplate.fstatistic('Processing', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}),
 but not to the template
-(\py{boilerplate.fstatistic('Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}),
-nor the interaction of both factors
-(\py{boilerplate.fstatistic('Processing:Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}).
+%(\py{boilerplate.fstatistic('Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}),
+%nor the interaction of both factors
+%(\py{boilerplate.fstatistic('Processing:Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}).
 
 The performance of the SAMRI Generic workflow (with the Generic template) differs significantly from that of the Legacy workflow (with the Legacy template) in terms of MS, yielding a two-tailed p-value of \py{pytex_printonly('scripts/ms_t.py')}.
 
 Descriptively, we observe that the Legacy level of the workflow variable introduces a notable significance increase
-(MS of \py{boilerplate.factorci('Processing[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}),
-while the Legacy level of the template variable
-(MS of \py{boilerplate.factorci('Template[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}),
-and the interaction of the Legacy template and Legacy workflow
-(MS of \py{boilerplate.factorci('Processing[T.Legacy]:Template[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')})
-introduce no significance change.
+(MS of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}),
+%while the Legacy level of the template variable
+%(MS of \py{boilerplate.factorci('Template[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}),
+%and the interaction of the Legacy template and Legacy workflow
+%(MS of \py{boilerplate.factorci('Processing[T.Legacy]:Template[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')})
+%introduce no significance change.
 Furthermore, we again note a variance increase in all conditions for the Legacy workflow
-(\py{boilerplate.varianceratio(df_path='data/functional_significance.csv', template='Legacy', dependent_variable='Mean Significance')}-fold
+(\py{boilerplate.varianceratio(df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}-fold
 given the Legacy template, and
-\py{boilerplate.varianceratio(df_path='data/functional_significance.csv', template='Generic', dependent_variable='Mean Significance')}-fold
-given the Generic template).
+%\py{boilerplate.varianceratio(df_path='data/functional_significance.csv', template='Generic', dependent_variable='Mean Significance')}-fold
+%given the Generic template).
 
 With respect to the data break-up by contrast (\cref{fig:mscv}), we see no notable main effect for the contrast variable
 (MS of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')})
-and no notable effect for the contrast-template interaction
-(MS of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
+%and no notable effect for the contrast-template interaction
+%(MS of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
 
 Functional analysis effects can further be inspected by visualizing the statistic maps.
 Second-level t-statistic maps depicting the CBV and BOLD omnibus contrasts (common to all subjects and sessions) provide a succinct overview capturing both amplitude and directionality of the signal (\cref{fig:m}).

@@ -18,16 +18,15 @@ if [ ! -d ~/.scratch/mlebe/bids ]; then
 	fi
 fi
 
-#python preprocess.py || exit 1
-#python collapse.py || exit 1
-#python volume_data.py || exit 1
-#python variance_data.py || exit 1
-#python smoothness_data.py || exit 1
-##python legacy_background_fix.py || exit 1
-#python l1.py || exit 1
-#python functional_data.py || exit 1
-#python l2.py || exit 1
-#python manual_overview.py || exit 1
+python preprocess.py || exit 1
+python collapse.py || exit 1
+python volume_data.py || exit 1
+python variance_data.py || exit 1
+python smoothness_data.py || exit 1
+python l1.py || exit 1
+python functional_data.py || exit 1
+python l2.py || exit 1
+python manual_overview.py || exit 1
 mkdir -p ../data/manual_overview/generic
 cp ~/.scratch/mlebe/manual_overview/generic/coherence_4008_cbv.pdf ../data/manual_overview/generic/ || exit 1
 cp ~/.scratch/mlebe/manual_overview/generic/4008_ofMcF1_T2w.pdf ../data/manual_overview/generic/ || exit 1

@@ -72,6 +72,7 @@ def inline_anova(anova,
 				anova.pvalue,
 				)
 	elif style == "tex":
+
 		if condensed:
 			string_template = "$F_{{{},{}}}\!=\!{},\\, p\!=\!{}$"
 		else:
