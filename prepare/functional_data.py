@@ -37,7 +37,7 @@ for key in masks:
 		column_string='DR Significance',
 		exclude_ones=True,
 		)
-	if 'generic' in key:
+	if key == 'generic':
 		df_['Processing'] = 'Generic'
 	else:
 		df_['Processing'] = 'Generic Masked'
@@ -74,7 +74,7 @@ for key in masks:
 		mask_path=masks_dr[key],
 		column_string='DR t',
 		)
-	if 'generic' in key:
+	if key == 'generic':
 		df_['Processing'] = 'Generic'
 	else:
 		df_['Processing'] = 'Generic Masked'

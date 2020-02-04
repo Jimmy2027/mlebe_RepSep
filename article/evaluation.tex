@@ -144,7 +144,7 @@ while the Legacy level of the workflow variable introduces a smoothness gain
 (SCF of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 Further, we note that there is a strong variance increase for the Legacy workflow
 \\
-ratio $= generic\_masked/generic =$ (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3)}
+ratio = generic$\_$masked/generic $=$ (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3)}
 \\
 
 %-fold given the Legacy template and \py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', template='Generic', max_len=3)}-fold given the Generic template).
@@ -153,7 +153,10 @@ Given the break-up by contrast shown in \cref{fig:sccv}, we see only very weak e
 (SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')})
 %and the contrast-template interaction
 %(SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
-\iffalse
+
+
+
+
 \subsection{Functional Analysis}
 
 Functional analysis is a frequently used avenue for preprocessing QC.
@@ -163,9 +166,10 @@ Additionally, functional analysis significance is documented to be sensitive to 
 For this analysis we compute the Mean Significance (MS), expressing the significance detected across all voxels of a scan.
 
 As seen in \cref{fig:msv}, MS is sensitive to
-the workflow TODO:NotYetWorking
+the workflow
 (\py{boilerplate.fstatistic('Processing', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}),
 but not to the template
+
 %(\py{boilerplate.fstatistic('Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}),
 %nor the interaction of both factors
 %(\py{boilerplate.fstatistic('Processing:Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}).
@@ -199,21 +203,12 @@ Separately from the Legacy workflow, the Legacy template causes acquisition slic
 Positive activation of the Raphe system, most clearly disambiguated from the surrounding tissue in the BOLD contrast, is notably displaced very far caudally by the joint effects of the Legacy workflow and the Legacy template (\cref{fig:mllb}).
 We note that processing with the Generic template and workflow (\cref{fig:mggc,fig:mggb}), does not show issues with statistic coverage alignment and overflow.
 
+
 \py{pytex_subfigs(
 	[
 		{'script':'scripts/map_generic_cbv.py', 'label':'mggc', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
                                 Generic workflow with Generic template CBV map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
-                                '
-			,},
-		{'script':'scripts/map_generic_ambmc_cbv.py', 'label':'mglc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
-			'caption':'
-                                Generic workflow with Legacy template CBV map, showing incorrect slice orientation and coverage correctly bounded to the acquisition area.
-                                '
-			,},
-		{'script':'scripts/map_legacy_dsurqec_cbv.py', 'label':'mlgc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
-			'caption':'
-                                Legacy workflow with Generic template CBV map, showing correct slice orientation and coverage caudally extending beyond the acquisition area.
                                 '
 			,},
 		{'script':'scripts/map_legacy_cbv.py', 'label':'mllc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
@@ -224,16 +219,6 @@ We note that processing with the Generic template and workflow (\cref{fig:mggc,f
 		{'script':'scripts/map_generic_bold.py', 'label':'mggb', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
                                 Generic workflow with Generic template BOLD map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
-                                '
-			,},
-		{'script':'scripts/map_generic_ambmc_bold.py', 'label':'mglb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
-			'caption':'
-                                Generic workflow with Legacy template BOLD map, showing incorrect slice orientation and coverage correctly bounded to the acquisition area.
-                                '
-			,},
-		{'script':'scripts/map_legacy_dsurqec_bold.py', 'label':'mlgb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
-			'caption':'
-                                Legacy workflow with Generic template BOLD map, showing correct slice orientation and coverage caudally extending beyond acquisition area.
                                 '
 			,},
 		{'script':'scripts/map_legacy_bold.py', 'label':'mllb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
@@ -248,7 +233,6 @@ We note that processing with the Generic template and workflow (\cref{fig:mggc,f
                 The acquisition area is bracketed in pink, and in comparing it to statistic coverage it is important to note that the latter is always underestimated, as the omnibus statistic contrast is only defined for voxels captured in \\textit{every} evaluated scan.
                 ',
 	label='fig:m',)}
-
 \subsection{Variance Analysis}
 
 \begin{sansmath}
@@ -275,14 +259,12 @@ and Mutual Information (MI, sensitive to whole-image information similarity).
 
 \Cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Legacy workflows (considering only the matching workflow-template combinations).
 The Legacy workflow produces results which show a higher F-statistic for the session than for the subject variable:
-CC (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','CC', condensed=True)}),
-GC (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','GC', condensed=True)}),
-and MI (subject: \py{boilerplate.variance_test('C(Subject)','Legacy','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Legacy','MI', condensed=True)}).
+CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic Masked','CC', condensed=True)}),
+GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic Masked','GC', condensed=True)}),
+and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic Masked','MI', condensed=True)}).
 
 The Generic SAMRI workflow shows a reversing trend.
 Resulting data F-statistics are consistently higher for the subject variable than for the session variable:
 CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','CC', condensed=True)}),
 GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','GC', condensed=True)}),
 and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','MI', condensed=True)}).
-
-\fi

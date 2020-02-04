@@ -20,11 +20,12 @@ def fstatistic(factor,
 
 	for key in exclusion_criteria.keys():
 		df = df.loc[~df[key].isin(exclusion_criteria[key])]
-	# print(df)
+
 	formula='Q("{}") ~ {}'.format(dependent_variable, expression)
 
+	# print('df: ', df[dependent_variable])
 	ols = smf.ols(formula, df).fit()
-	
+
 	anova = sm.stats.anova_lm(ols, typ=3)
 	tex = inline_anova(anova, factor, 'tex', **kwargs)
 	return tex
