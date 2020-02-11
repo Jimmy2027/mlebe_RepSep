@@ -7,6 +7,7 @@ from datetime import datetime
 
 db_path = '~/syncdata/meta.db'
 data_dir = '/usr/share/irsabi_data/'
+
 scratch_dir = os.path.expanduser('~/.scratch')
 base_dir = '{}/mlebe'.format(scratch_dir)
 bru2bids(data_dir,

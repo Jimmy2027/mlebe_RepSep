@@ -5,7 +5,8 @@ To solve this issue, the images need to be projected into the reference frame vi
 Intensities outside the brain region of a mouse MR image present high variations and bias the registration process.
 As a remedy, it would be useful to extract the region of interest and perform the registration on it.
 For this purpose, we propose a machine learning enabled brain extraction in an additional node to the workflow presented by Ioanas et al. \cite{ioanas_optimized_2019}.
-The additional node creates a mask of the brain region with segmentation using a classifier and masks the image such that only the region of interest remains.
+The additional node creates a mask of the brain region with segmentation using a classifier.
+The image is then masked such that only the region of interest remains.
 
 
 \subsection{Convolutional Neural Networks} \label{sec:Convolutional Neural Networks}
@@ -20,6 +21,7 @@ Ideally experiment setups are uniform and the resulting data does not differ muc
 Based on an approximation of the occurrence space, the network has to build a general model that enables it to extrapolate and produce sufficiently accurate predictions in new cases.
 Manually creating annotations as required to train a deep-learning classifier for high-resolution data is often infeasible, since it requires manual expert segmentation of vast amounts of slices.
 
-Here we take as data set, images that were registered through the SAMRI workflow into a reference frame defined by Toronto Hospital for Sick Children Mouse Imaging Center %TODO:cite(15 in old bib)
-together with a template mask.
-While our purpose was to create a workflow that generates better masks than the ones used for registration, we showed that the latter could be used as training data for the deep-learning model, by applying small changes to them.
+Here we take as data set, images that were registered through the SAMRI workflow into a reference frame defined by the Toronto Hospital for Sick Children Mouse Imaging Center. %TODO:cite(15 in old bib)
+A mask that was made in the same reference frame was used as ground truth.
+Because the registration process is not perfect, the mask does not always align perfectly with the brain region of every slice.
+While our purpose was to create a workflow that generates better masks than the one from the template space, we showed that the latter could be used as training data for the deep-learning model, by applying small changes to them.

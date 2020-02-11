@@ -24,7 +24,7 @@ for key in masks:
 		n_jobs_percentage=.33,
 		exclude={'subject':['4006'],},
 		include={'run':['0'],},
-		out_base='../data/l2',
+		out_base='{}/l2'.format(scratch_dir),
 		)
 	glm.l2_common_effect(path.join(preprocess_base,key),
 		workflow_name=key,
@@ -34,5 +34,5 @@ for key in masks:
 		n_jobs_percentage=.33,
 		exclude={'subject':['4006'],},
 		include={'run':['1'],},
-		out_base='../data/l2',
+		out_base='{}/l2'.format(scratch_dir),
 		)

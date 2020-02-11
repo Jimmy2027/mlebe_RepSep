@@ -18,15 +18,18 @@ if [ ! -d ~/.scratch/mlebe/bids ]; then
 	fi
 fi
 
-python preprocess.py || exit 1
-python collapse.py || exit 1
+#python preprocess.py || exit 1
+#python collapse.py || exit 1
+#python l1.py || exit 1
+#python manual_overview.py || exit 1
+python classifier/classifier_tester.py || exit 1
+
 python volume_data.py || exit 1
 python variance_data.py || exit 1
 python smoothness_data.py || exit 1
-python l1.py || exit 1
 python functional_data.py || exit 1
 python l2.py || exit 1
-python manual_overview.py || exit 1
+python smoothness_data.py || exit 1
 mkdir -p ../data/manual_overview/generic
 cp ~/.scratch/mlebe/manual_overview/generic/coherence_4008_cbv.pdf ../data/manual_overview/generic/ || exit 1
 cp ~/.scratch/mlebe/manual_overview/generic/4008_ofMcF1_T2w.pdf ../data/manual_overview/generic/ || exit 1
@@ -36,3 +39,7 @@ mkdir -p ../data/manual_overview/generic_masked
 cp ~/.scratch/mlebe/manual_overview/generic_masked/coherence_4008_cbv.pdf ../data/manual_overview/generic/ || exit 1
 cp ~/.scratch/mlebe/manual_overview/generic_masked/4008_ofMcF1_T2w.pdf ../data/manual_overview/generic_masked/ || exit 1
 cp ~/.scratch/mlebe/manual_overview/generic_masked/4008_ofMcF1_cbv.pdf ../data/manual_overview/generic_masked/ || exit 1
+
+cp ~/.scratch/mlebe/classifier/y_test_pred.npy ../data/classifier/ || exit 1
+cp ~/.scratch/mlebe/preprocessing/generic_masked_work/graph.dot ../data/generic_masked_nipype.dot
+rsync -avP --exclude='*_cope.nii*' --exclude='*_zstat.nii*' ~/.scratch/mlebe/*l2* ../data/ || exit 1

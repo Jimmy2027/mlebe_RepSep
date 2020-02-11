@@ -37,13 +37,13 @@ generic(bids_base,
 
 
 
-generic(bids_base,
-	'/usr/share/mouse-brain-atlases/dsurqec_200micron.nii',
-	registration_mask='/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
-	functional_match={'acquisition':['EPIlowcov'],},
-	structural_match={'acquisition':['TurboRARElowcov'],},
-	out_base='{}/preprocessing'.format(scratch_dir),
-	workflow_name='generic',
-	keep_work=True,
-    )
+# generic(bids_base,
+# 	'/usr/share/mouse-brain-atlases/dsurqec_200micron.nii',
+# 	registration_mask='/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
+# 	functional_match={'acquisition':['EPIlowcov'],},
+# 	structural_match={'acquisition':['TurboRARElowcov'],},
+# 	out_base='{}/preprocessing'.format(scratch_dir),
+# 	workflow_name='generic',
+# 	keep_work=True,
+#     )
 

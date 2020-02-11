@@ -10,5 +10,4 @@ summary =  ttest_rel(
 	df.loc[(df['Processing']=='Generic Masked'), 'Volume Conservation Factor'].tolist(),
 	df.loc[(df['Processing']=='Generic'), 'Volume Conservation Factor'].tolist(),
 	)
-print(df.loc[(df['Processing']=='Generic Masked'), df['Volume Conservation Factor'] - 1 > 0.1].tolist())
 print(float_to_tex(summary.pvalue, max_len=3, condensed=True, padding=True))

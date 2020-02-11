@@ -17,7 +17,7 @@
                         'options_pre_caption':'\\vspace{-1.5em}',
                         'options_post':'\\vspace{1em}',
                         'caption':'Example of an unpreprocessed slice.'
-                        ,}
+                        ,},
                 ],
         caption='\\textbf{The preprocessing removes the mask there, where the image-pixelvalues are 0.}\\
         Plots of the same image, superposed with the template mask, with and without preprocessing.
@@ -25,20 +25,47 @@
         label='fig:prepro_examples',
         )}
 \end{sansmath}
-%\begin{sansmath}
-%\sessionpy{pytex_fig(
-%        'scripts/prepex.py',
-%        conf='article/1col.conf',
-%        caption='
-%                Distribution densities of t-statistics, showing the regions were VTA structural projections exceed functional activation most strongly.
-%                \\vspace{-1em}
-%                ',
-%        label='dffn',
-%        options_pre='\\centering\n',
-%        environment='figure',
-%        figure_format='pdf',
-%        )}
-%\end{sansmath}
+\iffalse
+\begin{sansmath}
+\py{pytex_subfigs(
+        [
+                {'script':'scripts/classifier/plt_trainset.py', 'label':'wrtz', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+                        'options_pre_caption':'\\vspace{-1.5em}',
+                        'options_post':'\\vspace{1em}',
+                        },
+                {'script':'scripts/classifier/plt_trainset.py', 'label':'pghjkg', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+                        'options_pre_caption':'\\vspace{-1.5em}',
+                        'options_post':'\\vspace{1em}',
+                        },
+                {'script':'scripts/classifier/plt_trainset.py', 'label':'sdf', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+                        'options_pre_caption':'\\vspace{-1.5em}',
+                        'options_post':'\\vspace{1em}',
+                        },
+                {'script':'scripts/classifier/plt_trainset.py', 'label':'nnn', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+                        'options_pre_caption':'\\vspace{-1.5em}',
+                        'options_post':'\\vspace{1em}',
+                        },
+                ],
+        caption=
+        Augmented examples from the Training set.
+        ',
+        label='fig:trainset',
+        )}
+\end{sansmath}
+\fi
+
+\begin{sansmath}
+\py{pytex_fig('scripts/classifier/show_blacklist.py',
+        conf='article/1col.conf',
+        label='bl',
+        caption='
+                \\textbf{The SAMRI Generic workflow conserves subject-wise variability and minimizes trial-to-trial variability compared to the Legacy workflow.}
+                Swarmplots illustrate similarity metric scores of preprocessed images with respect to the corresponding workflow template, plotted across subjects (separated into x-axis bins) and sessions (individual points in each x-axis bin), for the CBV contrast.
+                ',
+        multicol=True,
+        )}
+\end{sansmath}
+
 \subsection{Model}
 As the architecture of the classifier, the U-Net from Ronneberger et al \cite{ronneberger_u-net:_2015} was chosen based on its high performance in the field of biomedical image segmentation.
 This is a convolutional neural network that consists of a contracting path that captures context in addition to a symmetric expanding path that enables precise localisation.
@@ -78,43 +105,8 @@ The binary cross-entropy loss, also called Log loss, is defined by:
 
 For pixel values of 0 and 1, it adds $log(p(y))$ for each white pixel (y=1) and $log(1-p(y))$ for every black pixel (y=0) to the loss.
 
-We quickly realised that the Dice-loss gives the best results for our problem and therefore used it to train the model. )TODO:compare results)
+We quickly realised that the Dice-loss gives the best results for our task and therefore used it to train the model. )TODO:compare results)
 
-%\begin{sansmath}
-%\sessionpy{pytex_figs(
-%        'scripts/prepro_example.py',
-%        conf='article/1col.conf',
-%        caption='
-%                Distribution densities of t-statistics, showing the regions were VTA structural projections exceed functional activation most strongly.
-%                \\vspace{-1em}
-%                ',
-%        label='dffn',
-%        options_pre='\\centering\n',
-%        environment='figure',
-%        figure_format='pdf',
-%        )}
-%\end{sansmath}
-%\begin{sansmath}
-%\py{pytex_subfigs(
-%        [
-%                {'script':'scripts/prepex.py', 'label':'vcv', 'conf':'article/1col.conf',                              'options_pre':'{.48\\textwidth} \\vspace{-2em}',
-%                        'options_pre_caption':'\\vspace{-1.5em}',
-%                        'options_post':'\\vspace{1em}',
-%                        'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
-%                        ,},
-%                {'script':'scripts/uprepex.py', 'label':'vccv','conf':'article/1col.conf',                                'options_pre':'{.48\\textwidth} \\vspace{-2em}',
-%                        'options_pre_caption':'\\vspace{-1.5em}',
-%                        'options_post':'\\vspace{1em}',
-%                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
-%                        ,},
-%
-%                ],
-%        caption='\\textbf{The SAMRI Generic workflow and template optimally and reliably conserve volume and smoothness --- unlike the Legacy workflow and template.}
-%        Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.
-%        ',
-%        label='fig:vc',
-%        )}
-%\end{sansmath}
 
 \subsection{Data Set} \label{subsec:Data Set}
 The data set consists of 3D MR images taken from an aggregation of three studies; irsabi , opfvta \cite{ioanas_whole-brain_nodate}, drlfom \cite{ioanas_effects_nodate} and other unpublished data, acquired with similar parameters.
@@ -155,7 +147,7 @@ It is then reshaped into (64, 64) by adding a zero padding to the border.
 
 Finally, the images are normalised by first clipping them from the minimum to the \nth{99} percentile of the data in order to remove outliers and then divided by the maximum.
 
-The data set is separated into Training, Validation and Test sets such that 90\% of the total data are used for training and 10\% for testing.
+The data set is separated into Training, Validation and Test sets such that 90\% of the total data are used for training and validation while 10\% are used for testing.
 The Validation set is used for the optimisation of hyper parameters while the Test set is used as a measure of extrapolation capability.
 
 \subsection{Data Augmentation} \label{Data Augmentation}
@@ -174,18 +166,17 @@ The model was trained slice wise, with the coronal view and 600 as the maximum n
 The coronal view was chosen over the axial one, because the shapes of the masks are much simpler in the coronal view and thus easier to learn for the network.
 Additionally the coronal view has the advantage of higher resolution as the MR images were recorded coronally.
 
-Because of the extensive transformations on the images (see \cref{Data Augmentation}), the augmented data presents much variation.
-To alleviate the learning process of the model, we have first trained it on the data without augmentation and then on the augmented data.
-
-To improve the learning process of the network, two callbacks from Keras were used \cite{noauthor_callbacks_nodate}. "ReduceLROnPlateau" reduces the learning rate when the validation loss has stopped improving and "EarlyStopping" stops the training when the validation loss has stopped improving for a number of epochs.
+To improve the learning process of the network, two callbacks from Keras were used \cite{noauthor_callbacks_nodate}.
+"ReduceLROnPlateau" reduces the learning rate when the validation loss has stopped improving and "EarlyStopping" stops the training when the validation loss has stopped improving for a number of epochs.
 The latter reduces computation time and prevents overfitting.
 
 \subsection{Masking}
 In order to improve the SAMRI registration workflow, an additional node is implemented where the images are masked, such that only the brain region remains.
-For this process, the image needs to be preprocessed using the operations described in \cref{subsec:Data Set}.
+For this, the input image needs to first be resampled into the resolution of the template space, which has a voxel size of $0.2\times 0.2 \times 0.2$.
+This is done with \textcolor{mg}{\texttt{$Resample$}} command from the FSL library which is an analysis tool for FMRI, MRI and DTI brain imaging data TODO:cite(look on fsl site).
+Them, the image is preprocessed using the operations described in \cref{subsec:Data Set}.
 Since the classifier was trained to predict on images of shape (64, 64), the input needs to be reshaped.
-If one dimension is bigger than 64, it reshaped into 64 using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package. TODO:cite
-If one dimension is smaller, a zero padding is added to the border.
+This is done by first zero-padding the smaller dimension to the same size of the bigger one and then reshaping the image into 64 using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package. TODO:cite
 For each slice in the image, the classifier then predicts a segmentation of the brain, which is used to create a 3D mask.
 The latter is then reshaped into the original shape inverting the preprocessing step, either with the opencv resize method or by cropping.
-The workflow then continues with only the Region Of Interest inside the image.
+The workflow then continues with only the Region Of Interest as the image, resampled into the original resolution.
