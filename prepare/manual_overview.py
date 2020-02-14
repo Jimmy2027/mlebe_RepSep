@@ -11,9 +11,6 @@ num_cores = max(mp.cpu_count()-1,1)
 templates = {
 	'generic':'/usr/share/mouse-brain-atlases/dsurqec_40micron_masked.nii',
 	'generic_masked':'/usr/share/mouse-brain-atlases/dsurqec_40micron_masked.nii',
-	# 'generic_ambmc':'/usr/share/mouse-brain-atlases/ambmc_40micron.nii',
-	# 'legacy':'/usr/share/mouse-brain-atlases/lambmc_40micron.nii',
-	# 'legacy_dsurqec':'/usr/share/mouse-brain-atlases/ldsurqec_40micron_masked.nii',
 	}
 
 subjects = [

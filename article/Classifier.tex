@@ -56,11 +56,11 @@
 
 \begin{sansmath}
 \py{pytex_fig('scripts/classifier/show_blacklist.py',
-        conf='article/1col.conf',
+        conf='article/2*8plot.conf',
         label='bl',
         caption='
-                \\textbf{The SAMRI Generic workflow conserves subject-wise variability and minimizes trial-to-trial variability compared to the Legacy workflow.}
-                Swarmplots illustrate similarity metric scores of preprocessed images with respect to the corresponding workflow template, plotted across subjects (separated into x-axis bins) and sessions (individual points in each x-axis bin), for the CBV contrast.
+                \\textbf{Slices where the mask includes too much outer-brain intensities are excluded from the data set.}
+                Examples from the slices that were excluded from the data set. The mask is shown in blue, on top of the brian image.
                 ',
         multicol=True,
         )}
@@ -109,8 +109,7 @@ We quickly realised that the Dice-loss gives the best results for our task and t
 
 
 \subsection{Data Set} \label{subsec:Data Set}
-The data set consists of 3D MR images taken from an aggregation of three studies; irsabi , opfvta \cite{ioanas_whole-brain_nodate}, drlfom \cite{ioanas_effects_nodate} and other unpublished data, acquired with similar parameters.
-%\todo{cite}
+The data set consists of 3D MR images taken from an aggregation of three studies; irsabi , opfvta \cite{ioanas_whole-brain_nodate}, drlfom \cite{ioanas_effects_nodate} and other unpublished data, acquired with similar parameters. TODO:cite
 
 The images are transformed into a standard space with one defined mask via SAMRI \cite{noauthor_ibt-fmi/samri_2019} and are thus defined in the same affine space.
 SAMRI is a data analysis package of the ETH/UZH Institute for Biomedical Engineering.
@@ -122,28 +121,13 @@ To filter these images out, most of the incongruent slices were removed manually
 For the registration of the images, a padding was needed to make the originally not affine space affine. 
 Due to this, the 3D volumes present many zero-valued slices, some of them overlapping with the mask.
 
-%\begin{sansmath}
-%\py{pytex_subfigs(
-%        [
-%                {'script':'scripts/vc_violin.py', 'label':'vcv', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
-%                        'options_pre_caption':'\\vspace{-1.5em}',
-%                        'options_post':'\\vspace{1em}',
-%                        'caption':'Comparison across workflows and target templates, considering both BOLD and CBV functional contrasts.'
-%                        ,}
-%                ],
-%        caption='\\textbf{The SAMRI Generic workflow and template optimally and reliably conserve volume and smoothness --- unlike the Legacy workflow and template.}
-%        Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.
-%        ',
-%        label='fig:vc',
-%        )}
-%\end{sansmath}
 Since it is not wanted for the model to predict a mask on black slices, the mask is set to zero where the image is as well.
 Because some pixels representing the brain tissue are zero-valued, holes result from this operation.
 To patch these, the function \textcolor{mg}{\texttt{$binary\_fill\_holes$}} from scipy.ndimage.morphology \cite{noauthor_multi-dimensional_nodate} is used.
 An example of this can be seen in \cref{fig:prepro_examples}.
 
 In the coronal view, each slice of the transformed data is originally of shape (63, 48), matching the reference space resolution of \SI{200}{\micro\metre}.
-It is then reshaped into (64, 64) by adding a zero padding to the border.
+It is then reshaped into (128, 128) by first zero-padding the smaller dimension to the same size of the bigger one and then reshaping the image into 128 using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package. TODO:cite
 
 Finally, the images are normalised by first clipping them from the minimum to the \nth{99} percentile of the data in order to remove outliers and then divided by the maximum.
 
@@ -174,9 +158,9 @@ The latter reduces computation time and prevents overfitting.
 In order to improve the SAMRI registration workflow, an additional node is implemented where the images are masked, such that only the brain region remains.
 For this, the input image needs to first be resampled into the resolution of the template space, which has a voxel size of $0.2\times 0.2 \times 0.2$.
 This is done with \textcolor{mg}{\texttt{$Resample$}} command from the FSL library which is an analysis tool for FMRI, MRI and DTI brain imaging data TODO:cite(look on fsl site).
-Them, the image is preprocessed using the operations described in \cref{subsec:Data Set}.
-Since the classifier was trained to predict on images of shape (64, 64), the input needs to be reshaped.
-This is done by first zero-padding the smaller dimension to the same size of the bigger one and then reshaping the image into 64 using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package. TODO:cite
+Then, the image is preprocessed using the operations described in \cref{subsec:Data Set}.
+Since the classifier was trained to predict on images of shape (128, 128), the input needs to be reshaped.
 For each slice in the image, the classifier then predicts a segmentation of the brain, which is used to create a 3D mask.
 The latter is then reshaped into the original shape inverting the preprocessing step, either with the opencv resize method or by cropping.
-The workflow then continues with only the Region Of Interest as the image, resampled into the original resolution.
+Additionally, the binary mask is resampled into its original affine space, before being multiplied with the brain image to extract the ROI.
+The workflow then continues with only the Region Of Interest as the image.

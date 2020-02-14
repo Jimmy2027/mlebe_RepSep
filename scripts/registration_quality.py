@@ -16,7 +16,7 @@ import numpy as np
 
 # preprocess the data
 # ------------------
-bids_base = '~/.scratch/mlebe/bids/'
+bids_base = '~/.scratch/mlebe_new_new/bids/'
 template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
 
 full_prep(bids_base,

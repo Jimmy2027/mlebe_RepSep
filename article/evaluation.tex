@@ -16,7 +16,7 @@ The prediction thus have only minor changes in comparison with the template, whi
 
 \begin{sansmath}
 \py{pytex_fig('scripts/classifier/plt_testset_examples.py',
-        conf='article/template.conf',
+        conf='article/wide.conf',
         label='testset_ex',
         caption='
                 \\textbf{The Classifier predicts a similar mask to the ground truth.}
@@ -81,26 +81,21 @@ Beyond just size differences between the acquired data and the target template, 
 For this analysis we compute a Volume Conservation Factor (VCF), whereby volume conservation is highest for a VCF equal to 1.
 
 As seen in \cref{fig:vccv}, we note that in the described dataset VCF is sensitive to the workflow (\py{boilerplate.fstatistic('Processing', condensed=True)}),
-%the template (\py{boilerplate.fstatistic('Template', condensed=True)}),
-%but not the interaction thereof (\py{boilerplate.fstatistic('Processing:Template', condensed=True)}).
+but not the interaction of the workflow with the contrast (\py{boilerplate.fstatistic('Processing:Contrast', condensed=True)}).
 
 The performance of the Generic SAMRI workflow is significantly different from that of Generic*, yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
 Moreover, the root mean squared error ratio favours the Generic* workflow
 ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
 
-Descriptively, we observe that the Generic level of the template variable introduces a notable volume loss
-%(VCF of \py{boilerplate.factorci('Processing[T.Generic]')}),
-while the Legacy level of the workflow variable introduces a volume gain
-(VCF of \py{boilerplate.factorci('Processing[T.Generic Masked]')}) (TODO:does it make sense to compare these values).
-Further, we note that there is a very strong variance increase in all conditions for the Legacy workflow
-%(\py{boilerplate.varianceratio(template='Legacy')}-fold given the Legacy template, and
-%\py{boilerplate.varianceratio(template='Generic')}-fold given the Generic template).
+Descriptively, we observe that the Generic* level of the workflow variable introduces a volume gain
+(VCF of \py{boilerplate.factorci('Processing[T.Generic Masked]')}).
+Further, we note that there is a very strong variance increase in all conditions for the Generic workflow
+(\py{boilerplate.varianceratio()}-fold).
 
 With respect to the data break-up by contrast (CBV versus BOLD, \cref{fig:vccv}), we see no notable main effect for the contrast variable
 (VCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]')}).
-We do, however, report a notable effect for the contrast-workflow interaction, with the Generic workflow and CBV contrast interaction level introducing a volume loss
-%(VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic]:Contrast[T.CBV]')})
-against Generic* (VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]')}).
+We do, however, report a notable effect for the contrast-workflow interaction, with the Generic* workflow and CBV contrast interaction level introducing a volume loss
+(VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]')}).
 
 
 \subsection{Smoothness Conservation}
@@ -115,24 +110,22 @@ With respect to the data shown in \cref{fig:scv}, we note that SCF is sensitive 
 the workflow (\py{boilerplate.fstatistic('Processing', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}). (TODO: not really?)
 %and the interaction of the factors (\py{boilerplate.fstatistic('Processing:Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
-The performance of the Generic SAMRI workflow is significantly different from that of the Legacy workflow in conjunction with the Legacy template, yielding a two-tailed p-value of \py{pytex_printonly('scripts/scf_t.py')}.(TODO: not really?)
-In this comparison, the root mean squared error ratio favours the Generic workflow ($\mathrm{RMSE_{GM}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
+The performance of the Generic SAMRI workflow is significantly different from that of the Generic* workflow, yielding a two-tailed p-value of \py{pytex_printonly('scripts/scf_t.py')}.(TODO: not really?)
+In this comparison, the root mean squared error ratio favours the Generic* workflow ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
 
-Descriptively, we observe that neither the Generic nor the Generic* worklow introduce a strong smoothing
+Descriptively, we observe that neither the Generic nor the Generic* workflow introduce a strong smoothing
 %(SCF of \py{boilerplate.factorci('Processing[T.Generic]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}),
 against
 (SCF of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
 Further, we note that there is a strong variance increase for the Generic workflow
-%(\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor',template='Generic', max_len=3)}
--fold given the Generic workflow and
-%\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', template='Generic Masked', max_len=3)}
--fold for the Generic* workflow).
+(\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3)}
+-fold)
 
 Given the break-up by contrast shown in \cref{fig:sccv}, we see only very weak effect sizes for the contrast variable
 (SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')})
 and the contrast-workflow interaction
-%(SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
+(SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
 \subsection{Functional Analysis}
 
@@ -144,30 +137,29 @@ For this analysis we compute the Mean Significance (MS), expressing the signific
 
 As seen in \cref{fig:msv}, MS is sensitive to
 the workflow
-(\py{boilerplate.fstatistic('Processing', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}),
-but not to the template
+(\py{boilerplate.fstatistic('Processing', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}).
 
 %(\py{boilerplate.fstatistic('Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}),
 %nor the interaction of both factors
 %(\py{boilerplate.fstatistic('Processing:Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}).
 
-The performance of the SAMRI Generic workflow (with the Generic template) differs significantly from that of the Legacy workflow (with the Legacy template) in terms of MS, yielding a two-tailed p-value of \py{pytex_printonly('scripts/ms_t.py')}.
+The performance of the SAMRI Generic workflow differs significantly from that of the Generic* workflow in terms of MS, yielding a two-tailed p-value of \py{pytex_printonly('scripts/ms_t.py')}.
 
-Descriptively, we observe that the Legacy level of the workflow variable introduces a notable significance increase
+Descriptively, we observe that the Generic* level of the workflow variable introduces a notable significance increase
 (MS of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}),
 %while the Legacy level of the template variable
 %(MS of \py{boilerplate.factorci('Template[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}),
 %and the interaction of the Legacy template and Legacy workflow
 %(MS of \py{boilerplate.factorci('Processing[T.Legacy]:Template[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')})
 %introduce no significance change.
-Furthermore, we again note a variance increase in all conditions for the Legacy workflow
+Furthermore, we again note a variance increase in all conditions for the Generic* workflow
 (\py{boilerplate.varianceratio(df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}-fold
-given the Legacy template, and
+)
 %\py{boilerplate.varianceratio(df_path='data/functional_significance.csv', template='Generic', dependent_variable='Mean Significance')}-fold
 %given the Generic template).
 
 With respect to the data break-up by contrast (\cref{fig:mscv}), we see no notable main effect for the contrast variable
-(MS of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')})
+(MS of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
 %and no notable effect for the contrast-template interaction
 %(MS of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
 

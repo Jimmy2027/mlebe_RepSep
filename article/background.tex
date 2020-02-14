@@ -1,12 +1,26 @@
 \section{Background}
 In order to make meaningful comparisons across subjects inside a study, it is imperative that the images lie in a standard reference frame.
+%Voxel-based population studies of either functional or structural variables depend on mapping to a template space.
+%The common coordinate system enables a statistical evaluation of the likelihood of consistent activation across a group or, in other contexts, the differences in anatomy between two groups.
 Because of positioning imprecision and anatomical animal variations, this is not the case for the original MR acquired images.
-To solve this issue, the images need to be projected into the reference frame via registration \cite{maintz_overview_nodate, sotiras_deformable_2013}. 
+To solve this issue, the images need to be projected into the reference frame via registration \cite{maintz_overview_nodate, sotiras_deformable_2013}.
+As reported by TODO:cite, the general approach for mouse-brain image registration is to use high-level functions designed and optimized for human brain images.
+This requires the mouse-data to be adapted to the processing function instead of vice-versa.
+To provide contrast, they compare two workflows, the Legacy workflow that adapts the data to the processing functions and an optimized Generic workflow, which is optimized to the data.
+While the Legacy workflow expands voxel size and deletes orientation information of the affine matrix in order to fit human brain data, the Generic workflow uses functions provided by the ANTs package, with spatial parameters adapted to the mouse brain.
+In a quality control, it is shown that the Generic workflow improves volume conservation, smoothness conservation and shows a reduction in variance.
+
 Intensities outside the brain region of a mouse MR image present high variations and bias the registration process.
-As a remedy, it would be useful to extract the region of interest and perform the registration on it.
-For this purpose, we propose a machine learning enabled brain extraction in an additional node to the workflow presented by Ioanas et al. \cite{ioanas_optimized_2019}.
-The additional node creates a mask of the brain region with segmentation using a classifier.
+To combat this, ANTs enables the user to define a mask to focus the optimization
+effort on the region of interest (ROI). (TODOcite:file:///Users/Hendrik/Downloads/ants2.pdf)
+The Generic workflow uses a template mask defined in the reference space to indicate the ROI.
+This template is not ad hoc to each subject and often includes the skull which contains high intensity variations.
+This can lead to stretching or skewing of the brain in order to fit unwanted intensities inside the mask region.
+As a remedy, it would be useful to extract the region of interest for each individual and continue the registration on an ad hoc region of interest.
+For this purpose, we propose a machine learning enabled brain extraction in an additional node to the Generic workflow presented by Ioanas et al. in \cite{ioanas_optimized_2019}.
+The additional node creates a mask of the brain region using a classifier.
 The image is then masked such that only the region of interest remains.
+The Generic workflow then continues with the masked image.
 
 
 \subsection{Convolutional Neural Networks} \label{sec:Convolutional Neural Networks}

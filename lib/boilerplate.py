@@ -8,24 +8,19 @@ from lib.utils import float_to_tex, inline_anova, inline_factor
 def fstatistic(factor,
 	df_path='data/volume.csv',
 	dependent_variable='Volume Conservation Factor',
-	# expression='Processing*Template',
-	expression='Processing',
+	expression='Processing*Contrast',
 	exclusion_criteria={},
 	**kwargs
 	):
 	df_path = path.abspath(df_path)
 	df = pd.read_csv(df_path)
-
 	df = df.loc[df['Processing']!='Unprocessed']
 
 	for key in exclusion_criteria.keys():
 		df = df.loc[~df[key].isin(exclusion_criteria[key])]
 
 	formula='Q("{}") ~ {}'.format(dependent_variable, expression)
-
-	# print('df: ', df[dependent_variable])
 	ols = smf.ols(formula, df).fit()
-
 	anova = sm.stats.anova_lm(ols, typ=3)
 	tex = inline_anova(anova, factor, 'tex', **kwargs)
 	return tex
@@ -34,7 +29,7 @@ def factorci(factor,
 	df_path='data/volume.csv',
 	dependent_variable='Volume Conservation Factor',
 	# expression='Processing*Template',
-	expression='Processing',
+	expression='Processing*Contrast',
 	exclusion_criteria={},
 	**kwargs
 	):
@@ -45,7 +40,6 @@ def factorci(factor,
 
 	for key in exclusion_criteria.keys():
 		df = df.loc[~df[key].isin(exclusion_criteria[key])]
-
 	formula = 'Q("{}") ~ {}'.format(dependent_variable, expression)
 	model = smf.mixedlm(formula, df, groups='Uid')
 	fit = model.fit()
@@ -94,7 +88,7 @@ def varianceratio(
 
 
 	ratio = generic_masked/generic
-
+	print(ratio)
 	return float_to_tex(ratio, max_len, **kwargs)
 
 def variance_test(
