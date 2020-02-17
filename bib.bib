@@ -158,12 +158,15 @@
 	urldate = {2020-01-05}
 }
 
-@article{srivastava_dropout:_nodate,
-	title = {Dropout: {A} {Simple} {Way} to {Prevent} {Neural} {Networks} from {Overﬁtting}},
-	abstract = {Deep neural nets with a large number of parameters are very powerful machine learning systems. However, overﬁtting is a serious problem in such networks. Large networks are also slow to use, making it diﬃcult to deal with overﬁtting by combining the predictions of many diﬀerent large neural nets at test time. Dropout is a technique for addressing this problem. The key idea is to randomly drop units (along with their connections) from the neural network during training. This prevents units from co-adapting too much. During training, dropout samples from an exponential number of diﬀerent “thinned” networks. At test time, it is easy to approximate the eﬀect of averaging the predictions of all these thinned networks by simply using a single unthinned network that has smaller weights. This signiﬁcantly reduces overﬁtting and gives major improvements over other regularization methods. We show that dropout improves the performance of neural networks on supervised learning tasks in vision, speech recognition, document classiﬁcation and computational biology, obtaining state-of-the-art results on many benchmark data sets.},
-	language = {en},
-	author = {Srivastava, Nitish and Hinton, Geoﬀrey and Krizhevsky, Alex and Sutskever, Ilya and Salakhutdinov, Ruslan},
-	pages = {30}
+@article{srivastava2014dropout,
+  title={Dropout: a simple way to prevent neural networks from overfitting},
+  author={Srivastava, Nitish and Hinton, Geoffrey and Krizhevsky, Alex and Sutskever, Ilya and Salakhutdinov, Ruslan},
+  journal={The journal of machine learning research},
+  volume={15},
+  number={1},
+  pages={1929--1958},
+  year={2014},
+  publisher={JMLR. org}
 }
 
 @misc{zhixuhao_zhixuhao/unet_2020,
@@ -208,19 +211,6 @@ version: 1},
 	doi = {10.1101/619650}
 }
 
-@techreport{ioanas_optimized_2019-1,
-	type = {preprint},
-	title = {An {Optimized} {Registration} {Workflow} and {Standard} {Geometric} {Space} for {Small} {Animal} {Brain} {Imaging}},
-	url = {http://biorxiv.org/lookup/doi/10.1101/619650},
-	abstract = {The reliability of scientiﬁc results critically depends on reproducible and transparent data processing. Cross-subject and cross-study comparability of imaging data in general, and magnetic resonance imaging (MRI) data in particular, is contingent on the quality of registration to a standard reference space. In small animal MRI this is not adequately provided by currently used processing workﬂows, which utilize highlevel scripts optimized for human data, and adapt animal data to ﬁt the scripts, rather than vice-versa. In this fully reproducible article we showcase a generic workﬂow optimized for the mouse brain, alongside a standard reference space suited to harmonize data between analysis and operation. We present four separate metrics for automated quality control (QC), and a visualization method to aid operator inspection. Benchmarking this workﬂow against common legacy practices reveals that it performs more consistently, better preserves variance across subjects while minimizing variance across sessions, and improves both volume and smoothness conservation RMSE approximately 3-fold. We propose this open source workﬂow and the QC metrics as a new standard for small animal MRI registration, ensuring workﬂow robustness, data comparability, and region assignment validity, important criteria for the comparability of scientiﬁc results across experiments and centers.},
-	language = {en},
-	urldate = {2020-01-02},
-	institution = {Neuroscience},
-	author = {Ioanas, Horea-Ioan and Marks, Markus and Yanik, Mehmet Fatih and Rudin, Markus},
-	month = apr,
-	year = {2019},
-	doi = {10.1101/619650}
-}
 
 @article{vartiainen_halo_2014,
 	title = {Halo suppression in full-field x-ray {Zernike} phase contrast microscopy},
@@ -485,8 +475,153 @@ version: 1},
 	pages = {1}
 }
 
-@misc{noauthor_zotero_nodate,
-	title = {Zotero {\textbar} {Your} personal research assistant},
-	url = {https://www.zotero.org/start},
-	urldate = {2019-11-09}
+@article{ants,
+  title={Advanced normalization tools (ANTS)},
+  author={Avants, Brian B and Tustison, Nick and Song, Gang},
+  journal={Insight j},
+  volume={2},
+  number={365},
+  pages={1--35},
+  year={2009}
+}
+
+@misc{noauthor_opencv-python_nodate,
+	title = {opencv-python: {Wrapper} package for {OpenCV} python bindings.},
+	copyright = {MIT License},
+	shorttitle = {opencv-python},
+	url = {https://github.com/skvark/opencv-python},
+	urldate = {2020-02-17},
+	keywords = {Scientific/Engineering, Scientific/Engineering - Image Recognition, Software Development},
+	file = {Snapshot:/Users/Hendrik/Zotero/storage/WT5IDHBJ/opencv-python.html:text/html}
+}
+
+@article{fsl,
+  title={Fsl},
+  author={Jenkinson, Mark and Beckmann, Christian F and Behrens, Timothy EJ and Woolrich, Mark W and Smith, Stephen M},
+  journal={Neuroimage},
+  volume={62},
+  number={2},
+  pages={782--790},
+  year={2012},
+  publisher={Elsevier}
+}
+
+@conference{repsep,
+	author = {Horea-Ioan Ioanas and Markus Rudin},
+	title = {Reproducible Self-Publishing for {P}ython-Based Research},
+	year = 2018,
+	month = aug,
+	publisher = {EuroSciPy},
+	url = {https://figshare.com/articles/Reproducible_Self-Publishing_for_Python-Based_Research/7247339},
+	doi = {10.6084/m9.figshare.7247339.v1},
+}
+
+@MANUAL{numpy,
+	author = {Oliphant, Travis E.},
+	title = {Guide to NumPy},
+	year = 2006,
+	month = mar,
+	address = {Provo, UT},
+	institution = {Brigham Young University},
+	url = {https://www.numpy.org/devdocs/contents.html},
+	keywords = {numpy},
+}
+
+@inproceedings{statsmodels,
+	title = {Statsmodels: {E}conometric and statistical modeling with {P}ython},
+	author = {Seabold, Skipper and Perktold, Josef},
+	booktitle = {9th Python in Science Conference},
+	year = 2010,
+	month = jun,
+	url = {http://conference.scipy.org/proceedings/scipy2010/pdfs/seabold.pdf},
+}
+
+@misc{seaborn,
+	author = {Michael Waskom and
+		Olga Botvinnik and
+		Drew O'Kane and
+		Paul Hobson and
+		Saulius Lukauskas and
+		David C Gemperline and
+		Tom Augspurger and
+		Yaroslav Halchenko and
+		John B. Cole and
+		Jordi Warmenhoven and
+		Julian de Ruiter and
+		Cameron Pye and
+		Stephan Hoyer and
+		Jake Vanderplas and
+		Santi Villalba and
+		Gero Kunter and
+		Eric Quintero and
+		Pete Bachant and
+		Marcel Martin and
+		Kyle Meyer and
+		Alistair Miles and
+		Yoav Ram and
+		Tal Yarkoni and
+		Mike Lee Williams and
+		Constantine Evans and
+		Clark Fitzgerald and
+		Brian and
+		Chris Fonnesbeck and
+		Antony Lee and
+		Adel Qalieh},
+	title = {Seaborn: v0.8.1},
+	year = 2017,
+	month = sep,
+	doi = {10.5281/zenodo.883859},
+	url = {https://doi.org/10.5281/zenodo.883859},
+}
+
+@article{scipy,
+	title = {Python for Scientists and Engineers},
+	author = {K. Jarrod Millman and Michael Aivazis},
+	doi = {10.1109/mcse.2011.36},
+	url = {https://doi.org/10.1109/mcse.2011.36},
+	year = 2011,
+	month = mar,
+	publisher = {Institute of Electrical and Electronics Engineers ({IEEE})},
+	volume = {13},
+	number = {2},
+	pages = {9--12},
+	journal = {Computing in Science {\&} Engineering},
+}
+
+@article{matplotlib,
+	doi = {10.1109/mcse.2007.55},
+	url = {https://doi.org/10.1109/mcse.2007.55},
+	year = 2007,
+	month = jun,
+	publisher = {Institute of Electrical and Electronics Engineers ({IEEE})},
+	volume = {9},
+	number = {3},
+	pages = {90--95},
+	author = {John D. Hunter},
+	title = {Matplotlib: A 2{D} {G}raphics {E}nvironment},
+	journal = {Computing in Science {\&} Engineering},
+}
+
+@InProceedings{pandas,
+	title = { {D}ata {S}tructures for {S}tatistical {C}omputing in {P}ython },
+	author = { Wes McKinney },
+	booktitle = { Proceedings of the 9th Python in Science Conference },
+	pages = { 51 - 56 },
+	year = 2010,
+	month = jun,
+	editor = { St\'efan van der Walt and Jarrod Millman },
+}
+
+@article{Scott1979,
+	title = {On optimal and data-based histograms},
+	author = {David W. Scott},
+	doi = {10.1093/biomet/66.3.605},
+	url = {https://doi.org/10.1093/biomet/66.3.605},
+	year = 1979,
+	month = dec,
+	publisher = {Oxford University Press ({OUP})},
+	volume = {66},
+	number = {3},
+	pages = {605--610},
+	journal = {Biometrika},
 }

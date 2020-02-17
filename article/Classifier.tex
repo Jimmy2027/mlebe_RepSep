@@ -8,15 +8,15 @@
 \begin{sansmath}
 \py{pytex_subfigs(
         [
-                {'script':'scripts/classifier/prepex.py', 'label':'exprepro', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
-                        'options_pre_caption':'\\vspace{-1.5em}',
-                        'options_post':'\\vspace{1em}',
-                        'caption':'Example of a preprocessed slice.'
-                        ,},
                 {'script':'scripts/classifier/uprepex.py', 'label':'exunprepro', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
                         'options_pre_caption':'\\vspace{-1.5em}',
                         'options_post':'\\vspace{1em}',
                         'caption':'Example of an unpreprocessed slice.'
+                        ,},
+                {'script':'scripts/classifier/prepex.py', 'label':'exprepro', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+                        'options_pre_caption':'\\vspace{-1.5em}',
+                        'options_post':'\\vspace{1em}',
+                        'caption':'Example of a preprocessed slice.'
                         ,},
                 ],
         caption='\\textbf{The preprocessing removes the mask there, where the image-pixelvalues are 0.}\\
@@ -25,42 +25,25 @@
         label='fig:prepro_examples',
         )}
 \end{sansmath}
-\iffalse
+
 \begin{sansmath}
-\py{pytex_subfigs(
-        [
-                {'script':'scripts/classifier/plt_trainset.py', 'label':'wrtz', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
-                        'options_pre_caption':'\\vspace{-1.5em}',
-                        'options_post':'\\vspace{1em}',
-                        },
-                {'script':'scripts/classifier/plt_trainset.py', 'label':'pghjkg', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
-                        'options_pre_caption':'\\vspace{-1.5em}',
-                        'options_post':'\\vspace{1em}',
-                        },
-                {'script':'scripts/classifier/plt_trainset.py', 'label':'sdf', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
-                        'options_pre_caption':'\\vspace{-1.5em}',
-                        'options_post':'\\vspace{1em}',
-                        },
-                {'script':'scripts/classifier/plt_trainset.py', 'label':'nnn', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
-                        'options_pre_caption':'\\vspace{-1.5em}',
-                        'options_post':'\\vspace{1em}',
-                        },
-                ],
-        caption=
-        Augmented examples from the Training set.
+\py{pytex_fig('scripts/classifier/plt_trainset.py',
+        conf='article/2*8plot.conf',
+        label='trainset',
+        caption='
+        Augmented samples from the Training set.
         ',
-        label='fig:trainset',
+        multicol=True,
         )}
 \end{sansmath}
-\fi
 
 \begin{sansmath}
 \py{pytex_fig('scripts/classifier/show_blacklist.py',
         conf='article/2*8plot.conf',
         label='bl',
         caption='
-                \\textbf{Slices where the mask includes too much outer-brain intensities are excluded from the data set.}
-                Examples from the slices that were excluded from the data set. The mask is shown in blue, on top of the brian image.
+                \\textbf{Slices where the mask includes too much outer-brain intensities are excluded from the data set.}\\
+                Examples from the slices that were excluded from the data set. The mask is shown in blue, on top of the brain image.
                 ',
         multicol=True,
         )}
@@ -77,11 +60,12 @@ It allows for a easily readable code and makes it thus easier to reproduce.
 The implementation of the U-Net from zhixuhao has two drop-out layers in addition to the original one.
 A drop-out layer randomly sets a fraction of input units from the layer to 0 at each update during training time.
 The set fraction rate is 0.5.
-It is known that dropout helps prevent overfitting and greatly improves the performance of deep learning models \cite{srivastava_dropout:_nodate}.
+It is known that dropout helps prevent overfitting and greatly improves the performance of deep learning models \cite{srivastava2014dropout}.
 
 Three losses were tested for the training of the model, namely the Dice-loss, the binary-cross-entropy loss and the sum of both.
 
-The Dice-loss is computed from the Dice score. It calculates the similarity of two binary samples X and Y with
+The Dice-loss is computed from the Dice score.
+It calculates the similarity of two binary samples X and Y with
 \begin{equation}\label{eqDcoef}
 D_{coef} = \frac{2|X\cap Y|}{|X|+|Y|}   
 \end{equation}
@@ -127,12 +111,14 @@ To patch these, the function \textcolor{mg}{\texttt{$binary\_fill\_holes$}} from
 An example of this can be seen in \cref{fig:prepro_examples}.
 
 In the coronal view, each slice of the transformed data is originally of shape (63, 48), matching the reference space resolution of \SI{200}{\micro\metre}.
-It is then reshaped into (128, 128) by first zero-padding the smaller dimension to the same size of the bigger one and then reshaping the image into 128 using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package. TODO:cite
+It is then reshaped into (128, 128) by first zero-padding the smaller dimension to the same size of the bigger one and then reshaping the image into 128 using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package \cite{noauthor_opencv-python_nodate}.
 
 Finally, the images are normalised by first clipping them from the minimum to the \nth{99} percentile of the data in order to remove outliers and then divided by the maximum.
 
 The data set is separated into Training, Validation and Test sets such that 90\% of the total data are used for training and validation while 10\% are used for testing.
 The Validation set is used for the optimisation of hyper parameters while the Test set is used as a measure of extrapolation capability.
+Images from the irsabi study are only used for quality control of the registration and are thus unknown to the classifier.
+This allows for a better estimation of the general performance of the workflow.
 
 \subsection{Data Augmentation} \label{Data Augmentation}
 
@@ -151,13 +137,13 @@ The coronal view was chosen over the axial one, because the shapes of the masks 
 Additionally the coronal view has the advantage of higher resolution as the MR images were recorded coronally.
 
 To improve the learning process of the network, two callbacks from Keras were used \cite{noauthor_callbacks_nodate}.
-"ReduceLROnPlateau" reduces the learning rate when the validation loss has stopped improving and "EarlyStopping" stops the training when the validation loss has stopped improving for a number of epochs.
+"\textcolor{mg}{\texttt{$ReduceLROnPlateau$}}" reduces the learning rate when the validation loss has stopped improving and "\textcolor{mg}{\texttt{$EarlyStopping$}}" stops the training when the validation loss has stopped improving for a number of epochs.
 The latter reduces computation time and prevents overfitting.
 
 \subsection{Masking}
 In order to improve the SAMRI registration workflow, an additional node is implemented where the images are masked, such that only the brain region remains.
 For this, the input image needs to first be resampled into the resolution of the template space, which has a voxel size of $0.2\times 0.2 \times 0.2$.
-This is done with \textcolor{mg}{\texttt{$Resample$}} command from the FSL library which is an analysis tool for FMRI, MRI and DTI brain imaging data TODO:cite(look on fsl site).
+This is done with \textcolor{mg}{\texttt{$Resample$}} command from the FSL library which is an analysis tool for FMRI, MRI and DTI brain imaging data \cite{fsl}.
 Then, the image is preprocessed using the operations described in \cref{subsec:Data Set}.
 Since the classifier was trained to predict on images of shape (128, 128), the input needs to be reshaped.
 For each slice in the image, the classifier then predicts a segmentation of the brain, which is used to create a 3D mask.

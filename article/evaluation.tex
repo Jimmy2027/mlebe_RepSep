@@ -2,7 +2,7 @@
 For the quality control of the workflow, we first evaluate the segmentation process and then the registration.
 The segmentations of the classifier should be as precise as possible for the masking process, which in return is then used to improve the registration.
 
-As stated by Ioanas et al. in TODO:cite a major challenge of registration QC is that a perfect mapping from the measured image to the template is undefined.
+As stated by Ioanas et al. in \cite{ioanas_optimized_2019} a major challenge of registration QC is that a perfect mapping from the measured image to the template is undefined.
 To address this challenge, they developed four alternative evaluation metrics: volume conservation, smoothness conservation, functional analysis, and variance analysis.
 We will use these metrics to benchmark our workflow against theirs.
 
@@ -20,7 +20,8 @@ The prediction thus have only minor changes in comparison with the template, whi
         label='testset_ex',
         caption='
                 \\textbf{The Classifier predicts a similar mask to the ground truth.}
-                Swarmplots illustrate similarity metric scores of preprocessed images with respect to the corresponding workflow template, plotted across subjects (separated into x-axis bins) and sessions (individual points in each x-axis bin), for the CBV contrast.
+                Random plots from the Test set illustrate the predictions of the classifier.
+                The first row presents the input image, the second the ground truth and the third row shows the predictions of the classifier.
                 ',
         multicol=True,
         )}
@@ -46,8 +47,8 @@ However, in total, the classifier has less predicitons with a lower correlation 
 %\end{figure}
 
 
-As an evaluation of the registration, we make use of the quality control from TODO:cite.
-We will denote the original workflow by Generic and our improved version by Generic*.
+As an evaluation of the registration, we make use of the quality control from \cite{ioanas_optimized_2019}.
+We denote the original workflow as Generic and our improved version as Generic*.
 
 \subsection{Volume Conservation}
 

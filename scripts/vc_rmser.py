@@ -8,6 +8,8 @@ volume_path = path.abspath('data/volume.csv')
 df = pd.read_csv(volume_path)
 
 generic_masked = df.loc[(df['Processing']=='Generic Masked'), 'Volume Conservation Factor'].tolist()
+# temp = df.loc[(df['Processing']=='Generic Masked')]
+# temp.to_csv('scripts/meeeh.csv')
 # temp = df.loc[(df['Processing']=='Generic Masked'), 'Volume Conservation Factor']
 # print(df)
 # print(temp.idxmax(), temp.max())
