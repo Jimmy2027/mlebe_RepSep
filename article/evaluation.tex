@@ -62,7 +62,7 @@ Volume conservation is based on the assumption that the total volume of the scan
 Beyond just size differences between the acquired data and the target template, a volume increase may indicate that the brain was stretched to fill in template brain space not covered by the scan, while a volume decrease might indicate that non-brain voxels were introduced into the template brain space.
 For this analysis we compute a Volume Conservation Factor (VCF), whereby volume conservation is highest for a VCF equal to 1.
 
-A Wilcoxon signed-rank test on the absolute distance to 1 of both VCF distributions (rank = \py{boilerplate.wilcoxon_(dependent_variable='1 - Vcf')[0]}, p = \py{boilerplate.wilcoxon_(dependent_variable='1 - Vcf')[1]}) shows that the VCF is sensitive to the workflow.
+A Wilcoxon signed-rank test on the absolute distance to 1 of both VCF distributions shows that the VCF is sensitive to the workflow (rank = \py{boilerplate.wilcoxon_(dependent_variable='1 - Vcf')[0]}, p = \py{boilerplate.wilcoxon_(dependent_variable='1 - Vcf')[1]}).
 %As seen in \cref{fig:vccv}, we note that in the described dataset VCF is sensitive to the workflow (\py{boilerplate.fstatistic('Processing', condensed=True)}),
 %but not the interaction of the workflow with the contrast (\py{boilerplate.fstatistic('Processing:Contrast', condensed=True)}).
 %Against : (\py{boilerplate.fstatistic('Processing', condensed=True, dependent_variable  = '1 - Vcf')}, \py{boilerplate.fstatistic('Processing:Contrast', condensed=True, dependent_variable  = '1 - Vcf')})
@@ -74,7 +74,7 @@ Moreover, the root mean squared error ratio favours the Generic* workflow
 
 %Descriptively, we observe that the Generic* level of the workflow variable introduces a volume gain
 %(VCF of \py{boilerplate.factorci('Processing[T.Generic Masked]')}).
-Further, we note that there is a slight variance increase in all conditions for the Generic workflow
+Further, we note that there is a slight variance decrease in all conditions for the Generic* workflow
 (\py{boilerplate.varianceratio()}-fold).
 
 With respect to the data break-up by contrast (CBV versus BOLD, \cref{fig:vccv}), we see no notable main effect for the contrast variable
@@ -91,11 +91,11 @@ While the performance of the Generic SAMRI workflow is only slightly different f
 
 Descriptively, we observe that neither the Generic nor the Generic* workflow introduce a strong smoothing (SCF of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
-Further, we note that there is a slight variance increase for the Generic workflow
+Further, we note that there is a slight variance decrease for the Generic* workflow
 (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3)}
 -fold)
 
-Given the break-up by contrast shown in \cref{fig:sccv}, we see only very weak effect sizes for the contrast variable
+Given the break-up by contrast shown in \cref{fig:sccv}, we see no effect for the contrast variable
 (SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')})
 and the contrast-workflow interaction
 (SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).

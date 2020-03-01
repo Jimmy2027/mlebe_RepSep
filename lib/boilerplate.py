@@ -105,7 +105,7 @@ def varianceratio(
 	generic = np.var(df.loc[df['Processing']=='Generic', dependent_variable].tolist())
 
 
-	ratio = generic/generic_masked
+	ratio = generic_masked/generic
 	return float_to_tex(ratio, max_len, **kwargs)
 
 def variance_test(

@@ -4,7 +4,7 @@ Intensities outside the brain region of a mouse MR image present high variations
 This can lead to stretching or skewing of the brain during the registration process in order to fit unwanted intensities inside the template brain region.
 As a remedy, we extract the brain volume from the images and compute the registration transformation on an image specific region of interest.
 For this purpose, we propose a machine learning enabled brain extraction in an additional node to the Generic workflow presented by Ioanas et al. in \cite{ioanas_optimized_2019}.
-It creates a mask of the brain region using a classifier, that is then used to mask the image such that only the region of interest remains.
+It creates a mask of the brain region using a classifier, that is then used to extract the region of interest.
 Two classifiers were trained, one for T2 contrast images and one for BOLD \cite{bold} and CBV \cite{cbv} contrasts.
 The brain extraction nodes of the workflow return both the masked input and the binary mask.
 The latter is used to concentrate computing effort on a region of interest in preprocessing functions while the extracted brain volume is used to compute the registration transformation.
