@@ -12,9 +12,6 @@ import nipype.interfaces.io as nio
 masks = {
 	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
 	'generic_masked':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
-	# 'generic_ambmc':'/usr/share/mouse-brain-atlases/ambmc_200micron_mask.nii',
-	# 'legacy':'/usr/share/mouse-brain-atlases/lambmc_200micron_mask.nii',
-	# 'legacy_dsurqec':'/usr/share/mouse-brain-atlases/ldsurqec_200micron_mask.nii',
 	}
 
 def bids_autograb(bids_dir):
@@ -56,26 +53,13 @@ scratch_dir = '~/.scratch/mlebe'
 
 df_bids = bids_autograb(scratch_dir + '/bids_collapsed/')
 df_bids['Processing'] = 'Unprocessed'
-# df_bids['Template'] = 'Unprocessed'
 
 df_generic = bids_autograb(scratch_dir + '/preprocessing/generic_collapsed/')
 df_generic['Processing'] = 'Generic'
-# df_generic['Template'] = 'Generic'
 
 df_generic_masked = bids_autograb(scratch_dir + '/preprocessing/generic_masked_collapsed/')
 df_generic_masked['Processing'] = 'Generic Masked'
-# df_generic_legacy['Template'] = 'LGeneric MAsked'
-# df_generic_legacy['Template'] = 'Legacy'
 
-# df_legacy = bids_autograb(scratch_dir + '/preprocessing/legacy_collapsed/')
-# df_legacy['Processing'] = 'Legacy'
-# df_legacy['Template'] = 'Legacy'
-#
-# df_legacy_generic = bids_autograb(scratch_dir + '/preprocessing/legacy_dsurqec_collapsed/')
-# df_legacy_generic['Processing'] = 'Legacy'
-# df_legacy_generic['Template'] = 'Generic'
-
-# df = pd.concat([df_generic, df_generic_masked, df_generic_legacy, df_legacy_generic, df_bids])
 df = pd.concat([df_generic, df_generic_masked, df_bids])
 df['Uid'] = df['subject']+'_'+df['session']+'_'+df['modality']
 df = df[df['type']=='func']
@@ -93,8 +77,9 @@ for uid in uids:
 	original = df.loc[(df['Uid']==uid) & (df['Processing']=='Unprocessed'), 'Smoothness'].item()
 	df.loc[(df['Uid']==uid), 'Smoothness Conservation Factor'] = df.loc[(df['Uid']==uid), 'Smoothness'] / original
 
-v_path='../data/volume.csv'
-v = pd.read_csv(path.abspath(v_path))
+v_path= path.join(scratch_dir, 'data', 'volume.csv')
+
+v = pd.read_csv(v_path)
 df = df.reset_index()
 df['Volume-Normalized SCF'] = 0
 for uid in df['Uid'].unique():
@@ -107,8 +92,9 @@ for uid in df['Uid'].unique():
 		vcf = v.loc[(v['Uid']==uid)&(v['Processing']==p),'Volume Conservation Factor'].item()
 		df.loc[(df['Uid']==uid)&(df['Processing']==p),'Volume-Normalized SCF'] = scf/(vcf**(1./3.))
 
-df.to_csv('../data/smoothness.csv')
+df.to_csv(path.join(scratch_dir, 'data', 'smoothness.csv'))
+
 files = os.listdir('./')
 for _file in files:
-	if  _file.endswith(('.out','.1D')):
+	if _file.endswith(('.out','.1D')):
 		os.remove(path.abspath(path.expanduser(_file)))

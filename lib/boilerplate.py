@@ -4,6 +4,7 @@ import statsmodels.api as sm
 import statsmodels.formula.api as smf
 from os import path
 from lib.utils import float_to_tex, inline_anova, inline_factor
+from scipy.stats import levene, iqr, wilcoxon, mannwhitneyu
 
 def fstatistic(factor,
 	df_path='data/volume.csv',
@@ -24,6 +25,23 @@ def fstatistic(factor,
 	anova = sm.stats.anova_lm(ols, typ=3)
 	tex = inline_anova(anova, factor, 'tex', **kwargs)
 	return tex
+
+def wilcoxon_(
+	df_path='data/volume.csv',
+	dependent_variable='Volume Conservation Factor',
+	):
+	df_path = path.abspath(df_path)
+	df = pd.read_csv(df_path)
+	df = df.loc[df['Processing']!= 'Unprocessed']
+	generic_masked_df = df.loc[df['Processing'] == 'Generic Masked']
+	generic_df = df.loc[df['Processing'] == 'Generic']
+	generic_masked_df = generic_masked_df.sort_values(by = ['Path'])
+	generic_df = generic_df.sort_values(by=['Path'])
+	generic_masked = generic_masked_df[dependent_variable].tolist()
+	generic = generic_df[dependent_variable].tolist()
+	statistic, p = wilcoxon(generic_masked, generic)
+	return np.round(statistic,3), np.round(p, 3)
+
 
 def factorci(factor,
 	df_path='data/volume.csv',
@@ -87,8 +105,7 @@ def varianceratio(
 	generic = np.var(df.loc[df['Processing']=='Generic', dependent_variable].tolist())
 
 
-	ratio = generic_masked/generic
-	print(ratio)
+	ratio = generic/generic_masked
 	return float_to_tex(ratio, max_len, **kwargs)
 
 def variance_test(
@@ -111,26 +128,17 @@ def variance_test(
         return tex
 
 def print_dice():
-	textfile = open('mlebe_figs/dice_score.txt', 'r')
+	textfile = open('data/classifier/dice_score.txt', 'r')
 	dice_score = textfile.readline()
 	return np.round(float(dice_score), 3)
 
-def print_testcorr_ytrue():
-	corr_df = pd.read_csv('data/classifier/test_correlation_dataframe.csv')
-	# corr = corr_df.loc[['x_test'], ['y_test']]
-	return np.round(corr_df.values[1][1], 3)
-
-def print_testcorr_ypred():
-	corr_df = pd.read_csv('data/classifier/test_correlation_dataframe.csv')
-	# corr = corr_df.loc[['x_test'], ['y_pred']]
-	return np.round(corr_df.values[2][1], 3)
-
-def print_blcorr_ytrue():
-	corr_df = pd.read_csv('data/classifier/bl_correlation_dataframe.csv', index_col = 0)
-	corr = corr_df.loc[['x_bl'], ['y_bl']]
-	return np.round(corr.values[0][0], 3)
-
-def print_blcorr_ypred():
-	corr_df = pd.read_csv('data/classifier/bl_correlation_dataframe.csv', index_col = 0)
-	corr = corr_df.loc[['x_bl'], ['y_pred']]
-	return np.round(corr.values[0][0], 3)
+def iqr_(
+	df_path='data/volume.csv',
+	dependent_variable='Volume Conservation Factor',
+	processing = 'Generic',
+	):
+	df_path = path.abspath(df_path)
+	df = pd.read_csv(df_path)
+	df = df.loc[df['Processing']!='Unprocessed']
+	list = df.loc[(df['Processing'] == processing), dependent_variable].tolist()
+	print(iqr(list))

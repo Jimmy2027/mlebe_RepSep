@@ -14,7 +14,7 @@
 			\includegraphics[width=\textwidth]{data/manual_overview/generic/4008_ofMcF1_cbv} 
 			}
 		\caption{
-			SAMRI Generic workflow with Generic template, note the undistorted mapping and conservative smoothing.
+			SAMRI Generic workflow, note the undistorted mapping and conservative smoothing.
 			\vspace{1em}
 			}
 		\label{fig:fit_gg}
@@ -27,7 +27,7 @@
 			\includegraphics[width=\textwidth]{data/manual_overview/generic/4008_ofMcF1_T2w} 
 			}
 		\caption{
-			SAMRI Generic workflow with Generic template, inspecting the structural scan intermediary; note the undistorted mapping and conservative smoothing.
+			SAMRI Generic workflow, inspecting the structural scan intermediary; note the undistorted mapping and conservative smoothing.
 			\vspace{1em}
 			}
 		\label{fig:fit_gga}
@@ -40,7 +40,7 @@
 			\includegraphics[width=\textwidth]{data/manual_overview/generic_masked/4008_ofMcF1_cbv}
 			}
 		\caption{
-			SAMRI Generic Masked workflow, note the strong smoothing and the mapping distortion in the rostral and caudal areas.
+			SAMRI Generic Masked workflow, note the undistorted mapping and conservative smoothing.
 			}
 		\label{fig:fit_ll}
 	\end{subfigure}\hfill
@@ -52,12 +52,12 @@
 			\includegraphics[width=\textwidth]{data/manual_overview/generic_masked/4008_ofMcF1_T2w}
 			}
 		\caption{
-			SAMRI Generic Masked workflow, note the strong smoothing and the mapping distortion in the rostral and caudal areas.
+			SAMRI Generic Masked workflow, inspecting the structural scan intermediary; note the undistorted mapping and conservative smoothing.
 			}
 		\label{fig:fit_lg}
 	\end{subfigure}
 	\caption{
-		\textbf{The SAMRI Generic workflow induces less smoothness, and provides more accurate coverage.}
+		\textbf{The SAMRI Generic* provides a more accurate coverage of the template space.}
 		Depicted are automatically created operator overview graphics, which allow a slice-by-slice (spacing analogous to acquisition) inspection of the registration fit.
 		This representation affords a particularly detailed view of the preprocessed MRI data, and highly accurate template contours.
 		}
@@ -97,26 +97,24 @@
 \end{figure*}
 
 \begin{figure*}[h!]
-	\begin{subfigure}{.48\textwidth}
-		\centering
-		\includedot[width=\textwidth]{data/generic_masked_nipype}
-		\vspace{-1.9em}
-		\caption{
-			“SAMRI Generic Mased” workflow, which is based on the \textcolor{mg}{\texttt{antsIntroduction.sh}} function (and other functions with hard-coded parameters optimized for human brain registration), and also performs destructive affine manipulations.
-			}
-		\label{fig:nwfgl}
-	\end{subfigure}\hfill
-	\begin{subfigure}{.48\textwidth}
+	\begin{subfigure}{0.6\textwidth}
 		\centering
 		\includedot[width=\textwidth]{data/generic_nipype}
 		\vspace{1.4em}
 		\caption{
 			“SAMRI Generic”  workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function.
-			The pipeline uses a higher-resolution structural scan intermediary for registration (note the two processing streams), which facilitates differential handling of anatomical variation and susceptibility artefacts.
-			The function used is highly parameterized, and both of its instances --- “s\niceus register” and “f\niceus register” --- are supplied in the workflow with defaults optimized for mouse brain registration.
-			}
+		}
 		\label{fig:nwfgg}
 	\end{subfigure}
+		\begin{subfigure}{0.6\textwidth}
+		\centering
+		\includedot[width=\textwidth]{data/generic_masked_nipype}
+		\vspace{-1.9em}
+		\caption{
+			“SAMRI Generic Masked” workflow, which is based on the \textcolor{mg}{\texttt{antsRegistration}} function. Two additional nodes provide the workflow with both the masked image and the binary mask.
+			}
+		\label{fig:nwfgl}
+	\end{subfigure}\hfill
 	\caption{
 		Directed acyclic graphs detailing the precise node names (as seen in the SAMRI source code) for the two alternate MRI registration workflows.
 		The package correspondence of each processing node is appended in parentheses to the node name.

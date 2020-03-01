@@ -1,152 +1,29 @@
-\section{The Classifier}
+\section{The Improved Workflow}
 
-%As part of the analysis of high-field mouse MRI data, relevant brain tissue needs to be selected via a mask.
-%For this process to be performed automatically, brain voxels need to be classified based both on their signal intensity and position in the image.
-%Nowadays, deep neural networks are the state-of-the-art methods for tissue segmentation in biomedical imaging, and thus constitute a promising method for preclinical neuroscience.
+Intensities outside the brain region of a mouse MR image present high variations and bias the registration process.
+This can lead to stretching or skewing of the brain during the registration process in order to fit unwanted intensities inside the template brain region.
+As a remedy, we extract the brain volume from the images and compute the registration transformation on an image specific region of interest.
+For this purpose, we propose a machine learning enabled brain extraction in an additional node to the Generic workflow presented by Ioanas et al. in \cite{ioanas_optimized_2019}.
+It creates a mask of the brain region using a classifier, that is then used to mask the image such that only the region of interest remains.
+Two classifiers were trained, one for T2 contrast images and one for BOLD \cite{bold} and CBV \cite{cbv} contrasts.
+The brain extraction nodes of the workflow return both the masked input and the binary mask.
+The latter is used to concentrate computing effort on a region of interest in preprocessing functions while the extracted brain volume is used to compute the registration transformation.
 
+\section{The Classifier} \label{sec:Convolutional Neural Networks}
+Classifiying each pixel with "brain" and "not brain" for the brain region extraction is done via a deep learning method.
+In recent years it has been shown that convolutional neural network give the best results for semantic image segmentation in terms of precision and flexibility \cite{geng_survey_2018, ronneberger_u-net:_2015}.
+Training a neural network into a classifier is a supervised method, meaning that the model needs to learn its parameters based on observations of data.
 
-\begin{sansmath}
-\py{pytex_subfigs(
-        [
-                {'script':'scripts/classifier/uprepex.py', 'label':'exunprepro', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
-                        'options_pre_caption':'\\vspace{-1.5em}',
-                        'options_post':'\\vspace{1em}',
-                        'caption':'Example of an unpreprocessed slice.'
-                        ,},
-                {'script':'scripts/classifier/prepex.py', 'label':'exprepro', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
-                        'options_pre_caption':'\\vspace{-1.5em}',
-                        'options_post':'\\vspace{1em}',
-                        'caption':'Example of a preprocessed slice.'
-                        ,},
-                ],
-        caption='\\textbf{The preprocessing removes the mask there, where the image-pixelvalues are 0.}\\
-        Plots of the same image, superposed with the template mask, with and without preprocessing.
-        ',
-        label='fig:prepro_examples',
-        )}
-\end{sansmath}
+The training data set of a classifier is as important as the architecture of the model itself.
+To improve general-purpose application, training examples need to be drawn from a usually unknown probability distribution, that is expected to be representative of the space of occurrences.
+We define the space of occurrences as the space of which the data of interest is drawn from.
+In our case this consists of all the different mouse brain MRI data sets coming from multiple experiments, with their corresponding labels.
+Ideally experiment setups are uniform and the resulting data does not differ much, but small variations in the experiment setup and animal size are unavoidable.
+Based on an approximation of the occurrence space, the network has to build a general model that enables it to extrapolate and produce sufficiently accurate predictions in new cases.
+Manually creating annotations as required to train a deep-learning classifier for high-resolution data is often infeasible, since it requires manual expert segmentation of vast amounts of slices.
 
-\begin{sansmath}
-\py{pytex_fig('scripts/classifier/plt_trainset.py',
-        conf='article/2*8plot.conf',
-        label='trainset',
-        caption='
-        Augmented samples from the Training set.
-        ',
-        multicol=True,
-        )}
-\end{sansmath}
+Here we take as data set, images that were registered through the SAMRI workflow into a reference space defined by the Toronto Hospital for Sick Children Mouse Imaging Center \cite{dsu}.
+A mask, defined in the same reference space is used as ground truth.
 
-\begin{sansmath}
-\py{pytex_fig('scripts/classifier/show_blacklist.py',
-        conf='article/2*8plot.conf',
-        label='bl',
-        caption='
-                \\textbf{Slices where the mask includes too much outer-brain intensities are excluded from the data set.}\\
-                Examples from the slices that were excluded from the data set. The mask is shown in blue, on top of the brain image.
-                ',
-        multicol=True,
-        )}
-\end{sansmath}
-
-\subsection{Model}
-As the architecture of the classifier, the U-Net from Ronneberger et al \cite{ronneberger_u-net:_2015} was chosen based on its high performance in the field of biomedical image segmentation.
-This is a convolutional neural network that consists of a contracting path that captures context in addition to a symmetric expanding path that enables precise localisation.
-Localisation in this context means that a class label is assigned to each pixel.
-We used the U-Net implementation from zhixuhao \cite{zhixuhao_zhixuhao/unet_2020}, written in Keras.
-Keras is a high-level neural networks API, written in Python and capable of running on top of TensorFlow, CNTK, or Theano.
-It allows for a easily readable code and makes it thus easier to reproduce.
-
-The implementation of the U-Net from zhixuhao has two drop-out layers in addition to the original one.
-A drop-out layer randomly sets a fraction of input units from the layer to 0 at each update during training time.
-The set fraction rate is 0.5.
-It is known that dropout helps prevent overfitting and greatly improves the performance of deep learning models \cite{srivastava2014dropout}.
-
-Three losses were tested for the training of the model, namely the Dice-loss, the binary-cross-entropy loss and the sum of both.
-
-The Dice-loss is computed from the Dice score.
-It calculates the similarity of two binary samples X and Y with
-\begin{equation}\label{eqDcoef}
-D_{coef} = \frac{2|X\cap Y|}{|X|+|Y|}   
-\end{equation}
-
-It is a quantity ranging from 0 to 1 that is to be maximised.
-The loss is then calculated with $1-D_{coef}$.
-Because the Dice loss is not differentiable, small changes need to be made.
-In our case, the two samples to be compared are normalised, grey valued images  and are thus not binary but have values between 0 and 1. 
-Additionally, instead of using the logical operation \textit{and}, element wise products are used to approximate the non-differentiable intersection operation.
-To avoid a division by zero, $+1$ is added on the numerator and denominator.
-
-Because many more pixels in the masks are 0 than 1, there is a class imbalance problem.
-It is a problem, because in this case a false positive gives a much higher loss than a false negative.
-For example, predicting only black would give an acceptable loss, while predicting only white pixels would not.
-Using the Dice coefficient as a loss function for training should make it invariant to this class imbalance problem as stated by Fausto Milletari et al. in \cite{milletari_v-net:_2016}.
-
-The binary cross-entropy loss, also called Log loss, is defined by:
-\begin{equation}\label{eq_bincross}
-    H_p (q) = -\frac{1}{N} \sum ^N _{i=1} y_i \cdot log(p(y_i))+(1-y_i) \cdot log(1-p(y_i))
-\end{equation}
-
-For pixel values of 0 and 1, it adds $log(p(y))$ for each white pixel (y=1) and $log(1-p(y))$ for every black pixel (y=0) to the loss.
-
-We quickly realised that the Dice-loss gives the best results for our task and therefore used it to train the model. )TODO:compare results)
-
-
-\subsection{Data Set} \label{subsec:Data Set}
-The data set consists of 3D MR images taken from an aggregation of three studies; irsabi , opfvta \cite{ioanas_whole-brain_nodate}, drlfom \cite{ioanas_effects_nodate} and other unpublished data, acquired with similar parameters. TODO:cite
-
-The images are transformed into a standard space with one defined mask via SAMRI \cite{noauthor_ibt-fmi/samri_2019} and are thus defined in the same affine space.
-SAMRI is a data analysis package of the ETH/UZH Institute for Biomedical Engineering.
-It is equipped with an optimized registration workflow and standard geometric space for small animal brain imaging \cite{ioanas_optimized_2019}.
-
-Because of variance in mouse brain anatomy and in the experiment setup, some of the transformed data do not overlap perfectly with the reference template.
-To filter these images out, most of the incongruent slices were removed manually from the data set.
-
-For the registration of the images, a padding was needed to make the originally not affine space affine. 
-Due to this, the 3D volumes present many zero-valued slices, some of them overlapping with the mask.
-
-Since it is not wanted for the model to predict a mask on black slices, the mask is set to zero where the image is as well.
-Because some pixels representing the brain tissue are zero-valued, holes result from this operation.
-To patch these, the function \textcolor{mg}{\texttt{$binary\_fill\_holes$}} from scipy.ndimage.morphology \cite{noauthor_multi-dimensional_nodate} is used.
-An example of this can be seen in \cref{fig:prepro_examples}.
-
-In the coronal view, each slice of the transformed data is originally of shape (63, 48), matching the reference space resolution of \SI{200}{\micro\metre}.
-It is then reshaped into (128, 128) by first zero-padding the smaller dimension to the same size of the bigger one and then reshaping the image into 128 using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package \cite{noauthor_opencv-python_nodate}.
-
-Finally, the images are normalised by first clipping them from the minimum to the \nth{99} percentile of the data in order to remove outliers and then divided by the maximum.
-
-The data set is separated into Training, Validation and Test sets such that 90\% of the total data are used for training and validation while 10\% are used for testing.
-The Validation set is used for the optimisation of hyper parameters while the Test set is used as a measure of extrapolation capability.
-Images from the irsabi study are only used for quality control of the registration and are thus unknown to the classifier.
-This allows for a better estimation of the general performance of the workflow.
-
-\subsection{Data Augmentation} \label{Data Augmentation}
-
-Because of diverse settings in the experiment setup, including animal manipulations causing artifacts, MR image quality can differ substantially between labs and even individual study populations.
-To account for these variations, we apply an extensive set of transformations to our data.
-This includes rotations of up to 90$^{\circ}$, a width and height shift range of 30 pixels, a shear range of 5 pixels, zoom range of 0.2 and horizontal as well as vertical flips.
-
-This not only increases the data set size but also makes it more representative of the general data distribution of Mice brain MR images and results in a model with a better generalisation capability.
-
-Many more sophisticated methods have been tested, but it has been shown that one of the more successful data augmentation strategies is the simple transformations mentioned above \cite{perez_effectiveness_2017}.
-
-
-\subsection{Training}
-The model was trained slice wise, with the coronal view and 600 as the maximum number of epochs.
-The coronal view was chosen over the axial one, because the shapes of the masks are much simpler in the coronal view and thus easier to learn for the network.
-Additionally the coronal view has the advantage of higher resolution as the MR images were recorded coronally.
-
-To improve the learning process of the network, two callbacks from Keras were used \cite{noauthor_callbacks_nodate}.
-"\textcolor{mg}{\texttt{$ReduceLROnPlateau$}}" reduces the learning rate when the validation loss has stopped improving and "\textcolor{mg}{\texttt{$EarlyStopping$}}" stops the training when the validation loss has stopped improving for a number of epochs.
-The latter reduces computation time and prevents overfitting.
-
-\subsection{Masking}
-In order to improve the SAMRI registration workflow, an additional node is implemented where the images are masked, such that only the brain region remains.
-For this, the input image needs to first be resampled into the resolution of the template space, which has a voxel size of $0.2\times 0.2 \times 0.2$.
-This is done with \textcolor{mg}{\texttt{$Resample$}} command from the FSL library which is an analysis tool for FMRI, MRI and DTI brain imaging data \cite{fsl}.
-Then, the image is preprocessed using the operations described in \cref{subsec:Data Set}.
-Since the classifier was trained to predict on images of shape (128, 128), the input needs to be reshaped.
-For each slice in the image, the classifier then predicts a segmentation of the brain, which is used to create a 3D mask.
-The latter is then reshaped into the original shape inverting the preprocessing step, either with the opencv resize method or by cropping.
-Additionally, the binary mask is resampled into its original affine space, before being multiplied with the brain image to extract the ROI.
-The workflow then continues with only the Region Of Interest as the image.
+The registration process is good but not perfect, which is why the mask does not always align perfectly with the brain region of every slice.
+While our purpose was to create a workflow that generates better masks than the one from the template space, we show that the latter can be used as training data for the deep-learning model, by applying small changes to them.

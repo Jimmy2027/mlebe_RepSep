@@ -1,5 +1,5 @@
 import pandas as pd
-
+from os import path
 from samri.report.snr import df_roi_data, df_significant_signal
 from samri.utilities import bids_autofind_df
 
@@ -60,7 +60,7 @@ df = df.rename(
 		'Modality':'Contrast',
 		})
 
-df.to_csv('../data/functional_significance.csv')
+df.to_csv(path.join(scratch_dir, 'data', 'functional_significance.csv'))
 
 df = pd.DataFrame([])
 for key in masks:
@@ -96,5 +96,4 @@ df = df.rename(
 		'Median Dr T':'Median DR t',
 		'Modality':'Contrast',
 		})
-
-df.to_csv('../data/functional_t.csv')
+df.to_csv(path.join(scratch_dir, 'data', 'functional_t.csv'))

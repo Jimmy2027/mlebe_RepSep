@@ -2,22 +2,145 @@
 The same methods that are described in the original paper have been applied in this work.
 A more detailed description can be found there.
 
-The slice-wise predictions of the model are reconstructed to a 3D mask via the command \textit{Nifit1Image} from the neuroimaging python package nibabel \cite{noauthor_neuroimaging_nodate}.
-This is done using the same affine space as the input image.
+\begin{sansmath}
+\py{pytex_subfigs(
+        [
+                {'script':'scripts/classifier/uprepex.py', 'label':'exunprepro', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+                        'options_pre_caption':'\\vspace{-1.5em}',
+                        'options_post':'\\vspace{1em}',
+                        'caption':'Example of an unpreprocessed slice.'
+                        ,},
+                {'script':'scripts/classifier/prepex.py', 'label':'exprepro', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+                        'options_pre_caption':'\\vspace{-1.5em}',
+                        'options_post':'\\vspace{1em}',
+                        'caption':'Example of a preprocessed slice.'
+                        ,},
+                ],
+        caption='\\textbf{The preprocessing removes the mask there, where the image-pixelvalues are 0.}\\
+        Plots of the same image, superposed with the template mask, with and without preprocessing.
+        ',
+        label='fig:prepro_examples',
+        )}
+\end{sansmath}
 
-For the training of the classifier, the data are separated into a Training, Validation and Test set with the help of the function \textcolor{mg}{\texttt{$train\_test\_split$}} from the package sklearn.model$\_$selection \cite{noauthor_scikit-learn/scikit-learn_2020}.
+\begin{sansmath}
+\py{pytex_fig('scripts/classifier/plt_trainset.py',
+        conf='article/2*8plot.conf',
+        label='trainset',
+        caption='
+        Augmented samples from the Training set.
+        ',
+        multicol=True,
+        )}
+\end{sansmath}
 
-For the quality control of the workflows, a dataset with an effective size of 102 scans is used.
-%Data from 11 adult animals
-%(\py{pytex_printonly('scripts/sex.py')},
-%\py{pytex_printonly('scripts/age.py')}
-%old at study onset)
-is included, with each animal scanned on up to 5 sessions (repeated at 14 day intervals).
-Each session contains an anatomical scan and two functional scans --- with Blood-Oxygen Level Dependent (BOLD) \cite{Ogawa1990} and Cerebral Blood Volume (CBV) \cite{Marota1999} contrast, respectively (for a total of 68 functional scans).
+\begin{sansmath}
+\py{pytex_fig('scripts/classifier/show_blacklist.py',
+        conf='article/2*8plot.conf',
+        label='bl',
+        caption='
+                \\textbf{Slices where the mask includes too much outer-brain intensities are excluded from the data set.}\\
+                Examples from the slices that were excluded from the data set. The mask is shown in blue, on top of the brain image.
+                ',
+        multicol=True,
+        )}
+\end{sansmath}
+
+\subsection{Model}
+As the architecture of the classifier, the U-Net from Ronneberger et al \cite{ronneberger_u-net:_2015} was chosen based on its high performance in the field of biomedical image segmentation.
+This is a convolutional neural network that consists of a contracting path that captures context in addition to a symmetric expanding path that enables precise localisation.
+Localisation in this context means that a class label is assigned to each pixel.
+We used the U-Net implementation from zhixuhao \cite{zhixuhao_zhixuhao/unet_2020}, written in Keras.
+Keras is a high-level neural networks API, written in Python and capable of running on top of TensorFlow, CNTK, or Theano.
+It allows for a easily readable code and thus makes the workflow easier to reproduce.
+
+The implementation of the U-Net from zhixuhao has, in addition to the original architecture, two drop-out layers.
+A drop-out layer randomly sets a fraction of input units from the layer to 0 at each update during training time.
+The set fraction rate is 0.5.
+It is known that dropout helps prevent overfitting and greatly improves the performance of deep learning models \cite{srivastava2014dropout}.
+
+The model was trained using the Dice loss, which is computed from the Dice score.
+It calculates the similarity of two binary samples X and Y with
+\begin{equation}\label{eqDcoef}
+D_{coef} = \frac{2|X\cap Y|}{|X|+|Y|}
+\end{equation}
+
+It is a quantity ranging from 0 to 1 that is to be maximised.
+The loss is then calculated with $1-D_{coef}$.
+Because the Dice loss is not differentiable, small changes need to be made.
+In our case, the two samples to be compared are normalised, grey valued images  and are thus not binary but have values between 0 and 1.
+Additionally, instead of using the logical operation \textit{and}, element wise products are used to approximate the non-differentiable intersection operation.
+To avoid a division by zero, $+1$ is added on the numerator and denominator.
+
+Because many more pixels in the masks are 0 than 1, there is a class imbalance problem.
+It is a problem, because in this case a false positive gives a much higher loss than a false negative.
+For example, predicting only black would give an acceptable loss, while predicting only white pixels would not.
+Using the Dice coefficient as a loss function for training should make it invariant to this class imbalance problem as stated by Fausto Milletari et al. in \cite{milletari_v-net:_2016}.
+
+\subsection{Data Set} \label{subsec:Data Set}
+The data set consists of 3D MR images taken from an aggregation of three studies: irsabi \cite{irsabi_bidsdata}, opfvta \cite{ioanas_whole-brain_nodate}, drlfom \cite{ioanas_effects_nodate} and other unpublished data, acquired with similar parameters.
 
 The measured animals were fitted with an optic fiber implant ($\mathrm{l=\SI{3.2}{\milli\meter} \ d=\SI{400}{\micro\meter}}$) targeting the Dorsal Raphe (DR) nucleus in the brain stem.
+Using this dataset shows that the workflow is robust to these types of experiment setups.
 
-All experimental procedures were approved by the Veterinary Office of the Canton of Zurich and done in accordance with the relevant regulations.
+Images from the irsabi study are only used for quality control of the registration and are thus unknown to the classifier.
+It is the the same dataset that was used to benchmark the Generic workflow in the original paper and thus allows for a better estimation of the general performance of our improved pipeline.
+
+The images are transformed into a standard space using a template mask via SAMRI \cite{noauthor_ibt-fmi/samri_2019} and are thus defined in the same affine space.
+SAMRI is a data analysis package of the ETH/UZH Institute for Biomedical Engineering.
+It is equipped with an optimized registration workflow and standard geometric space for small animal brain imaging \cite{ioanas_optimized_2019}.
+
+Because of variance in mouse brain anatomy and in the experiment setup, some of the transformed data do not overlap perfectly with the reference template.
+To filter these images out, most of the incongruent slices were removed manually from the data set.
+
+For the registration of the images, a padding was needed to make the originally not affine space affine.
+Due to this, the 3D volumes present many zero-valued slices, some of them overlapping with the mask.
+
+Since it is not wanted for the model to predict a mask on black slices, the mask is set to zero where the image is as well.
+Because some pixels representing the brain tissue are zero-valued, holes result from this operation.
+To patch these, the function \textcolor{mg}{\texttt{$binary\_fill\_holes$}} from scipy.ndimage.morphology \cite{noauthor_multi-dimensional_nodate} is used.
+An example of the preprocessing can be seen in \cref{fig:prepro_examples}.
+
+In the coronal view, each slice of the transformed data is originally of shape (63, 48), matching the reference space resolution of \SI{200}{\micro\metre}.
+It is then reshaped into (128, 128) by first zero-padding the smaller dimension to the same size of the bigger one and then reshaping the image into 128 using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package \cite{noauthor_opencv-python_nodate}.
+
+Finally, the images are normalised by first clipping them from the minimum to the \nth{99} percentile of the data in order to remove outliers and then divided by the maximum.
+
+The data set is separated into Training, Validation and Test sets such that 90\% of the total data are used for training and validation while 10\% are used for testing.
+This is done with the help of the function \textcolor{mg}{\texttt{$train\_test\_split$}} from the package sklearn.model$\_$selection \cite{noauthor_scikit-learn/scikit-learn_2020}.
+The Validation set is used for the optimisation of hyper parameters while the Test set is used as a measure of extrapolation capability.
+
+\subsection{Data Augmentation} \label{Data Augmentation}
+
+Because of diverse settings in the experiment setup, including animal manipulations causing artifacts, MR image quality can differ substantially between labs and even individual study populations.
+To account for these variations, we apply an extensive set of transformations to our data.
+This includes rotations of up to 90$^{\circ}$, a width and height shift range of 30 pixels, a shear range of 5 pixels, zoom range of 0.2 and horizontal as well as vertical flips.
+
+This not only increases the data set size but also makes it more representative of the general data distribution of mice brain MR images and results in a model with a better generalisation capability.
+
+Many more sophisticated methods have been tested, but it has been shown that one of the more successful data augmentation strategies is the simple transformations mentioned above \cite{perez_effectiveness_2017}.
+
+
+\subsection{Training}
+The model was trained slice wise, with the coronal view and 600 as the maximum number of epochs.
+The coronal view was chosen over the axial one, because the shapes of the masks are much simpler in the coronal view and thus easier to learn for the network.
+Additionally the coronal view has the advantage of higher resolution as the MR images were recorded coronally.
+
+To improve the learning process of the network, two callbacks from Keras were used \cite{noauthor_callbacks_nodate}.
+"\textcolor{mg}{\texttt{$ReduceLROnPlateau$}}" reduces the learning rate when the validation loss has stopped improving and "\textcolor{mg}{\texttt{$EarlyStopping$}}" stops the training when the validation loss has stopped improving for a number of epochs.
+The latter reduces computation time and prevents overfitting.
+
+\subsection{Masking}
+In order to improve the SAMRI registration workflow, an additional node is implemented where the images are masked, such that only the brain region remains.
+For this, the input image needs to first be resampled into the resolution of the template space, which has a voxel size of $0.2\times 0.2 \times 0.2$.
+This is done with \textcolor{mg}{\texttt{$Resample$}} command from the FSL library which is an analysis tool for FMRI, MRI and DTI brain imaging data \cite{fsl}.
+Then, the image is preprocessed using the operations described in \cref{subsec:Data Set}.
+Since the classifier was trained to predict on images of shape (128, 128), the input needs to be reshaped.
+The slice-wise predictions of the model are reconstructed to a 3D mask via the command \textit{Nifit1Image} from the neuroimaging python package nibabel \cite{noauthor_neuroimaging_nodate}.
+This is done using the same affine space as the input image.
+The latter is then reshaped into the original shape inverting the preprocessing step, either with the opencv resize method or by cropping.
+Additionally, the binary mask is resampled into its original affine space, before being multiplied with the brain image to extract the ROI.
+The workflow then continues with only the Region Of Interest as the image.
 
 \subsection{Metrics}
 
@@ -66,5 +189,5 @@ Specifically, distribution densities for plots are drawn using the Scott bandwid
 
 \section{Data and Code Availability}
 
-The data archive relevant for this article is freely available \cite{irsabi_bidsdata}, and automatically accessible via the Gentoo Linux package manager.
-The code relevant for reproducing this document is also freely available \cite{source}, as are its dependencies, and most prominently, SAMRI \cite{samri}, the package via which the herein described workflows are distributed.
+The data archive relevant for this article is freely available \cite{mlebe_bidsdata}, and automatically accessible via the Gentoo Linux package manager.
+The code relevant for reproducing this document is also freely available \cite{source}, as are its dependencies, and most prominently, MLEBE and SAMRI \cite{samri}, the packages via which the herein described workflows are distributed.

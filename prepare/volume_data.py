@@ -52,25 +52,16 @@ generic_masked_df['uID'] = generic_masked_df['subject']+'_'+generic_masked_df['s
 uids = base_df['uID'].unique()
 generic_df = generic_df.loc[generic_df['uID'].isin(uids)]
 generic_masked_df = generic_masked_df.loc[generic_masked_df['uID'].isin(uids)]
-# legacy_df = legacy_df.loc[legacy_df['uID'].isin(uids)]
+
 
 base_df['Processing'] = 'Unprocessed'
 generic_df['Processing'] = 'Generic'
 generic_masked_df['Processing'] = 'Generic Masked'
-# legacy_df['Processing'] = 'Legacy'
-# legacy_dsurqec_df['Processing'] = 'Legacy'
-
-# base_df['Template'] = 'Unprocessed'
-# generic_df['Template'] = 'Generic'
-# generic_masked_df['Template'] = 'Generic Masked'
-# legacy_df['Template'] = 'Legacy'
-# legacy_dsurqec_df['Template'] = 'Generic'
 
 base_df['Threshold'] = ''
 generic_df['Threshold'] = ''
 generic_masked_df['Threshold'] = ''
-# legacy_df['Threshold'] = ''
-# legacy_dsurqec_df['Threshold'] = ''
+
 for uid in uids:
 	img = nib.load(base_df.loc[base_df['uID'] == uid, 'path'].item())
 	data = img.get_data()
@@ -78,8 +69,7 @@ for uid in uids:
 	base_df.loc[base_df['uID'] == uid, 'Threshold'] = threshold
 	generic_df.loc[generic_df['uID'] == uid, 'Threshold'] = threshold
 	generic_masked_df.loc[generic_masked_df['uID'] == uid, 'Threshold'] = threshold
-	# legacy_df.loc[legacy_df['uID'] == uid, 'Threshold'] = threshold
-	# legacy_dsurqec_df.loc[legacy_dsurqec_df['uID'] == uid, 'Threshold'] = threshold
+
 
 df = pd.DataFrame([])
 df_ = df_threshold_volume(base_df,
@@ -94,35 +84,26 @@ df_ = df_threshold_volume(generic_masked_df,
 	threshold='Threshold',
 	)
 df = df.append(df_)
-# df_ = df_threshold_volume(legacy_df,
-# 	threshold='Threshold',
-# 	)
-# df_['Thresholded Volume'] = df_['Thresholded Volume']/1000.
-# df = df.append(df_)
-# df_ = df_threshold_volume(legacy_dsurqec_df,
-# 	threshold='Threshold',
-# 	)
-# df_['Thresholded Volume'] = df_['Thresholded Volume']/1000.
-# df = df.append(df_)
 
 # Ar a voxel size of 0.2mm isotropic we are only sensitive to about 0.008mm^3
 df = df.round({'Volume':3,'Thresholded Volume':3})
 
 # Calculate Volume Conservation Factor
 df['Volume Conservation Factor']=-1
+df['1 - VCF']=-1
 uids = df['uID'].unique()
-# templates = [i for i in df['Template'].unique() if i != 'Unprocessed']
+
 processings = [i for i in df['Processing'].unique() if i != 'Unprocessed']
 
 for uid, processing in list(product(uids,processings)):
 	reference = df.loc[(df['uID']==uid) & (df['Processing']=='Unprocessed'), 'Thresholded Volume'].item()
-
 	volume = df.loc[(df['uID']==uid) & (df['Processing']==processing), 'Thresholded Volume'].item()
 	df.loc[(df['uID']==uid) & (df['Processing']==processing), 'Volume Conservation Factor'] = volume/reference
+	df.loc[(df['uID'] == uid) & (df['Processing'] == processing), '1 - VCF'] = np.abs(1 - volume / reference)
 
 # Ready Strings for Printing
 df['modality'] = df['modality'].str.upper()
 df = df.rename(columns={'modality': 'Contrast',})
 df.columns = map(str.title, df.columns)
 
-df.to_csv('../data/volume.csv')
+df.to_csv(path.join(scratch_dir, 'data', 'volume.csv'))

@@ -42,9 +42,6 @@ def bids_autofind(bids_dir,
 		match_regex = '.+/sub-(?P<sub>.+)/ses-(?P<ses>.+)/anat/.*?_(?P<task>.+).*?_acq-(?P<acquisition>.+)\.nii.gz'
 
 	path_template = path_template.format(bids_dir=bids_dir, modality=modality)
-	print('bids_dir: ', bids_dir)
-	print('match regex: ', match_regex)
-	print('path template: ', path_template)
 	datafind = nio.DataFinder()
 	datafind.inputs.root_paths = bids_dir
 	datafind.inputs.match_regex = match_regex
@@ -138,4 +135,4 @@ df = df.rename(columns={
 	'session': 'Session',
 	'subject': 'Subject',
 	})
-df.to_csv('../data/variance.csv')
+df.to_csv(path.join(scratch_dir, 'data', 'variance.csv'))

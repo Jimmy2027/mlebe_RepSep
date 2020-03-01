@@ -8,14 +8,16 @@ volume_path = path.abspath('data/volume.csv')
 df = pd.read_csv(volume_path)
 
 generic_masked = df.loc[(df['Processing']=='Generic Masked'), 'Volume Conservation Factor'].tolist()
-# temp = df.loc[(df['Processing']=='Generic Masked')]
-# temp.to_csv('scripts/meeeh.csv')
+generic = df.loc[(df['Processing']=='Generic'), 'Volume Conservation Factor'].tolist()
 # temp = df.loc[(df['Processing']=='Generic Masked'), 'Volume Conservation Factor']
 # print(df)
 # print(temp.idxmax(), temp.max())
 # print(temp.idxmin(), temp.min())
-generic = df.loc[(df['Processing']=='Generic'), 'Volume Conservation Factor'].tolist()
-
+# import numpy as np
+# print('median generic*: ', np.median(generic_masked), 'std: ', np.std(generic_masked))
+# print('median generic: ', np.median(generic), 'std: ', np.std(generic))
+# print('mean generic*: ', np.median(generic_masked), 'std: ', np.mean(generic_masked))
+# print('mean generic: ', np.median(generic), 'std: ', np.mean(generic))
 rmse_generic_masked = sqrt(mean_squared_error([1]*len(generic_masked), generic_masked))
 rmse_generic = sqrt(mean_squared_error([1]*len(generic), generic))
 

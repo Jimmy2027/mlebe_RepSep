@@ -1,10 +1,11 @@
 \section{Evaluation}
-For the quality control of the workflow, we first evaluate the segmentation process and then the registration.
+For the quality control of the workflow, we first evaluate the segmentation process, followed by a benchmark between the Generic and the improved workflow.
 The segmentations of the classifier should be as precise as possible for the masking process, which in return is then used to improve the registration.
 
 As stated by Ioanas et al. in \cite{ioanas_optimized_2019} a major challenge of registration QC is that a perfect mapping from the measured image to the template is undefined.
 To address this challenge, they developed four alternative evaluation metrics: volume conservation, smoothness conservation, functional analysis, and variance analysis.
 We will use these metrics to benchmark our workflow against theirs.
+It is worth noting that the quality of the Generic workflow is already remarkable such that even slight improvements should be considered an amelioration.
 
 \subsection{Segmentation}
 Quality control of our classifier is difficult in the sense that it should predict a better mask than the template.
@@ -27,26 +28,6 @@ The prediction thus have only minor changes in comparison with the template, whi
         )}
 \end{sansmath}
 
-
-\iffalse
-It is hard to measure how much better the predicted masks from the classifier are, compared with the template, because both are very accurate.
-They both correlate similarily with the images for example, as can be seen in \cref{subfig:test_corr}:
-\py{boilerplate.print_testcorr_ytrue()} against \py{boilerplate.print_testcorr_ypred()}.
-
-Where the classifier clearly has the advantage is on the blacklisted slices.
-Due to the data agumentation on the training set, the classifier is trained to predict well on incongruent data and thus has a better correlation with the blacklisted slices than the template (\py{boilerplate.print_blcorr_ypred()} against \py{boilerplate.print_blcorr_ytrue()}).
-Here the argument could be brought that one could do the inverse: taking all the bad predictions of the classifier and comparing them to the template.
-However, in total, the classifier has less predicitons with a lower correlation than: compared to the template: TODO
-\fi
-
-%\begin{figure}
-%    \centering
-%    \includegraphics{mlebe_figs/sub-6542_ses-ofMaF_acq-TurboRARE_T2w1.pdf}
-%    \caption{Caption}
-%    \label{fig:my_label}
-%\end{figure}
-
-
 As an evaluation of the registration, we make use of the quality control from \cite{ioanas_optimized_2019}.
 We denote the original workflow as Generic and our improved version as Generic*.
 
@@ -58,19 +39,19 @@ We denote the original workflow as Generic and our improved version as Generic*.
                 {'script':'scripts/vcc_violin.py', 'label':'vccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
                         'options_pre_caption':'\\vspace{-1.5em}',
                         'options_post':'\\vspace{1em}',
-                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
+                        'caption':'Comparison across workflows and functional contrasts.'
                         ,},
                 {'script':'scripts/scf_violin_contrasts.py', 'label':'sccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
                         'options_pre_caption':'\\vspace{-1.5em}\\',
                         'options_post':'\\vspace{1em}',
-                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
+                        'caption':'Comparison across workflows and functional contrasts.'
                         ,},
                         {'script':'scripts/msc_violin.py', 'label':'mscv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
                         'options_pre_caption':'\\vspace{-1.5em}',
-                        'caption':'Comparison across workflows and functional contrasts, considering only matching template-workflow combinations.'
+                        'caption':'Comparison across workflows and functional contrasts.'
                         ,},
                 ],
-        caption='\\textbf{The SAMRI Generic workflow and template optimally and reliably conserve volume and smoothness --- unlike the Legacy workflow and template.}
+        caption='\\textbf{Both the SAMRI Generic and the Generic* workflow optimally and reliably conserve volume and smoothness, the latter showing values that are closely distributed to 1.}
         Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.
         ',
         label='fig:vc',
@@ -81,23 +62,23 @@ Volume conservation is based on the assumption that the total volume of the scan
 Beyond just size differences between the acquired data and the target template, a volume increase may indicate that the brain was stretched to fill in template brain space not covered by the scan, while a volume decrease might indicate that non-brain voxels were introduced into the template brain space.
 For this analysis we compute a Volume Conservation Factor (VCF), whereby volume conservation is highest for a VCF equal to 1.
 
-As seen in \cref{fig:vccv}, we note that in the described dataset VCF is sensitive to the workflow (\py{boilerplate.fstatistic('Processing', condensed=True)}),
-but not the interaction of the workflow with the contrast (\py{boilerplate.fstatistic('Processing:Contrast', condensed=True)}).
+A Wilcoxon signed-rank test on the absolute distance to 1 of both VCF distributions (rank = \py{boilerplate.wilcoxon_(dependent_variable='1 - Vcf')[0]}, p = \py{boilerplate.wilcoxon_(dependent_variable='1 - Vcf')[1]}) shows that the VCF is sensitive to the workflow.
+%As seen in \cref{fig:vccv}, we note that in the described dataset VCF is sensitive to the workflow (\py{boilerplate.fstatistic('Processing', condensed=True)}),
+%but not the interaction of the workflow with the contrast (\py{boilerplate.fstatistic('Processing:Contrast', condensed=True)}).
+%Against : (\py{boilerplate.fstatistic('Processing', condensed=True, dependent_variable  = '1 - Vcf')}, \py{boilerplate.fstatistic('Processing:Contrast', condensed=True, dependent_variable  = '1 - Vcf')})
 
-The performance of the Generic SAMRI workflow is significantly different from that of Generic*, yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
+%
+%The performance of the Generic SAMRI workflow is different from that of Generic*, yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
 Moreover, the root mean squared error ratio favours the Generic* workflow
 ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
 
-Descriptively, we observe that the Generic* level of the workflow variable introduces a volume gain
-(VCF of \py{boilerplate.factorci('Processing[T.Generic Masked]')}).
-Further, we note that there is a very strong variance increase in all conditions for the Generic workflow
+%Descriptively, we observe that the Generic* level of the workflow variable introduces a volume gain
+%(VCF of \py{boilerplate.factorci('Processing[T.Generic Masked]')}).
+Further, we note that there is a slight variance increase in all conditions for the Generic workflow
 (\py{boilerplate.varianceratio()}-fold).
 
 With respect to the data break-up by contrast (CBV versus BOLD, \cref{fig:vccv}), we see no notable main effect for the contrast variable
-(VCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]')}).
-We do, however, report a notable effect for the contrast-workflow interaction, with the Generic* workflow and CBV contrast interaction level introducing a volume loss
-(VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]')}).
-
+(VCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]')}), nor do we report a notable effect for the contrast-workflow interaction (VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]')}).
 
 \subsection{Smoothness Conservation}
 
@@ -106,20 +87,11 @@ Although controlled smoothing is a valuable preprocessing tool used to increase 
 Uncontrolled smoothness can thus lead to undocumented and implicit loss of spatial resolution and is therefore associated with inferior anatomical alignment \cite{fmriprep}.
 We employ a Smoothness Conservation Factor (SCF), expressing the ratio between the smoothness of the preprocessed images and the smoothness of the original images.
 
-With respect to the data shown in \cref{fig:scv}, we note that SCF is sensitive to
-%the template (\py{boilerplate.fstatistic('Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}),
-the workflow (\py{boilerplate.fstatistic('Processing', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}). (TODO: not really?)
-%and the interaction of the factors (\py{boilerplate.fstatistic('Processing:Template', condensed=True, df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
+While the performance of the Generic SAMRI workflow is only slightly different from that of the Generic* workflow, the root mean squared error ratio favours the Generic* workflow ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
 
-The performance of the Generic SAMRI workflow is significantly different from that of the Generic* workflow, yielding a two-tailed p-value of \py{pytex_printonly('scripts/scf_t.py')}.(TODO: not really?)
-In this comparison, the root mean squared error ratio favours the Generic* workflow ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
+Descriptively, we observe that neither the Generic nor the Generic* workflow introduce a strong smoothing (SCF of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
-Descriptively, we observe that neither the Generic nor the Generic* workflow introduce a strong smoothing
-%(SCF of \py{boilerplate.factorci('Processing[T.Generic]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}),
-against
-(SCF of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
-
-Further, we note that there is a strong variance increase for the Generic workflow
+Further, we note that there is a slight variance increase for the Generic workflow
 (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3)}
 -fold)
 
@@ -135,29 +107,13 @@ Its viability derives from the fact that the metric being maximized in the regis
 The method is however primarily suited to examine workflow effects in light of higher-level applications, and less suited for wide-spread QC (as it is computationally intensive and only applicable to stimulus-evoked functional data).
 Additionally, functional analysis significance is documented to be sensitive to data smoothness \cite{Molloy2014}, and thus an increased score on account of uncontrolled smoothing can be expected.
 For this analysis we compute the Mean Significance (MS), expressing the significance detected across all voxels of a scan.
+%The performance of the SAMRI Generic workflow differs significantly from that of the Generic* workflow in terms of MS, yielding a two-tailed p-value of \py{pytex_printonly('scripts/ms_t.py')}.
 
-As seen in \cref{fig:msv}, MS is sensitive to
-the workflow
-(\py{boilerplate.fstatistic('Processing', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}).
-
-%(\py{boilerplate.fstatistic('Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}),
-%nor the interaction of both factors
-%(\py{boilerplate.fstatistic('Processing:Template', dependent_variable='Mean Significance', df_path='data/functional_significance.csv', condensed=True)}).
-
-The performance of the SAMRI Generic workflow differs significantly from that of the Generic* workflow in terms of MS, yielding a two-tailed p-value of \py{pytex_printonly('scripts/ms_t.py')}.
-
-Descriptively, we observe that the Generic* level of the workflow variable introduces a notable significance increase
+We observe that the Generic* level of the workflow variable does not introduce a notable significance loss
 (MS of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}),
-%while the Legacy level of the template variable
-%(MS of \py{boilerplate.factorci('Template[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}),
-%and the interaction of the Legacy template and Legacy workflow
-%(MS of \py{boilerplate.factorci('Processing[T.Legacy]:Template[T.Legacy]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')})
-%introduce no significance change.
 Furthermore, we again note a variance increase in all conditions for the Generic* workflow
 (\py{boilerplate.varianceratio(df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}-fold
 )
-%\py{boilerplate.varianceratio(df_path='data/functional_significance.csv', template='Generic', dependent_variable='Mean Significance')}-fold
-%given the Generic template).
 
 With respect to the data break-up by contrast (\cref{fig:mscv}), we see no notable main effect for the contrast variable
 (MS of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
@@ -168,41 +124,39 @@ Functional analysis effects can further be inspected by visualizing the statisti
 Second-level t-statistic maps depicting the CBV and BOLD omnibus contrasts (common to all subjects and sessions) provide a succinct overview capturing both amplitude and directionality of the signal (\cref{fig:m}).
 %While the most salient feature of this figure is the qualitative distribution difference between CBV and BOLD scans, we note that this is to be expected given the different nature of the processes, and is wholly orthogonal to the question of registration.
 Crucial to the examination of registration quality and its effects on functional read-outs is the differential coverage.
-We note that the Legacy workflow induces coverage overflow, extending to the cerebellum (\cref{fig:mlgc,fig:mllc,fig:mlgb,fig:mllb}), as well as to more rostral areas when used in conjunction with the Legacy template (\cref{fig:mllc,fig:mllb}).
-Separately from the Legacy workflow, the Legacy template causes acquisition slice misalignment (\cref{fig:mglc,fig:mllc,fig:mglc,fig:mllb}).
-Positive activation of the Raphe system, most clearly disambiguated from the surrounding tissue in the BOLD contrast, is notably displaced very far caudally by the joint effects of the Legacy workflow and the Legacy template (\cref{fig:mllb}).
-We note that processing with the Generic template and workflow (\cref{fig:mggc,fig:mggb}), does not show issues with statistic coverage alignment and overflow.
+We note that processing with the Generic* workflow (\cref{fig:mllc,fig:mllb}), does not induce issues with statistic coverage alignment and overflow.
 
 
 \py{pytex_subfigs(
 	[
 		{'script':'scripts/map_generic_cbv.py', 'label':'mggc', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-                                Generic workflow with Generic template CBV map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
+                                Generic workflow with CBV map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
                                 '
 			,},
 		{'script':'scripts/map_generic_masked_cbv.py', 'label':'mllc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-				generic* workflow with Generic template CBV map, showing incorrect slice orientation and coverage both caudally and rostrally extending beyond acquisition area.
+				Generic* workflow with CBV map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
 				'
 			,},
 		{'script':'scripts/map_generic_bold.py', 'label':'mggb', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-                                Generic workflow with Generic template BOLD map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
+                                Generic workflow with BOLD map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
                                 '
 			,},
 		{'script':'scripts/map_generic_masked_bold.py', 'label':'mllb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-				Legacy workflow with Legacy template BOLD map, showing incorrect slice orientation and coverage both caudally and rostrally extending beyond acquisition area.
+				Generic* workflow with BOLD map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
 			        '
                         ,},
 		],
 	caption='
-                \\textbf{Legacy workflow processing leads to a problematic overflow of the statistic maps into adjacent anatomical regions, leaking beyond the acquistion area.}
-                SAMRI mitigates this effect as illustrated by multiplanar depictions of second-level omnibus statistic maps separately evaluating CBV and BOLD scans, and thresholded at $\mathrm{|t|\geq2}$.
+                \\textbf{The Generic* workflow does not induce statistic coverage misalignment nor does it induce overflow of the statistic maps into adjacent anatomical regions.}
+                Illustrated are multiplanar depictions of second-level omnibus statistic maps separately evaluating CBV and BOLD scans, and thresholded at $\mathrm{|t|\geq2}$.
                 The acquisition area is bracketed in pink, and in comparing it to statistic coverage it is important to note that the latter is always underestimated, as the omnibus statistic contrast is only defined for voxels captured in \\textit{every} evaluated scan.
                 ',
 	label='fig:m',)}
+
 \subsection{Variance Analysis}
 
 \begin{sansmath}
@@ -210,7 +164,7 @@ We note that processing with the Generic template and workflow (\cref{fig:mggc,f
         conf='article/varplot.conf',
         label='var',
         caption='
-                \\textbf{The SAMRI Generic workflow conserves subject-wise variability and minimizes trial-to-trial variability compared to the Legacy workflow.}
+                \\textbf{The SAMRI Generic* workflow conserves subject-wise variability and minimizes trial-to-trial variability.}
                 Swarmplots illustrate similarity metric scores of preprocessed images with respect to the corresponding workflow template, plotted across subjects (separated into x-axis bins) and sessions (individual points in each x-axis bin), for the CBV contrast.
                 ',
         multicol=True,
@@ -227,14 +181,13 @@ Global Correlation (GC, sensitive to whole-image correlation),
 and Mutual Information (MI, sensitive to whole-image information similarity).
 %As similarity metrics are not equivalent, and since the main comparison of variance is performed across all of them, p-values for the variable effects are uncorrected.
 
-\Cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Legacy workflows (considering only the matching workflow-template combinations).
-The Legacy workflow produces results which show a higher F-statistic for the session than for the subject variable:
+\Cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Generic* workflows.
+The Generic* workflow produces results which consistently show a higher F-statistic for the subject than for the session variable:
 CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic Masked','CC', condensed=True)}),
 GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic Masked','GC', condensed=True)}),
 and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic Masked','MI', condensed=True)}).
 
-The Generic SAMRI workflow shows a reversing trend.
-Resulting data F-statistics are consistently higher for the subject variable than for the session variable:
+For the Generic SAMRI workflow, resulting data F-statistics are less consistant in this trend:
 CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','CC', condensed=True)}),
 GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','GC', condensed=True)}),
 and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','MI', condensed=True)}).

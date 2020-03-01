@@ -1,9 +1,11 @@
 digraph generic_work{
+  label="generic_work";
   generic_work_get_f_scan[label="get_f_scan (utility)", shape=box3d,style=filled, color=black, colorscheme=greys7 fillcolor=2];
   generic_work_get_s_scan[label="get_s_scan (utility)"];
   generic_work_s_biascorrect[label="s_biascorrect (ants)"];
   generic_work_s_register[label="s_register (ants)"];
   generic_work_s_warp[label="s_warp (ants)"];
+  generic_work_find_physio[label="find_physio (utility)"];
   generic_work_dummy_scans[label="dummy_scans (utility)"];
   generic_work_slicetimer[label="slicetimer (fsl)"];
   generic_work_temporal_mean[label="temporal_mean (fsl)"];
@@ -13,15 +15,15 @@ digraph generic_work{
   generic_work_f_warp[label="f_warp (ants)"];
   generic_work_events_file[label="events_file (utility)"];
   generic_work_datasink[label="datasink (io)"];
-  generic_work_get_f_scan -> generic_work_f_warp;
   generic_work_get_f_scan -> generic_work_dummy_scans;
-  generic_work_get_f_scan -> generic_work_dummy_scans;
+  generic_work_get_f_scan -> generic_work_events_file;
+  generic_work_get_f_scan -> generic_work_events_file;
+  generic_work_get_f_scan -> generic_work_events_file;
+  generic_work_get_f_scan -> generic_work_events_file;
+  generic_work_get_f_scan -> generic_work_find_physio;
   generic_work_get_f_scan -> generic_work_datasink;
   generic_work_get_f_scan -> generic_work_get_s_scan;
-  generic_work_get_f_scan -> generic_work_events_file;
-  generic_work_get_f_scan -> generic_work_events_file;
-  generic_work_get_f_scan -> generic_work_events_file;
-  generic_work_get_f_scan -> generic_work_events_file;
+  generic_work_get_f_scan -> generic_work_f_warp;
   generic_work_get_s_scan -> generic_work_s_warp;
   generic_work_get_s_scan -> generic_work_s_warp;
   generic_work_get_s_scan -> generic_work_s_biascorrect;
@@ -30,10 +32,12 @@ digraph generic_work{
   generic_work_s_register -> generic_work_s_warp;
   generic_work_s_register -> generic_work_merge;
   generic_work_s_warp -> generic_work_datasink;
+  generic_work_find_physio -> generic_work_datasink;
+  generic_work_find_physio -> generic_work_datasink;
   generic_work_dummy_scans -> generic_work_events_file;
   generic_work_dummy_scans -> generic_work_slicetimer;
-  generic_work_slicetimer -> generic_work_f_warp;
   generic_work_slicetimer -> generic_work_temporal_mean;
+  generic_work_slicetimer -> generic_work_f_warp;
   generic_work_temporal_mean -> generic_work_f_biascorrect;
   generic_work_f_biascorrect -> generic_work_f_register;
   generic_work_f_register -> generic_work_merge;

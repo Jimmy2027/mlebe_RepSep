@@ -6,36 +6,7 @@ Because of positioning imprecision and anatomical animal variations, this is not
 To solve this issue, the images need to be projected into the reference frame via registration \cite{maintz_overview_nodate, sotiras_deformable_2013}.
 As reported by Ioanas et al. \cite{ioanas_optimized_2019}, the general approach for mouse-brain image registration is to use high-level functions designed and optimized for human brain images.
 This requires the mouse-data to be adapted to the processing function instead of vice-versa.
-To provide contrast, they compare two workflows, the Legacy workflow that adapts the data to the processing functions and an optimized Generic workflow, which is optimized to the data.
-While the Legacy workflow expands voxel size and deletes orientation information of the affine matrix in order to fit human brain data, the Generic workflow uses functions provided by the ANTs package, with spatial parameters adapted to the mouse brain.
-In a quality control, it is shown that the Generic workflow improves volume conservation, smoothness conservation and shows a reduction in variance.
-
-Intensities outside the brain region of a mouse MR image present high variations and bias the registration process.
-To combat this, ANTs enables the user to define a mask to focus the optimization
-effort on the region of interest (ROI) \cite{ants}.
-The Generic workflow uses a template mask defined in the reference space to indicate the ROI.
-This template is not ad hoc to each subject and often includes the skull which contains high intensity variations.
-This can lead to stretching or skewing of the brain in order to fit unwanted intensities inside the mask region.
-As a remedy, it would be useful to extract the region of interest for each individual and continue the registration on an ad hoc region of interest.
-For this purpose, we propose a machine learning enabled brain extraction in an additional node to the Generic workflow presented by Ioanas et al. in \cite{ioanas_optimized_2019}.
-The additional node creates a mask of the brain region using a classifier.
-The image is then masked such that only the region of interest remains.
-The Generic workflow then continues with the masked image.
-
-
-\subsection{Convolutional Neural Networks} \label{sec:Convolutional Neural Networks}
-In recent years it has been shown that convolutional neural network give the best results for semantic image segmentation in terms of precision and flexibility \cite{geng_survey_2018, ronneberger_u-net:_2015}.
-Training a convolutional neural network into a classifier is a supervised method, meaning that the model needs to learn its parameters based on observations of data.
-
-The training data set of a classifier is as important as the architecture of the model itself.
-To improve general-purpose application, training examples need to be drawn from a usually unknown probability distribution, that is expected to be representative of the space of occurrences.
-We define the space of occurrences as the space of which the data of interest is drawn from.
-In our case this consists of all the different mouse brain MRI data sets coming from multiple experiments, with their corresponding labels. 
-Ideally experiment setups are uniform and the resulting data does not differ much, but small variations in the experiment setup and animal size are unavoidable.
-Based on an approximation of the occurrence space, the network has to build a general model that enables it to extrapolate and produce sufficiently accurate predictions in new cases.
-Manually creating annotations as required to train a deep-learning classifier for high-resolution data is often infeasible, since it requires manual expert segmentation of vast amounts of slices.
-
-Here we take as data set, images that were registered through the SAMRI workflow into a reference frame defined by the Toronto Hospital for Sick Children Mouse Imaging Center \cite{dsu}.
-A mask that was made in the same reference frame was used as ground truth.
-Because the registration process is not perfect, the mask does not always align perfectly with the brain region of every slice.
-While our purpose was to create a workflow that generates better masks than the one from the template space, we showed that the latter could be used as training data for the deep-learning model, by applying small changes to them.
+To provide contrast, they compare two workflows, a Legacy workflow that adapts the data to the processing functions and a Generic workflow, which is optimized to the data.
+While the Legacy workflow expands voxel size and deletes orientation information of the affine matrix in order to fit human brain data, the Generic workflow uses functions provided by the ANTs package \cite{ants}, with spatial parameters adapted to the mouse brain.
+In a quality control, it is shown that the Generic workflow improves volume conservation, smoothness conservation and provides a reduction in variance.
+While the performance increase is considerable, registration quality can be improved further by computing the transformation solely on the brain volume to reduce disturbances induced by intensity variations outside the brain region.
