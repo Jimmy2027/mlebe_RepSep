@@ -1,12 +1,12 @@
 \section{Background}
-In order to make meaningful comparisons across subjects inside a study, it is imperative that the images lie in a standard reference frame.
+To make meaningful comparisons across the subjects of a study, it is imperative that the images lie in a standard reference frame.
 %Voxel-based population studies of either functional or structural variables depend on mapping to a template space.
 %The common coordinate system enables a statistical evaluation of the likelihood of consistent activation across a group or, in other contexts, the differences in anatomy between two groups.
-Because of positioning imprecision and anatomical animal variations, this is not the case for the original MR acquired images.
+Because of positioning imprecision and anatomical animal variations, this is not the case for original MR acquired images.
 To solve this issue, the images need to be projected into the reference frame via registration \cite{maintz_overview_nodate, sotiras_deformable_2013}.
 As reported by Ioanas et al. \cite{ioanas_optimized_2019}, the general approach for mouse-brain image registration is to use high-level functions designed and optimized for human brain images.
 This requires the mouse-data to be adapted to the processing function instead of vice-versa.
 To provide contrast, they compare two workflows, a Legacy workflow that adapts the data to the processing functions and a Generic workflow, which is optimized to the data.
-While the Legacy workflow expands voxel size and deletes orientation information of the affine matrix in order to fit human brain data, the Generic workflow uses functions provided by the ANTs package \cite{ants}, with spatial parameters adapted to the mouse brain.
-In a quality control, it is shown that the Generic workflow improves volume conservation, smoothness conservation and provides a reduction in variance.
+While the Legacy workflow expands voxel size and deletes orientation information of the affine matrix to fit human brain data, the Generic workflow uses functions provided by the ANTs package \cite{ants}, with spatial parameters adapted to the mouse brain.
+A quality control shows that the Generic workflow improves volume conservation, smoothness conservation and provides a reduction in variance.
 While the performance increase is considerable, registration quality can be improved further by computing the transformation solely on the brain volume to reduce disturbances induced by intensity variations outside the brain region.

@@ -5,11 +5,12 @@ The segmentations of the classifier should be as precise as possible for the mas
 As stated by Ioanas et al. in \cite{ioanas_optimized_2019} a major challenge of registration quality control (QC) is that a perfect mapping from the measured image to the template is undefined.
 To address this challenge, they developed four alternative evaluation metrics: volume conservation, smoothness conservation, functional analysis, and variance analysis.
 We will use these metrics to benchmark our workflow against theirs.
-It is worth noting that the quality of the Generic workflow is already remarkable such that even slight improvements should be considered an amelioration.
+It is worth noting that the quality of the Generic workflow is already remarkable.
+Even slight improvements should be considered an amelioration.
 
 \subsection{Segmentation}
 Quality control of our classifier is difficult in the sense that it should predict a better mask than the template.
-Nevertheless, it is use-full to verify if the output is similar, as it should be.
+Nevertheless, it is useful to verify if the output is similar, as it should be.
 As a similarity metric we have used the Dice score (see \cref{eqDcoef}).
 The average Dice score taken on every slice of the test data set is $D_{coef}= $ \py{boilerplate.print_dice()} $\sim 1$.
 The prediction thus have only minor changes in comparison with the template, which should represent small improvements.
@@ -123,7 +124,7 @@ With respect to the data break-up by contrast (\cref{fig:mscv}), we see no notab
 Functional analysis effects can further be inspected by visualizing the statistic maps.
 Second-level t-statistic maps depicting the CBV and BOLD omnibus contrasts (common to all subjects and sessions) provide a succinct overview capturing both amplitude and directionality of the signal (\cref{fig:m}).
 %While the most salient feature of this figure is the qualitative distribution difference between CBV and BOLD scans, we note that this is to be expected given the different nature of the processes, and is wholly orthogonal to the question of registration.
-Crucial to the examination of registration quality and its effects on functional read-outs is the differential coverage.
+The differential coverage is crucial to the examination of registration quality and its effects on functional read-outs.
 We note that processing with the Generic* workflow (\cref{fig:mllc,fig:mllb}), does not induce issues with statistic coverage alignment and overflow.
 
 

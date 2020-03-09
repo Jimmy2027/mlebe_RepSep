@@ -73,7 +73,7 @@ Additionally, instead of using the logical operation \textit{and}, element wise 
 To avoid a division by zero, $+1$ is added on the numerator and denominator.
 
 Because many more pixels in the masks are 0 than 1, there is a class imbalance problem.
-It is a problem, because in this case a false positive gives a much higher loss than a false negative.
+This is a problem, because in this case a false positive gives a much higher loss than a false negative.
 For example, predicting only black would give an acceptable loss, while predicting only white pixels would not.
 Using the Dice coefficient as a loss function for training should make it invariant to this class imbalance problem as stated by Fausto Milletari et al. in \cite{milletari_v-net:_2016}.
 
@@ -94,17 +94,17 @@ Because of variance in mouse brain anatomy and in the experiment setup, some of 
 To filter these images out, most of the incongruent slices were removed manually from the data set.
 
 For the registration of the images, a padding was needed to make the originally not affine space affine.
-Due to this, the 3D volumes present many zero-valued slices, some of them overlapping with the mask.
+As a result, the 3D volumes present many zero-valued slices, some of them overlapping with the mask.
 
-Since it is not wanted for the model to predict a mask on black slices, the mask is set to zero where the image is as well.
+Since it is not wanted for the model to predict a mask on black slices, the mask is set to zero where the image is zero-valued.
 Because some pixels representing the brain tissue are zero-valued, holes result from this operation.
 To patch these, the function \textcolor{mg}{\texttt{$binary\_fill\_holes$}} from scipy.ndimage.morphology \cite{noauthor_multi-dimensional_nodate} is used.
 An example of the preprocessing can be seen in \cref{fig:prepro_examples}.
 
 In the coronal view, each slice of the transformed data is originally of shape (63, 48), matching the reference space resolution of \SI{200}{\micro\metre}.
-It is then reshaped into (128, 128) by first zero-padding the smaller dimension to the same size of the bigger one and then reshaping the image into 128 using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package \cite{noauthor_opencv-python_nodate}.
+It is then reshaped into (128, 128) by first zero-padding the smaller dimension to the same size as the bigger one and then reshaping the image into 128 using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package \cite{noauthor_opencv-python_nodate}.
 
-Finally, the images are normalised by first clipping them from the minimum to the \nth{99} percentile of the data in order to remove outliers and then divided by the maximum.
+Finally, the images are normalised by first clipping them from the minimum to the \nth{99} percentile of the data to remove outliers and then divided by the maximum.
 
 The data set is separated into Training, Validation and Test sets such that 90\% of the total data are used for training and validation while 10\% are used for testing.
 This is done with the help of the function \textcolor{mg}{\texttt{$train\_test\_split$}} from the package sklearn.model$\_$selection \cite{noauthor_scikit-learn/scikit-learn_2020}.
@@ -131,9 +131,9 @@ To improve the learning process of the network, two callbacks from Keras were us
 The latter reduces computation time and prevents overfitting.
 
 \subsection{Masking}
-In order to improve the SAMRI registration workflow, an additional node is implemented where the images are masked, such that only the brain region remains.
-For this, the input image needs to first be resampled into the resolution of the template space, which has a voxel size of $0.2\times 0.2 \times 0.2$.
-This is done with \textcolor{mg}{\texttt{$Resample$}} command from the FSL library which is an analysis tool for FMRI, MRI and DTI brain imaging data \cite{fsl}.
+To improve the SAMRI registration workflow, an additional node is implemented where the images are masked, such that only the brain region remains.
+This requires the input image to first be resampled into the resolution of the template space, which has a voxel size of $0.2\times 0.2 \times 0.2$.
+This is done with the \textcolor{mg}{\texttt{$Resample$}} command from the FSL library which is an analysis tool for FMRI, MRI and DTI brain imaging data \cite{fsl}.
 Then, the image is preprocessed using the operations described in \cref{subsec:Data Set}.
 Since the classifier was trained to predict on images of shape (128, 128), the input needs to be reshaped.
 The slice-wise predictions of the model are reconstructed to a 3D mask via the command \textit{Nifit1Image} from the neuroimaging python package nibabel \cite{noauthor_neuroimaging_nodate}.
