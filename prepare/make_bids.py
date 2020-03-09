@@ -6,7 +6,7 @@ from labbookdb.report.selection import animal_id, parameterized
 from datetime import datetime
 
 db_path = '~/syncdata/meta.db'
-data_dir = '/usr/share/irsabi_data/'
+data_dir = '/usr/share/drlfom_data/'
 
 scratch_dir = os.path.expanduser('~/.scratch')
 base_dir = '{}/mlebe'.format(scratch_dir)

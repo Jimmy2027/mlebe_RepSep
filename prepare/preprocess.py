@@ -16,10 +16,13 @@ generic(bids_base,
 	workflow_name='generic_masked',
 	model_prediction_mask = True,
 	keep_work= True,
-	)
+	# subjects= ['{}'.format(x) for x in range(4001, 4013 + 1)],
+	subjects=['4013'],
+
+		)
 
 
-
+#
 # generic(bids_base,
 # 	'/usr/share/mouse-brain-atlases/dsurqec_200micron.nii',
 # 	registration_mask='/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
@@ -29,4 +32,4 @@ generic(bids_base,
 # 	workflow_name='generic',
 # 	keep_work=True,
 # 	)
-
+#

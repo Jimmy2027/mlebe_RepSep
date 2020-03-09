@@ -94,10 +94,13 @@ df['1 - VCF']=-1
 uids = df['uID'].unique()
 
 processings = [i for i in df['Processing'].unique() if i != 'Unprocessed']
-
 for uid, processing in list(product(uids,processings)):
 	reference = df.loc[(df['uID']==uid) & (df['Processing']=='Unprocessed'), 'Thresholded Volume'].item()
-	volume = df.loc[(df['uID']==uid) & (df['Processing']==processing), 'Thresholded Volume'].item()
+	try:
+		volume = df.loc[(df['uID']==uid) & (df['Processing']==processing), 'Thresholded Volume'].item()
+	except:
+		volume = 1
+		print(uid, processing)
 	df.loc[(df['uID']==uid) & (df['Processing']==processing), 'Volume Conservation Factor'] = volume/reference
 	df.loc[(df['uID'] == uid) & (df['Processing'] == processing), '1 - VCF'] = np.abs(1 - volume / reference)
 

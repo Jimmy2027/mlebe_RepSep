@@ -2,7 +2,7 @@
 For the quality control of the workflow, we first evaluate the segmentation process, followed by a benchmark between the Generic and the improved workflow.
 The segmentations of the classifier should be as precise as possible for the masking process, which in return is then used to improve the registration.
 
-As stated by Ioanas et al. in \cite{ioanas_optimized_2019} a major challenge of registration QC is that a perfect mapping from the measured image to the template is undefined.
+As stated by Ioanas et al. in \cite{ioanas_optimized_2019} a major challenge of registration quality control (QC) is that a perfect mapping from the measured image to the template is undefined.
 To address this challenge, they developed four alternative evaluation metrics: volume conservation, smoothness conservation, functional analysis, and variance analysis.
 We will use these metrics to benchmark our workflow against theirs.
 It is worth noting that the quality of the Generic workflow is already remarkable such that even slight improvements should be considered an amelioration.
@@ -63,8 +63,8 @@ Beyond just size differences between the acquired data and the target template, 
 For this analysis we compute a Volume Conservation Factor (VCF), whereby volume conservation is highest for a VCF equal to 1.
 
 A Wilcoxon signed-rank test on the absolute distance to 1 of both VCF distributions shows that the VCF is sensitive to the workflow (rank = \py{boilerplate.wilcoxon_(dependent_variable='1 - Vcf')[0]}, p = \py{boilerplate.wilcoxon_(dependent_variable='1 - Vcf')[1]}).
-%As seen in \cref{fig:vccv}, we note that in the described dataset VCF is sensitive to the workflow (\py{boilerplate.fstatistic('Processing', condensed=True)}),
-%but not the interaction of the workflow with the contrast (\py{boilerplate.fstatistic('Processing:Contrast', condensed=True)}).
+As seen in \cref{fig:vccv}, we note that in the described dataset VCF is sensitive to the workflow (\py{boilerplate.fstatistic('Processing', condensed=True)}),
+but not the interaction of the workflow with the contrast (\py{boilerplate.fstatistic('Processing:Contrast', condensed=True)}).
 %Against : (\py{boilerplate.fstatistic('Processing', condensed=True, dependent_variable  = '1 - Vcf')}, \py{boilerplate.fstatistic('Processing:Contrast', condensed=True, dependent_variable  = '1 - Vcf')})
 
 %

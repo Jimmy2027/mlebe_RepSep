@@ -20,3 +20,5 @@ else
 	pdflatex -shell-escape ${TARGET}.tex &&\
 	pdflatex -shell-escape ${TARGET}.tex
 fi
+
+mv auto_fig_py* auto_fig_py/
