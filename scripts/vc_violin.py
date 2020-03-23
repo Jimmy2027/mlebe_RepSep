@@ -27,3 +27,6 @@ ax = violinplot(
 	linewidth=mpl.rcParams['grid.linewidth'],
 	linecolor='w',
 	)
+
+
+plt.savefig('test1')

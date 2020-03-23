@@ -4,6 +4,48 @@
 
 \section{Supplementary Materials}
 
+\begin{sansmath}
+\py{pytex_fig('scripts/msc_violin.py',
+        conf='article/1col.conf',
+        label='mscv',
+        caption='
+                \\textbf{The Generic* workflow does not introduce a significance loss.}
+                Comparison across workflows and functional contrasts.
+                ',
+        multicol=True,
+        )}
+\end{sansmath}
+
+\py{pytex_subfigs(
+	[
+		{'script':'scripts/map_generic_cbv.py', 'label':'mggc', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+			'caption':'
+                                Generic workflow with CBV map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
+                                '
+			,},
+		{'script':'scripts/map_generic_masked_cbv.py', 'label':'mllc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+			'caption':'
+				Generic* workflow with CBV map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
+				'
+			,},
+		{'script':'scripts/map_generic_bold.py', 'label':'mggb', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+			'caption':'
+                                Generic workflow with BOLD map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
+                                '
+			,},
+		{'script':'scripts/map_generic_masked_bold.py', 'label':'mllb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+			'caption':'
+				Generic* workflow with BOLD map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
+			        '
+                        ,},
+		],
+	caption='
+                \\textbf{The Generic* workflow does not induce statistic coverage misalignment nor does it induce overflow of the statistic maps into adjacent anatomical regions.}
+                Illustrated are multiplanar depictions of second-level omnibus statistic maps separately evaluating CBV and BOLD scans, and thresholded at $\mathrm{|t|\geq2}$.
+                The acquisition area is bracketed in pink, and in comparing it to statistic coverage it is important to note that the latter is always underestimated, as the omnibus statistic contrast is only defined for voxels captured in \\textit{every} evaluated scan.
+                ',
+	label='fig:m',)}
+
 \begin{figure*}[h!]
 	\centering
 	\begin{subfigure}[t]{0.48\textwidth}

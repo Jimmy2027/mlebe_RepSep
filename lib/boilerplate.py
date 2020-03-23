@@ -40,7 +40,7 @@ def wilcoxon_(
 	generic_masked = generic_masked_df[dependent_variable].tolist()
 	generic = generic_df[dependent_variable].tolist()
 	statistic, p = wilcoxon(generic_masked, generic)
-	return np.round(statistic,3), np.round(p, 3)
+	return np.round(statistic, 3), np.round(p, 3)
 
 
 def factorci(factor,

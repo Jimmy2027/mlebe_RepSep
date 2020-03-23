@@ -21,4 +21,4 @@ else
 	pdflatex -shell-escape ${TARGET}.tex
 fi
 
-mv auto_fig_py* auto_fig_py/
+mv auto_fig_py* Auto_fig_py/

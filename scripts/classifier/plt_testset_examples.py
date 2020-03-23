@@ -1,9 +1,10 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import pickle
+import os
 seed = 2
 
-path = '/home/hendrik/.scratch/mlebe/classifier'
+path = os.path.expanduser('~/.scratch/mlebe_+bc_+btr/classifiers/T2')
 xfile = open(path + '/x_test_struct.pkl', 'rb')
 x_test_struct = pickle.load(xfile)
 xfile.close()
@@ -28,29 +29,8 @@ y_pred = np.concatenate(y_pred)
 np.random.seed(seed)
 np.random.shuffle(y_pred)
 
-# x_test = [x_test[3]]
-# y_test = [y_test[3]]
-# y_pred = [y_pred[3]]
-# x_test = [i[1::12] for i in x_test]
-# y_test = [i[1::12] for i in y_test]
-# y_pred = [i[1::12] for i in y_pred]
-
-# thresholds = [0, 0.9]
-# outputs = []
-#
-# for thr in thresholds:
-#     if thr == 0:
-#         for img in y_pred:
-#             temp = np.squeeze(img)
-#             outputs.append([temp])
-#     else:
-#         for img in y_pred:
-#             temp = np.where(np.squeeze(img) > thr, 1, 0)
-#             outputs.append([temp])
 nbr_images = 13
 list = [[x_test[:nbr_images]], [y_test[:nbr_images]], [y_pred[:nbr_images]]]
-# for o in outputs:
-#     list.append([o[:12]])
 
 
 for img in range(len(list[0])):

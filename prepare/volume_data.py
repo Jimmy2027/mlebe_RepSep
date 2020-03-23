@@ -34,21 +34,6 @@ generic_masked_df = generic_masked_df.loc[~generic_masked_df['path'].str.endswit
 generic_masked_df = generic_masked_df.loc[generic_masked_df['modality'].isin(['bold','cbv'])]
 generic_masked_df['uID'] = generic_masked_df['subject']+'_'+generic_masked_df['session']+'_'+generic_masked_df['modality']
 
-# generic_masked_df = bids_autograb('{}/preprocessing/generic_masked_collapsed'.format(scratch_dir))
-# generic_masked_df = generic_masked_df.loc[~generic_masked_df['path'].str.endswith('.json')]
-# generic_masked_df = generic_masked_df.loc[generic_masked_df['modality'].isin(['bold','cbv'])]
-# generic_masked_df['uID'] = generic_masked_df['subject']+'_'+generic_masked_df['session']+'_'+generic_masked_df['modality']
-
-# legacy_df = bids_autograb('{}/preprocessing/legacy_collapsed'.format(scratch_dir))
-# legacy_df = legacy_df.loc[~legacy_df['path'].str.endswith('.json')]
-# legacy_df = legacy_df.loc[legacy_df['modality'].isin(['bold','cbv'])]
-# legacy_df['uID'] = legacy_df['subject']+'_'+legacy_df['session']+'_'+legacy_df['modality']
-#
-# legacy_dsurqec_df = bids_autograb('{}/preprocessing/legacy_dsurqec_collapsed'.format(scratch_dir))
-# legacy_dsurqec_df = legacy_dsurqec_df.loc[~legacy_dsurqec_df['path'].str.endswith('.json')]
-# legacy_dsurqec_df = legacy_dsurqec_df.loc[legacy_dsurqec_df['modality'].isin(['bold','cbv'])]
-# legacy_dsurqec_df['uID'] = legacy_dsurqec_df['subject']+'_'+legacy_dsurqec_df['session']+'_'+legacy_dsurqec_df['modality']
-
 uids = base_df['uID'].unique()
 generic_df = generic_df.loc[generic_df['uID'].isin(uids)]
 generic_masked_df = generic_masked_df.loc[generic_masked_df['uID'].isin(uids)]
