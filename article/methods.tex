@@ -48,11 +48,11 @@ A more detailed description can be found there.
 
 \subsection{Model}
 As the architecture of the classifier, the U-Net from Ronneberger et al \cite{ronneberger_u-net:_2015} was chosen based on its high performance in the field of biomedical image segmentation.
-This is a convolutional neural network that consists of a contracting path that captures context in addition to a symmetric expanding path that enables precise localisation.
-Localisation in this context means that a class label is assigned to each pixel.
+This is a convolutional neural network that consists of a contracting path that captures context in addition to a symmetric expanding path that enables precise localization.
+Localization in this context means that a class label is assigned to each pixel.
 We used the U-Net implementation from zhixuhao \cite{zhixuhao_zhixuhao/unet_2020}, written in Keras.
 Keras is a high-level neural networks API, written in Python and capable of running on top of TensorFlow, CNTK, or Theano.
-It allows for a easily readable code and thus makes the workflow easier to reproduce.
+It allows for easily readable code and thus makes the workflow easier to reproduce.
 
 The implementation of the U-Net from zhixuhao has, in addition to the original architecture, two drop-out layers.
 A drop-out layer randomly sets a fraction of input units from the layer to 0 at each update during training time.
@@ -65,15 +65,15 @@ It calculates the similarity of two binary samples X and Y with
 D_{coef} = \frac{2|X\cap Y|}{|X|+|Y|}
 \end{equation}
 
-It is a quantity ranging from 0 to 1 that is to be maximised.
+It is a quantity ranging from 0 to 1 that is to be maximized.
 The loss is then calculated with $1-D_{coef}$.
 Because the Dice loss is not differentiable, small changes need to be made.
-In our case, the two samples to be compared are normalised, grey valued images  and are thus not binary but have values between 0 and 1.
+In our case, the two samples to be compared are normalized, grey valued images and are thus not binary but have values between 0 and 1.
 Additionally, instead of using the logical operation \textit{and}, element wise products are used to approximate the non-differentiable intersection operation.
 To avoid a division by zero, $+1$ is added on the numerator and denominator.
 
 Because many more pixels in the masks are 0 than 1, there is a class imbalance problem.
-This is a problem, because in this case a false positive gives a much higher loss than a false negative.
+This is a problem because in this case a false positive gives a much higher loss than a false negative.
 For example, predicting only black would give an acceptable loss, while predicting only white pixels would not.
 Using the Dice coefficient as a loss function for training should make it invariant to this class imbalance problem as stated by Fausto Milletari et al. in \cite{milletari_v-net:_2016}.
 
@@ -84,7 +84,7 @@ The measured animals were fitted with an optic fiber implant ($\mathrm{l=\SI{3.2
 Using this dataset shows that the workflow is robust to these types of experiment setups.
 
 Images from the irsabi study are only used for quality control of the registration and are thus unknown to the classifier.
-It is the the same dataset that was used to benchmark the Generic workflow in the original paper and thus allows for a better estimation of the general performance of our improved pipeline.
+It is the same dataset that was used to benchmark the Generic workflow in the original paper and thus allows for a better estimation of the general performance of our improved pipeline.
 
 The images are transformed into a standard space using a template mask via SAMRI \cite{noauthor_ibt-fmi/samri_2019} and are thus defined in the same affine space.
 SAMRI is a data analysis package of the ETH/UZH Institute for Biomedical Engineering.
@@ -104,11 +104,11 @@ An example of the preprocessing can be seen in \cref{fig:prepro_examples}.
 In the coronal view, each slice of the transformed data is originally of shape (63, 48), matching the reference space resolution of \SI{200}{\micro\metre}.
 It is then reshaped into (128, 128) by first zero-padding the smaller dimension to the same size as the bigger one and then reshaping the image into 128 using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package \cite{noauthor_opencv-python_nodate}.
 
-Finally, the images are normalised by first clipping them from the minimum to the \nth{99} percentile of the data to remove outliers and then divided by the maximum.
+Finally, the images are normalized by first clipping them from the minimum to the \nth{99} percentile of the data to remove outliers and then divided by the maximum.
 
 The data set is separated into Training, Validation and Test sets such that 90\% of the total data are used for training and validation while 10\% are used for testing.
 This is done with the help of the function \textcolor{mg}{\texttt{$train\_test\_split$}} from the package sklearn.model$\_$selection \cite{scikit-learn}.
-The Validation set is used for the optimisation of hyper parameters while the Test set is used as a measure of extrapolation capability.
+The Validation set is used for the optimization of hyperparameters while the Test set is used as a measure of extrapolation capability.
 
 \subsection{Data Augmentation} \label{Data Augmentation}
 
@@ -117,7 +117,7 @@ To account for these variations, we apply an extensive set of transformations to
 This includes rotations of up to 90$^{\circ}$, a width and height shift range of 30 pixels, a shear range of 0.5 pixels, zoom range of 0.3, brightness range of (0.7, 1.3) and horizontal as well as vertical flips.
 Additionally a gaussian noise with a variance range of (0, 0.001) is added to the image.
 
-This not only increases the data set size but also makes it more representative of the general data distribution of mice brain MR images and results in a model with a better generalisation capability.
+This not only increases the data set size but also makes it more representative of the general data distribution of mice brain MR images and results in a model with a better generalization capability.
 
 Many more sophisticated methods have been tested, but it has been shown that one of the more successful data augmentation strategies is the simple transformations mentioned above \cite{perez_effectiveness_2017}.
 
@@ -126,7 +126,7 @@ Many more sophisticated methods have been tested, but it has been shown that one
 The model was trained slice wise, with the coronal view and 600 as the maximum number of epochs.
 The coronal view was chosen over the axial one, because the shapes of the masks are much simpler in the coronal view and thus easier to learn for the network.
 
-Additionally the coronal view has the advantage of higher resolution as the MR images were recorded coronally.
+Additionally, the coronal view has the advantage of higher resolution as the MR images were recorded coronally.
 
 To improve the learning process of the network, two callbacks from Keras were used \cite{noauthor_callbacks_nodate}.
 "\textcolor{mg}{\texttt{$ReduceLROnPlateau$}}" reduces the learning rate when the validation loss has stopped improving and "\textcolor{mg}{\texttt{$EarlyStopping$}}" stops the training when the validation loss has stopped improving for a number of epochs.

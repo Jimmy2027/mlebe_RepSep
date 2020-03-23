@@ -13,7 +13,7 @@ Quality control of our classifier is difficult in the sense that it should predi
 Nevertheless, it is useful to verify if the output is similar, as it should be.
 As a similarity metric we have used the Dice score (see \cref{eqDcoef}).
 The average Dice score taken on every slice of the test data set is $D_{coef}= $ \py{boilerplate.print_dice()} $\sim 1$.
-The prediction thus have only minor changes in comparison with the template.
+The predictions thus have only minor changes in comparison with the template.
 
 
 \begin{sansmath}
@@ -57,7 +57,7 @@ We denote the original workflow as Generic and our modified version as Generic*.
 
 Volume conservation is based on the assumption that the total volume of the scanned segment of the brain should remain roughly constant after preprocessing.
 Beyond just size differences between the acquired data and the target template, a volume increase may indicate that the brain was stretched to fill in template brain space not covered by the scan, while a volume decrease might indicate that non-brain voxels were introduced into the template brain space.
-For this analysis we compute a Volume Conservation Factor (VCF), whereby volume conservation is highest for a VCF equal to 1.
+For this analysis, we compute a Volume Conservation Factor (VCF), whereby volume conservation is highest for a VCF equal to 1.
 
 A Wilcoxon signed-rank test on the absolute distance to 1 of both VCF distributions shows that the VCF is sensitive to the workflow (rank = \py{boilerplate.wilcoxon_(dependent_variable='1 - Vcf')[0]}, p = \py{boilerplate.wilcoxon_(dependent_variable='1 - Vcf')[1]}).
 %As seen in \cref{fig:vccv}, we note that in the described dataset VCF is sensitive to the workflow (\py{boilerplate.fstatistic('Processing', condensed=True)}),
@@ -84,7 +84,7 @@ Although controlled smoothing is a valuable preprocessing tool used to increase 
 Uncontrolled smoothness can thus lead to undocumented and implicit loss of spatial resolution and is therefore associated with inferior anatomical alignment \cite{fmriprep}.
 We employ a Smoothness Conservation Factor (SCF), expressing the ratio between the smoothness of the preprocessed images and the smoothness of the original images.
 
-While the performance of the Generic SAMRI workflow is only slightly different from that of the Generic* workflow, the root mean squared error ratio favours the Generic* workflow ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
+While the performance of the Generic SAMRI workflow is only slightly different from that of the Generic* workflow, the root mean squared error ratio favors the Generic* workflow ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
 
 Descriptively, we observe that neither the Generic nor the Generic* workflow introduce a strong smoothing (SCF of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
@@ -138,8 +138,8 @@ With respect to the data break-up by contrast (\cref{fig:mscv}), we see no notab
 
 An additional way to assess preprocessing quality focuses on the robustness to variability across repeated measurements, and whether this is attained without overfitting (i.e. compromising physiologically meaningful variability).
 The core assumption of this analysis of variance is that adult mouse brains in the absence of intervention retain size, shape, and implant position throughout the 8 week study period.
-Consequently, when examining similarity scores of preprocessed scans with respect to the target template, more variation should be found across levels of the subject variable rather than session variable.
-This comparison can be performed using a type 3 ANOVA, modelling both the subject and the session variables.
+Consequently, when examining similarity scores of preprocessed scans with respect to the target template, more variation should be found across levels of the subject variable rather than the session variable.
+This comparison can be performed using a type 3 ANOVA, modeling both the subject and the session variables.
 For this assessment we select three metrics with maximal sensitivity to different features:
 Neighborhood Cross Correlation (CC, sensitive to localized correlation),
 Global Correlation (GC, sensitive to whole-image correlation),
