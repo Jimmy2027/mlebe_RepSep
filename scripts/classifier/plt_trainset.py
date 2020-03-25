@@ -4,8 +4,8 @@ from matplotlib import pyplot as plt
 import os
 
 seed = 1
-x_train = np.load(os.path.expanduser('~/.scratch/mlebe_+bc_+btr/classifiers/T2/x_train_augmented.npy'))
-y_train = np.load(os.path.expanduser('~/.scratch/mlebe_+bc_+btr/classifiers/T2/y_train_augmented.npy'))
+x_train = np.load(os.path.expanduser('~/.scratch/mlebe/classifiers/T2/x_train_augmented.npy'))
+y_train = np.load(os.path.expanduser('~/.scratch/mlebe/classifiers/T2/y_train_augmented.npy'))
 np.random.seed(seed)
 np.random.shuffle(x_train)
 np.random.seed(seed)

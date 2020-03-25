@@ -3,10 +3,10 @@ from matplotlib import pyplot as plt
 import numpy as np
 import os
 
-xfile = open(os.path.expanduser('~/.scratch/mlebe_+bc_+btr/classifiers/T2/blacklisted_images.pkl'), 'rb')
+xfile = open(os.path.expanduser('~/.scratch/mlebe/classifiers/T2/blacklisted_images.pkl'), 'rb')
 blacklisted_images = pickle.load(xfile)
 xfile.close()
-yfile = open(os.path.expanduser('~/.scratch/mlebe_+bc_+btr/classifiers/T2/blacklisted_masks.pkl'), 'rb')
+yfile = open(os.path.expanduser('~/.scratch/mlebe/classifiers/T2/blacklisted_masks.pkl'), 'rb')
 blacklisted_masks = pickle.load(yfile)
 yfile.close()
 plt.figure()

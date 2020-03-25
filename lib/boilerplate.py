@@ -46,7 +46,6 @@ def wilcoxon_(
 def factorci(factor,
 	df_path='data/volume.csv',
 	dependent_variable='Volume Conservation Factor',
-	# expression='Processing*Template',
 	expression='Processing*Contrast',
 	exclusion_criteria={},
 	**kwargs

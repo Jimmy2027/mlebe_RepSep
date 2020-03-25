@@ -4,7 +4,7 @@ import pickle
 import os
 seed = 2
 
-path = os.path.expanduser('~/.scratch/mlebe_+bc_+btr/classifiers/T2')
+path = os.path.expanduser('~/.scratch/mlebe/classifiers/T2')
 xfile = open(path + '/x_test_struct.pkl', 'rb')
 x_test_struct = pickle.load(xfile)
 xfile.close()

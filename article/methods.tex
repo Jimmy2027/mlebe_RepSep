@@ -157,6 +157,8 @@ The arbitrary unit equivalent of this percentile threshold is recorded for each 
         = \frac{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}{v \lceil0.66n\rceil}
 \end{equation}
 
+The bootstrapped distribution of the RMSE ($\sqrt{(\text{mean}((1 - \text{VCF})^2)}$) is obtained by resampling the VCF distributions 10000 times with replacement, and computing the RMSE for every sample.
+
 The SCF metric is based on the ratio of smoothness before and after processing.
 The smoothness measure is the full-width at half-maximum (FWHM) of the signal amplitude spatial autocorrelation function (ACF \cite{eklund2016cluster}).
 Since fMRI data usually do not have a Gaussian-shaped spatial ACF, we use AFNI \cite{cox1996afni} to fit the following function in order to compute the FWHM ---

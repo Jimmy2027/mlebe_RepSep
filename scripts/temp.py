@@ -12,7 +12,10 @@ from lib import boilerplate
 # boilerplate.factorci('Processing[T.Generic]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')
 
 # boilerplate.levene_(dependent_variable='1 - Vcf')
-print(boilerplate.wilcoxon_(dependent_variable='1 - Vcf'))
+# print(boilerplate.wilcoxon_(dependent_variable='1 - Vcf'))
+print(boilerplate.corecomparison_factorci('Processing[T.Generic Masked]', df_path='data/bootstrapped_volume.csv', dependent_variable='RMSE'))
+print(boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/bootstrapped_volume.csv', dependent_variable='RMSE'))
+print(boilerplate.corecomparison_factorci('Intercept', df_path='data/bootstrapped_volume.csv', dependent_variable='RMSE'))
 #
 # boilerplate.iqr_(dependent_variable='1 - Vcf')
 # boilerplate.iqr_(dependent_variable='1 - Vcf', processing = 'Generic Masked')

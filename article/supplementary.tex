@@ -5,11 +5,24 @@
 \section{Supplementary Materials}
 
 \begin{sansmath}
+\py{pytex_fig('scripts/vc_violin_bootstrap.py',
+        conf='article/1col.conf',
+        label='mscv',
+        caption='
+                \\textbf{The Generic* workflow shows much less variance than the Generic workflow.}\\
+                Comparison of a bootstrapped distribution of the root mean squared errors to 1, across workflows and functional contrasts.
+                ',
+        multicol=True,
+        )}
+\end{sansmath}
+
+
+\begin{sansmath}
 \py{pytex_fig('scripts/msc_violin.py',
         conf='article/1col.conf',
         label='mscv',
         caption='
-                \\textbf{The Generic* workflow does not introduce a significance loss.}
+                \\textbf{The Generic* workflow does not introduce a significance loss.}\\
                 Comparison across workflows and functional contrasts.
                 ',
         multicol=True,
