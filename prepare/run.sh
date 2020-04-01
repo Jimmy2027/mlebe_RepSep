@@ -37,7 +37,7 @@ fi
 
 
 #echo " Write your experiment description here " > ~/.scratch/mlebe/description.txt
-echo " with biascorrect before predictions \n with bias training" > ~/.scratch/mlebe/description.txt
+echo " second try with biascorrect before predictions \n with bias training,\\ anta model: /mnt/data/mlebe_data/results/anat_br_augment/dice_600_2020-03-06/1_Step/model_ep282.h5,\\ func model: /mnt/data/mlebe_data/results/func_br_augment/dice_600_2020-03-07/1_Step/model_ep104.h5" > ~/.scratch/mlebe/description.txt
 
 python preprocess.py || exit 1
 python collapse.py || exit 1
