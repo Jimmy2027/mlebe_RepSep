@@ -1,9 +1,12 @@
 %%briefly explain why
 %%  - extraction ROI 
 %%  - registration into a standard reference space
-Cross-subject and cross-study comparability of imaging data in general, and magnetic resonance imaging (MRI) data in particular, is contingent on the quality of registration to a standard reference space.
-Current methods rely on full image processing, with high varying intensities outside the Region Of Interest that interfere with registration.
+%%% no, some use heuristic-based masking derived from tweaked human-brain masking presets. You should mention that you are talking about preclinical imaging, as the issue is distinctly less problematic for human brain imaging, where masking has been optimized via manual-machine-learning before automatic machine learning was developed.
+Cross-subject and cross-study comparability of imaging data in general, whole-brain imaging e.g. MRI) data in particular, is contingent on the quality of registration to a standard reference space.
+%%% but before you mention the brain regiion of interest, you should inroduce that you are talking about neuroimaging.
+Current methods rely on full image processing, with high varying intensities outside the brain Region Of Interest that interfere with registration.
 Applying the processing to a masked image improves the quality of the latter.
+%%% you need to either introduce SAMRI, or not mention it at all. After all, ideally, your masking should be usable without SAMRI.
 Here, we present as an additional step in the SAMRI registration workflow, a deep learning enabled framework for segmentation of brain tissue in functional and structural MR images.
 
 
