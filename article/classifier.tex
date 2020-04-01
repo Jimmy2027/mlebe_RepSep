@@ -1,30 +1,40 @@
 \section{The Improved Workflow}
 
-Intensities outside the brain region of a mouse MR image present high variations and bias the registration process.
-This can lead to stretching or skewing of the brain during the registration process to fit unwanted intensities inside the template brain region.
-As a remedy, we extract the brain volume from the images and compute the registration transformation on an image specific region of interest.
-For this purpose, we propose a machine learning enabled brain extraction in an additional node to the Generic workflow presented by Ioanas et al. in \cite{ioanas_optimized_2019}.
-It creates a mask of the brain region using a classifier, which is then used to extract the region of interest.
-Two classifiers were trained, one for T2 contrast images and one for BOLD \cite{bold} and CBV \cite{cbv} contrasts.
-The brain extraction nodes of the workflow return both the masked input and the binary mask.
-The latter is used to concentrate computing effort on a region of interest in preprocessing functions while the extracted brain volume is used to compute the registration transformation.
+In-vivo as well as ex-vivo MRI head scans, present higher variability in the viscerocranial and extracranial tissue than in the neurocranium and the brain region of interest.
+Usage of unmasked (i.e. non brain extracted) data can thus lead to stretching or skewing of the brain during the registration process.
+%%% Das bis hier sollte eher ins background, vllt auch leicht umformuliert um besser reinzupassen.
 
-\section{The Classifier} \label{sec:Convolutional Neural Networks}
-Classifiying each pixel with "brain" and "not brain" for the brain region extraction is done via a deep learning method.
+We lay out a preparatory step to improve brain registration by specifically extracting the brain volume from the MRI scans.
+%%% I would make the section name “Classifier Implementation”, and move the Classifier subsection to the main text, then re-write SAMRI integration as a separate subsection “Workflow Integration”, and at the end of it, also highlight the advantages this has for software distribution (i.e. via NeuroGentoo), reproducibility (article RepSeP infrastructure), and benchmark accessibility.
+Our solution utilises a machine learning enabled brain tissue classifier, and the software implementation is formulated to integrate with the SAMRI Generic workflow \cite{ioanas_optimized_2019}, in order to ensure broader usability and reproducible benchmarking.
+It creates a mask of the brain region using a classifier, which is then used to extract the region of interest.
+Two classifiers were trained, one for scans acquired with RARE sequences yielding $$T_2$$-weighted contrast and one scans acquired with gradient-echo EPI sequences yielding either BOLD \cite{bold} and CBV \cite{cbv} contrasts.
+%%% Maybe reference the methods section, where you briefly cite the data and list the actual scan parameters (echo time, inter-echo spacing, etc. --- all available in the methods section of the DRLFOM, IRSABI, and OPFVTA publications) --- reviewers will want to see this. For Zhiva's data, please write to her asking for the information.
+The brain extraction nodes of the workflow return both the masked input and the binary mask.
+%%% Is this really the case? I thought we are computing the transformation on unmasked data, no? From this one sentence alone it makes no sense to mask the data if we already use the region of interest to constrain the metrics. If we need masked images to ensure that extracranial hyperintensities don't drift into the ROI, then you should mention this explicitly, and then also mention that the transformation is applied to the unmasked data to make the process minimally destructive.
+The latter is used to constrain image similarity metric estimation on a the relevant region of interest, while the extracted brain volume is used to compute the registration transformation.
+
+\subsection{The Classifier} \label{sec:Convolutional Neural Networks}
+%%% A bit too vague, that it's “a deep learning method” is probably not that informative a descriptor.
+%%% once you have introduced unet in the background, you can just repeat that you use Unet and briefly recap a few keywords form your rationale.
+The assignment of “brain” and “not brain” annotation to each voxel in the scans is performed by a deep learning method.
+%%% this belongs in the background
 In recent years it has been shown that convolutional neural network give the best results for semantic image segmentation in terms of precision and flexibility \cite{geng_survey_2018, ronneberger_u-net:_2015}.
 Training a neural network into a classifier is a supervised method.
 This means that the model needs to learn its parameters based on observations of data.
 
-The training data set of a neural network is as important as the architecture of the model itself.
 To improve general-purpose application, training examples need to be drawn from a usually unknown probability distribution, which is expected to be representative of the space of occurrences.
-We define the space of occurrences as the space of which the data of interest is drawn from.
-In our case this consists of all the different mouse brain MRI data sets coming from multiple experiments, with their corresponding labels.
-Ideally experiment setups are uniform and the resulting data does not differ much, but small variations in the experiment setup and animal size are unavoidable.
-Based on an approximation of the occurrence space, the network has to build a general model that enables it to extrapolate and produce sufficiently accurate predictions in new cases.
+%%% you need to explain where the labels come from, maybe split the bit where you introduce the scan types of into a separate subsection and entitle it “Training Data”, and talk about this there. After all, you are discussing data right here, not the classifier.
+We set up an occurence space from which the data of interest is drawn, consisting of all the different mouse brain MRI data sets coming from multiple experiments, with their corresponding labels.
+Based on an approximation of the occurrence space, the network builds a general model that enables it to extrapolate and produce sufficiently accurate predictions in new cases.
+%%% This would be more appropriate for the background section, introducing the suitability of machine learning. Don't try to justify your choices here, you can introduce pros and cons of preexisting methods in the background or discuss pros and cons of your own work in the discussion. In the “Results” section, which this is equivalent to, you just state what you have done (briefly, full details go into Methods).
 Manually creating annotations as required to train a deep-learning classifier for high-resolution data is often infeasible, since it requires manual expert segmentation of vast amounts of slices.
 
-Here we take as data set, images that were registered through the SAMRI workflow into a reference space defined by the Toronto Hospital for Sick Children Mouse Imaging Center \cite{dsu}.
-A mask, defined in the same reference space is used as ground truth.
+%%% This is again, more appropriate for a data section
+As a training dataset, we use scans which were preprocessed with the SAMRI Generic workflow.
+This data thus contains scans mapped onto a bregma-centered standard \cite{ioanas_optimized_2019} space derived from the Toronto Hospital for Sick Children Mouse Imaging Center brain template \cite{dsu}.
+A template-based mask is available in the same reference space, and constitutes a ground truth estimation.
+As registration in the absence of brain extraction is prone to imperfections, the mask does not always align perfectly with the brain region of every slice.
 
-The registration process is good but not perfect, which is why the mask does not always align perfectly with the brain region of every slice.
+%%% you should introduce this as a question of interest in the background, and maybe reference some articles which comment on or deal with imperfect testing data.
 While our purpose was to create a workflow that generates better masks than the one from the template space, we show that the latter can be used as training data for the deep-learning model, by applying small changes to it.

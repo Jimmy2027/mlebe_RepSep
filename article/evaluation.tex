@@ -1,18 +1,16 @@
 \section{Evaluation}
-For the quality control of the workflow, we first evaluate the segmentation process, followed by a benchmark between the Generic and the improved workflow.
-The segmentations of the classifier should be as precise as possible for the masking process, which in return is then used to improve the registration.
+%%% I think classification is more sensible than segmentation (you really only segment data into two), but I might be wrong if this is some specific ML jargon where there is some meaningful difference between the terms. If not and if a specific term has synonyms, try to just choose one, and stick with it.
+For the quality control of the workflow, we first evaluate the classification process, followed by a benchmark between the Generic and the improved (Generic Masked) workflow.
 
-As stated by Ioanas et al. in \cite{ioanas_optimized_2019} a major challenge of registration quality control (QC) is that a perfect mapping from the measured image to the template is undefined.
-To address this challenge, they developed four alternative evaluation metrics: volume conservation, smoothness conservation, functional analysis, and variance analysis.
-We use these metrics to benchmark our workflow against theirs.
-It is worth noting that the quality of the Generic workflow is already remarkable.
-Even slight improvements should be considered an amelioration.
 
 \subsection{Segmentation}
+%%% Again, background or discussion
 Quality control of our classifier is difficult in the sense that it should predict a better mask than the template.
-Nevertheless, it is useful to verify if the output is similar, as it should be.
+Nevertheless, it is useful to verify whether the output is similar, as it should be.
+%%% A similarity metric for what, between what and what?
 As a similarity metric we have used the Dice score (see \cref{eqDcoef}).
 The average Dice score taken on every slice of the test data set is $D_{coef}= $ \py{boilerplate.print_dice()} $\sim 1$.
+%%% Sentences evaluating your evaluation results go into Discussion, if you *really* want to make a point here, add it as a sub-clause, e.g. “The dice score average shows strong similarity between y and x, yielding a value of XXXXX”
 The predictions thus have only minor changes in comparison with the template.
 
 
@@ -22,15 +20,29 @@ The predictions thus have only minor changes in comparison with the template.
         label='testset_ex',
         caption='
                 \\textbf{The Classifier predicts a similar mask to the ground truth.}
-                Random plots from the Test set illustrate the predictions of the classifier.
+                Randomly picked plots from the test set illustrate the predictions of the classifier.
                 The first row presents the input image, the second the ground truth and the third row shows the predictions of the classifier.
                 ',
         multicol=True,
         )}
 \end{sansmath}
 
-As an evaluation of the registration, we make use of the quality control from \cite{ioanas_optimized_2019}.
-We denote the original workflow as Generic and our modified version as Generic*.
+%%% Kind of repetitive since you already talked about this at the start of the section...
+We evaluate the effects of our classifier on a full-fledged registration workflow via the benchmarking algorithms from \cite{ioanas_optimized_2019}.
+%%% Generic Masked is really more descriptive, but you should introduce the terminology when you introduce the workflow.
+We denote the original workflow as Generic and our modified version as Generic Masked.
+
+\subsection{Workflow}
+
+%%% Don't spell out the author name, just include the citation, and if you want it to expand to list the name (which I do not like, but your and the journal's preference have priority over mine :D), you can do that via bibtex.
+%%% Also this is background stuff
+%As stated by Ioanas et al. in \cite{ioanas_optimized_2019} a major challenge of registration quality control (QC) is that a perfect mapping from the measured image to the template is undefined.
+%To address this challenge, they developed four alternative evaluation metrics: volume conservation, smoothness conservation, functional analysis, and variance analysis.
+We use an established palette of workflow evaluation metrics --- inspecting volume and smoothness conservation, as well as downstream effects on basic functional analysis \cite{ioanas_optimized_2019} --- to benchmark the novel SAMRI Generic Masked workflow against the SAMRI Generic workflow.
+%%% Awwww, thanks :"> , but this is (1) unscientifically formulated, (2) background or discussion content
+It is worth noting that the quality of the Generic workflow is already remarkable.
+Even slight improvements should be considered an amelioration.
+%%% Introduce RMSE bootstrapping here, as you will need it for both VCF and SCF.
 
 \subsection{Volume Conservation}
 
@@ -55,10 +67,14 @@ We denote the original workflow as Generic and our modified version as Generic*.
         )}
 \end{sansmath}
 
+%%% Ughhhh... please don't copy text from IRSABI (not for my sake, but four yours, technically someone who really wants to find fault with your work could construe this as plagiarism). Briefly rephrase what this is, maybe show the equation, and reference IRSABI --- and you're done!
 Volume conservation is based on the assumption that the total volume of the scanned segment of the brain should remain roughly constant after preprocessing.
 Beyond just size differences between the acquired data and the target template, a volume increase may indicate that the brain was stretched to fill in template brain space not covered by the scan, while a volume decrease might indicate that non-brain voxels were introduced into the template brain space.
 For this analysis, we compute a Volume Conservation Factor (VCF), whereby volume conservation is highest for a VCF equal to 1.
 
+%%% Ok, you introduce the VCF and you show the VCF plots primarily, and then you list the stats for RMSE only? You should definitely write out the modelling evaluation for VCF. My recommendation is to write down a paragraph for the VCF evaluation, and then RMSE evaluation, plot-wise you show a composite figure with subfigures for VCF, SCF, and the respective bootstrapped RMSE.
+
+%%% briefly introduce what the RMSE tells you here.
 Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to 1, we report that the RMSE is sensitive to the
 workflow (RMSE of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]', df_path='data/bootstrapped_volume.csv', dependent_variable='RMSE')})
 and the contrast-workflow interaction (RMSE of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/bootstrapped_volume.csv', dependent_variable='RMSE')}).
@@ -75,13 +91,15 @@ Moreover, the root mean squared error ratio favours the Generic* workflow
 
 %Descriptively, we observe that the Generic* level of the workflow variable introduces a volume gain
 %(VCF of \py{boilerplate.factorci('Processing[T.Generic Masked]')}).
-Further, we note that there is a significant variance decrease in all conditions for the Generic* workflow
+Further, we note that there is a significant variance decrease in all conditions for the Generic Masked workflow
 (\py{boilerplate.varianceratio()}-fold).
 
 With respect to the data break-up by contrast (CBV versus BOLD, \cref{fig:vccv}), we see no notable main effect for the contrast variable
 (VCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]')}), nor do we report a notable effect for the contrast-workflow interaction (VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]')}).
 
 \subsection{Smoothness Conservation}
+
+%%% Same comments as for VCF
 
 A further aspect of preprocessing quality is the resulting image smoothness.
 Although controlled smoothing is a valuable preprocessing tool used to increase the signal-to-noise ratio (SNR), uncontrolled smoothness limits operator discretion in the trade-off between SNR and feature granularity.
@@ -102,6 +120,8 @@ and the contrast-workflow interaction
 (SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
 \subsection{Functional Analysis}
+
+%%% Same comments as for VCF, these three sections can basically be copy-pasted in as far as the sentence structure is concerned.
 
 Functional analysis is a frequently used avenue for preprocessing QC.
 Its viability derives from the fact that the metric being maximized in the registration process is not the same output metric as that used for QC.
@@ -140,6 +160,8 @@ With respect to the data break-up by contrast (\cref{fig:mscv}), we see no notab
         )}
 \end{sansmath}
 
+%%% Again, please don't copy verbatim from IRSABI
+
 An additional way to assess preprocessing quality focuses on the robustness to variability across repeated measurements, and whether this is attained without overfitting (i.e. compromising physiologically meaningful variability).
 The core assumption of this analysis of variance is that adult mouse brains in the absence of intervention retain size, shape, and implant position throughout the 8 week study period.
 Consequently, when examining similarity scores of preprocessed scans with respect to the target template, more variation should be found across levels of the subject variable rather than the session variable.
@@ -157,6 +179,7 @@ CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','CC', c
 GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic Masked','GC', condensed=True)}),
 and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic Masked','MI', condensed=True)}).
 
+%%% What do you mean by “the same trend”?
 For the Generic SAMRI workflow, resulting data F-statistics follow the same trend:
 CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','CC', condensed=True)}),
 GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','GC', condensed=True)}),

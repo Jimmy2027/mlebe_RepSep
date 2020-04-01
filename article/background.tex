@@ -1,12 +1,17 @@
 \section{Background}
-To make meaningful comparisons across the subjects of a study, it is imperative that the images lie in a standard reference frame.
+To make meaningful comparisons across the subjects of a study, it is imperative that all scans lie in a standard reference frame.
 %Voxel-based population studies of either functional or structural variables depend on mapping to a template space.
 %The common coordinate system enables a statistical evaluation of the likelihood of consistent activation across a group or, in other contexts, the differences in anatomy between two groups.
-Because of positioning imprecision and anatomical animal variations, this is not the case for original MR acquired images.
-To solve this issue, the images need to be projected into the reference frame via registration \cite{maintz_overview_nodate, sotiras_deformable_2013}.
-As reported by Ioanas et al. \cite{ioanas_optimized_2019}, the general approach for mouse-brain image registration is to use high-level functions designed and optimized for human brain images.
+%%% Again, please introduce that and why you are talking about MR. 1-2 sentences should suffice.
+Because of variability both in animal anatomy and in animal preparation, this is not the case for original MR acquired images.
+To solve this issue, scans need to be remapped to a reference frame via registration \cite{maintz_overview_nodate, sotiras_deformable_2013}.
+As reported by Ioanas et al. \cite{ioanas_optimized_2019}, the legacy approach for mouse-brain image registration is to modify the data in order to conform to pre-existing functions, designed and optimized for human brain imaging.
+%%% Please don't referring to “images”, scans is a more appropriate term here.
 This requires the mouse-data to be adapted to the processing function instead of vice-versa.
-To provide contrast, they compare two workflows, a Legacy workflow that adapts the data to the processing functions and a Generic workflow, which is optimized to the data.
-While the Legacy workflow expands voxel size and deletes orientation information of the affine matrix to fit human brain data, the Generic workflow uses functions provided by the ANTs package \cite{ants}, with spatial parameters adapted to the mouse brain.
-A quality control shows that the Generic workflow improves volume conservation, smoothness conservation and provides a reduction in variance.
-While the performance increase is considerable, registration quality can be improved further by computing the transformation solely on the brain volume to reduce disturbances induced by intensity variations outside the brain region.
+\cite{ioanas_optimized_2019} establishes a novel workflow, specifically designed for mouse brain imaging, and benchmarks it against the legacy procedure.
+While the reported performance increase is considerable, registration quality can be improved further by computing the transformation solely on the brain volume to reduce disturbances induced by intensity variations outside the brain region.
+%%% Perhaps this is a better place to introduce the non-masked image processing. The SAMRI Legacy workflow actually uses masking, via heuristics optimized for human brain imaging.
+
+%%% I think you should introduce machine learning and U-net as well. Just one or two paragraphs should be enough, some of which could be moved from the methods section. Basically you should introduce everything which motivates your approach here.
+
+%%% There should be a final paragraph in this section, summarizing the interesting questions in the field. For you these would be all or some subset of: (1) preclinical image masking, (2) in a reusable and reproducible fashion, (3) distributed as FOSS, (4) whether and in how far this actually improves the optimized workflow, (5) whether and in how far reliable classification can be obtained from imperfect training data.
