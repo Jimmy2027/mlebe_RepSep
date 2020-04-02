@@ -7,7 +7,7 @@ For the quality control of the workflow, we first evaluate the classification pr
 %%% Again, background or discussion
 Quality control of our classifier is difficult in the sense that it should predict a better mask than the template.
 Nevertheless, it is useful to verify whether the output is similar, as it should be.
-%%% A similarity metric for what, between what and what?
+%%% A similarity metric for what, between what and what? for the mask between the template and the prediction
 As a similarity metric we have used the Dice score (see \cref{eqDcoef}).
 The average Dice score taken on every slice of the test data set is $D_{coef}= $ \py{boilerplate.print_dice()} $\sim 1$.
 %%% Sentences evaluating your evaluation results go into Discussion, if you *really* want to make a point here, add it as a sub-clause, e.g. “The dice score average shows strong similarity between y and x, yielding a value of XXXXX”

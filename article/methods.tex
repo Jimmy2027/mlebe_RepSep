@@ -156,7 +156,11 @@ The VCF is then obtained with \cref{eq:vcf}, where $v$ is the voxel volume in th
         = \frac{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}{v \lceil0.66n\rceil}
 \end{equation}
 
-The bootstrapped distribution of the RMSE ($\sqrt{(\text{mean}((1 - \text{VCF})^2)}$) is obtained by resampling the VCF distributions 10000 times with replacement, and computing the RMSE for every sample.
+The bootstrapped distribution of the RMSE (\cref{eq:RMSE}) is obtained by resampling the VCF distributions 10000 times with replacement, and computing the RMSE for every sample.
+
+\begin{equation} \label{eq:RMSE}
+        RMSE = \sqrt{(\text{mean}((1 - \text{VCF})^2)}
+\end{equation}
 
 The SCF metric is based on the ratio of smoothness before and after processing.
 It is obtained via \cref{eq:acf}, where $r$ is the distance of two amplitude distribution samples, $a$ is the relative weight of the Gaussian term in the model, $b$ is the width of the Gaussian and $c$ the decay of the mono-exponential term \cite{cox2017fmri}.
