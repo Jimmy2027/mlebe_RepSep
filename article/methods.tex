@@ -167,8 +167,7 @@ It is obtained via \cref{eq:acf}, where $r$ is the distance of two amplitude dis
 \end{equation}
 
 The for the MS relevant statistical power is obtained via the negative logarithm of first-level p-value maps.
-This produces voxelwise statistical estimates for the probability that a time course could --- by chance alone --- be at least as well correlated with the stimulation regressor as the voxel time course measured.
-Per-scan average of these values are computed as seen in \cref{eq:ms}, where $n$ represents the number of statistical estimates in the scan, and $p$ is a p-value.
+Voxelwise statistical estimates for the probability that a time course could --- by chance alone --- be at least as well correlated with the stimulation regressor as the voxel time course measured are averaged via \cref{eq:ms}, where $n$ represents the number of statistical estimates in the scan, and $p$ is a p-value.
 
 \begin{equation} \label{eq:ms}
         M\!S = \frac{\sum_{i=1}^n -log(p_i)}{n}
