@@ -60,7 +60,7 @@ Even slight improvements should be considered an amelioration.
                         'caption':'Comparison across workflows and functional contrasts.'
                         ,},
                 ],
-        caption='\\textbf{Both the SAMRI Generic and the Generic* workflow optimally and reliably conserve volume and smoothness, the latter showing values that are closely distributed to 1.}
+        caption='\\textbf{Both the SAMRI Generic and the Generic Masked workflow optimally and reliably conserve volume and smoothness, the latter showing values that are closely distributed to 1.}
         Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.
         ',
         label='fig:vc',
@@ -68,9 +68,9 @@ Even slight improvements should be considered an amelioration.
 \end{sansmath}
 
 %%% Ughhhh... please don't copy text from IRSABI (not for my sake, but four yours, technically someone who really wants to find fault with your work could construe this as plagiarism). Briefly rephrase what this is, maybe show the equation, and reference IRSABI --- and you're done!
-Volume conservation is based on the assumption that the total volume of the scanned segment of the brain should remain roughly constant after preprocessing.
-Beyond just size differences between the acquired data and the target template, a volume increase may indicate that the brain was stretched to fill in template brain space not covered by the scan, while a volume decrease might indicate that non-brain voxels were introduced into the template brain space.
-For this analysis, we compute a Volume Conservation Factor (VCF), whereby volume conservation is highest for a VCF equal to 1.
+Volume Conservation Factor (VCF) \cite{ioanas_optimized_2019} measures the registration induced deformation of the scanned brain, by computing the ratio of the brain volume before and after preprocessing.
+A positive ratio indicates that the brain was stretched to fill the template space, while a negative ratio indicates that non-brain voxels were introduced in the template brain space.
+Volume conservation is highest for a VCF equal to 1, indicating that the preprocessing has no influence on the brain volume of the scans.
 
 %%% Ok, you introduce the VCF and you show the VCF plots primarily, and then you list the stats for RMSE only? You should definitely write out the modelling evaluation for VCF. My recommendation is to write down a paragraph for the VCF evaluation, and then RMSE evaluation, plot-wise you show a composite figure with subfigures for VCF, SCF, and the respective bootstrapped RMSE.
 
@@ -86,7 +86,7 @@ A Wilcoxon signed-rank test on the absolute distance to 1 of both VCF distributi
 
 %
 %The performance of the Generic SAMRI workflow is different from that of Generic*, yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
-Moreover, the root mean squared error ratio favours the Generic* workflow
+Moreover, the root mean squared error ratio favours the Generic Masked workflow
 ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
 
 %Descriptively, we observe that the Generic* level of the workflow variable introduces a volume gain
@@ -101,16 +101,16 @@ With respect to the data break-up by contrast (CBV versus BOLD, \cref{fig:vccv})
 
 %%% Same comments as for VCF
 
-A further aspect of preprocessing quality is the resulting image smoothness.
-Although controlled smoothing is a valuable preprocessing tool used to increase the signal-to-noise ratio (SNR), uncontrolled smoothness limits operator discretion in the trade-off between SNR and feature granularity.
-Uncontrolled smoothness can thus lead to undocumented and implicit loss of spatial resolution and is therefore associated with inferior anatomical alignment \cite{fmriprep}.
-We employ a Smoothness Conservation Factor (SCF), expressing the ratio between the smoothness of the preprocessed images and the smoothness of the original images.
+Smoothing is a popular tool employed by many preprocessing functions to increase the signal-to-noise ratio.
+Image smoothness comes at the cost of image contrast as well as feature saliency and has been shown to result in inferior anatomical alignment \cite{fmriprep} due to the loss of spatial resolution.
+As an indicator of image smothness induced by the workflow, the Smoothness Conservation Factor (SCF) \cite{ioanas_optimized_2019} expresses the ratio between the smoothness of the preprocessed images and the smoothness of the original images.
+Smoothess Conservation is highest for a SCF equal to 1, indicating that the preprocessing does not influence image smoothness.
 
-While the performance of the Generic SAMRI workflow is only slightly different from that of the Generic* workflow, the root mean squared error ratio favors the Generic* workflow ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
+While the performance of the Generic SAMRI workflow is only slightly different from that of the Generic Masked workflow, the root mean squared error ratio favors the Generic Masked workflow ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
 
-Descriptively, we observe that neither the Generic nor the Generic* workflow introduce a strong smoothing (SCF of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
+Descriptively, we observe that neither the Generic nor the Generic Masked workflow introduce a strong smoothing (SCF of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
-Further, we note that there is a notable variance decrease for the Generic* workflow
+Further, we note that there is a notable variance decrease for the Generic Masked workflow
 (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3)}
 -fold).
 
@@ -122,17 +122,11 @@ and the contrast-workflow interaction
 \subsection{Functional Analysis}
 
 %%% Same comments as for VCF, these three sections can basically be copy-pasted in as far as the sentence structure is concerned.
+Functional Analysis expresses the significance detected across all voxels of a scan by computing the Mean Significance (MS) \cite{ioanas_optimized_2019}.
 
-Functional analysis is a frequently used avenue for preprocessing QC.
-Its viability derives from the fact that the metric being maximized in the registration process is not the same output metric as that used for QC.
-The method is however primarily suited to examine workflow effects in light of higher-level applications, and less suited for wide-spread QC (as it is computationally intensive and only applicable to stimulus-evoked functional data).
-%Additionally, functional analysis significance is documented to be sensitive to data smoothness \cite{Molloy2014}, and thus an increased score on account of uncontrolled smoothing can be expected.
-For this analysis we compute the Mean Significance (MS), expressing the significance detected across all voxels of a scan.
-%The performance of the SAMRI Generic workflow differs significantly from that of the Generic* workflow in terms of MS, yielding a two-tailed p-value of \py{pytex_printonly('scripts/ms_t.py')}.
-
-We observe that the Generic* level of the workflow variable does not introduce a notable significance loss
+We observe that the Generic Masked level of the workflow variable does not introduce a notable significance loss
 (MS of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
-Furthermore, we note a slight variance decrease in all conditions for the Generic* workflow
+Furthermore, we note a slight variance decrease in all conditions for the Generic Masked workflow
 (\py{boilerplate.varianceratio(df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}-fold).
 
 With respect to the data break-up by contrast (\cref{fig:mscv}), we see no notable main effect for the contrast variable
@@ -153,7 +147,7 @@ With respect to the data break-up by contrast (\cref{fig:mscv}), we see no notab
         conf='article/varplot.conf',
         label='var',
         caption='
-                \\textbf{The SAMRI Generic* workflow conserves subject-wise variability and minimizes trial-to-trial variability.}
+                \\textbf{The Generic Masked workflow conserves subject-wise variability and minimizes trial-to-trial variability.}
                 Swarmplots illustrate similarity metric scores of preprocessed images with respect to the corresponding workflow template, plotted across subjects (separated into x-axis bins) and sessions (individual points in each x-axis bin), for the CBV contrast.
                 ',
         multicol=True,
@@ -161,26 +155,23 @@ With respect to the data break-up by contrast (\cref{fig:mscv}), we see no notab
 \end{sansmath}
 
 %%% Again, please don't copy verbatim from IRSABI
-
-An additional way to assess preprocessing quality focuses on the robustness to variability across repeated measurements, and whether this is attained without overfitting (i.e. compromising physiologically meaningful variability).
-The core assumption of this analysis of variance is that adult mouse brains in the absence of intervention retain size, shape, and implant position throughout the 8 week study period.
-Consequently, when examining similarity scores of preprocessed scans with respect to the target template, more variation should be found across levels of the subject variable rather than the session variable.
-This comparison can be performed using a type 3 ANOVA, modeling both the subject and the session variables.
-For this assessment we select three metrics with maximal sensitivity to different features:
+As an additional metric for the comparison between workflows, we evaluate if physiological meaningfull variability is retained across repeated measurements.
+It is based on the assumption that adult mouse brains retain size, shape, and implant position in the absence of intervention, throughout the 8 week study period \cite{ioanas_optimized_2019}.
+Examining the similarity between the template and preprocessed scans, session-wise variability should be smaller than subject-wise variability.
+This comparison is performed using a type 3 ANOVA, modeling both the subject and the session variables.
+For this assessment three metrics are used, with maximal sensitivity to different features:
 Neighborhood Cross Correlation (CC, sensitive to localized correlation),
 Global Correlation (GC, sensitive to whole-image correlation),
 and Mutual Information (MI, sensitive to whole-image information similarity).
-%As similarity metrics are not equivalent, and since the main comparison of variance is performed across all of them, p-values for the variable effects are uncorrected.
 
-\Cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Generic* workflows.
-Both, the Generic and the Generic* workflow produce results which show a higher F-statistic for the subject than for the session variable.
-For the Generic* workflow, F-statistics show:
+\Cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Generic Masked workflows.
+Both, the Generic and the Generic Masked workflow produce results which show a higher F-statistic for the subject than for the session variable.
+For the Generic Masked workflow, F-statistics show:
 CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic Masked','CC', condensed=True)}),
 GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic Masked','GC', condensed=True)}),
 and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic Masked','MI', condensed=True)}).
 
-%%% What do you mean by “the same trend”?
-For the Generic SAMRI workflow, resulting data F-statistics follow the same trend:
+For the Generic SAMRI workflow, resulting data F-statistics show:
 CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','CC', condensed=True)}),
 GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','GC', condensed=True)}),
 and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','MI', condensed=True)}).

@@ -81,7 +81,7 @@ Using the Dice coefficient as a loss function for training should make it invari
 The data set consists of 3D MR images taken from an aggregation of three studies: irsabi \cite{irsabi_bidsdata}, opfvta \cite{ioanas_whole-brain_nodate}, drlfom \cite{ioanas_effects_nodate} and other unpublished data, acquired with similar parameters.
 
 The measured animals were fitted with an optic fiber implant ($\mathrm{l=\SI{3.2}{\milli\meter} \ d=\SI{400}{\micro\meter}}$) targeting the Dorsal Raphe (DR) nucleus in the brain stem.
-Using this dataset shows that the workflow is robust to these types of experiment setups.
+Using this dataset shows that the classifier is robust to these types of experiment setups.
 
 Images from the irsabi study are only used for quality control of the registration and are thus unknown to the classifier.
 It is the same dataset that was used to benchmark the Generic workflow in the original paper and thus allows for a better estimation of the general performance of our improved pipeline.
@@ -147,9 +147,8 @@ The workflow then continues with only the Region Of Interest as the image.
 
 \subsection{Metrics}
 
-For the current VCF implementation brain volume is defined as estimated by the 66\textsuperscript{th} voxel intensity percentile of the raw scan before any processing.
-The arbitrary unit equivalent of this percentile threshold is recorded for each scan and applied to all preprocessing workflow results for that particular scan, to obtain VCF estimates
- --- \cref{eq:vcf}, where $v$ is the voxel volume in the original space, $v^\prime$ the voxel volume in the transformed space, $n$ the number of voxels in the original space, $m$ the number of voxels in the transformed space, $s$ a voxel value sampled from the vector $S$ containing all values in the original data, and $s^\prime$ a voxel value sampled from the transformed data.
+The VCF uses the 66\textsuperscript{th} voxel intensity percentile of the raw scan before any processing as definition of the brain volume.
+The VCF is then obtained with \cref{eq:vcf}, where $v$ is the voxel volume in the original space, $v^\prime$ the voxel volume in the transformed space, $n$ the number of voxels in the original space, $m$ the number of voxels in the transformed space, $s$ a voxel value sampled from the vector $S$ containing all values in the original data, and $s^\prime$ a voxel value sampled from the transformed data.
 
 \begin{equation} \label{eq:vcf}
         V\!C\!F
@@ -160,39 +159,23 @@ The arbitrary unit equivalent of this percentile threshold is recorded for each 
 The bootstrapped distribution of the RMSE ($\sqrt{(\text{mean}((1 - \text{VCF})^2)}$) is obtained by resampling the VCF distributions 10000 times with replacement, and computing the RMSE for every sample.
 
 The SCF metric is based on the ratio of smoothness before and after processing.
-The smoothness measure is the full-width at half-maximum (FWHM) of the signal amplitude spatial autocorrelation function (ACF \cite{eklund2016cluster}).
-Since fMRI data usually do not have a Gaussian-shaped spatial ACF, we use AFNI \cite{cox1996afni} to fit the following function in order to compute the FWHM ---
-\cref{eq:acf}, where $r$ is the distance of two amplitude distribution samples, $a$ is the relative weight of the Gaussian term in the model, $b$ is the width of the Gaussian and $c$ the decay of the mono-exponential term \cite{cox2017fmri}.
+It is obtained via \cref{eq:acf}, where $r$ is the distance of two amplitude distribution samples, $a$ is the relative weight of the Gaussian term in the model, $b$ is the width of the Gaussian and $c$ the decay of the mono-exponential term \cite{cox2017fmri}.
 
 \begin{equation} \label{eq:acf}
         ACF(r)
         = a * e^{ -r^{2}/ (2 * b^{2}) } + (1 - a) + e^{-r/c}
 \end{equation}
 
-We examine statistical power as relevant for the MS metric via the negative logarithm of first-level p-value maps.
+The for the MS relevant statistical power is obtained via the negative logarithm of first-level p-value maps.
 This produces voxelwise statistical estimates for the probability that a time course could --- by chance alone --- be at least as well correlated with the stimulation regressor as the voxel time course measured.
-We compute the per-scan average of these values as seen in \cref{eq:ms}, where $n$ represents the number of statistical estimates in the scan, and $p$ is a p-value.
+Per-scan average of these values are computed as seen in \cref{eq:ms}, where $n$ represents the number of statistical estimates in the scan, and $p$ is a p-value.
 
 \begin{equation} \label{eq:ms}
         M\!S = \frac{\sum_{i=1}^n -log(p_i)}{n}
 \end{equation}
 
-\subsection{Software}
-
-The workflow functions make use of the Nipype \cite{nipype} package, which provides high-level workflow management and execution features.
-Via this package, functions provided by any other package can be encapsulated in a node (complete with error reporting and isolated re-execution support) and integrated into a directed workflow graph.
-Parallelization can also be managed via a number of execution plugins, allowing scalability.
-Most importantly, Nipype can generate graph descriptor language (DOT) summaries, as well as visual workflow representations suitable for operator inspection, graph theoretical analysis, and programmatic comparison between workflow variants.
-
-Via Nipype, we utilize basic MRI preprocessing functions from the FSL package \cite{fsl} and registration functions from the ANTs package \cite{ants}.
-The choice of the ANTs package (in addition to FSL, which also provides registration functions) owes to the package's functions being more highly parameterized.
-This feature allows us to avoid maladaptive optimization choices, and instead fine-tune the registration to the overarching characteristics of the brain type at hand.
-Additionally, we have implemented a number of functions in our workflow directly, e.g. to read BIDS \cite{bids} inputs, and perform dummy scans management.
-
-For Quality Control we distribute as part of this publication additional workflows using the NumPy \cite{numpy}, SciPy \cite{scipy}, pandas \cite{pandas}, and matplotlib packages \cite{matplotlib}, as well as Seaborn \cite{seaborn} for plotting, and Statsmodels \cite{statsmodels} for top-level statistics, using the HC3 heteroscedasticity consistent covariance matrix \cite{long2000}.
-Specifically, distribution densities for plots are drawn using the Scott bandwidth density estimator \cite{Scott1979}.
-
 \section{Data and Code Availability}
 
 The data archive relevant for this article is freely available \cite{mlebe_bidsdata}, and automatically accessible via the Gentoo Linux package manager.
-The code relevant for reproducing this document is also freely available \cite{mlebe_repsep}, as are its dependencies, and most prominently, MLEBE \cite{samri} and SAMRI \cite{samri}, the packages via which the herein described workflows are distributed.
+In addition to the workflow code \cite{mlebe, samri}, we openly release the re-executable source code \cite{mlebe_repsep} for all statistics and figures in this document.
+The herein introduced novel method as well as the benchmarking are thus fully transparent and reusable for further data.
