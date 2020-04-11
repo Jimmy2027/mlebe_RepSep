@@ -101,3 +101,5 @@ df.to_csv(path.join(scratch_dir, 'data', 'volume.csv'))
 Bootstrapping
 """
 bootstrap(df, 'Volume Conservation Factor')
+bootstrap_analysis('volume',dependent_variable = 'RMSE',expression = 'Processing*Contrast')
+

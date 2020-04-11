@@ -99,3 +99,4 @@ for _file in files:
 Bootstrapping
 """
 bootstrap(df, 'Smoothness Conservation Factor')
+bootstrap_analysis('smoothness',dependent_variable = 'RMSE',expression = 'Processing*Contrast')

@@ -4,7 +4,7 @@ from lib.categorical import violinplot
 from matplotlib import pyplot as plt
 import matplotlib as mpl
 
-bootstrapped_RMSEs = pd.read_csv('data/bootstrapped_volume.csv')
+bootstrapped_RMSEs = pd.read_csv('data/bootstrapped/bootstrapped_smoothness.csv')
 
 ax = violinplot(
 	x='Contrast',

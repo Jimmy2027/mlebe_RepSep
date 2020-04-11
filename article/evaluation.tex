@@ -53,7 +53,7 @@ We use an established palette of workflow evaluation metrics --- inspecting volu
                         ,},
                 ],
         caption='\\textbf{Both the SAMRI Generic and the Generic Masked workflow optimally and reliably conserve volume and smoothness, the latter showing values that are closely distributed to 1.}
-        Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.
+        Plots showing the distribution of two target metrics in the first row, together with the respective bootstrapped distributions of the RMESs in the second row. Solid lines in the colored distribution densities indicate the sample mean and dashed lines the inner quartiles.
         ',
         label='fig:vc',
         )}
@@ -67,24 +67,18 @@ As seen in \cref{fig:vccv}, we note that in the described dataset VCF is sensiti
 (\py{boilerplate.fstatistic('Processing', condensed=True)}),
 but not the interaction of the workflow with the contrast (\py{boilerplate.fstatistic('Processing:Contrast', condensed=True)}).
 The performance of the Generic SAMRI workflow is different from that of Generic*, yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
-
+With respect to the data break-up by contrast (CBV versus BOLD, \cref{fig:vccv}), we see no notable main effect for the contrast variable
+(VCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]')}), nor do we report a notable effect for the contrast-workflow interaction (VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]')}).
 %%% Ok, you introduce the VCF and you show the VCF plots primarily, and then you list the stats for RMSE only? You should definitely write out the modelling evaluation for VCF. My recommendation is to write down a paragraph for the VCF evaluation, and then RMSE evaluation, plot-wise you show a composite figure with subfigures for VCF, SCF, and the respective bootstrapped RMSE.
 
 %%% briefly introduce what the RMSE tells you here.
-
+Further, we note that there is a significant variance decrease in all conditions for the Generic Masked workflow
+(\py{boilerplate.varianceratio()}-fold).
 We note that the root mean squared error ratio favours the Generic Masked workflow
 ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
 Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to the optimal VCF 1, we report that the RMSE is sensitive to the
-workflow (RMSE of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]', df_path='data/bootstrapped_volume.csv', dependent_variable='RMSE')})
-and the contrast-workflow interaction (RMSE of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/bootstrapped_volume.csv', dependent_variable='RMSE')}).
-
-
-
-Further, we note that there is a significant variance decrease in all conditions for the Generic Masked workflow
-(\py{boilerplate.varianceratio()}-fold).
-
-With respect to the data break-up by contrast (CBV versus BOLD, \cref{fig:vccv}), we see no notable main effect for the contrast variable
-(VCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]')}), nor do we report a notable effect for the contrast-workflow interaction (VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]')}).
+workflow (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Generic Masked]')})
+and the contrast-workflow interaction (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]')}).
 
 \subsection{Smoothness Conservation}
 
@@ -109,8 +103,8 @@ and the contrast-workflow interaction
 (SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
 Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to 1, we report that the RMSE is sensitive to the
-workflow (RMSE of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]', df_path='data/bootstrapped_smoothness.csv', dependent_variable='RMSE')})
-and the contrast-workflow interaction (RMSE of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/bootstrapped_smoothness.csv', dependent_variable='RMSE')}).
+workflow (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Generic Masked]')})
+and the contrast-workflow interaction (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]')}).
 
 \subsection{Functional Analysis}
 
@@ -140,14 +134,13 @@ With respect to the data break-up by contrast (\cref{fig:mscv}), we see no notab
         conf='article/varplot.conf',
         label='var',
         caption='
-                \\textbf{The Generic Masked workflow conserves subject-wise variability and minimizes trial-to-trial variability.}
-                Swarmplots illustrate similarity metric scores of preprocessed images with respect to the corresponding workflow template, plotted across subjects (separated into x-axis bins) and sessions (individual points in each x-axis bin), for the CBV contrast.
+                \\textbf{Both the Generic and the Generic Masked workflow minimize trial-to-trial variability while conserving subject-wise variability.}
+                Swarmplots of three metric scores illustrate similarity of preprocessed images for the two corresponding workflow templates, plotted across subjects (separated into x-axis bins) and sessions (individual points in each x-axis bin), for the CBV contrast.
                 ',
         multicol=True,
         )}
 \end{sansmath}
 
-%%% Again, please don't copy verbatim from IRSABI
 As an additional metric for the comparison between workflows, we evaluate if physiological meaningfull variability is retained across repeated measurements.
 It is based on the assumption that adult mouse brains retain size, shape, and implant position in the absence of intervention, throughout the 8 week study period \cite{ioanas_optimized_2019}.
 Examining the similarity between the template and preprocessed scans, session-wise variability should be smaller than subject-wise variability.

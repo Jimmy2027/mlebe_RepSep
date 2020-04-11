@@ -2,6 +2,9 @@ import pandas as pd
 from numpy.random import choice
 from sklearn.metrics import mean_squared_error
 from math import sqrt
+import os
+import statsmodels.formula.api as smf
+
 
 def bootstrap(df, factor):
     if factor == 'Volume Conservation Factor':
@@ -49,6 +52,32 @@ def bootstrap(df, factor):
             pd.DataFrame([['BOLD', 'Generic Masked', '{}.2'.format(i), rmse_generic_masked_BOLD]],
                          columns=['Contrast', 'Processing', 'Uid', metric + '_RMSE']), sort = False)
     if factor == 'Volume Conservation Factor':
-        bootstrapped_RMSEs.to_csv('../data/bootstrapped_volume.csv', index= False)
+        bootstrapped_RMSEs.to_csv('../data/bootstrapped/bootstrapped_volume.csv', index= False)
     elif factor == 'Smoothness Conservation Factor':
-        bootstrapped_RMSEs.to_csv('../data/bootstrapped_smoothness.csv', index = False)
+        bootstrapped_RMSEs.to_csv('../data/bootstrapped/bootstrapped_smoothness.csv', index = False)
+
+def bootstrap_analysis(
+    factor,
+    dependent_variable = 'RMSE',
+    expression = 'Processing*Contrast',
+    ):
+    if factor == 'volume':
+        df_path = '../data/bootstrapped/bootstrapped_volume.csv'
+        df_name = 'vbootstrapped_analy'
+    if factor == 'smoothness':
+        df_path = '../data/bootstrapped/bootstrapped_smoothness.csv'
+        df_name = 'sbootstrapped_analy'
+
+    df = pd.read_csv(df_path)
+
+    df = df.loc[df['Processing'] != 'Unprocessed']
+    df = df.loc[((df['Processing'] == 'Generic Masked')) | ((df['Processing'] == 'Generic'))]
+
+    formula = 'Q("{}") ~ {}'.format(dependent_variable, expression)
+    model = smf.mixedlm(formula, df, groups='Uid')
+    fit = model.fit()
+    summary = fit.summary().tables[1]
+    print(summary)
+    summary.to_csv('../data/bootstrapped/{}.csv'.format(df_name))
+    temp = pd.read_csv('../data/bootstrapped/{}.csv'.format(df_name), index_col=0)
+    print(temp)
