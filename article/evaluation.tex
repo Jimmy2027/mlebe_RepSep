@@ -1,18 +1,12 @@
 \section{Evaluation}
-%%% I think classification is more sensible than segmentation (you really only segment data into two), but I might be wrong if this is some specific ML jargon where there is some meaningful difference between the terms. If not and if a specific term has synonyms, try to just choose one, and stick with it.
 For the quality control of the workflow, we first evaluate the classification process, followed by a benchmark between the Generic and the improved (Generic Masked) workflow.
 
-
-\subsection{Segmentation}
+\subsection{Classification}
 %%% Again, background or discussion
 Quality control of our classifier is difficult in the sense that it should predict a better mask than the template.
 Nevertheless, it is useful to verify whether the output is similar, as it should be.
-%%% A similarity metric for what, between what and what? for the mask between the template and the prediction
-As a similarity metric we have used the Dice score (see \cref{eqDcoef}).
-The average Dice score taken on every slice of the test data set is $D_{coef}= $ \py{boilerplate.print_dice()} $\sim 1$.
-%%% Sentences evaluating your evaluation results go into Discussion, if you *really* want to make a point here, add it as a sub-clause, e.g. “The dice score average shows strong similarity between y and x, yielding a value of XXXXX”
-The predictions thus have only minor changes in comparison with the template.
-
+As a similarity metric between the template mask and the classifier output we have used the Dice score (see \cref{eqDcoef}).
+The average Dice score taken on every slice of the test data set is $D_{coef}= $ \py{boilerplate.print_dice()} $\sim 1$, indicating that classifier output has only minor changes in comparison with the template.
 
 \begin{sansmath}
 \py{pytex_fig('scripts/classifier/plt_testset_examples.py',
@@ -27,21 +21,9 @@ The predictions thus have only minor changes in comparison with the template.
         )}
 \end{sansmath}
 
-%%% Kind of repetitive since you already talked about this at the start of the section...
-We evaluate the effects of our classifier on a full-fledged registration workflow via the benchmarking algorithms from \cite{ioanas_optimized_2019}.
-%%% Generic Masked is really more descriptive, but you should introduce the terminology when you introduce the workflow.
-We denote the original workflow as Generic and our modified version as Generic Masked.
-
 \subsection{Workflow}
-
-%%% Don't spell out the author name, just include the citation, and if you want it to expand to list the name (which I do not like, but your and the journal's preference have priority over mine :D), you can do that via bibtex.
-%%% Also this is background stuff
-%As stated by Ioanas et al. in \cite{ioanas_optimized_2019} a major challenge of registration quality control (QC) is that a perfect mapping from the measured image to the template is undefined.
-%To address this challenge, they developed four alternative evaluation metrics: volume conservation, smoothness conservation, functional analysis, and variance analysis.
 We use an established palette of workflow evaluation metrics --- inspecting volume and smoothness conservation, as well as downstream effects on basic functional analysis \cite{ioanas_optimized_2019} --- to benchmark the novel SAMRI Generic Masked workflow against the SAMRI Generic workflow.
-%%% Awwww, thanks :"> , but this is (1) unscientifically formulated, (2) background or discussion content
-It is worth noting that the quality of the Generic workflow is already remarkable.
-Even slight improvements should be considered an amelioration.
+
 %%% Introduce RMSE bootstrapping here, as you will need it for both VCF and SCF.
 
 \subsection{Volume Conservation}
@@ -59,6 +41,16 @@ Even slight improvements should be considered an amelioration.
                         'options_post':'\\vspace{1em}',
                         'caption':'Comparison across workflows and functional contrasts.'
                         ,},
+                {'script':'scripts/vc_violin_bootstrap.py', 'label':'vcfb','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                        'options_pre_caption':'\\vspace{-1.5em}\\',
+                        'options_post':'\\vspace{1em}',
+                        'caption':'Comparison of a bootstrapped distribution of the root mean squared errors to 1, across workflows and functional contrasts.'
+                        ,},
+                {'script':'scripts/scf_violin_bootstrap.py', 'label':'scfb','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                        'options_pre_caption':'\\vspace{-1.5em}\\',
+                        'options_post':'\\vspace{1em}',
+                        'caption':'Comparison of a bootstrapped distribution of the root mean squared errors to 1, across workflows and functional contrasts.'
+                        ,},
                 ],
         caption='\\textbf{Both the SAMRI Generic and the Generic Masked workflow optimally and reliably conserve volume and smoothness, the latter showing values that are closely distributed to 1.}
         Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.
@@ -67,30 +59,27 @@ Even slight improvements should be considered an amelioration.
         )}
 \end{sansmath}
 
-%%% Ughhhh... please don't copy text from IRSABI (not for my sake, but four yours, technically someone who really wants to find fault with your work could construe this as plagiarism). Briefly rephrase what this is, maybe show the equation, and reference IRSABI --- and you're done!
 Volume Conservation Factor (VCF) \cite{ioanas_optimized_2019} measures the registration induced deformation of the scanned brain, by computing the ratio of the brain volume before and after preprocessing.
 A positive ratio indicates that the brain was stretched to fill the template space, while a negative ratio indicates that non-brain voxels were introduced in the template brain space.
 Volume conservation is highest for a VCF equal to 1, indicating that the preprocessing has no influence on the brain volume of the scans.
 
+As seen in \cref{fig:vccv}, we note that in the described dataset VCF is sensitive to the workflow
+(\py{boilerplate.fstatistic('Processing', condensed=True)}),
+but not the interaction of the workflow with the contrast (\py{boilerplate.fstatistic('Processing:Contrast', condensed=True)}).
+The performance of the Generic SAMRI workflow is different from that of Generic*, yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
+
 %%% Ok, you introduce the VCF and you show the VCF plots primarily, and then you list the stats for RMSE only? You should definitely write out the modelling evaluation for VCF. My recommendation is to write down a paragraph for the VCF evaluation, and then RMSE evaluation, plot-wise you show a composite figure with subfigures for VCF, SCF, and the respective bootstrapped RMSE.
 
 %%% briefly introduce what the RMSE tells you here.
-Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to 1, we report that the RMSE is sensitive to the
+
+We note that the root mean squared error ratio favours the Generic Masked workflow
+($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
+Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to the optimal VCF 1, we report that the RMSE is sensitive to the
 workflow (RMSE of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]', df_path='data/bootstrapped_volume.csv', dependent_variable='RMSE')})
 and the contrast-workflow interaction (RMSE of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/bootstrapped_volume.csv', dependent_variable='RMSE')}).
 
-A Wilcoxon signed-rank test on the absolute distance to 1 of both VCF distributions shows that the VCF is sensitive to the workflow (rank = \py{boilerplate.wilcoxon_(dependent_variable='1 - Vcf')[0]}, p = \py{boilerplate.wilcoxon_(dependent_variable='1 - Vcf')[1]}).
-%As seen in \cref{fig:vccv}, we note that in the described dataset VCF is sensitive to the workflow (\py{boilerplate.fstatistic('Processing', condensed=True)}),
-%but not the interaction of the workflow with the contrast (\py{boilerplate.fstatistic('Processing:Contrast', condensed=True)}).
-%Against : (\py{boilerplate.fstatistic('Processing', condensed=True, dependent_variable  = '1 - Vcf')}, \py{boilerplate.fstatistic('Processing:Contrast', condensed=True, dependent_variable  = '1 - Vcf')})
 
-%
-%The performance of the Generic SAMRI workflow is different from that of Generic*, yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
-Moreover, the root mean squared error ratio favours the Generic Masked workflow
-($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
 
-%Descriptively, we observe that the Generic* level of the workflow variable introduces a volume gain
-%(VCF of \py{boilerplate.factorci('Processing[T.Generic Masked]')}).
 Further, we note that there is a significant variance decrease in all conditions for the Generic Masked workflow
 (\py{boilerplate.varianceratio()}-fold).
 
@@ -118,6 +107,10 @@ Given the break-up by contrast shown in \cref{fig:sccv}, we see no effect for th
 (SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')})
 and the contrast-workflow interaction
 (SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
+
+Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to 1, we report that the RMSE is sensitive to the
+workflow (RMSE of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]', df_path='data/bootstrapped_smoothness.csv', dependent_variable='RMSE')})
+and the contrast-workflow interaction (RMSE of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/bootstrapped_smoothness.csv', dependent_variable='RMSE')}).
 
 \subsection{Functional Analysis}
 

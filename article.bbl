@@ -1,0 +1,222 @@
+\begin{thebibliography}{29}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Maintz and Viergever()]{maintz_overview_nodate}
+J~B~Antoine Maintz and Max~A Viergever.
+\newblock An {Overview} of {Medical} {Image} {Registration} {Methods}.
+\newblock page~22.
+
+\bibitem[Sotiras et~al.(2013)Sotiras, Davatzikos, and
+  Paragios]{sotiras_deformable_2013}
+Aristeidis Sotiras, Christos Davatzikos, and Nikos Paragios.
+\newblock Deformable {Medical} {Image} {Registration}: {A} {Survey}.
+\newblock \emph{IEEE Transactions on Medical Imaging}, 32\penalty0
+  (7):\penalty0 1153--1190, July 2013.
+\newblock ISSN 1558-254X.
+\newblock \doi{10.1109/TMI.2013.2265603}.
+
+\bibitem[Ioanas et~al.(2019)Ioanas, Marks, Yanik, and
+  Rudin]{ioanas_optimized_2019}
+Horea-Ioan Ioanas, Markus Marks, Mehmet~Fatih Yanik, and Markus Rudin.
+\newblock An {Optimized} {Registration} {Workflow} and {Standard} {Geometric}
+  {Space} for {Small} {Animal} {Brain} {Imaging}.
+\newblock preprint, Neuroscience, April 2019.
+\newblock URL \url{http://biorxiv.org/lookup/doi/10.1101/619650}.
+
+\bibitem[Geng et~al.(2018)Geng, Zhou, and Cao]{geng_survey_2018}
+Qichuan Geng, Zhong Zhou, and Xiaochun Cao.
+\newblock Survey of recent progress in semantic image segmentation with {CNNs}.
+\newblock \emph{Science China Information Sciences}, 61\penalty0 (5):\penalty0
+  051101, May 2018.
+\newblock ISSN 1674-733X, 1869-1919.
+\newblock \doi{10.1007/s11432-017-9189-6}.
+\newblock URL \url{http://link.springer.com/10.1007/s11432-017-9189-6}.
+
+\bibitem[Ronneberger et~al.(2015)Ronneberger, Fischer, and
+  Brox]{ronneberger_u-net:_2015}
+Olaf Ronneberger, Philipp Fischer, and Thomas Brox.
+\newblock U-{Net}: {Convolutional} {Networks} for {Biomedical} {Image}
+  {Segmentation}.
+\newblock \emph{arXiv:1505.04597 [cs]}, May 2015.
+\newblock URL \url{http://arxiv.org/abs/1505.04597}.
+\newblock arXiv: 1505.04597 version: 1.
+
+\bibitem[Tajbakhsh et~al.()Tajbakhsh, Jeyaseelan, Li, Chiang, Wu, and
+  Ding]{imperfect_datasets}
+Nima Tajbakhsh, Laura Jeyaseelan, Qian Li, Jeffrey~N. Chiang, Zhihao Wu, and
+  Xiaowei Ding.
+\newblock Embracing imperfect datasets: A review of deep learning solutions for
+  medical image segmentation.
+\newblock page 101693.
+\newblock ISSN 1361-8415.
+\newblock \doi{10.1016/j.media.2020.101693}.
+\newblock URL
+  \url{http://www.sciencedirect.com/science/article/pii/S136184152030058X}.
+
+\bibitem[imp()]{imperferct_segmentaion_labels}
+Imperfect segmentation labels: How much do they matter?
+\newblock URL
+  \url{https://www.researchgate.net/publication/325733789_Imperfect_Segmentation_Labels_How_Much_Do_They_Matter}.
+\newblock Library Catalog: www.researchgate.net.
+
+\bibitem[Ogawa et~al.(1990)Ogawa, Lee, Nayak, and Glynn]{bold}
+Seiji Ogawa, Tso-Ming Lee, Asha~S. Nayak, and Paul Glynn.
+\newblock Oxygenation-sensitive contrast in magnetic resonance image of rodent
+  brain at high magnetic fields.
+\newblock \emph{Magnetic Resonance in Medicine}, 14\penalty0 (1):\penalty0
+  68--78, April 1990.
+\newblock \doi{10.1002/mrm.1910140108}.
+\newblock URL \url{https://doi.org/10.1002/mrm.1910140108}.
+
+\bibitem[Marota et~al.(1999)Marota, Ayata, Moskowitz, Weisskoff, Rosen, and
+  Mandeville]{cbv}
+John~J.A. Marota, C.~Ayata, Michael~A. Moskowitz, Robert~M. Weisskoff, Bruce~R.
+  Rosen, and Joseph~B. Mandeville.
+\newblock Investigation of the early response to rat forepaw stimulation.
+\newblock \emph{Magnetic Resonance in Medicine}, 41\penalty0 (2):\penalty0
+  247--252, February 1999.
+\newblock \doi{10.1002/(sici)1522-2594(199902)41:2<247::aid-mrm6>3.0.co;2-u}.
+\newblock URL
+  \url{https://doi.org/10.1002/(sici)1522-2594(199902)41:2<247::aid-mrm6>3.0.co;2-u}.
+
+\bibitem[Dorr et~al.(2008)Dorr, Lerch, Spring, Kabani, and Henkelman]{dsu}
+A.E. Dorr, J.P. Lerch, S.~Spring, N.~Kabani, and R.M. Henkelman.
+\newblock High resolution three-dimensional brain atlas using an average
+  magnetic resonance image of 40 adult c57bl/6j mice.
+\newblock \emph{{NeuroImage}}, 42\penalty0 (1):\penalty0 60--69, August 2008.
+\newblock \doi{10.1016/j.neuroimage.2008.03.037}.
+\newblock URL \url{https://doi.org/10.1016/j.neuroimage.2008.03.037}.
+
+\bibitem[Esteban et~al.(2019)Esteban, Markiewicz, Blair, Moodie, Isik, Aliaga,
+  Kent, Goncalves, DuPre, Snyder, et~al.]{fmriprep}
+Oscar Esteban, Christopher Markiewicz, Ross~W Blair, Craig Moodie, Ayse~Ilkay
+  Isik, Asier~Erramuzpe Aliaga, James Kent, Mathias Goncalves, Elizabeth DuPre,
+  Madeleine Snyder, et~al.
+\newblock {FMRIP}rep: a robust preprocessing pipeline for functional {MRI}.
+\newblock \emph{Nature Methods}, page 111–116, December 2019.
+\newblock \doi{10.1038/s41592-018-0235-4}.
+\newblock URL \url{https://doi.org/10.1038/s41592-018-0235-4}.
+
+\bibitem[Hendrik{\textbackslash}\_Klug({\natexlab{a}})]{mlebe}
+Hendrik{\textbackslash}\_Klug.
+\newblock Jimmy2027/{MLEBE}, {\natexlab{a}}.
+\newblock URL \url{https://github.com/Jimmy2027/MLEBE}.
+\newblock original-date: 2019-10-13T09:57:20Z.
+
+\bibitem[zhixuhao(2020)]{zhixuhao_zhixuhao/unet_2020}
+zhixuhao.
+\newblock zhixuhao/unet, January 2020.
+\newblock URL \url{https://github.com/zhixuhao/unet}.
+\newblock original-date: 2017-04-06T01:58:15Z.
+
+\bibitem[Srivastava et~al.(2014)Srivastava, Hinton, Krizhevsky, Sutskever, and
+  Salakhutdinov]{srivastava2014dropout}
+Nitish Srivastava, Geoffrey Hinton, Alex Krizhevsky, Ilya Sutskever, and Ruslan
+  Salakhutdinov.
+\newblock Dropout: a simple way to prevent neural networks from overfitting.
+\newblock \emph{The journal of machine learning research}, 15\penalty0
+  (1):\penalty0 1929--1958, 2014.
+
+\bibitem[Milletari et~al.(2016)Milletari, Navab, and
+  Ahmadi]{milletari_v-net:_2016}
+Fausto Milletari, Nassir Navab, and Seyed-Ahmad Ahmadi.
+\newblock V-{Net}: {Fully} {Convolutional} {Neural} {Networks} for {Volumetric}
+  {Medical} {Image} {Segmentation}.
+\newblock \emph{arXiv:1606.04797 [cs]}, June 2016.
+\newblock URL \url{http://arxiv.org/abs/1606.04797}.
+\newblock arXiv: 1606.04797.
+
+\bibitem[Ioanas and Rudin(2019)]{irsabi_bidsdata}
+Horea-Ioan Ioanas and Markus Rudin.
+\newblock {BIDS Data for "An Optimized Registration Workflow and Standard
+  Geometric Space for Small Animal Brain Imaging"}, April 2019.
+\newblock URL \url{https://doi.org/10.5281/zenodo.2651640}.
+
+\bibitem[Ioanas et~al.({\natexlab{a}})Ioanas, Saab, and
+  Rudin]{ioanas_whole-brain_nodate}
+Horea-Ioan Ioanas, Bechara~John Saab, and Markus Rudin.
+\newblock A {Whole}-{Brain} {Map} and {Assay} {Parameter} {Analysis} of {Mouse}
+  {VTA} {Dopaminergic} {Activation}.
+\newblock page~19, {\natexlab{a}}.
+
+\bibitem[Ioanas et~al.({\natexlab{b}})Ioanas, Saab, and
+  Rudin]{ioanas_effects_nodate}
+Horea-Ioan Ioanas, Bechara~John Saab, and Markus Rudin.
+\newblock Effects of {Acute} and {Chronic} {Reuptake} {Inhibition} on
+  {Optogenetically} {Induced} {Serotonergic} {Activity}.
+\newblock page~20, {\natexlab{b}}.
+
+\bibitem[noa(2019)]{noauthor_ibt-fmi/samri_2019}
+{IBT}-{FMI}/{SAMRI}, December 2019.
+\newblock URL \url{https://github.com/IBT-FMI/SAMRI}.
+\newblock original-date: 2015-04-27T00:26:08Z.
+
+\bibitem[noa({\natexlab{a}})]{noauthor_multi-dimensional_nodate}
+Multi-dimensional image processing (scipy.ndimage) — {SciPy} v1.4.1
+  {Reference} {Guide}, {\natexlab{a}}.
+\newblock URL
+  \url{https://docs.scipy.org/doc/scipy/reference/ndimage.html#morphology}.
+
+\bibitem[noa({\natexlab{b}})]{noauthor_opencv-python_nodate}
+opencv-python: {Wrapper} package for {OpenCV} python bindings., {\natexlab{b}}.
+\newblock URL \url{https://github.com/skvark/opencv-python}.
+
+\bibitem[Pedregosa et~al.(2011)Pedregosa, Varoquaux, Gramfort, Michel, Thirion,
+  Grisel, Blondel, Prettenhofer, Weiss, Dubourg, Vanderplas, Passos,
+  Cournapeau, Brucher, Perrot, and Duchesnay]{scikit-learn}
+F.~Pedregosa, G.~Varoquaux, A.~Gramfort, V.~Michel, B.~Thirion, O.~Grisel,
+  M.~Blondel, P.~Prettenhofer, R.~Weiss, V.~Dubourg, J.~Vanderplas, A.~Passos,
+  D.~Cournapeau, M.~Brucher, M.~Perrot, and E.~Duchesnay.
+\newblock Scikit-learn: Machine learning in {P}ython.
+\newblock \emph{Journal of Machine Learning Research}, 12:\penalty0 2825--2830,
+  2011.
+
+\bibitem[Perez and Wang(2017)]{perez_effectiveness_2017}
+Luis Perez and Jason Wang.
+\newblock The {Effectiveness} of {Data} {Augmentation} in {Image}
+  {Classification} using {Deep} {Learning}.
+\newblock \emph{arXiv:1712.04621 [cs]}, December 2017.
+\newblock URL \url{http://arxiv.org/abs/1712.04621}.
+\newblock arXiv: 1712.04621.
+
+\bibitem[noa({\natexlab{c}})]{noauthor_callbacks_nodate}
+Callbacks - {Keras} {Documentation}, {\natexlab{c}}.
+\newblock URL \url{https://keras.io/callbacks/}.
+
+\bibitem[Jenkinson et~al.(2012)Jenkinson, Beckmann, Behrens, Woolrich, and
+  Smith]{fsl}
+Mark Jenkinson, Christian~F Beckmann, Timothy~EJ Behrens, Mark~W Woolrich, and
+  Stephen~M Smith.
+\newblock Fsl.
+\newblock \emph{Neuroimage}, 62\penalty0 (2):\penalty0 782--790, 2012.
+
+\bibitem[noa({\natexlab{d}})]{noauthor_neuroimaging_nodate}
+Neuroimaging in {Python} — {NiBabel} 2.5.0 documentation, {\natexlab{d}}.
+\newblock URL \url{https://nipy.org/nibabel/}.
+
+\bibitem[Cox et~al.(2017)Cox, Chen, Glen, Reynolds, and Taylor]{cox2017fmri}
+Robert~W Cox, Gang Chen, Daniel~R Glen, Richard~C Reynolds, and Paul~A Taylor.
+\newblock {FMRI} clustering in {AFNI}: false-positive rates redux.
+\newblock \emph{Brain connectivity}, 7\penalty0 (3):\penalty0 152--171, April
+  2017.
+\newblock \doi{10.1089/brain.2016.0475}.
+\newblock URL \url{https://doi.org/10.1089/brain.2016.0475}.
+
+\bibitem[Ioanas et~al.(2017)Ioanas, Marks, Schmidt, Aymanns, and Rudin]{samri}
+Horea-Ioan Ioanas, Markus Marks, Dominik Schmidt, Florian Aymanns, and Markus
+  Rudin.
+\newblock {SAMRI} --- {S}mall {A}nimal {M}agnetic {R}esonance {I}maging,
+  November 2017.
+\newblock URL \url{https://doi.org/10.5281/zenodo.1044033}.
+
+\bibitem[Hendrik{\textbackslash}\_Klug({\natexlab{b}})]{mlebe_repsep}
+Hendrik{\textbackslash}\_Klug.
+\newblock Jimmy2027/mlebe\_repsep, {\natexlab{b}}.
+\newblock URL \url{https://github.com/Jimmy2027/mlebe_RepSep}.
+\newblock original-date: 2020-01-20T16:51:45Z.
+
+\end{thebibliography}

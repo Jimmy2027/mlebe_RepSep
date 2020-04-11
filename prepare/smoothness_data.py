@@ -8,6 +8,7 @@ import pandas as pd
 from bids.grabbids import BIDSLayout
 from bids.grabbids import BIDSValidator
 import nipype.interfaces.io as nio
+from utils.bootstrapping import bootstrap
 
 masks = {
 	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
@@ -69,7 +70,6 @@ df['modality'] = df['modality'].str.upper()
 df['Contrast'] = df['modality']
 
 df['Smoothness'] = df['path'].apply(avg_smoothness)
-# df.loc[df['Processing']=='Legacy', 'Smoothness'] = df.loc[df['Processing']=='Legacy', 'Smoothness']/10
 
 df['Smoothness Conservation Factor'] = ''
 uids = df['Uid'].unique()
@@ -83,11 +83,7 @@ v = pd.read_csv(v_path)
 df = df.reset_index()
 df['Volume-Normalized SCF'] = 0
 for uid in df['Uid'].unique():
-	# for p, t in product(['Generic', 'Legacy'],['Generic','Legacy']):
-	for p, t in product(['Generic', 'Generic Masked'], ['Generic', 'Generic Masked']):
-		# scf = df.loc[(df['Uid']==uid)&(df['Processing']==p)&(df['Template']==t),'Smoothness Conservation Factor'].item()
-		# vcf = v.loc[(v['Uid']==uid)&(v['Processing']==p)&(v['Template']==t),'Volume Conservation Factor'].item()
-		# df.loc[(df['Uid']==uid)&(df['Processing']==p)&(df['Template']==t),'Volume-Normalized SCF'] = scf/(vcf**(1./3.))
+	for p in ['Generic', 'Generic Masked']:
 		scf = df.loc[(df['Uid']==uid)&(df['Processing']==p),'Smoothness Conservation Factor'].item()
 		vcf = v.loc[(v['Uid']==uid)&(v['Processing']==p),'Volume Conservation Factor'].item()
 		df.loc[(df['Uid']==uid)&(df['Processing']==p),'Volume-Normalized SCF'] = scf/(vcf**(1./3.))
@@ -98,3 +94,8 @@ files = os.listdir('./')
 for _file in files:
 	if _file.endswith(('.out','.1D')):
 		os.remove(path.abspath(path.expanduser(_file)))
+
+"""
+Bootstrapping
+"""
+bootstrap(df, 'Smoothness Conservation Factor')
