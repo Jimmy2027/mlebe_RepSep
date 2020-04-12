@@ -88,6 +88,20 @@ def corecomparison_factorci(factor,
 	tex = inline_factor(summary, factor, 'tex', **kwargs)
 	return tex
 
+
+def bootstrapped_corecomparison_factorci(
+		factor,
+		metric = 'volume',
+		**kwargs
+):
+	if metric == 'volume':
+		summary = pd.read_csv('data/bootstrapped/vbootstrapped_analy.csv', index_col=0)
+	if metric == 'smoothness':
+		summary = pd.read_csv('data/bootstrapped/sbootstrapped_analy.csv', index_col=0)
+	tex = inline_factor(summary, factor, 'tex', **kwargs)
+	return tex
+
+
 def varianceratio(
 	df_path='data/volume.csv',
 	dependent_variable='Volume Conservation Factor',
@@ -141,3 +155,4 @@ def iqr_(
 	df = df.loc[df['Processing']!='Unprocessed']
 	list = df.loc[(df['Processing'] == processing), dependent_variable].tolist()
 	print(iqr(list))
+

@@ -3,6 +3,8 @@ import seaborn as sns
 import matplotlib as mpl
 from lib.categorical import violinplot
 from os import path
+import matplotlib.pyplot as plt
+
 
 volume_path = path.abspath('data/volume.csv')
 df = pd.read_csv(volume_path)
@@ -27,3 +29,4 @@ ax = violinplot(
 	linewidth=mpl.rcParams['grid.linewidth'],
 	linecolor='w',
 	)
+ax.legend()

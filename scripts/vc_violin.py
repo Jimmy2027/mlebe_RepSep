@@ -28,5 +28,3 @@ ax = violinplot(
 	linecolor='w',
 	)
 
-
-plt.savefig('test1')

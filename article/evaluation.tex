@@ -52,16 +52,26 @@ Even slight improvements should be considered an amelioration.
                 {'script':'scripts/vcc_violin.py', 'label':'vccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
                         'options_pre_caption':'\\vspace{-1.5em}\\',
                         'options_post':'\\vspace{1em}',
-                        'caption':'Comparison across workflows and functional contrasts.'
+                        'caption':'Comparison of volume conservation across workflows and functional contrasts.'
                         ,},
                 {'script':'scripts/scf_violin_contrasts.py', 'label':'sccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
                         'options_pre_caption':'\\vspace{-1.5em}\\',
                         'options_post':'\\vspace{1em}',
-                        'caption':'Comparison across workflows and functional contrasts.'
+                        'caption':'Comparison across of smoothness conservation workflows and functional contrasts.'
+                        ,},
+                {'script':'scripts/vc_violin_bootstrap.py', 'label':'vcfb','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                        'options_pre_caption':'\\vspace{-1.5em}\\',
+                        'options_post':'\\vspace{1em}',
+                        'caption':'Comparison of a bootstrapped distribution of the root mean squared errors to 1, across workflows and functional contrasts.'
+                        ,},
+                {'script':'scripts/scf_violin_bootstrap.py', 'label':'scfb','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                        'options_pre_caption':'\\vspace{-1.5em}\\',
+                        'options_post':'\\vspace{1em}',
+                        'caption':'Comparison of a bootstrapped distribution of the root mean squared errors to 1, across workflows and functional contrasts.'
                         ,},
                 ],
         caption='\\textbf{Both the SAMRI Generic and the Generic Masked workflow optimally and reliably conserve volume and smoothness, the latter showing values that are closely distributed to 1.}
-        Plots of three target metrics, with coloured patch widths estimating distribution density, solid lines indicating the sample mean, and dashed lines indicate the inner quartiles.
+        Plots showing the distribution of two target metrics in the first row, together with the respective bootstrapped distributions of the RMESs in the second row. Solid lines in the colored distribution densities indicate the sample mean and dashed lines the inner quartiles.
         ',
         label='fig:vc',
         )}
@@ -76,8 +86,8 @@ Volume conservation is highest for a VCF equal to 1, indicating that the preproc
 
 %%% briefly introduce what the RMSE tells you here.
 Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to 1, we report that the RMSE is sensitive to the
-workflow (RMSE of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]', df_path='data/bootstrapped_volume.csv', dependent_variable='RMSE')})
-and the contrast-workflow interaction (RMSE of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/bootstrapped_volume.csv', dependent_variable='RMSE')}).
+workflow (RMSE of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]')})
+and the contrast-workflow interaction (RMSE of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]')}).
 
 A Wilcoxon signed-rank test on the absolute distance to 1 of both VCF distributions shows that the VCF is sensitive to the workflow (rank = \py{boilerplate.wilcoxon_(dependent_variable='1 - Vcf')[0]}, p = \py{boilerplate.wilcoxon_(dependent_variable='1 - Vcf')[1]}).
 %As seen in \cref{fig:vccv}, we note that in the described dataset VCF is sensitive to the workflow (\py{boilerplate.fstatistic('Processing', condensed=True)}),
@@ -118,6 +128,10 @@ Given the break-up by contrast shown in \cref{fig:sccv}, we see no effect for th
 (SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')})
 and the contrast-workflow interaction
 (SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
+
+Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to 1, we report that the RMSE is sensitive to the
+workflow (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Generic Masked]', metric = 'smoothness')})
+and but not the contrast-workflow interaction (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', metric = 'smoothness')}).
 
 \subsection{Functional Analysis}
 

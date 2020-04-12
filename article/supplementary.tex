@@ -5,24 +5,11 @@
 \section{Supplementary Materials}
 
 \begin{sansmath}
-\py{pytex_fig('scripts/vc_violin_bootstrap.py',
-        conf='article/temp.conf',
-        label='mscv',
-        caption='
-                \\textbf{The Generic* workflow shows much less variance than the Generic workflow.}\\
-                Comparison of a bootstrapped distribution of the root mean squared errors to 1, across workflows and functional contrasts.
-                ',
-        multicol=True,
-        )}
-\end{sansmath}
-
-
-\begin{sansmath}
 \py{pytex_fig('scripts/msc_violin.py',
         conf='article/1col.conf',
         label='mscv',
         caption='
-                \\textbf{The Generic* workflow does not introduce a significance loss.}\\
+                \\textbf{The Generic Masked workflow does not introduce a loss of significance.}\\
                 Comparison across workflows and functional contrasts.
                 ',
         multicol=True,
@@ -33,29 +20,29 @@
 	[
 		{'script':'scripts/map_generic_cbv.py', 'label':'mggc', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-                                Generic workflow with CBV map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
-                                '
+				The Generic workflow together with the CBV map shows a correct slice orientation and a coverage that is correctly bounded to the acquisition area.
+				'
 			,},
 		{'script':'scripts/map_generic_masked_cbv.py', 'label':'mllc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-				Generic* workflow with CBV map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
+				The Generic Masked workflow together with the CBV map shows a correct slice orientation and a coverage that is correctly bounded to the acquisition area.
 				'
 			,},
 		{'script':'scripts/map_generic_bold.py', 'label':'mggb', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-                                Generic workflow with BOLD map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
-                                '
+				The Generic workflow together with the BOLD map, shows a correct slice orientation and coverage that is correctly bounded to the acquisition area.
+				'
 			,},
 		{'script':'scripts/map_generic_masked_bold.py', 'label':'mllb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
 			'caption':'
-				Generic* workflow with BOLD map, showing correct slice orientation and coverage correctly bounded to the acquisition area.
-			        '
+				The Generic Masked workflow together with the BOLD map, shows a correct slice orientation and coverage that is correctly bounded to the acquisition area.
+				'
                         ,},
 		],
 	caption='
-                \\textbf{The Generic* workflow does not induce statistic coverage misalignment nor does it induce overflow of the statistic maps into adjacent anatomical regions.}
-                Illustrated are multiplanar depictions of second-level omnibus statistic maps separately evaluating CBV and BOLD scans, and thresholded at $\mathrm{|t|\geq2}$.
-                The acquisition area is bracketed in pink, and in comparing it to statistic coverage it is important to note that the latter is always underestimated, as the omnibus statistic contrast is only defined for voxels captured in \\textit{every} evaluated scan.
+                \\textbf{The Generic Masked workflow does not induce statistic coverage misalignment nor does it induce overflow of the statistic maps into adjacent anatomical regions.}
+				Four multiplanar depictions of second-level omnibus statistic maps thresholded at $\mathrm{|t|\geq2}$ are shown, corresponding to CBV and BOLD scans.
+				The acquisition area is outlined by the pink square.
                 ',
 	label='fig:m',)}
 
@@ -69,7 +56,7 @@
 			\includegraphics[width=\textwidth]{data/manual_overview/generic/4008_ofMcF1_cbv} 
 			}
 		\caption{
-			SAMRI Generic workflow, note the undistorted mapping and conservative smoothing.
+			SAMRI Generic workflow, depicting an undistorted functional scan intermediary;
 			\vspace{1em}
 			}
 		\label{fig:fit_gg}
@@ -82,7 +69,7 @@
 			\includegraphics[width=\textwidth]{data/manual_overview/generic/4008_ofMcF1_T2w} 
 			}
 		\caption{
-			SAMRI Generic workflow, inspecting the structural scan intermediary; note the undistorted mapping and conservative smoothing.
+			SAMRI Generic workflow, depicting an undistorted structural scan intermediary;
 			\vspace{1em}
 			}
 		\label{fig:fit_gga}
@@ -95,7 +82,7 @@
 			\includegraphics[width=\textwidth]{data/manual_overview/generic_masked/4008_ofMcF1_cbv}
 			}
 		\caption{
-			SAMRI Generic Masked workflow, note the undistorted mapping and conservative smoothing.
+			SAMRI Generic Masked workflow, depicting an undistorted functional scan intermediary;
 			}
 		\label{fig:fit_ll}
 	\end{subfigure}\hfill
@@ -107,74 +94,69 @@
 			\includegraphics[width=\textwidth]{data/manual_overview/generic_masked/4008_ofMcF1_T2w}
 			}
 		\caption{
-			SAMRI Generic Masked workflow, inspecting the structural scan intermediary; note the undistorted mapping and conservative smoothing.
+			SAMRI Generic Masked workflow, depicting an undistorted structural scan intermediary;
 			}
 		\label{fig:fit_lg}
 	\end{subfigure}
 	\caption{
-		\textbf{The SAMRI Generic* provides a more accurate coverage of the template space.}
-		Depicted are automatically created operator overview graphics, which allow a slice-by-slice (spacing analogous to acquisition) inspection of the registration fit.
-		This representation affords a particularly detailed view of the preprocessed MRI data, and highly accurate template contours.
+		\textbf{The SAMRI Generic Masked provides a more accurate coverage of the template space.}
+		Depicted are slice-by-slice inspections of the registration fit, with a spacing that is analogous to acquisition.
 		}
 	\label{fig:fit}
 \end{figure*}
 
 \begin{figure*}[h!]
 	\centering
-	\setlength{\fboxsep}{0pt}%
-	\setlength{\fboxrule}{0.2pt}%
-	\fbox{
-		\includegraphics[width=\textwidth]{data/manual_overview/generic/coherence_4008_cbv} 
- 		}
-	\caption{
-		\textbf{The SAMRI Generic workflow consistently maps high-salience features such as the implant site across sessions.}
-		Automatically created operator overview graphic, allowing a slice-by-slice (spacing analogous to acquisition) inspection of registration coherence.
-		This representation permits a coarse assessment of registration consistency for multiple sessions --- though at the cost of some clarity.
-		Particularly, this visualization, allows an operator to track the position of high-amplitude fixed features across scans in order to ascertain coherence (similarly to what is automatically assessed by the Variance analysis of the session factor).
-		}
- 	\label{fig:coherence}
-\end{figure*}
-
-\begin{figure*}[h!]
-	\centering
-	\setlength{\fboxsep}{0pt}%
-	\setlength{\fboxrule}{0.2pt}%
-	\fbox{
-		\includegraphics[width=\textwidth]{data/manual_overview/generic_masked/coherence_4008_cbv}
- 		}
-	\caption{
-		\textbf{The SAMRI Generic Masked workflow consistently maps high-salience features such as the implant site across sessions.}
-		Automatically created operator overview graphic, allowing a slice-by-slice (spacing analogous to acquisition) inspection of registration coherence.
-		This representation permits a coarse assessment of registration consistency for multiple sessions --- though at the cost of some clarity.
-		Particularly, this visualization, allows an operator to track the position of high-amplitude fixed features across scans in order to ascertain coherence (similarly to what is automatically assessed by the Variance analysis of the session factor).
-		}
- 	\label{fig:coherence}
-\end{figure*}
-
-\begin{figure*}[h!]
-	\begin{subfigure}{0.48\textwidth}
+	\begin{subfigure}[t]{1\textwidth}
 		\centering
-		\includedot[width=\textwidth]{data/generic_nipype}
-		\vspace{1.4em}
+		\setlength{\fboxsep}{0pt}%
+		\setlength{\fboxrule}{0.2pt}%
+		\fbox{
+			\includegraphics[width=\textwidth]{data/manual_overview/generic/coherence_4008_cbv}
+			}
+		\caption{A slice-by-slice overview of the SAMRI Generic registration coherence across multiple sessions.}
+	\end{subfigure}
+\end{figure*}
+\begin{figure*}[h!]\ContinuedFloat
+	\begin{subfigure}[t]{1\textwidth}
+		\centering
+		\setlength{\fboxsep}{0pt}%
+		\setlength{\fboxrule}{0.2pt}%
+		\fbox{
+			\includegraphics[width=\textwidth]{data/manual_overview/generic_masked/coherence_4008_cbv}
+			}
+		\caption{A slice-by-slice overview of the SAMRI Generic Masked registration coherence across multiple sessions.}
+	\end{subfigure}
+	\caption{
+		\textbf{Both the SAMRI Generic and the Generic Masked workflow present a consistent mapping across sessions.}
+		}
+ 	\label{fig:coherence}
+\end{figure*}
+
+\begin{figure*}[h!]
+	\begin{subfigure}{0.75\textwidth}
+		\centering
+		\includedot[width=\linewidth]{data/generic_nipype}
+		\vspace{-1.9em}
 		\caption{
-			“SAMRI Generic”  workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function.
+			“SAMRI Generic” workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function.
 		}
 		\label{fig:nwfgg}
 	\end{subfigure}
-		\begin{subfigure}{0.48\textwidth}
+	\begin{subfigure}{0.75\linewidth}
 		\centering
 		\includedot[width=\textwidth]{data/generic_masked_nipype}
 		\vspace{-1.9em}
 		\caption{
-			“SAMRI Generic Masked” workflow, which is based on the \textcolor{mg}{\texttt{antsRegistration}} function. Two additional nodes provide the workflow with both the masked image and the binary mask.
+			“SAMRI Generic Masked” workflow, which is based on the \textcolor{mg}{\texttt{antsRegistration}} function.\\
+		Two additional nodes provide the workflow with both the masked image and the binary mask.
 			}
 		\label{fig:nwfgl}
 	\end{subfigure}\hfill
 	\caption{
-		Directed acyclic graphs detailing the precise node names (as seen in the SAMRI source code) for the two alternate MRI registration workflows.
-		The package correspondence of each processing node is appended in parentheses to the node name.
+		Directed acyclic graphs visualising the two registration workflows.
+		Each node name is depicted together with its corresponding package name in paranthesis.
 		The “utility” indication corresponds to nodes based on Python functions specific to the workflow, distributed alongside it, and dynamically wrapped via Nipype.
-		The “extra\niceus interfaces” indication corresponds to nodes using explicitly defined Nipype-style interfaces, which are specific to the workflow and distributed alongside it.
 		}
 	\label{fig:nwfg}
 \end{figure*}
