@@ -11,7 +11,7 @@ num_cores = max(mp.cpu_count()-1,1)
 
 templates = {
 	'generic':'/usr/share/mouse-brain-atlases/dsurqec_40micron_masked.nii',
-	'generic_masked':'/usr/share/mouse-brain-atlases/dsurqec_40micron_masked.nii',
+	'masked':'/usr/share/mouse-brain-atlases/dsurqec_40micron_masked.nii',
 	}
 
 subjects = find_subjects()
@@ -20,6 +20,7 @@ sessions=find_sessions(os.path.expanduser('~/.scratch/mlebe/bids_collapsed'))
 if '6mo' in sessions:
 	blacklisted_run = True		#boolean to indicate that this script is executed for the blacklisted volumes
 else: blacklisted_run = False
+
 runs={
 	0:'bold',
 	1:'cbv'
@@ -30,8 +31,8 @@ if blacklisted_run:
 	functional_acquisitions = ['EPI']
 	structural_acquisitions = ['TurboRARE']
 else:
-	functional_acquisitions = ['EPIlowcov']
-	structural_acquisitions = ['TurboRARElowcov']
+	functional_acquisitions = ['EPIlowcov', 'geEPI']
+	structural_acquisitions = ['TurboRARElowcov', 'TurboRARE']
 
 data_dir='~/.scratch/mlebe'
 cmap = plt.get_cmap('tab20').colors
@@ -73,14 +74,15 @@ for key in templates:
 				data_dir=data_dir,
 				validate_for_template=func_path,
 				)
-			Parallel(n_jobs=num_cores,verbose=0)(map(delayed(func_contour_slices),
-				func_substitutions,
-				[func_path]*len(func_substitutions),
-				[data_dir]*len(func_substitutions),
-				[key]*len(func_substitutions),
-				[i]*len(func_substitutions),
-				[spacing]*len(func_substitutions),
-				))
+			if not len(func_substitutions) == 0:
+				Parallel(n_jobs=num_cores,verbose=0)(map(delayed(func_contour_slices),
+					func_substitutions,
+					[func_path]*len(func_substitutions),
+					[data_dir]*len(func_substitutions),
+					[key]*len(func_substitutions),
+					[i]*len(func_substitutions),
+					[spacing]*len(func_substitutions),
+					))
 		anat_path='{{data_dir}}/preprocessing/{}_collapsed/sub-{{subject}}/ses-{{session}}/anat/sub-{{subject}}_ses-{{session}}_acq-{acq}_T2w.nii.gz'.format(key,i[1], acq = i[4])
 		anat_substitutions = bids_substitution_iterator(
 			sessions=sessions,
@@ -98,6 +100,7 @@ for key in templates:
 				[spacing]*len(anat_substitutions),
 				))
 		if not blacklisted_run:
+			if not len(func_substitutions) == 0:
 				contour_slices(templates[key],
 					alpha=[0.6],
 					colors=cmap[::2],

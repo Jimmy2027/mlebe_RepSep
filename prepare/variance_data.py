@@ -127,8 +127,8 @@ df_generic = reg_cc(path = scratch_dir + '/preprocessing/generic_collapsed/', te
 df_generic['Processing'] = 'Generic'
 
 template = '/usr/share/mouse-brain-atlases/dsurqec_200micron.nii'
-df_masked = reg_cc(path = scratch_dir + '/preprocessing/generic_masked_collapsed/', template=template, autofind=True)
-df_masked['Processing'] = 'Generic Masked'
+df_masked = reg_cc(path = scratch_dir + '/preprocessing/masked_collapsed/', template=template, autofind=True)
+df_masked['Processing'] = 'Masked'
 
 df = pd.concat([df_generic, df_masked], sort=False)
 df = df.rename(columns={

@@ -8,7 +8,7 @@ bootstrapped_RMSEs = pd.read_csv('data/bootstrapped/bootstrapped_volume.csv')
 
 ax = violinplot(
 	x='Contrast',
-	y='RMSE',
+	y='VCF_RMSE',
 	data=bootstrapped_RMSEs,
 	hue="Processing",
 	saturation=1,
@@ -21,4 +21,3 @@ ax = violinplot(
 	linewidth=mpl.rcParams['grid.linewidth'],
 	linecolor='w',
 	)
-

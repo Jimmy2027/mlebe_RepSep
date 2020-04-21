@@ -8,11 +8,11 @@ import pandas as pd
 from bids.grabbids import BIDSLayout
 from bids.grabbids import BIDSValidator
 import nipype.interfaces.io as nio
-from utils.bootstrapping import bootstrap
+from utils.bootstrapping import bootstrap, bootstrap_analysis
 
 masks = {
 	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
-	'generic_masked':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
+	'masked':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
 	}
 
 def bids_autograb(bids_dir):
@@ -58,10 +58,10 @@ df_bids['Processing'] = 'Unprocessed'
 df_generic = bids_autograb(scratch_dir + '/preprocessing/generic_collapsed/')
 df_generic['Processing'] = 'Generic'
 
-df_generic_masked = bids_autograb(scratch_dir + '/preprocessing/generic_masked_collapsed/')
-df_generic_masked['Processing'] = 'Generic Masked'
+df_masked = bids_autograb(scratch_dir + '/preprocessing/masked_collapsed/')
+df_masked['Processing'] = 'Masked'
 
-df = pd.concat([df_generic, df_generic_masked, df_bids])
+df = pd.concat([df_generic, df_masked, df_bids])
 df['Uid'] = df['subject']+'_'+df['session']+'_'+df['modality']
 df = df[df['type']=='func']
 
@@ -72,10 +72,12 @@ df['Contrast'] = df['modality']
 df['Smoothness'] = df['path'].apply(avg_smoothness)
 
 df['Smoothness Conservation Factor'] = ''
+df.to_csv(path.join(scratch_dir, 'data', 'df.csv'))
 uids = df['Uid'].unique()
 for uid in uids:
-	original = df.loc[(df['Uid']==uid) & (df['Processing']=='Unprocessed'), 'Smoothness'].item()
-	df.loc[(df['Uid']==uid), 'Smoothness Conservation Factor'] = df.loc[(df['Uid']==uid), 'Smoothness'] / original
+	if not df.loc[(df['Uid']==uid) & (df['Processing']=='Unprocessed'), 'Smoothness'].empty:
+		original = df.loc[(df['Uid']==uid) & (df['Processing']=='Unprocessed'), 'Smoothness'].item()
+		df.loc[(df['Uid']==uid), 'Smoothness Conservation Factor'] = df.loc[(df['Uid']==uid), 'Smoothness'] / original
 
 v_path= path.join(scratch_dir, 'data', 'volume.csv')
 
@@ -83,10 +85,11 @@ v = pd.read_csv(v_path)
 df = df.reset_index()
 df['Volume-Normalized SCF'] = 0
 for uid in df['Uid'].unique():
-	for p in ['Generic', 'Generic Masked']:
-		scf = df.loc[(df['Uid']==uid)&(df['Processing']==p),'Smoothness Conservation Factor'].item()
-		vcf = v.loc[(v['Uid']==uid)&(v['Processing']==p),'Volume Conservation Factor'].item()
-		df.loc[(df['Uid']==uid)&(df['Processing']==p),'Volume-Normalized SCF'] = scf/(vcf**(1./3.))
+	for p in ['Generic', 'Masked']:
+		if not df.loc[(df['Uid']==uid)&(df['Processing']==p),'Smoothness Conservation Factor'].empty and not v.loc[(v['Uid']==uid)&(v['Processing']==p),'Volume Conservation Factor'].empty:
+			scf = df.loc[(df['Uid']==uid)&(df['Processing']==p),'Smoothness Conservation Factor'].item()
+			vcf = v.loc[(v['Uid']==uid)&(v['Processing']==p),'Volume Conservation Factor'].item()
+			df.loc[(df['Uid']==uid)&(df['Processing']==p),'Volume-Normalized SCF'] = scf/(vcf**(1./3.))
 
 df.to_csv(path.join(scratch_dir, 'data', 'smoothness.csv'))
 
@@ -98,5 +101,5 @@ for _file in files:
 """
 Bootstrapping
 """
-bootstrap(df, 'Smoothness Conservation Factor')
-bootstrap_analysis('smoothness',dependent_variable = 'RMSE',expression = 'Processing*Contrast')
+bootstrap(df, 'Smoothness Conservation Factor', scratch_dir)
+bootstrap_analysis('smoothness',dependent_variable = 'SCF_RMSE',expression = 'Processing*Contrast', scratch_dir=scratch_dir)

@@ -8,14 +8,15 @@ import utils
 import samri
 from utils import dice_coef_loss, dice
 import cv2
-from get_model import get_model
+import config
+from mlebe.training import unet
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
-
-save_dir = '../data/classifier/'
-save_dir_bin = os.path.expanduser('~/.scratch/mlebe/classifiers/T2')
+scratch_dir = os.path.expanduser(config.scratch_dir)
+save_dir = scratch_dir + '/classifiers/T2'
+save_dir_bin = scratch_dir + '/classifiers/T2'
 path = save_dir_bin
-model = get_model()
+model = keras.models.load_model(config.anat_model_path, custom_objects = {'dice_coef_loss': unet.dice_coef_loss})
 
 xfile = open(path + '/x_test_struct.pkl', 'rb')
 x_test_struct = pickle.load(xfile)
@@ -28,8 +29,6 @@ yfile.close()
 x_test, x_test_affines, x_test_headers, file_names = x_test_struct['x_test'], x_test_struct['x_test_affines'], x_test_struct['x_test_headers'], x_test_struct['file_names']
 y_test, y_test_affines, y_test_headers = y_test_struct['y_test'], y_test_struct['y_test_affines'], y_test_struct['y_test_headers']
 shape = x_test[0][0].shape
-
-
 
 dice_scores = []
 y_pred = []
@@ -52,11 +51,6 @@ np.save(save_dir_bin + '/y_test_pred', np.asarray(y_pred))
 np.save(save_dir_bin + '/dice_scores_testSet', np.asarray(dice_scores))
 
 dice_score = np.mean(dice_scores)
-textfile = open(save_dir + 'dice_score.txt', 'w+')
+textfile = open(save_dir + '/dice_score.txt', 'w+')
 textfile.write(str(dice_score) + '\n\n\n')
 textfile.close()
-
-
-
-
-

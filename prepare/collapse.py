@@ -13,8 +13,8 @@ manipulations.collapse_nifti(bids_base,
 	'{}/bids_collapsed'.format(scratch_dir),
 	n_jobs_percentage=0.66,
 	)
-manipulations.collapse_nifti('{}/preprocessing/generic_masked'.format(scratch_dir),
-	'{}/preprocessing/generic_masked_collapsed'.format(scratch_dir),
+manipulations.collapse_nifti('{}/preprocessing/masked'.format(scratch_dir),
+	'{}/preprocessing/masked_collapsed'.format(scratch_dir),
 	n_jobs_percentage=0.33,
 	)
 

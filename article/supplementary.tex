@@ -134,21 +134,22 @@
 \end{figure*}
 
 \begin{figure*}[h!]
-	\begin{subfigure}{0.65\textwidth}
+	\begin{subfigure}{0.75\textwidth}
 		\centering
-		\includedot[width=\textwidth]{data/generic_nipype}
-		\vspace{1.4em}
+		\includedot[width=\linewidth]{data/generic_nipype}
+		\vspace{-1.9em}
 		\caption{
 			“SAMRI Generic” workflow, based on the \textcolor{mg}{\texttt{antsRegistration}} function.
 		}
 		\label{fig:nwfgg}
 	\end{subfigure}
-		\begin{subfigure}{0.65\textwidth}
+	\begin{subfigure}{0.75\linewidth}
 		\centering
 		\includedot[width=\textwidth]{data/generic_masked_nipype}
 		\vspace{-1.9em}
 		\caption{
-			“SAMRI Generic Masked” workflow, which is based on the \textcolor{mg}{\texttt{antsRegistration}} function. Two additional nodes provide the workflow with both the masked image and the binary mask.
+			“SAMRI Generic Masked” workflow, which is based on the \textcolor{mg}{\texttt{antsRegistration}} function.\\
+		Two additional nodes provide the workflow with both the masked image and the binary mask.
 			}
 		\label{fig:nwfgl}
 	\end{subfigure}\hfill

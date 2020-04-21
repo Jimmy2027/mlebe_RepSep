@@ -23,9 +23,8 @@ The average Dice score taken on every slice of the test data set is $D_{coef}= $
 
 \subsection{Workflow}
 We use an established palette of workflow evaluation metrics --- inspecting volume and smoothness conservation, as well as downstream effects on basic functional analysis \cite{ioanas_optimized_2019} --- to benchmark the novel SAMRI Generic Masked workflow against the SAMRI Generic workflow.
-
 %%% Introduce RMSE bootstrapping here, as you will need it for both VCF and SCF.
-
+In order to provide a statistical evaluation of the quality of registration, we evaluate a bootstrapped distribution of the respective root mean squared error (RMSE) to the optimal value of 1 for volume conservation and smoothness conservation.
 \subsection{Volume Conservation}
 
 \begin{sansmath}
@@ -72,11 +71,11 @@ With respect to the data break-up by contrast (CBV versus BOLD, \cref{fig:vccv})
 %%% Ok, you introduce the VCF and you show the VCF plots primarily, and then you list the stats for RMSE only? You should definitely write out the modelling evaluation for VCF. My recommendation is to write down a paragraph for the VCF evaluation, and then RMSE evaluation, plot-wise you show a composite figure with subfigures for VCF, SCF, and the respective bootstrapped RMSE.
 
 %%% briefly introduce what the RMSE tells you here.
-Further, we note that there is a significant variance decrease in all conditions for the Generic Masked workflow
+We note that there is a significant variance decrease in all conditions for the Generic Masked workflow
 (\py{boilerplate.varianceratio()}-fold).
-We note that the root mean squared error ratio favours the Generic Masked workflow
+Further, we note that the root mean squared error ratio favours the Generic Masked workflow
 ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
-Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to the optimal VCF 1, we report that the RMSE is sensitive to the
+Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to the optimal VCF 1, we report that it is sensitive to the
 workflow (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Generic Masked]')})
 and the contrast-workflow interaction (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]')}).
 

@@ -28,7 +28,7 @@ for i in im_data:
     mask = np.moveaxis(mask, 1, 0)
 
 for o in os.listdir(dir):
-    if o != 'irsabi':
+    if o != 'irsabi' and not o.startswith('.'):
         for x in os.listdir(os.path.join(dir, o)):
             if x.endswith('preprocessing'):
                 for root, dirs, files in os.walk(os.path.join(dir, o, x)):

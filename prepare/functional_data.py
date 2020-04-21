@@ -8,15 +8,11 @@ scratch_dir = '~/.scratch/mlebe'
 # Total significance
 masks = {
 	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
-	'generic_masked':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
-	# 'legacy':'/usr/share/mouse-brain-atlases/lambmc_200micron_mask.nii',
-	# 'legacy_dsurqec':'/usr/share/mouse-brain-atlases/ldsurqec_200micron_mask.nii',
+	'masked':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
 	}
 masks_dr = {
 	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_roi-dr.nii',
-	'generic_masked':'/usr/share/mouse-brain-atlases/dsurqec_200micron_roi-dr.nii',
-	# 'legacy':'/usr/share/mouse-brain-atlases/lambmc_200micron_roi-dr.nii',
-	# 'legacy_dsurqec':'/usr/share/mouse-brain-atlases/ldsurqec_200micron_roi-dr.nii',
+	'masked':'/usr/share/mouse-brain-atlases/dsurqec_200micron_roi-dr.nii',
 	}
 
 df = pd.DataFrame([])
@@ -41,10 +37,7 @@ for key in masks:
 		df_['Processing'] = 'Generic'
 	else:
 		df_['Processing'] = 'Generic Masked'
-	# if key in ['generic', 'legacy_dsurqec']:
-	# 	df_['Template'] = 'Generic'
-	# elif key in ['legacy', 'generic_ambmc']:
-	# 	df_['Template'] = 'Legacy'
+
 	df = df.append(df_)
 
 # Create processing and template-independent unique identifiers
@@ -77,7 +70,7 @@ for key in masks:
 	if key == 'generic':
 		df_['Processing'] = 'Generic'
 	else:
-		df_['Processing'] = 'Generic Masked'
+		df_['Processing'] = 'Masked'
 	# if key in ['generic', 'legacy_dsurqec']:
 	# 	df_['Template'] = 'Generic'
 	# elif key in ['legacy', 'generic_ambmc']:

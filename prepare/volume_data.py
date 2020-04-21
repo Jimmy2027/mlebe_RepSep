@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from bids.grabbids import BIDSLayout
 from bids.grabbids import BIDSValidator
-from utils.bootstrapping import bootstrap
+from utils.bootstrapping import bootstrap, bootstrap_analysis
 
 scratch_dir = '~/.scratch/mlebe'
 
@@ -30,23 +30,23 @@ generic_df = generic_df.loc[~generic_df['path'].str.endswith('.json')]
 generic_df = generic_df.loc[generic_df['modality'].isin(['bold','cbv'])]
 generic_df['uID'] = generic_df['subject']+'_'+generic_df['session']+'_'+generic_df['modality']
 
-generic_masked_df = bids_autograb('{}/preprocessing/generic_masked_collapsed'.format(scratch_dir))
-generic_masked_df = generic_masked_df.loc[~generic_masked_df['path'].str.endswith('.json')]
-generic_masked_df = generic_masked_df.loc[generic_masked_df['modality'].isin(['bold','cbv'])]
-generic_masked_df['uID'] = generic_masked_df['subject']+'_'+generic_masked_df['session']+'_'+generic_masked_df['modality']
+masked_df = bids_autograb('{}/preprocessing/masked_collapsed'.format(scratch_dir))
+masked_df = masked_df.loc[~masked_df['path'].str.endswith('.json')]
+masked_df = masked_df.loc[masked_df['modality'].isin(['bold','cbv'])]
+masked_df['uID'] = masked_df['subject']+'_'+masked_df['session']+'_'+masked_df['modality']
 
 uids = base_df['uID'].unique()
 generic_df = generic_df.loc[generic_df['uID'].isin(uids)]
-generic_masked_df = generic_masked_df.loc[generic_masked_df['uID'].isin(uids)]
+masked_df = masked_df.loc[masked_df['uID'].isin(uids)]
 
 
 base_df['Processing'] = 'Unprocessed'
 generic_df['Processing'] = 'Generic'
-generic_masked_df['Processing'] = 'Generic Masked'
+masked_df['Processing'] = 'Masked'
 
 base_df['Threshold'] = ''
 generic_df['Threshold'] = ''
-generic_masked_df['Threshold'] = ''
+masked_df['Threshold'] = ''
 
 for uid in uids:
 	img = nib.load(base_df.loc[base_df['uID'] == uid, 'path'].item())
@@ -54,7 +54,7 @@ for uid in uids:
 	threshold = np.percentile(data,66)
 	base_df.loc[base_df['uID'] == uid, 'Threshold'] = threshold
 	generic_df.loc[generic_df['uID'] == uid, 'Threshold'] = threshold
-	generic_masked_df.loc[generic_masked_df['uID'] == uid, 'Threshold'] = threshold
+	masked_df.loc[masked_df['uID'] == uid, 'Threshold'] = threshold
 
 
 df = pd.DataFrame([])
@@ -66,7 +66,7 @@ df_ = df_threshold_volume(generic_df,
 	threshold='Threshold',
 	)
 df = df.append(df_)
-df_ = df_threshold_volume(generic_masked_df,
+df_ = df_threshold_volume(masked_df,
 	threshold='Threshold',
 	)
 df = df.append(df_)
@@ -94,12 +94,11 @@ for uid, processing in list(product(uids,processings)):
 df['modality'] = df['modality'].str.upper()
 df = df.rename(columns={'modality': 'Contrast',})
 df.columns = map(str.title, df.columns)
-
 df.to_csv(path.join(scratch_dir, 'data', 'volume.csv'))
 
 """
 Bootstrapping
 """
-bootstrap(df, 'Volume Conservation Factor')
-bootstrap_analysis('volume',dependent_variable = 'RMSE',expression = 'Processing*Contrast')
+bootstrap(df, 'Volume Conservation Factor', scratch_dir = scratch_dir)
+bootstrap_analysis('volume',dependent_variable = 'VCF_RMSE',expression = 'Processing*Contrast', scratch_dir = scratch_dir)
 

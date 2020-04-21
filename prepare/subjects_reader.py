@@ -1,8 +1,8 @@
 import os
 
-def find_subjects():
+def find_subjects(dir ='~/.scratch/mlebe/bids'):
     subjects = []
-    for o in os.listdir(os.path.expanduser('~/.scratch/mlebe/bids')):
+    for o in os.listdir(os.path.expanduser(dir)):
         if o.startswith('sub-'):
             subjects.append(o.strip('sub-'))
     return subjects
