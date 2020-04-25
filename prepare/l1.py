@@ -6,7 +6,7 @@ scratch_dir = '~/.scratch/mlebe'
 preprocess_base = '{}/preprocessing/'.format(scratch_dir)
 
 masks = {
-	'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
+	# 'generic':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
 	'masked':'/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
 	}
 

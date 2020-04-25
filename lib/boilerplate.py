@@ -33,7 +33,7 @@ def wilcoxon_(
 	df_path = path.abspath(df_path)
 	df = pd.read_csv(df_path)
 	df = df.loc[df['Processing']!= 'Unprocessed']
-	generic_masked_df = df.loc[df['Processing'] == 'Generic Masked']
+	generic_masked_df = df.loc[df['Processing'] == 'Masked']
 	generic_df = df.loc[df['Processing'] == 'Generic']
 	generic_masked_df = generic_masked_df.sort_values(by = ['Path'])
 	generic_df = generic_df.sort_values(by=['Path'])
@@ -76,7 +76,7 @@ def corecomparison_factorci(factor,
 	df = pd.read_csv(df_path)
 
 	df = df.loc[df['Processing']!='Unprocessed']
-	df = df.loc[((df['Processing']=='Generic Masked')) | ((df['Processing']=='Generic'))]
+	df = df.loc[((df['Processing']=='Masked')) | ((df['Processing']=='Generic'))]
 
 	for key in exclusion_criteria.keys():
 		df = df.loc[~df[key].isin(exclusion_criteria[key])]
@@ -114,7 +114,7 @@ def varianceratio(
 
 	df = df.loc[df['Processing']!='Unprocessed']
 
-	generic_masked = np.var(df.loc[df['Processing']=='Generic Masked', dependent_variable].tolist())
+	generic_masked = np.var(df.loc[df['Processing']=='Masked', dependent_variable].tolist())
 	generic = np.var(df.loc[df['Processing']=='Generic', dependent_variable].tolist())
 
 

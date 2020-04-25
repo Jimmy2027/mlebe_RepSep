@@ -36,7 +36,7 @@ for key in masks:
 	if key == 'generic':
 		df_['Processing'] = 'Generic'
 	else:
-		df_['Processing'] = 'Generic Masked'
+		df_['Processing'] = 'Masked'
 
 	df = df.append(df_)
 

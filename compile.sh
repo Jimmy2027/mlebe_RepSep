@@ -22,3 +22,4 @@ else
 fi
 
 mv auto_fig_py* Auto_fig_py/
+cp article.pdd ~/.scratch/mlebe/

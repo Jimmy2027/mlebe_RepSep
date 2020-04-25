@@ -14,7 +14,7 @@ def wilcoxon_(
     df = pd.read_csv(df_path)
     df = df.loc[df['Processing']!= 'Unprocessed']
     df = df.loc[df['Contrast'] == contrast]
-    generic_masked_df = df.loc[df['Processing'] == 'Generic Masked']
+    generic_masked_df = df.loc[df['Processing'] == 'Masked']
     generic_df = df.loc[df['Processing'] == 'Generic']
     generic_masked_df = generic_masked_df.sort_values(by = ['Path'])
     generic_df = generic_df.sort_values(by=['Path'])

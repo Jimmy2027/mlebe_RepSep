@@ -24,7 +24,7 @@ ax = violinplot(
 
 plt.savefig('test')
 
-print(bootstrapped_RMSEs.loc[(bootstrapped_RMSEs['Processing'] == 'Generic Masked')].describe())
+print(bootstrapped_RMSEs.loc[(bootstrapped_RMSEs['Processing'] == 'Masked')].describe())
 print(bootstrapped_RMSEs.loc[(bootstrapped_RMSEs['Processing'] == 'Generic')].describe())
 dependent_variable = 'RMSE'
 expression = 'Processing*Contrast'

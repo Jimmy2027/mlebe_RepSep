@@ -4,9 +4,8 @@ import os
 import nibabel as nib
 import pandas as pd
 import pickle
-import utils
 import samri
-from utils import dice_coef_loss, dice
+from classifier.utils import dice_coef_loss, dice
 import cv2
 import config
 from mlebe.training import unet
@@ -16,7 +15,7 @@ scratch_dir = os.path.expanduser(config.scratch_dir)
 save_dir = scratch_dir + '/classifiers/T2'
 save_dir_bin = scratch_dir + '/classifiers/T2'
 path = save_dir_bin
-model = keras.models.load_model(config.anat_model_path, custom_objects = {'dice_coef_loss': unet.dice_coef_loss})
+model = keras.models.load_model(config.anat_model_path, custom_objects = {'dice_coef_loss': unet.dice_coef_loss, 'dice_coef': unet.dice_coef})
 
 xfile = open(path + '/x_test_struct.pkl', 'rb')
 x_test_struct = pickle.load(xfile)

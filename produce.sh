@@ -1,5 +1,5 @@
 pushd prepare
-	./run.sh || exit
+	./run.sh || exit 1
 popd
 ./cleanup.sh || exit
 ./compile.sh || exit

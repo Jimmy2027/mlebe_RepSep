@@ -21,3 +21,5 @@ ax = violinplot(
 	linewidth=mpl.rcParams['grid.linewidth'],
 	linecolor='w',
 	)
+from matplotlib import pyplot as plt
+plt.show()

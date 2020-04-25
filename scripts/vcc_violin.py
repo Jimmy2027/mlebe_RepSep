@@ -8,7 +8,7 @@ volume_path = path.abspath('data/volume.csv')
 df = pd.read_csv(volume_path)
 
 df = df.loc[df['Processing']!='Unprocessed']
-df = df.loc[((df['Processing']=='Generic Masked') | (df['Processing']=='Generic'))]
+df = df.loc[((df['Processing']=='Masked') | (df['Processing']=='Generic'))]
 
 df.loc[df['Processing']=='Unprocessed'] = ''
 
@@ -27,3 +27,6 @@ ax = violinplot(
 	linewidth=mpl.rcParams['grid.linewidth'],
 	linecolor='w',
 	)
+
+from matplotlib import pyplot as plt
+plt.show()

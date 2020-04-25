@@ -13,10 +13,10 @@ from lib import boilerplate
 
 # boilerplate.levene_(dependent_variable='1 - Vcf')
 # print(boilerplate.wilcoxon_(dependent_variable='1 - Vcf'))
-print(boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Generic Masked]'))
-# print(boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/bootstrapped_volume.csv', dependent_variable='RMSE'))
+print(boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Masked]'))
+# print(boilerplate.corecomparison_factorci('Processing[T.Masked]:Contrast[T.CBV]', df_path='data/bootstrapped_volume.csv', dependent_variable='RMSE'))
 # print(boilerplate.corecomparison_factorci('Intercept', df_path='data/bootstrapped_volume.csv', dependent_variable='RMSE'))
 #
 # boilerplate.iqr_(dependent_variable='1 - Vcf')
-# boilerplate.iqr_(dependent_variable='1 - Vcf', processing = 'Generic Masked')
+# boilerplate.iqr_(dependent_variable='1 - Vcf', processing = 'Masked')
 # predict_mask('/home/hendrik/.scratch/mlebe/bids/sub-4013/ses-ofM/anat/sub-4013_ses-ofM_acq-TurboRARElowcov_T2w.nii.gz')

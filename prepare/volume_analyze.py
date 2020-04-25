@@ -8,7 +8,7 @@ volume_df = pd.read_csv('../data/volume.csv')
 generic_df = volume_df.loc[volume_df['Processing']=='Generic']
 generic_CBV_df = generic_df.loc[generic_df['Contrast']=='CBV']
 generic_BOLD_df = generic_df.loc[generic_df['Contrast']=='BOLD']
-masked_df = volume_df.loc[volume_df['Processing']=='Generic Masked']
+masked_df = volume_df.loc[volume_df['Processing']=='Masked']
 masked_CBV_df = masked_df.loc[masked_df['Contrast']=='CBV']
 masked_BOLD_df = masked_df.loc[masked_df['Contrast']=='BOLD']
 
@@ -28,8 +28,8 @@ for i in range(N):
     rmse_generic_BOLD = sqrt(mean_squared_error([1] * len(generic_BOLD_df_temp), generic_BOLD_df_temp))
     bootstrapped_RMSEs =bootstrapped_RMSEs.append(pd.DataFrame([['CBV', 'Generic', '{}.1'.format(i), rmse_generic_CBV]], columns=['Contrast', 'Processing', 'Uid', 'RMSE']))
     bootstrapped_RMSEs =bootstrapped_RMSEs.append(pd.DataFrame([['BOLD', 'Generic', '{}.2'.format(i), rmse_generic_BOLD]], columns=['Contrast', 'Processing', 'Uid', 'RMSE']))
-    bootstrapped_RMSEs =bootstrapped_RMSEs.append(pd.DataFrame([['CBV', 'Generic Masked', '{}.1'.format(i), rmse_masked_CBV]], columns=['Contrast', 'Processing', 'Uid', 'RMSE']))
-    bootstrapped_RMSEs =bootstrapped_RMSEs.append(pd.DataFrame([['BOLD', 'Generic Masked', '{}.2'.format(i), rmse_masked_BOLD]], columns=['Contrast', 'Processing', 'Uid', 'RMSE']))
+    bootstrapped_RMSEs =bootstrapped_RMSEs.append(pd.DataFrame([['CBV', 'Masked', '{}.1'.format(i), rmse_masked_CBV]], columns=['Contrast', 'Processing', 'Uid', 'RMSE']))
+    bootstrapped_RMSEs =bootstrapped_RMSEs.append(pd.DataFrame([['BOLD', 'Masked', '{}.2'.format(i), rmse_masked_BOLD]], columns=['Contrast', 'Processing', 'Uid', 'RMSE']))
 
 bootstrapped_RMSEs.to_csv('../data/bootstrapped_volume.csv')
 

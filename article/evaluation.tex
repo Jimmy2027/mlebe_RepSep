@@ -1,5 +1,5 @@
 \section{Evaluation}
-For the quality control of the workflow, we first evaluate the classification process, followed by a benchmark between the Generic and the improved (Generic Masked) workflow.
+For the quality control of the workflow, we first evaluate the classification process, followed by a benchmark between the Generic and the improved (Masked) workflow.
 
 \subsection{Classification}
 %%% Again, background or discussion
@@ -22,7 +22,7 @@ The average Dice score taken on every slice of the test data set is $D_{coef}= $
 \end{sansmath}
 
 \subsection{Workflow}
-We use an established palette of workflow evaluation metrics --- inspecting volume and smoothness conservation, as well as downstream effects on basic functional analysis \cite{ioanas_optimized_2019} --- to benchmark the novel SAMRI Generic Masked workflow against the SAMRI Generic workflow.
+We use an established palette of workflow evaluation metrics --- inspecting volume and smoothness conservation, as well as downstream effects on basic functional analysis \cite{ioanas_optimized_2019} --- to benchmark the novel SAMRI Masked workflow against the SAMRI Generic workflow.
 %%% Introduce RMSE bootstrapping here, as you will need it for both VCF and SCF.
 In order to provide a statistical evaluation of the quality of registration, we evaluate a bootstrapped distribution of the respective root mean squared error (RMSE) to the optimal value of 1 for volume conservation and smoothness conservation.
 \subsection{Volume Conservation}
@@ -51,7 +51,7 @@ In order to provide a statistical evaluation of the quality of registration, we 
                         'caption':'Comparison of a bootstrapped distribution of the root mean squared errors to 1, across workflows and functional contrasts.'
                         ,},
                 ],
-        caption='\\textbf{Both the SAMRI Generic and the Generic Masked workflow optimally and reliably conserve volume and smoothness, the latter showing values that are closely distributed to 1.}
+        caption='\\textbf{Both the SAMRI Generic and the Masked workflow optimally and reliably conserve volume and smoothness, the latter showing values that are closely distributed to 1.}
         Plots showing the distribution of two target metrics in the first row, together with the respective bootstrapped distributions of the RMESs in the second row. Solid lines in the colored distribution densities indicate the sample mean and dashed lines the inner quartiles.
         ',
         label='fig:vc',
@@ -67,17 +67,17 @@ As seen in \cref{fig:vccv}, we note that in the described dataset VCF is sensiti
 but not the interaction of the workflow with the contrast (\py{boilerplate.fstatistic('Processing:Contrast', condensed=True)}).
 The performance of the Generic SAMRI workflow is different from that of Generic*, yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
 With respect to the data break-up by contrast (CBV versus BOLD, \cref{fig:vccv}), we see no notable main effect for the contrast variable
-(VCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]')}), nor do we report a notable effect for the contrast-workflow interaction (VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]')}).
+(VCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]')}), nor do we report a notable effect for the contrast-workflow interaction (VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Masked]:Contrast[T.CBV]')}).
 %%% Ok, you introduce the VCF and you show the VCF plots primarily, and then you list the stats for RMSE only? You should definitely write out the modelling evaluation for VCF. My recommendation is to write down a paragraph for the VCF evaluation, and then RMSE evaluation, plot-wise you show a composite figure with subfigures for VCF, SCF, and the respective bootstrapped RMSE.
 
 %%% briefly introduce what the RMSE tells you here.
-We note that there is a significant variance decrease in all conditions for the Generic Masked workflow
+We note that there is a significant variance decrease in all conditions for the Masked workflow
 (\py{boilerplate.varianceratio()}-fold).
-Further, we note that the root mean squared error ratio favours the Generic Masked workflow
+Further, we note that the root mean squared error ratio favours the Masked workflow
 ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
 Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to the optimal VCF 1, we report that it is sensitive to the
-workflow (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Generic Masked]')})
-and the contrast-workflow interaction (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]')}).
+workflow (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Masked]')})
+and the contrast-workflow interaction (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Masked]:Contrast[T.CBV]')}).
 
 \subsection{Smoothness Conservation}
 
@@ -88,31 +88,31 @@ Image smoothness comes at the cost of image contrast as well as feature saliency
 As an indicator of image smothness induced by the workflow, the Smoothness Conservation Factor (SCF) \cite{ioanas_optimized_2019} expresses the ratio between the smoothness of the preprocessed images and the smoothness of the original images.
 Smoothess Conservation is highest for a SCF equal to 1, indicating that the preprocessing does not influence image smoothness.
 
-While the performance of the Generic SAMRI workflow is only slightly different from that of the Generic Masked workflow, the root mean squared error ratio favors the Generic Masked workflow ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
+While the performance of the Generic SAMRI workflow is only slightly different from that of the Masked workflow, the root mean squared error ratio favors the Masked workflow ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
 
-Descriptively, we observe that neither the Generic nor the Generic Masked workflow introduce a strong smoothing (SCF of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
+Descriptively, we observe that neither the Generic nor the Masked workflow introduce a strong smoothing (SCF of \py{boilerplate.factorci('Processing[T.Masked]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
-Further, we note that there is a notable variance decrease for the Generic Masked workflow
+Further, we note that there is a notable variance decrease for the Masked workflow
 (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3)}
 -fold).
 
 Given the break-up by contrast shown in \cref{fig:sccv}, we see no effect for the contrast variable
 (SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')})
 and the contrast-workflow interaction
-(SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
+(SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Masked]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
 Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to 1, we report that the RMSE is sensitive to the
-workflow (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Generic Masked]')})
-and the contrast-workflow interaction (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Generic Masked]:Contrast[T.CBV]')}).
+workflow (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Masked]')})
+and the contrast-workflow interaction (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Masked]:Contrast[T.CBV]')}).
 
 \subsection{Functional Analysis}
 
 %%% Same comments as for VCF, these three sections can basically be copy-pasted in as far as the sentence structure is concerned.
 Functional Analysis expresses the significance detected across all voxels of a scan by computing the Mean Significance (MS) \cite{ioanas_optimized_2019}.
 
-We observe that the Generic Masked level of the workflow variable does not introduce a notable significance loss
-(MS of \py{boilerplate.factorci('Processing[T.Generic Masked]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
-Furthermore, we note a slight variance decrease in all conditions for the Generic Masked workflow
+We observe that the Masked level of the workflow variable does not introduce a notable significance loss
+(MS of \py{boilerplate.factorci('Processing[T.Masked]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
+Furthermore, we note a slight variance decrease in all conditions for the Masked workflow
 (\py{boilerplate.varianceratio(df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}-fold).
 
 With respect to the data break-up by contrast (\cref{fig:mscv}), we see no notable main effect for the contrast variable
@@ -133,7 +133,7 @@ With respect to the data break-up by contrast (\cref{fig:mscv}), we see no notab
         conf='article/varplot.conf',
         label='var',
         caption='
-                \\textbf{Both the Generic and the Generic Masked workflow minimize trial-to-trial variability while conserving subject-wise variability.}
+                \\textbf{Both the Generic and the Masked workflow minimize trial-to-trial variability while conserving subject-wise variability.}
                 Swarmplots of three metric scores illustrate similarity of preprocessed images for the two corresponding workflow templates, plotted across subjects (separated into x-axis bins) and sessions (individual points in each x-axis bin), for the CBV contrast.
                 ',
         multicol=True,
@@ -149,12 +149,12 @@ Neighborhood Cross Correlation (CC, sensitive to localized correlation),
 Global Correlation (GC, sensitive to whole-image correlation),
 and Mutual Information (MI, sensitive to whole-image information similarity).
 
-\Cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Generic Masked workflows.
-Both, the Generic and the Generic Masked workflow produce results which show a higher F-statistic for the subject than for the session variable.
-For the Generic Masked workflow, F-statistics show:
-CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic Masked','CC', condensed=True)}),
-GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic Masked','GC', condensed=True)}),
-and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic Masked','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic Masked','MI', condensed=True)}).
+\Cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Masked workflows.
+Both, the Generic and the Masked workflow produce results which show a higher F-statistic for the subject than for the session variable.
+For the Masked workflow, F-statistics show:
+CC (subject: \py{boilerplate.variance_test('C(Subject)','Masked','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Masked','CC', condensed=True)}),
+GC (subject: \py{boilerplate.variance_test('C(Subject)','Masked','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Masked','GC', condensed=True)}),
+and MI (subject: \py{boilerplate.variance_test('C(Subject)','Masked','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Masked','MI', condensed=True)}).
 
 For the Generic SAMRI workflow, resulting data F-statistics show:
 CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','CC', condensed=True)}),

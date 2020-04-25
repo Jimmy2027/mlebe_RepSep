@@ -2,7 +2,7 @@ import os
 import nibabel as nib
 import numpy as np
 from matplotlib import pyplot as plt
-from samri.masking import utils
+from mlebe.masking import utils
 
 example = 'sub-6570_ses-4mo_acq-TurboRARE_T2w.nii.gz'
 slice = 65

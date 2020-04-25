@@ -9,7 +9,7 @@ data_path = path.abspath('data/functional_significance.csv')
 df = pd.read_csv(data_path)
 #df = df.loc[~df['Subject'].isin([4003,4006,4013])]
 df = df.loc[df['Processing']!='Unprocessed']
-df = df.loc[((df['Processing']=='Generic Masked')) | ((df['Processing']=='Generic') )]
+df = df.loc[((df['Processing']=='Masked')) | ((df['Processing']=='Generic') )]
 df.loc[df['Processing']=='Unprocessed'] = ''
 ax = violinplot(
 	x="Contrast",
