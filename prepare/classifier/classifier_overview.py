@@ -5,10 +5,10 @@ from mlebe.training.utils.masking_vis import tester
 from matplotlib import pyplot as plt
 import operator, functools
 import numpy as np
-experiment_config = '/Users/Hendrik/Desktop/bartholin/results/attention_unet_anat/dice_600_2020-04-21/1_Step/experiment_config.json'
-vis_dir = '/Users/Hendrik/Desktop/bartholin/results/attention_unet_anat/dice_600_2020-04-21/1_Step'
-# experiment_config = '/mnt/data/mlebe_data/results/attention_unet_anat/dice_600_2020-04-21/1_Step/experiment_config.json'
-# vis_dir = '/mnt/data/mlebe_data/results/attention_unet_anat/dice_600_2020-04-21/1_Step'
+# experiment_config = '/Users/Hendrik/Desktop/bartholin/results/attention_unet_anat/dice_600_2020-04-21/1_Step/experiment_config.json'
+# vis_dir = '/Users/Hendrik/Desktop/bartholin/results/attention_unet_anat/dice_600_2020-04-21/1_Step'
+experiment_config = '/mnt/data/mlebe_data/results/attention_unet_anat/dice_600_2020-04-21/1_Step/experiment_config.json'
+vis_dir = '/mnt/data/mlebe_data/results/attention_unet_anat/dice_600_2020-04-21/1_Step'
 results_df = 'results_df.csv'
 
 with open(experiment_config) as json_file:
@@ -82,10 +82,12 @@ for idx, dir in enumerate(os.listdir(os.path.join(vis_dir, 'anat'))):
 total_good = len(labels_df.loc[labels_df['label'] == 'good'].values.tolist())
 total_bad = len(labels_df.loc[labels_df['label'] == 'bad'].values.tolist())
 total_okay = len(labels_df.loc[labels_df['label'] == 'okay'].values.tolist())
+manual_label = 'okay'
 
 temp = experiment_config
 temp['good'] = total_good
 temp['bad'] = total_bad
 temp['okay'] = total_okay
-results_df = results_df.append(temp, ignore_index=False)
-results_df.to_csv('results_df.csv')
+temp['manual_label'] = manual_label
+results_df = results_df.append(temp, ignore_index=True)
+results_df.to_csv('results_df.csv', index = False)
