@@ -115,7 +115,6 @@ bootstrap(df, 'Smoothness Conservation Factor', scratch_dir)
 bootstrap_analysis('smoothness', dependent_variable='SCF_RMSE', expression='Processing*Contrast',
                    scratch_dir=scratch_dir)
 
-df = pd.read_csv(path.join(scratch_dir, 'data', 'smoothness.csv'))
 """
 Writing results
 """

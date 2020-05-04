@@ -1,55 +1,106 @@
-import numpy as np
-from tensorflow import keras
-import os
-import nibabel as nib
-import pandas as pd
-import pickle
-import samri
-from classifier.utils import dice_coef_loss, dice
-import cv2
-import config
+import mlebe.training.utils.data_loader as dl
+import mlebe.training.utils.general as utils
+import mlebe.training.utils.scoring_utils as su
+import copy
 from mlebe.training import unet
+from tensorflow import keras
+import config
+import pandas as pd
+import numpy as np
+import os
+from matplotlib import pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+
+
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+data_dir = '/mnt/data/mlebe_data/'
+template_dir = '/usr/share/mouse-brain-atlases/'
+study = ['irsabi']
+slice_view = 'coronal'
+shape = (128, 128)
+IMG_NBRs = [65, 65,65, 65,65, 65,65, 65]
 
-scratch_dir = os.path.expanduser(config.scratch_dir)
-save_dir = scratch_dir + '/classifiers/T2'
-save_dir_bin = scratch_dir + '/classifiers/T2'
-path = save_dir_bin
-model = keras.models.load_model(config.anat_model_path, custom_objects = {'dice_coef_loss': unet.dice_coef_loss, 'dice_coef': unet.dice_coef})
+def evaluate(data_type):
+    if data_type == 'anat':
+        excluded_img_data = dl.load_img(data_dir, studies=study)
+        model = keras.models.load_model(config.func_model_path, custom_objects={'dice_coef_loss': unet.dice_coef_loss,
+                                                                                'dice_coef': unet.dice_coef})
+        save_path = config.anat_model_path.split('/')
 
-xfile = open(path + '/x_test_struct.pkl', 'rb')
-x_test_struct = pickle.load(xfile)
-xfile.close()
+    else:
+        excluded_img_data = dl.load_func_img(data_dir, studies=study)
+        model = keras.models.load_model(config.func_model_path, custom_objects={'dice_coef_loss': unet.dice_coef_loss,
+                                                                                'dice_coef': unet.dice_coef})
+        save_path = config.func_model_path.split('/')
 
-yfile = open(path + '/y_test_struct.pkl', 'rb')
-y_test_struct = pickle.load(yfile)
-yfile.close()
+    save_path[-1] = 'irsabi_test'
+    save_path = '/'.join(save_path)
+    print(save_path)
+    mask_data = []
+    temp = dl.load_mask(template_dir)
+    for i in range(len(excluded_img_data)):
+        mask_data.append(copy.deepcopy(temp[0]))
 
-x_test, x_test_affines, x_test_headers, file_names = x_test_struct['x_test'], x_test_struct['x_test_affines'], x_test_struct['x_test_headers'], x_test_struct['file_names']
-y_test, y_test_affines, y_test_headers = y_test_struct['y_test'], y_test_struct['y_test_affines'], y_test_struct['y_test_headers']
-shape = x_test[0][0].shape
+    img_data, mask_data, img_affines, img_headers, img_file_names, mask_affines, mask_headers = utils.get_image_and_mask(
+        '', excluded_img_data, mask_data, shape, '', slice_view=slice_view,
+        visualisation=False, blacklist_bool=False)
 
-dice_scores = []
-y_pred = []
+    dice_scores_df = pd.DataFrame(columns=['volume_name', 'slice', 'dice_score', 'idx'])
+    predictions = []
+    for volume in range(len(img_data)):
+        volume_name = img_file_names[volume]
+        predicted_volume = np.empty(img_data[volume].shape)
+        for slice in range(img_data[volume].shape[0]):
+            prediction = np.squeeze(model.predict(np.expand_dims(np.expand_dims(img_data[volume][slice], 0), -1)))
+            prediction = np.where(prediction > 0.9, 1, 0)
+            predicted_volume[slice] = prediction
+            dice_score = su.dice(mask_data[volume][slice], prediction)
+            dice_scores_df = dice_scores_df.append(
+                {'volume_name': volume_name, 'slice': slice, 'dice_score': dice_score, 'idx': volume},
+                ignore_index=True)
+        predictions.append(predicted_volume)
 
-counter = 0
-for x, y in zip(x_test, y_test):
-    img_pred = np.empty((x.shape))
-    for slice in range(x.shape[0]):
-        temp = np.expand_dims(x[slice], -1)  # expand dims for channel
-        temp = np.expand_dims(temp, 0)  # expand dims for batch
-        prediction = model.predict(temp, verbose=0)
-        prediction = np.where(np.squeeze(prediction) > 0.9, 1, 0)
-        img_pred[slice, ...] = prediction
-        dice_score = dice(y[slice], prediction)
-        dice_scores.append(dice_score)
-    counter += 1
-    y_pred.append(img_pred)
+    min_df = dice_scores_df.sort_values(by=['dice_score']).head(sum(IMG_NBRs))
+    df_idx = 0
+    with PdfPages('../data/irsabi_test_{}.pdf'.format(data_type)) as pdf:
+        for IMG_NBR in IMG_NBRs:
+            plt.figure(figsize=(40, IMG_NBR * 10))
+            plt.figtext(.5, .9, 'Mean dice score of {}'.format(np.round(dice_scores_df['dice_score'].mean(), 4)), fontsize=100, ha='center')
+            i = 1
+            while i <= IMG_NBR * 2:
+                volume = min_df.iloc[df_idx]['idx']
+                slice = min_df.iloc[df_idx]['slice']
+                dice_score = min_df.iloc[df_idx]['dice_score']
+                plt.subplot(IMG_NBR, 2, i)
+                plt.imshow(img_data[volume][slice], cmap='gray')
+                plt.imshow(mask_data[volume][slice], cmap='Blues', alpha=0.6)
+                plt.axis('off')
+                i += 1
+                plt.subplot(IMG_NBR, 2, i)
+                plt.imshow(img_data[volume][slice], cmap='gray')
+                plt.imshow(predictions[volume][slice], cmap='Blues', alpha=0.6)
+                plt.title('Volume: {}, slice {}, dice {}'.format(img_file_names[volume], slice, dice_score))
+                plt.axis('off')
+                i += 1
+                df_idx += 1
+            pdf.savefig()
+            plt.close()
 
-np.save(save_dir_bin + '/y_test_pred', np.asarray(y_pred))
-np.save(save_dir_bin + '/dice_scores_testSet', np.asarray(dice_scores))
+    plt.title('Dice score = {}'.format(dice_scores_df['dice_score'].mean()))
+    plt.savefig('{}.pdf'.format(save_path), format='pdf')
 
-dice_score = np.mean(dice_scores)
-textfile = open(save_dir + '/dice_score.txt', 'w+')
-textfile.write(str(dice_score) + '\n\n\n')
-textfile.close()
+    df = pd.DataFrame([[]])
+    df['irsabi_dice_{}'.format(data_type)] = dice_scores_df['dice_score'].mean()
+    df['irsabi_dice_std_{}'.format(data_type)] = dice_scores_df['dice_score'].std()
+    df['uid'] = config.uid
+    reg_results = pd.read_csv('classifier/reg_results.csv')
+    reg_results = pd.concat([reg_results, df]).groupby('uid', as_index=False).first()
+    reg_results.to_csv('classifier/reg_results.csv', index=False)
+    plt.plot()
+
+    command = 'cp ../data/irsabi_test_{}.pdf {}.pdf'.format(data_type, save_path)
+    print(command)
+    os.system(command)
+
+evaluate('anat')
+evaluate('func')

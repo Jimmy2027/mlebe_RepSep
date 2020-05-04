@@ -1,10 +1,9 @@
 \section{Background}
-%%% Again, please introduce that and why you are talking about MR. 1-2 sentences should suffice.
 Functional magnetic resonance imaging (fMRI) gives an indirect measurement of brain activity by being sensitive to the change of blood flow. It is one of the most prominent neuroimaging tool for many applications, such as drug discovery
-%\cite{https://www.nature.com/articles/nrd2027}
+\cite{borsook_role_2006}
 and neuromodeling
-%\cite{https://www.sciencedirect.com/science/article/pii/S1053811903002027}.
-For these studies, it is imperative that all scans lie in a standard reference frame in order to make meaningful comparisons across the subjects.
+\cite{friston_dynamic_2003}.
+For fMRI studies, it is necessary that all scans lie in a standard reference frame in order to make meaningful comparisons across the subjects.
 The common coordinate system enables a statistical evaluation of the likelihood of consistent activation across a group or, in other contexts, the differences in anatomy between two groups.
 Because of variability both in animal anatomy and in animal preparation, the original MR acquired images are not defined in a common template space.
 To solve this issue, scans need to be remapped to a reference frame via registration \cite{maintz_overview_nodate, sotiras_deformable_2013}.
@@ -17,25 +16,17 @@ Usage of unmasked (i.e. non brain extracted) data as done by the generic method,
 Computing the transformation solely on the brain volume removes disturbances induced by intensity variations outside the brain region and further improves registration quality.
 
 In recent years it has been shown that convolutional neural networks give the best results for semantic image segmentation in terms of precision and flexibility \cite{geng_survey_2018}.
-Especially the U-Net architecture from Renneberger et al \cite{ronneberger_u-net:_2015} is to this day one of the most popular in the field of biomedical image segmentation.
+Especially the U-Net architecture from \cite{ronneberger_u-net:_2015} is to this day one of the most popular in the field of biomedical image segmentation.
 Training a neural network into a classifier is a supervised method.
 This means that the model needs to learn its parameters based on observations of labeled data.
 Manually creating annotations as required to train a deep-learning classifier for high-resolution data is often infeasible, since it requires manual expert segmentation of vast amounts of slices.
 In the medical domain especially, human labeled data is expensive to acquire and thus very scarce.
 A much more widely applicable approach is to train the network using the template mask as label together with registered scans.
-Registration might not be as precise as human labeling, but it is automatic and does not depend on expert input.
+Registration is not be as precise as human labeling, but it is automatic and does not depend on expert input.
 \cite{imperfect_datasets, imperferct_segmentaion_labels} show that deep learning methods can indeed show satisfiable results when trained with imperfect training data.
 While our purpose was to create a workflow that generates better masks than the one from the template space, we show that the latter can be used as training data for the deep-learning model, by applying small changes to it.
 
 
 In this study we investigate whether and in how far reliable classification can be obtained from imperfect training data and whether preclinical image masking improves an optimized registration workflow.
-We also integrate the question of reusability and reproducibility
-This is done in a fully open and reproducible fashion and the resulting applicable program is distributed as FOSS.
-%%% There should be a final paragraph in this section, summarizing the interesting questions in the field. For you these would be all or some subset of: (1) preclinical image masking, (2) in a reusable and reproducible fashion, (3) distributed as FOSS, (4) whether and in how far this actually improves the optimized workflow, (5) whether and in how far reliable classification can be obtained from imperfect training data.
-
-
+We provide the methods as a free and open source softare (FOSS) package \cite{mlebe} as well as the functions needed for the data analysis in this article as a RepSeP document \cite{repsep}.
 We evaluate the effects of our classifier on a full-fledged registration workflow via the benchmarking algorithms from \cite{ioanas_optimized_2019}.
-
-%%% Don't spell out the author name, just include the citation, and if you want it to expand to list the name (which I do not like, but your and the journal's preference have priority over mine :D), you can do that via bibtex.
-%As stated by Ioanas et al. in \cite{ioanas_optimized_2019} a major challenge of registration quality control (QC) is that a perfect mapping from the measured image to the template is undefined.
-%To address this challenge, they developed four alternative evaluation metrics: volume conservation, smoothness conservation, functional analysis, and variance analysis.

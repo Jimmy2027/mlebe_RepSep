@@ -1,25 +1,22 @@
 \section{Classifier Implementation}
 We lay out a preparatory step to improve brain registration by specifically extracting the brain volume from the MRI scans.
-%%% I would make the section name “Classifier Implementation”, and move the Classifier subsection to the main text, then re-write SAMRI integration as a separate subsection “Workflow Integration”, and at the end of it, also highlight the advantages this has for software distribution (i.e. via NeuroGentoo), reproducibility (article RepSeP infrastructure), and benchmark accessibility.
 Our solution utilises a machine learning enabled brain tissue classifier, and the software implementation is formulated to integrate with the SAMRI Generic workflow \cite{ioanas_optimized_2019}, in order to ensure broader usability and reproducible benchmarking.
 It creates a mask of the brain region using a classifier, which is then used to extract the region of interest.
 Two classifiers were trained, one for scans acquired with RARE sequences yielding $T_2$-weighted contrast and one scans acquired with gradient-echo EPI sequences yielding either BOLD \cite{bold} and CBV \cite{cbv} contrasts \cref{subsec:Data Set}.
-%%% Maybe reference the methods section, where you briefly cite the data and list the actual scan parameters (echo time, inter-echo spacing, etc. --- all available in the methods section of the DRLFOM, IRSABI, and OPFVTA publications) --- reviewers will want to see this. For Zhiva's data, please write to her asking for the information.
+%%%todo Maybe reference the methods section, where you briefly cite the data and list the actual scan parameters (echo time, inter-echo spacing, etc. --- all available in the methods section of the DRLFOM, IRSABI, and OPFVTA publications) --- reviewers will want to see this. For Zhiva's data, please write to her asking for the information.
+The assignment of “brain” and “not brain” annotation to each voxel in the scans is performed via a trained U-Net, a popular neural network for medical image segmentation.
+
+\subsection{Workflow integration}
+%%% re-write SAMRI integration as a separate subsection “Workflow Integration”, and at the end of it, also highlight the advantages this has for software distribution (i.e. via NeuroGentoo), reproducibility (article RepSeP infrastructure), and benchmark accessibility.
 The brain extraction nodes of the workflow return both the masked input and the binary mask.
 The latter is used to constrain image similarity metric estimation on the relevant region of interest (ROI), while the extracted brain volume is used to prevent drifting of extracranial hyperintensities into the ROI.
 The registration transformation is applied to the unmasked data to make the process minimally destructive.
 
-The assignment of “brain” and “not brain” annotation to each voxel in the scans is performed via a trained U-Net, a popular neural network for medical image segmentation.
-
 \subsection{Training Data}
 
 To improve general-purpose application, training examples need to be drawn from a usually unknown probability distribution, which is expected to be representative of the space of occurrences.
-%%% you need to explain where the labels come from, maybe split the bit where you introduce the scan types of into a separate subsection and entitle it “Training Data”, and talk about this there. After all, you are discussing data right here, not the classifier.
 We set up an occurence space from which the data of interest is drawn, consisting of all the different mouse brain MRI data sets coming from multiple experiments, with their corresponding labels.
 Based on an approximation of the occurrence space, the network builds a general model that enables it to extrapolate and produce sufficiently accurate predictions in new cases.
-%%% This would be more appropriate for the background section, introducing the suitability of machine learning. Don't try to justify your choices here, you can introduce pros and cons of preexisting methods in the background or discuss pros and cons of your own work in the discussion. In the “Results” section, which this is equivalent to, you just state what you have done (briefly, full details go into Methods).
-
-%%% This is again, more appropriate for a data section
 As a training dataset, we use scans which were preprocessed with the SAMRI Generic workflow.
 This data thus contains scans mapped onto a bregma-centered standard \cite{ioanas_optimized_2019} space derived from the Toronto Hospital for Sick Children Mouse Imaging Center brain template \cite{dsu}.
 A template-based mask is available in the same reference space, and constitutes a ground truth estimation.
