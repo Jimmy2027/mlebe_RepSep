@@ -12,7 +12,6 @@ import os
 
 scratch_dir = config.scratch_dir
 
-
 def bids_autograb(bids_dir):
     bids_dir = path.abspath(path.expanduser(bids_dir))
     validate = BIDSValidator()
@@ -96,6 +95,8 @@ for uid, processing in list(product(uids, processings)):
 df['modality'] = df['modality'].str.upper()
 df = df.rename(columns={'modality': 'Contrast', })
 df.columns = map(str.title, df.columns)
+df.loc[df['Uid'].str.contains('VZ'), 'Contrast'] = 'T1w+'+df.loc[df['Uid'].str.contains('VZ'), 'Contrast']
+df.loc[~df['Uid'].str.contains('VZ'), 'Contrast'] = 'T2w+'+df.loc[~df['Uid'].str.contains('VZ'), 'Contrast']
 df.to_csv(path.join(scratch_dir, 'data', 'volume.csv'))
 
 """

@@ -11,14 +11,14 @@ import os
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
-
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 data_dir = '/mnt/data/mlebe_data/'
 template_dir = '/usr/share/mouse-brain-atlases/'
 study = ['irsabi']
 slice_view = 'coronal'
 shape = (128, 128)
-IMG_NBRs = [65, 65,65, 65,65, 65,65, 65]
+IMG_NBRs = [65, 65, 65, 65, 65, 65, 65, 65]
+
 
 def evaluate(data_type):
     if data_type == 'anat':
@@ -65,7 +65,8 @@ def evaluate(data_type):
     with PdfPages('../data/irsabi_test_{}.pdf'.format(data_type)) as pdf:
         for IMG_NBR in IMG_NBRs:
             plt.figure(figsize=(40, IMG_NBR * 10))
-            plt.figtext(.5, .9, 'Mean dice score of {}'.format(np.round(dice_scores_df['dice_score'].mean(), 4)), fontsize=100, ha='center')
+            plt.figtext(.5, .9, 'Mean dice score of {}'.format(np.round(dice_scores_df['dice_score'].mean(), 4)),
+                        fontsize=100, ha='center')
             i = 1
             while i <= IMG_NBR * 2:
                 volume = min_df.iloc[df_idx]['idx']
@@ -96,11 +97,22 @@ def evaluate(data_type):
     reg_results = pd.read_csv('classifier/reg_results.csv')
     reg_results = pd.concat([reg_results, df]).groupby('uid', as_index=False).first()
     reg_results.to_csv('classifier/reg_results.csv', index=False)
-    plt.plot()
+
+    if os.path.exists(config.anat_model_training_config):
+        models_results = pd.read_csv('classifier/results_df.csv')
+        if data_type == 'anat':
+            anat_model_training_config = pd.read_csv(config.anat_model_training_config)
+            df['uid'] = anat_model_training_config['uid']
+        elif data_type == 'func':
+            func_model_training_config = pd.read_csv(config.func_model_training_config)
+            df['uid'] = func_model_training_config['uid']
+        models_results = pd.concat([models_results, df]).groupby('uid', as_index=False).first()
+        models_results.to_csv('classifier/results_df.csv', index=False)
 
     command = 'cp ../data/irsabi_test_{}.pdf {}.pdf'.format(data_type, save_path)
     print(command)
     os.system(command)
+
 
 evaluate('anat')
 evaluate('func')

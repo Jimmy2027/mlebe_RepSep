@@ -1,5 +1,4 @@
 from samri.pipelines.preprocess import generic
-from samri.pipelines import manipulations
 from subjects_reader import find_subjects
 
 scratch_dir = '~/.scratch/mlebe'

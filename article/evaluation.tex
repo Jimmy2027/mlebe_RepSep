@@ -102,8 +102,8 @@ and the contrast-workflow interaction
 (SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Masked]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
 Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to 1, we report that the RMSE is sensitive to the
-workflow (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Masked]')})
-and the contrast-workflow interaction (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Masked]:Contrast[T.CBV]')}).
+workflow (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Masked]', metric= 'smoothness')})
+and the contrast-workflow interaction (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Masked]:Contrast[T.CBV]', metric= 'smoothness')}).
 
 \subsection{Functional Analysis}
 

@@ -5,8 +5,8 @@ from math import sqrt
 import os
 import statsmodels.formula.api as smf
 
-
-def bootstrap(df, factor, scratch_dir):
+#todo: remove test variable
+def bootstrap(df, factor, scratch_dir, numbr_samples=10000, test = False):
     if factor == 'Volume Conservation Factor':
         metric = 'VCF'
     elif factor == 'Smoothness Conservation Factor':
@@ -22,10 +22,9 @@ def bootstrap(df, factor, scratch_dir):
     generic_masked_CBV_df = generic_masked_df.loc[generic_masked_df['Contrast'] == 'CBV']
     generic_masked_BOLD_df = generic_masked_df.loc[generic_masked_df['Contrast'] == 'BOLD']
 
-
     bootstrapped_RMSEs = pd.DataFrame(columns=['Contrast', 'Processing', 'Uid', metric + '_RMSE'])
 
-    N = 10000
+    N = numbr_samples
 
     for i in range(N):
         generic_CBV_df_temp = choice(generic_CBV_df[factor].to_list(),
@@ -44,33 +43,51 @@ def bootstrap(df, factor, scratch_dir):
         rmse_generic_BOLD = sqrt(mean_squared_error([1] * len(generic_BOLD_df_temp), generic_BOLD_df_temp))
         bootstrapped_RMSEs = bootstrapped_RMSEs.append(
             pd.DataFrame([['CBV', 'Generic', '{}.1'.format(i), rmse_generic_CBV]],
-                         columns=['Contrast', 'Processing', 'Uid', metric + '_RMSE']), sort = False)
+                         columns=['Contrast', 'Processing', 'Uid', metric + '_RMSE']), sort=False)
         bootstrapped_RMSEs = bootstrapped_RMSEs.append(
             pd.DataFrame([['BOLD', 'Generic', '{}.2'.format(i), rmse_generic_BOLD]],
-                         columns=['Contrast', 'Processing', 'Uid', metric + '_RMSE']), sort = False)
+                         columns=['Contrast', 'Processing', 'Uid', metric + '_RMSE']), sort=False)
         bootstrapped_RMSEs = bootstrapped_RMSEs.append(
             pd.DataFrame([['CBV', 'Masked', '{}.1'.format(i), rmse_generic_masked_CBV]],
-                         columns=['Contrast', 'Processing', 'Uid', metric + '_RMSE']), sort = False)
-        bootstrapped_RMSEs = bootstrapped_RMSEs.append(pd.DataFrame([['BOLD', 'Masked', '{}.2'.format(i), rmse_generic_masked_BOLD]],
-                                                                    columns=['Contrast', 'Processing', 'Uid', metric + '_RMSE']), sort = False)
-    if factor == 'Volume Conservation Factor':
-        bootstrapped_RMSEs.to_csv(scratch_dir + '/data/bootstrapped/bootstrapped_volume.csv', index= False)
-    elif factor == 'Smoothness Conservation Factor':
-        bootstrapped_RMSEs.to_csv(scratch_dir + '/data/bootstrapped/bootstrapped_smoothness.csv', index = False)
+                         columns=['Contrast', 'Processing', 'Uid', metric + '_RMSE']), sort=False)
+        bootstrapped_RMSEs = bootstrapped_RMSEs.append(
+            pd.DataFrame([['BOLD', 'Masked', '{}.2'.format(i), rmse_generic_masked_BOLD]],
+                         columns=['Contrast', 'Processing', 'Uid', metric + '_RMSE']), sort=False)
+    if test:
+        if factor == 'Volume Conservation Factor':
+            bootstrapped_RMSEs.to_csv(scratch_dir + '/data/bootstrapped/bootstrapped_volume_{}.csv'.format(N), index=False)
+        elif factor == 'Smoothness Conservation Factor':
+            bootstrapped_RMSEs.to_csv(scratch_dir + '/data/bootstrapped/bootstrapped_smoothness_{}.csv'.format(N), index=False)
+    else:
+        if factor == 'Volume Conservation Factor':
+            bootstrapped_RMSEs.to_csv(scratch_dir + '/data/bootstrapped/bootstrapped_volume.csv', index=False)
+        elif factor == 'Smoothness Conservation Factor':
+            bootstrapped_RMSEs.to_csv(scratch_dir + '/data/bootstrapped/bootstrapped_smoothness.csv', index=False)
+
 
 def bootstrap_analysis(
-    factor,
-    dependent_variable = 'RMSE',
-    expression = 'Processing*Contrast',
-    scratch_dir = '',
-    ):
+        factor,
+        dependent_variable='RMSE',
+        expression='Processing*Contrast',
+        scratch_dir='',
+        nbr_samples = 10000,
+        test = False,
+):
     scratch_dir = os.path.expanduser(scratch_dir)
-    if factor == 'volume':
-        df_path = scratch_dir + '/data/bootstrapped/bootstrapped_volume.csv'
-        df_name = 'vbootstrapped_analy'
-    if factor == 'smoothness':
-        df_path = scratch_dir + '/data/bootstrapped/bootstrapped_smoothness.csv'
-        df_name = 'sbootstrapped_analy'
+    if test:
+        if factor == 'volume':
+            df_path = scratch_dir + '/data/bootstrapped/bootstrapped_volume_{}.csv'.format(nbr_samples)
+            df_name = 'vbootstrapped_analy'
+        if factor == 'smoothness':
+            df_path = scratch_dir + '/data/bootstrapped/bootstrapped_smoothness_{}.csv'.format(nbr_samples)
+            df_name = 'sbootstrapped_analy'
+    else:
+        if factor == 'volume':
+            df_path = scratch_dir + '/data/bootstrapped/bootstrapped_volume.csv'
+            df_name = 'vbootstrapped_analy'
+        if factor == 'smoothness':
+            df_path = scratch_dir + '/data/bootstrapped/bootstrapped_smoothness.csv'
+            df_name = 'sbootstrapped_analy'
 
     df = pd.read_csv(df_path)
 
@@ -81,5 +98,7 @@ def bootstrap_analysis(
     model = smf.mixedlm(formula, df, groups='Uid')
     fit = model.fit()
     summary = fit.summary().tables[1]
-    summary.to_csv(scratch_dir + '/data/bootstrapped/{}.csv'.format(df_name))
-    # temp = pd.read_csv(scratch_dir + '/data/bootstrapped/{}.csv'.format(df_name), index_col=0)
+    if test:
+        summary.to_csv(scratch_dir + '/data/bootstrapped/{}_{}.csv'.format(df_name, nbr_samples))
+    else:
+        summary.to_csv(scratch_dir + '/data/bootstrapped/{}.csv'.format(df_name))

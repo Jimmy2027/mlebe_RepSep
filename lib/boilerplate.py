@@ -143,13 +143,6 @@ def variance_test(
     tex = inline_anova(anova, factor, 'tex', **kwargs)
     return tex
 
-
-# todo this is no longer needed
-# def print_dice():
-# 	textfile = open('data/classifier/dice_score.txt', 'r')
-# 	dice_score = textfile.readline()
-# 	return np.round(float(dice_score), 3)
-
 def print_dice():
     reg_results_df = pd.read_csv('prepare/classifier/reg_results.csv')
     uid = config.uid

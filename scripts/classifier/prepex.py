@@ -7,7 +7,7 @@ from mlebe.masking import utils
 example = 'sub-6570_ses-4mo_acq-TurboRARE_T2w.nii.gz'
 slice = 65
 
-dir = '/mnt/data/mlebe_data/'
+dir = '/mnt/data/mlebe_data/mlebe_trainingdata-1.0/'
 
 mask_dir = '/usr/share/mouse-brain-atlases/'
 
