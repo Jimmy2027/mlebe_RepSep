@@ -2,12 +2,12 @@ import os
 import nibabel as nib
 import numpy as np
 from matplotlib import pyplot as plt
-
+from prepare import config
 
 example = 'sub-6570_ses-4mo_acq-TurboRARE_T2w.nii.gz'
 slice = 65
 
-dir = '/mnt/data/mlebe_data/mlebe_trainingdata-1.0/'
+dir = config.data_path
 
 mask_dir = '/usr/share/mouse-brain-atlases/'
 

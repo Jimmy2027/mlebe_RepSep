@@ -70,9 +70,13 @@ df = pd.concat([df_generic, df_masked, df_bids])
 df['Uid'] = df['subject'] + '_' + df['session'] + '_' + df['modality']
 df = df[df['type'] == 'func']
 
-df = df.loc[np.logical_or(df.modality == 'cbv', df.modality == 'bold')]
-df['modality'] = df['modality'].str.upper()
+# df = df.loc[np.logical_or(df.modality == 'cbv', df.modality == 'bold')]
+# df['modality'] = df['modality'].str.upper()
+# df['Contrast'] = df['modality']
 df['Contrast'] = df['modality']
+df['Contrast'] = df['Contrast'].str.upper()
+df.loc[df['Uid'].str.contains('VZ'), 'Contrast'] = 'T1w+'+df.loc[df['Uid'].str.contains('VZ'), 'Contrast']
+df.loc[~df['Uid'].str.contains('VZ'), 'Contrast'] = 'T2w+'+df.loc[~df['Uid'].str.contains('VZ'), 'Contrast']
 
 df['Smoothness'] = df['path'].apply(avg_smoothness)
 
@@ -111,9 +115,9 @@ for _file in files:
 """
 Bootstrapping
 """
-bootstrap(df, 'Smoothness Conservation Factor', scratch_dir)
+bootstrap(df, 'Smoothness Conservation Factor', scratch_dir, nbr_samples=len(df))
 bootstrap_analysis('smoothness', dependent_variable='SCF_RMSE', expression='Processing*Contrast',
-                   scratch_dir=scratch_dir)
+                   scratch_dir=scratch_dir, nbr_samples=len(df))
 
 """
 Writing results
@@ -137,5 +141,5 @@ reg_results.at[0, 'max_Scf_RMSE_masked'] = (
     df.loc[df['Processing'] == 'Masked'].groupby('Uid')['1 - Scf'].max().max())
 
 reg_results_ = pd.read_csv('classifier/reg_results.csv')
-reg_results_ = pd.concat([reg_results, reg_results_]).groupby('uid', as_index = False).first()
+reg_results_ = pd.concat([reg_results, reg_results_]).groupby('uid', as_index=False).first()
 reg_results_.to_csv('classifier/reg_results.csv', index=False)

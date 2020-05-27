@@ -91,7 +91,7 @@ def func_contour_slices(substitution, file_path, data_dir, key, i, spacing):
                    )
 
 
-def anat_contour_slices(substitution, file_path, data_dir, key, i, spacing):
+def anat_contour_slices(substitution, file_path, data_dir, key, i, spacing, contrast):
     contour_slices(file_path.format(**substitution),
                    alpha=[0.9],
                    colors=cmap[::2],

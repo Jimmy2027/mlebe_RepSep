@@ -12,6 +12,7 @@ import os
 
 scratch_dir = config.scratch_dir
 
+
 def bids_autograb(bids_dir):
     bids_dir = path.abspath(path.expanduser(bids_dir))
     validate = BIDSValidator()
@@ -95,15 +96,16 @@ for uid, processing in list(product(uids, processings)):
 df['modality'] = df['modality'].str.upper()
 df = df.rename(columns={'modality': 'Contrast', })
 df.columns = map(str.title, df.columns)
-df.loc[df['Uid'].str.contains('VZ'), 'Contrast'] = 'T1w+'+df.loc[df['Uid'].str.contains('VZ'), 'Contrast']
-df.loc[~df['Uid'].str.contains('VZ'), 'Contrast'] = 'T2w+'+df.loc[~df['Uid'].str.contains('VZ'), 'Contrast']
+df.loc[df['Uid'].str.contains('VZ'), 'Contrast'] = 'T1w+' + df.loc[df['Uid'].str.contains('VZ'), 'Contrast']
+df.loc[~df['Uid'].str.contains('VZ'), 'Contrast'] = 'T2w+' + df.loc[~df['Uid'].str.contains('VZ'), 'Contrast']
 df.to_csv(path.join(scratch_dir, 'data', 'volume.csv'))
 
 """
 Bootstrapping
 """
-bootstrap(df, 'Volume Conservation Factor', scratch_dir=scratch_dir)
-bootstrap_analysis('volume', dependent_variable='VCF_RMSE', expression='Processing*Contrast', scratch_dir=scratch_dir)
+bootstrap(df, 'Volume Conservation Factor', scratch_dir=scratch_dir, nbr_samples=len(df))
+bootstrap_analysis('volume', dependent_variable='VCF_RMSE', expression='Processing*Contrast', scratch_dir=scratch_dir,
+                   nbr_samples=len(df))
 """
 Writing results
 """
@@ -126,13 +128,12 @@ reg_results['masked_mean_Vcf_RMSE'] = df.loc[df['Processing'] == 'Masked', '1 - 
 reg_results['generic_mean_Vcf_RMSE'] = df.loc[df['Processing'] == 'Generic', '1 - Vcf'].mean()
 reg_results['max_RMSE_generic'] = -1
 reg_results['max_RMSE_generic'] = reg_results['max_RMSE_generic'].astype('object')
-reg_results.at[0,'max_RMSE_generic'] = [df.loc[df['Processing'] == 'Generic'].groupby('Uid')['1 - Vcf'].max().idxmax(),
+reg_results.at[0, 'max_RMSE_generic'] = [df.loc[df['Processing'] == 'Generic'].groupby('Uid')['1 - Vcf'].max().idxmax(),
                                          df.loc[df['Processing'] == 'Generic'].groupby('Uid')['1 - Vcf'].max().max()]
 reg_results['max_RMSE_masked'] = -1
 reg_results['max_RMSE_masked'] = reg_results['max_RMSE_masked'].astype('object')
-reg_results.at[0,'max_RMSE_masked'] = [df.loc[df['Processing'] == 'Masked'].groupby('Uid')['1 - Vcf'].max().idxmax(),
+reg_results.at[0, 'max_RMSE_masked'] = [df.loc[df['Processing'] == 'Masked'].groupby('Uid')['1 - Vcf'].max().idxmax(),
                                         df.loc[df['Processing'] == 'Masked'].groupby('Uid')['1 - Vcf'].max().max()]
 
 reg_results_ = reg_results_.append(reg_results)
 reg_results_.to_csv('classifier/reg_results.csv', index=False)
-

@@ -5,8 +5,9 @@ from math import sqrt
 import os
 import statsmodels.formula.api as smf
 
-#todo: remove test variable
-def bootstrap(df, factor, scratch_dir, numbr_samples=10000, test = False):
+
+# todo: remove test variable
+def bootstrap(df, factor, scratch_dir, nbr_samples=10000, test=False):
     if factor == 'Volume Conservation Factor':
         metric = 'VCF'
     elif factor == 'Smoothness Conservation Factor':
@@ -16,15 +17,15 @@ def bootstrap(df, factor, scratch_dir, numbr_samples=10000, test = False):
         os.mkdir(scratch_dir + '/data/bootstrapped')
 
     generic_df = df.loc[df['Processing'] == 'Generic']
-    generic_CBV_df = generic_df.loc[generic_df['Contrast'] == 'CBV']
-    generic_BOLD_df = generic_df.loc[generic_df['Contrast'] == 'BOLD']
+    generic_CBV_df = generic_df.loc[generic_df['Contrast'] == 'T2w+CBV']
+    generic_BOLD_df = generic_df.loc[generic_df['Contrast'] == 'T2w+BOLD']
     generic_masked_df = df.loc[df['Processing'] == 'Masked']
-    generic_masked_CBV_df = generic_masked_df.loc[generic_masked_df['Contrast'] == 'CBV']
-    generic_masked_BOLD_df = generic_masked_df.loc[generic_masked_df['Contrast'] == 'BOLD']
+    generic_masked_CBV_df = generic_masked_df.loc[generic_masked_df['Contrast'] == 'T2w+CBV']
+    generic_masked_BOLD_df = generic_masked_df.loc[generic_masked_df['Contrast'] == 'T2w+BOLD']
 
     bootstrapped_RMSEs = pd.DataFrame(columns=['Contrast', 'Processing', 'Uid', metric + '_RMSE'])
 
-    N = numbr_samples
+    N = nbr_samples
 
     for i in range(N):
         generic_CBV_df_temp = choice(generic_CBV_df[factor].to_list(),
@@ -55,9 +56,11 @@ def bootstrap(df, factor, scratch_dir, numbr_samples=10000, test = False):
                          columns=['Contrast', 'Processing', 'Uid', metric + '_RMSE']), sort=False)
     if test:
         if factor == 'Volume Conservation Factor':
-            bootstrapped_RMSEs.to_csv(scratch_dir + '/data/bootstrapped/bootstrapped_volume_{}.csv'.format(N), index=False)
+            bootstrapped_RMSEs.to_csv(scratch_dir + '/data/bootstrapped/bootstrapped_volume_{}.csv'.format(N),
+                                      index=False)
         elif factor == 'Smoothness Conservation Factor':
-            bootstrapped_RMSEs.to_csv(scratch_dir + '/data/bootstrapped/bootstrapped_smoothness_{}.csv'.format(N), index=False)
+            bootstrapped_RMSEs.to_csv(scratch_dir + '/data/bootstrapped/bootstrapped_smoothness_{}.csv'.format(N),
+                                      index=False)
     else:
         if factor == 'Volume Conservation Factor':
             bootstrapped_RMSEs.to_csv(scratch_dir + '/data/bootstrapped/bootstrapped_volume.csv', index=False)
@@ -70,8 +73,8 @@ def bootstrap_analysis(
         dependent_variable='RMSE',
         expression='Processing*Contrast',
         scratch_dir='',
-        nbr_samples = 10000,
-        test = False,
+        nbr_samples=10000,
+        test=False,
 ):
     scratch_dir = os.path.expanduser(scratch_dir)
     if test:

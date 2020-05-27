@@ -12,7 +12,7 @@ from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
-data_dir = '/mnt/data/mlebe_data/'
+data_dir = config.data_path
 template_dir = '/usr/share/mouse-brain-atlases/'
 study = ['irsabi']
 slice_view = 'coronal'

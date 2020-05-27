@@ -143,11 +143,13 @@ def variance_test(
     tex = inline_anova(anova, factor, 'tex', **kwargs)
     return tex
 
+
 def print_dice():
     reg_results_df = pd.read_csv('prepare/classifier/reg_results.csv')
     uid = config.uid
     dice_score = reg_results_df.loc[reg_results_df['uid'] == uid, 'anat_model_dice'].item()
     return np.round(float(dice_score), 3)
+
 
 def iqr_(
         df_path='data/volume.csv',

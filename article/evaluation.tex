@@ -67,7 +67,7 @@ As seen in \cref{fig:vccv}, we note that in the described dataset VCF is sensiti
 but not the interaction of the workflow with the contrast (\py{boilerplate.fstatistic('Processing:Contrast', condensed=True)}).
 The performance of the Generic SAMRI workflow is different from that of Generic*, yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
 With respect to the data break-up by contrast (CBV versus BOLD, \cref{fig:vccv}), we see no notable main effect for the contrast variable
-(VCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]')}), nor do we report a notable effect for the contrast-workflow interaction (VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Masked]:Contrast[T.CBV]')}).
+(VCF of \py{boilerplate.corecomparison_factorci('Contrast[T.T2w+CBV]')}), nor do we report a notable effect for the contrast-workflow interaction (VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Masked]:Contrast[T.T2w+CBV]')}).
 %%% Ok, you introduce the VCF and you show the VCF plots primarily, and then you list the stats for RMSE only? You should definitely write out the modelling evaluation for VCF. My recommendation is to write down a paragraph for the VCF evaluation, and then RMSE evaluation, plot-wise you show a composite figure with subfigures for VCF, SCF, and the respective bootstrapped RMSE.
 
 %%% briefly introduce what the RMSE tells you here.
@@ -97,9 +97,9 @@ Further, we note that there is a notable variance decrease for the Masked workfl
 -fold).
 
 Given the break-up by contrast shown in \cref{fig:sccv}, we see no effect for the contrast variable
-(SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')})
+(SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.T2w+CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')})
 and the contrast-workflow interaction
-(SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Masked]:Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
+(SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Masked]:Contrast[T.T2w+CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
 Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to 1, we report that the RMSE is sensitive to the
 workflow (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Masked]', metric= 'smoothness')})
