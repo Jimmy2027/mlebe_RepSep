@@ -1,5 +1,5 @@
 """
-Pretrained models can be downloaded with: https://zenodo.org/record/3759361#.Xp70KlMzZQJ
+Pretrained models can be downloaded at: https://zenodo.org/record/3759361#.Xp70KlMzZQJ
 """
 import uuid
 import json
@@ -7,15 +7,17 @@ import os
 import pandas as pd
 import datetime
 
-dir = '/mnt/data/hendrik/results/anat_br_augment/dice_600_2020-03-06/'
-anat_model_path = '/mnt/data/hendrik/results/anat_br_augment/dice_600_2020-03-06/1_Step/model_ep282.h5'
-func_model_path = '/mnt/data/hendrik/results/func_br_augment/dice_600_2020-03-07/1_Step/model_ep104.h5'
+dir = '/home/hendrik/src/MLEBE/mlebe/threed/training/checkpoints/2020-06-15_anat_dice_loss_normalize_medic_blacklist_True1/'
+anat_model_path = '/home/hendrik/src/MLEBE/mlebe/threed/training/checkpoints/2020-06-15_anat_dice_loss_normalize_medic_blacklist_True1/trained_mlebe_config_anat.json'
+func_model_path = '/home/hendrik/src/MLEBE/mlebe/threed/training/checkpoints/2020-06-15_func_dice_loss_normalize_medic_blacklist False1/trained_mlebe_config_func.json'
 scratch_dir = '~/.scratch/mlebe'
 data_path = '/mnt/data/hendrik/mlebe_data/'
 parameters = {  # parameters to be stored in the results dataframe
-    'with_FLASH': True,
+    'with_FLASH_train': True,
     'data_path': data_path,
-    'date': str(datetime.date.today())
+    'date': str(datetime.date.today()),
+    '3D_prediction': True,
+    'blacklist': False,
 }
 
 if __name__ == '__main__':

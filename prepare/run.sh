@@ -31,7 +31,7 @@ mkdir -p ~/.scratch/mlebe/preprocessing/generic
 ln -s ~/.scratch/irsabi/preprocessing/generic/* ~/.scratch/mlebe/preprocessing/generic/
 
 if [ ! -f ~/.scratch/mlebe/uid.json ]; then
-  python config.py || exit 1
+  python config_3D.py || exit 1
 fi
 
 if [ ! -d ~/.scratch/mlebe/classifiers ]; then
@@ -39,18 +39,18 @@ if [ ! -d ~/.scratch/mlebe/classifiers ]; then
   exit 1
 fi
 
-#cp config.py ~/.scratch/mlebe/
-#echo " With irsabi as training data " >~/.scratch/mlebe/description.txt
-#python preprocess.py || exit 1
-#python collapse.py || exit 1
-#python l1.py || exit 1
-#python manual_overview.py || exit 1
-#python classifier/classifier_tester.py || exit 1
+cp config_3D.py ~/.scratch/mlebe/
+echo " With irsabi as training data " >~/.scratch/mlebe/description.txt
+python preprocess.py || exit 1
+python collapse.py || exit 1
+python l1.py || exit 1
+python manual_overview.py || exit 1
+python classifier/classifier_tester.py || exit 1
 
-#mkdir -p ~/.scratch/mlebe/data
-#python volume_data.py || exit 1
-#python variance_data.py || exit 1
-#python smoothness_data.py || exit 1
-#python functional_data.py || exit 1
-#python l2.py || exit 1
+mkdir -p ~/.scratch/mlebe/data
+python volume_data.py || exit 1
+python variance_data.py || exit 1
+python smoothness_data.py || exit 1
+python functional_data.py || exit 1
+python l2.py || exit 1
 sh transfer.sh || exit 1

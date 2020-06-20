@@ -1,68 +1,105 @@
-import mlebe.training.utils.data_loader as dl
+import mlebe.training.data_loader as dl
 import mlebe.training.utils.general as utils
 import mlebe.training.utils.scoring_utils as su
 import copy
-from mlebe.training import unet
-from tensorflow import keras
-import config
+import config_3D as config
 import pandas as pd
 import numpy as np
 import os
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
+from mlebe.threed.training.models import get_model
+from mlebe.threed.training.utils.utils import json_file_to_pyobj
+from mlebe.threed.training.dataio.transformation import get_dataset_transformation
+from mlebe.threed.training.dataio.loaders import get_dataset
+from mlebe.training.utils.general import preprocess, arrange_mask, remove_black_images
+import nibabel as nib
 
-os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+scratch_dir = os.path.expanduser(config.scratch_dir)
 data_dir = config.data_path
 template_dir = '/usr/share/mouse-brain-atlases/'
-study = ['irsabi']
+study = ['irsabi_dargcc', 'irsabi']
 slice_view = 'coronal'
-shape = (128, 128)
-IMG_NBRs = [65, 65, 65, 65, 65, 65, 65, 65]
+IMG_NBRs = [65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65]
 
 
 def evaluate(data_type):
-    if data_type == 'anat':
-        excluded_img_data = dl.load_img(data_dir, studies=study)
-        model = keras.models.load_model(config.func_model_path, custom_objects={'dice_coef_loss': unet.dice_coef_loss,
-                                                                                'dice_coef': unet.dice_coef})
-        save_path = config.anat_model_path.split('/')
+    json_opts = json_file_to_pyobj(config.anat_model_path)
+    training_shape = json_opts.augmentation.mlebe.scale_size[:3]
+    model = get_model(json_opts.model)
+    save_path = model.save_dir.split('/')
+    print(save_path)
 
-    else:
-        excluded_img_data = dl.load_func_img(data_dir, studies=study)
-        model = keras.models.load_model(config.func_model_path, custom_objects={'dice_coef_loss': unet.dice_coef_loss,
-                                                                                'dice_coef': unet.dice_coef})
-        save_path = config.func_model_path.split('/')
+    ds_class = get_dataset('mlebe_dataset')
+    # define preprocessing transfromer for model
+    ds_transform = get_dataset_transformation('mlebe', opts=json_opts.augmentation,
+                                              max_output_channels=json_opts.model.output_nc)
+
+    test_dataset = ds_class(template_dir, data_dir, study, split='test', save_dir=None,
+                            data_type=data_type, transform=ds_transform['valid'],
+                            train_size=None)
+    data_selection = test_dataset.data_selection
+    transformer = ds_transform['valid']()
 
     save_path[-1] = 'irsabi_test'
     save_path = '/'.join(save_path)
     print(save_path)
+
     mask_data = []
     temp = dl.load_mask(template_dir)
-    for i in range(len(excluded_img_data)):
-        mask_data.append(copy.deepcopy(temp[0]))
-
-    img_data, mask_data, img_affines, img_headers, img_file_names, mask_affines, mask_headers = utils.get_image_and_mask(
-        '', excluded_img_data, mask_data, shape, '', slice_view=slice_view,
-        visualisation=False, blacklist_bool=False)
+    for i in range(len(data_selection)):
+        mask_data.append(copy.deepcopy(temp))
 
     dice_scores_df = pd.DataFrame(columns=['volume_name', 'slice', 'dice_score', 'idx'])
     predictions = []
-    for volume in range(len(img_data)):
-        volume_name = img_file_names[volume]
-        predicted_volume = np.empty(img_data[volume].shape)
-        for slice in range(img_data[volume].shape[0]):
-            prediction = np.squeeze(model.predict(np.expand_dims(np.expand_dims(img_data[volume][slice], 0), -1)))
-            prediction = np.where(prediction > 0.9, 1, 0)
-            predicted_volume[slice] = prediction
-            dice_score = su.dice(mask_data[volume][slice], prediction)
+    for volume in range(len(data_selection)):  # volume is an index
+        # get volume
+        volume_name = data_selection.iloc[volume]['uid']
+        img = nib.load(data_selection.iloc[volume]['path']).get_data()
+        target = mask_data[volume].get_data()
+
+        if json_opts.data.with_arranged_mask:
+            # set the mask to zero where the image is zero
+            target = arrange_mask(img, target)
+
+        img = preprocess(img, training_shape[:2], 'coronal')
+        target = preprocess(target, training_shape[:2], 'coronal')
+
+        # set image shape to x,y,z
+        img = np.moveaxis(img, 0, 2)
+        target = np.moveaxis(target, 0, 2)
+
+        # preprocess data for compatibility with model
+        network_input = transformer(np.expand_dims(img, -1))
+        target = np.squeeze(transformer(np.expand_dims(target, -1)).cpu().byte().numpy()).astype(np.int16)
+        # add dimension for batches
+        network_input = network_input.unsqueeze(0)
+        model.set_input(network_input)
+        model.test()
+        # predict
+        mask_pred = np.squeeze(model.pred_seg.cpu().numpy())
+        img = np.squeeze(network_input.numpy())
+        # set image shape to z,x,y
+        mask_pred = np.moveaxis(mask_pred, 2, 0)
+        img = np.moveaxis(img, 2, 0)
+        target = np.moveaxis(target, 2, 0)
+
+        for slice in range(img.shape[0]):
+            dice_score = su.dice(target[slice], mask_pred[slice])
             dice_scores_df = dice_scores_df.append(
                 {'volume_name': volume_name, 'slice': slice, 'dice_score': dice_score, 'idx': volume},
                 ignore_index=True)
-        predictions.append(predicted_volume)
+        predictions.append(mask_pred)
 
     min_df = dice_scores_df.sort_values(by=['dice_score']).head(sum(IMG_NBRs))
     df_idx = 0
-    with PdfPages('../data/irsabi_test_{}.pdf'.format(data_type)) as pdf:
+
+    if not os.path.exists(os.path.join(scratch_dir, 'data',
+                                       'classifier')):  # path to pdf with visualisations of classifier predictions
+        os.mkdir(os.path.join(scratch_dir, 'data', 'classifier'))
+
+    with PdfPages(os.path.join(scratch_dir, 'data', 'classifier', 'irsabi_test_{}.pdf'.format(data_type))) as pdf:
         for IMG_NBR in IMG_NBRs:
             plt.figure(figsize=(40, IMG_NBR * 10))
             plt.figtext(.5, .9, 'Mean dice score of {}'.format(np.round(dice_scores_df['dice_score'].mean(), 4)),
@@ -73,14 +110,14 @@ def evaluate(data_type):
                 slice = min_df.iloc[df_idx]['slice']
                 dice_score = min_df.iloc[df_idx]['dice_score']
                 plt.subplot(IMG_NBR, 2, i)
-                plt.imshow(img_data[volume][slice], cmap='gray')
-                plt.imshow(mask_data[volume][slice], cmap='Blues', alpha=0.6)
+                plt.imshow(img[slice], cmap='gray')
+                plt.imshow(target[slice], cmap='Blues', alpha=0.6)
                 plt.axis('off')
                 i += 1
                 plt.subplot(IMG_NBR, 2, i)
-                plt.imshow(img_data[volume][slice], cmap='gray')
+                plt.imshow(img[slice], cmap='gray')
                 plt.imshow(predictions[volume][slice], cmap='Blues', alpha=0.6)
-                plt.title('Volume: {}, slice {}, dice {}'.format(img_file_names[volume], slice, dice_score))
+                plt.title('Volume: {}, slice {}, dice {}'.format(volume_name, slice, dice_score))
                 plt.axis('off')
                 i += 1
                 df_idx += 1
@@ -109,10 +146,11 @@ def evaluate(data_type):
         models_results = pd.concat([models_results, df]).groupby('uid', as_index=False).first()
         models_results.to_csv('classifier/results_df.csv', index=False)
 
-    command = 'cp ../data/irsabi_test_{}.pdf {}.pdf'.format(data_type, save_path)
+    command = 'cp {} {}.pdf'.format(
+        os.path.join(scratch_dir, 'data', 'classifier', 'irsabi_test_{}.pdf'.format(data_type)), save_path)
     print(command)
     os.system(command)
 
 
 evaluate('anat')
-evaluate('func')
+# evaluate('func')
