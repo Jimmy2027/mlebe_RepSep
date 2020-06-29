@@ -1,15 +1,11 @@
-# import os
-# import imageio
-# import numpy as np
-# from matplotlib import pyplot as plt
-# from matplotlib import gridspec
-# import os
-# import pickle
-# import cv2
-# import data_loader as dl
-# import scipy
-# import scipy.ndimage
-# import pandas as pd
+import json
+
+def set_cuda_var(config_path, use_cuda):
+    with open(config_path) as file:
+        config = json.load(file)
+    config['model']['use_cuda'] = use_cuda
+    with open(config_path, 'w') as outfile:
+        json.dump(config, outfile, indent=4)
 
 
 

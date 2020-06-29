@@ -7,45 +7,28 @@ if [ ! -d ~/.scratch ]; then
   exit 1
 fi
 
-if [ ! -d ~/.scratch/mlebe/bids ]; then
-  if [ -d '/usr/share/irsabi_bidsdata' ]; then
-    mkdir -p ~/.scratch/mlebe/bids
-    ln -s /usr/share/irsabi_bidsdata/* ~/.scratch/mlebe/bids/
-  else
-    echo "No IRSABI BIDS data distribution found, processing from scanner IRSABI data:"
-    python make_bids.py
-  fi
-fi
-
-if [ ! -d ~/.scratch/mlebe/dargcc_bids ]; then
-  if [ -d '/usr/share/dargcc_bidsdata' ]; then
-    ln -s '/usr/share/dargcc_bidsdata' ~/.scratch/mlebe/dargcc_bids
-  else
-    echo "No DARGCC BIDS data distribution found, processing from scanner IRSABI data:"
-    exit
-  fi
-fi
-
-ln -s /home/hendrik/.scratch/mlebe_final/classifiers /home/hendrik/.scratch/mlebe/classifiers
+#ln -s /home/hendrik/.scratch/mlebe_final/classifiers /home/hendrik/.scratch/mlebe/classifiers
 mkdir -p ~/.scratch/mlebe/preprocessing/generic
 ln -s ~/.scratch/irsabi/preprocessing/generic/* ~/.scratch/mlebe/preprocessing/generic/
 
-if [ ! -f ~/.scratch/mlebe/uid.json ]; then
-  python config_3D.py || exit 1
+
+# This workflow runs with a json configuration file, choose one in configs/ and define it in make_config.py
+if [ ! -f ~/.scratch/mlebe/config.json ]; then
+  python make_config.py || exit 1
 fi
 
-if [ ! -d ~/.scratch/mlebe/classifiers ]; then
-  python classifier/move_classifier_data.py
-  exit 1
-fi
+#if [ ! -d ~/.scratch/mlebe/classifiers ]; then
+#  python classifier/move_classifier_data.py
+#  exit 1
+#fi
 
-cp config_3D.py ~/.scratch/mlebe/
-echo " With irsabi as training data " >~/.scratch/mlebe/description.txt
+echo " Without cropping bids before predicting mask, with 3D classifier " > ~/.scratch/mlebe/description.txt
+python make_bids.py || exit 1
 python preprocess.py || exit 1
 python collapse.py || exit 1
 python l1.py || exit 1
 python manual_overview.py || exit 1
-python classifier/classifier_tester.py || exit 1
+#python classifier/classifier_tester.py || exit 1
 
 mkdir -p ~/.scratch/mlebe/data
 python volume_data.py || exit 1

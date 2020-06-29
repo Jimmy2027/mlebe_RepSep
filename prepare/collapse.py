@@ -1,24 +1,27 @@
 from samri.pipelines import manipulations
+from make_config import config_path, scratch_dir
+from mlebe.threed.training.configs.utils import json_to_dict
 
-scratch_dir = '~/.scratch/mlebe'
-
-for i in ['','dargcc_']:
-	bids_base = '{}/{}bids'.format(scratch_dir,i)
-
-	# Create 3D collapsed dataset to speed up repeated evaluations
-	# Uncomment n_jobs_percentage parameter for machines with limited memory,
-	# or comment them out for machines with plenty of memory.
-	manipulations.collapse_nifti(bids_base,
-		'{}/bids_collapsed'.format(scratch_dir),
-		n_jobs_percentage=0.66,
-		)
+config = json_to_dict(config_path)
+if config['workflow_config']['with_FLASH']:
+    bids_bases = ['{}/bids'.format(scratch_dir), '{}/dargcc_bids'.format(scratch_dir)]
+else:
+    bids_bases = ['{}/bids'.format(scratch_dir)]
+for bids_base in bids_bases:
+    # Create 3D collapsed dataset to speed up repeated evaluations
+    # Uncomment n_jobs_percentage parameter for machines with limited memory,
+    # or comment them out for machines with plenty of memory.
+    manipulations.collapse_nifti(bids_base,
+                                 '{}/bids_collapsed'.format(scratch_dir),
+                                 n_jobs_percentage=0.66,
+                                 )
 
 manipulations.collapse_nifti('{}/preprocessing/masked'.format(scratch_dir),
-	'{}/preprocessing/masked_collapsed'.format(scratch_dir),
-	n_jobs_percentage=0.33,
-	)
+                             '{}/preprocessing/masked_collapsed'.format(scratch_dir),
+                             n_jobs_percentage=0.33,
+                             )
 
 manipulations.collapse_nifti('{}/preprocessing/generic'.format(scratch_dir),
-	'{}/preprocessing/generic_collapsed'.format(scratch_dir),
-	n_jobs_percentage=0.33,
-	)
+                             '{}/preprocessing/generic_collapsed'.format(scratch_dir),
+                             n_jobs_percentage=0.33,
+                             )

@@ -22,4 +22,4 @@ else
 fi
 
 rm auto_fig_py*
-cp article.pdd ~/.scratch/mlebe/
+cp article.pdf ~/.scratch/mlebe/

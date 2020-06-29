@@ -9,7 +9,8 @@ from bids.grabbids import BIDSLayout
 from bids.grabbids import BIDSValidator
 import nipype.interfaces.io as nio
 from utils.bootstrapping import bootstrap, bootstrap_analysis
-import config
+from make_config import config_path, scratch_dir
+from mlebe.threed.training.utils.utils import json_file_to_pyobj
 
 masks = {
     'generic': '/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
@@ -54,8 +55,7 @@ def acqname(inp_entry):
     else:
         return 'cbv'
 
-
-scratch_dir = config.scratch_dir
+workflow_config = json_file_to_pyobj(config_path)
 
 df_bids = bids_autograb(scratch_dir + '/bids_collapsed/')
 df_bids['Processing'] = 'Unprocessed'
@@ -122,11 +122,9 @@ bootstrap_analysis('smoothness', dependent_variable='SCF_RMSE', expression='Proc
 """
 Writing results
 """
-anat_model_training_config = pd.read_csv(config.anat_model_training_config)
-func_model_training_config = pd.read_csv(config.func_model_training_config)
 
 reg_results = pd.DataFrame([[]])
-reg_results['uid'] = config.uid
+reg_results['uid'] = workflow_config.workflow_config.uid
 reg_results['masked_mean_Scf_RMSE'] = df.loc[df['Processing'] == 'Masked', '1 - Scf'].mean()
 reg_results['generic_mean_Scf_RMSE'] = df.loc[df['Processing'] == 'Generic', '1 - Scf'].mean()
 reg_results['max_Scf_RMSE_generic'] = -1

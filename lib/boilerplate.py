@@ -6,7 +6,7 @@ import os
 from os import path
 from lib.utils import float_to_tex, inline_anova, inline_factor
 from scipy.stats import levene, iqr, wilcoxon, mannwhitneyu
-import prepare.config as config
+import prepare.make_config as config
 
 
 def fstatistic(factor,

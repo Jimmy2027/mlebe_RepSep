@@ -7,10 +7,11 @@ import pandas as pd
 from bids.grabbids import BIDSLayout
 from bids.grabbids import BIDSValidator
 from utils.bootstrapping import bootstrap, bootstrap_analysis
-import config
+from make_config import config_path, scratch_dir
+from mlebe.threed.training.utils.utils import json_file_to_pyobj
 import os
 
-scratch_dir = config.scratch_dir
+workflow_config = json_file_to_pyobj(config_path)
 
 
 def bids_autograb(bids_dir):
@@ -109,21 +110,21 @@ bootstrap_analysis('volume', dependent_variable='VCF_RMSE', expression='Processi
 """
 Writing results
 """
-anat_model_training_config = pd.read_csv(config.anat_model_training_config)
-func_model_training_config = pd.read_csv(config.func_model_training_config)
+anat_model_training_config = json_file_to_pyobj(workflow_config.masking_config.masking_config_anat.model_config_path)
+func_model_training_config = json_file_to_pyobj(workflow_config.masking_config.masking_config_func.model_config_path)
 
 if not os.path.exists('classifier/reg_results.csv'):
     reg_results_ = pd.DataFrame([[]])
 else:
     reg_results_ = pd.read_csv('classifier/reg_results.csv')
 reg_results = pd.DataFrame([[]])
-reg_results['uid'] = config.uid
-reg_results['anat_model_uid'] = anat_model_training_config['uid'].item()
-reg_results['func_model_uid'] = func_model_training_config['uid'].item()
-reg_results['anat_model_path'] = config.anat_model_path
-reg_results['func_model_path'] = config.func_model_path
-reg_results['func_model_dice'] = func_model_training_config['dice_score'].item()
-reg_results['anat_model_dice'] = anat_model_training_config['dice_score'].item()
+reg_results['uid'] = workflow_config.workflow_config.uid
+reg_results['anat_model_uid'] = anat_model_training_config.model.uid
+reg_results['func_model_uid'] = func_model_training_config.model.uid
+reg_results['anat_model_path'] = workflow_config.masking_config.masking_config_anat.model_config_path
+reg_results['func_model_path'] = workflow_config.masking_config.masking_config_func.model_config_path
+reg_results['func_model_dice'] = workflow_config.masking_config.masking_config_func.dice_score
+reg_results['anat_model_dice'] = workflow_config.masking_config.masking_config_anat.dice_score
 reg_results['masked_mean_Vcf_RMSE'] = df.loc[df['Processing'] == 'Masked', '1 - Vcf'].mean()
 reg_results['generic_mean_Vcf_RMSE'] = df.loc[df['Processing'] == 'Generic', '1 - Vcf'].mean()
 reg_results['max_RMSE_generic'] = -1

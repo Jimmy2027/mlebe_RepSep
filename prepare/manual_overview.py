@@ -1,12 +1,13 @@
 import itertools
-import matplotlib.pyplot as plt
-import os
-from samri.plotting.maps import contour_slices
-from samri.utilities import bids_substitution_iterator
-from joblib import Parallel, delayed
 import multiprocessing as mp
 import matplotlib as mpl
-from subjects_reader import find_subjects, find_sessions, find_tasks
+import matplotlib.pyplot as plt
+from joblib import Parallel, delayed
+from make_config import config_path
+from samri.plotting.maps import contour_slices
+from samri.utilities import bids_substitution_iterator
+from subjects_reader import find_subjects
+from mlebe.threed.training.configs.utils import json_to_dict
 
 num_cores = max(mp.cpu_count() - 1, 1)
 mpl.rcParams['font.size'] = 14
@@ -16,9 +17,12 @@ templates = {
     'masked': '/usr/share/mouse-brain-atlases/dsurqec_40micron_masked.nii',
 }
 
-# todo: do these functions still work?
-# subjects = find_subjects()
-# sessions=find_sessions(os.path.expanduser('~/.scratch/mlebe/bids_collapsed'))
+config = json_to_dict(config_path)
+if config['workflow_config']['subjects']:
+    subjects = config['workflow_config']['subjects']
+else:
+    subjects = find_subjects()
+# sessions = find_sessions(os.path.expanduser('~/.scratch/mlebe/bids_collapsed'))
 # if '6mo' in sessions:
 # 	blacklisted_run = True		#boolean to indicate that this script is executed for the blacklisted volumes
 # else: blacklisted_run = False
@@ -30,29 +34,29 @@ templates = {
 # 	functional_acquisitions = ['EPIlowcov', 'geEPI']
 # 	structural_acquisitions = ['TurboRARElowcov', 'TurboRARE']
 
-subjects = [
-    '4001',
-    '4002',
-    '4004',
-    '4005',
-    '4006',
-    '4007',
-    '4008',
-    '4009',
-    '4011',
-    '4012',
-    '4013',
-    'VZ02',
-    'VZ01',
-    'VZ03',
-    'VZ04',
-    'VZ05',
-    'VZ06',
-    'VZ07',
-    'VZ08',
-    'VZ09',
-    'VZ10',
-]
+# subjects = [
+#     '4001',
+#     '4002',
+#     '4004',
+#     '4005',
+#     '4006',
+#     '4007',
+#     '4008',
+#     '4009',
+#     '4011',
+#     '4012',
+#     '4013',
+#     # 'VZ02',
+#     # 'VZ01',
+#     # 'VZ03',
+#     # 'VZ04',
+#     # 'VZ05',
+#     # 'VZ06',
+#     # 'VZ07',
+#     # 'VZ08',
+#     # 'VZ09',
+#     # 'VZ10',
+# ]
 
 sessions = [
     'ofM',

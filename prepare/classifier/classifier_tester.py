@@ -1,8 +1,9 @@
-import mlebe.training.data_loader as dl
+import mlebe.training.utils.data_loader as dl
 import mlebe.training.utils.general as utils
 import mlebe.training.utils.scoring_utils as su
 import copy
-import config_3D as config
+from make_config import config_path, scratch_dir
+from mlebe.threed.training.utils.utils import json_file_to_pyobj
 import pandas as pd
 import numpy as np
 import os
@@ -15,8 +16,7 @@ from mlebe.threed.training.dataio.loaders import get_dataset
 from mlebe.training.utils.general import preprocess, arrange_mask, remove_black_images
 import nibabel as nib
 
-# os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
-scratch_dir = os.path.expanduser(config.scratch_dir)
+config = json_file_to_pyobj(config_path)
 data_dir = config.data_path
 template_dir = '/usr/share/mouse-brain-atlases/'
 study = ['irsabi_dargcc', 'irsabi']
@@ -36,8 +36,8 @@ def evaluate(data_type):
     ds_transform = get_dataset_transformation('mlebe', opts=json_opts.augmentation,
                                               max_output_channels=json_opts.model.output_nc)
 
-    test_dataset = ds_class(template_dir, data_dir, study, split='test', save_dir=None,
-                            data_type=data_type, transform=ds_transform['valid'],
+    test_dataset = ds_class(template_dir, data_dir, json_opts.data, split='test', save_dir=None,
+                            transform=ds_transform['valid'],
                             train_size=None)
     data_selection = test_dataset.data_selection
     transformer = ds_transform['valid']()
@@ -62,13 +62,6 @@ def evaluate(data_type):
         if json_opts.data.with_arranged_mask:
             # set the mask to zero where the image is zero
             target = arrange_mask(img, target)
-
-        img = preprocess(img, training_shape[:2], 'coronal')
-        target = preprocess(target, training_shape[:2], 'coronal')
-
-        # set image shape to x,y,z
-        img = np.moveaxis(img, 0, 2)
-        target = np.moveaxis(target, 0, 2)
 
         # preprocess data for compatibility with model
         network_input = transformer(np.expand_dims(img, -1))
@@ -97,7 +90,7 @@ def evaluate(data_type):
 
     if not os.path.exists(os.path.join(scratch_dir, 'data',
                                        'classifier')):  # path to pdf with visualisations of classifier predictions
-        os.mkdir(os.path.join(scratch_dir, 'data', 'classifier'))
+        os.makedirs(os.path.join(scratch_dir, 'data', 'classifier'))
 
     with PdfPages(os.path.join(scratch_dir, 'data', 'classifier', 'irsabi_test_{}.pdf'.format(data_type))) as pdf:
         for IMG_NBR in IMG_NBRs:
@@ -135,7 +128,7 @@ def evaluate(data_type):
     reg_results = pd.concat([reg_results, df]).groupby('uid', as_index=False).first()
     reg_results.to_csv('classifier/reg_results.csv', index=False)
 
-    if os.path.exists(config.anat_model_training_config):
+    if type(config.anat_model_training_config) == str and os.path.exists(config.anat_model_training_config):
         models_results = pd.read_csv('classifier/results_df.csv')
         if data_type == 'anat':
             anat_model_training_config = pd.read_csv(config.anat_model_training_config)
@@ -153,4 +146,4 @@ def evaluate(data_type):
 
 
 evaluate('anat')
-# evaluate('func')
+evaluate('func')
