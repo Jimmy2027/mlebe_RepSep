@@ -3,12 +3,15 @@ import nibabel as nib
 import numpy as np
 from matplotlib import pyplot as plt
 from mlebe.masking import utils
-from prepare import config
+from mlebe.threed.training.configs.utils import json_to_dict
+
+config_path = os.path.expanduser('data/config.json')
+config = json_to_dict(config_path)
 
 example = 'sub-6570_ses-4mo_acq-TurboRARE_T2w.nii.gz'
 slice = 65
 
-dir = config.data_path
+dir = config['workflow_config']['data_path']
 
 mask_dir = '/usr/share/mouse-brain-atlases/'
 

@@ -17,4 +17,6 @@ cp -v ~/.scratch/mlebe/classifiers/T2/dice_score.txt ../data/classifier/dice_sco
 cp -v ~/.scratch/mlebe/preprocessing/masked_work/graph.dot ../data/masked_nipype.dot || exit 1
 cp -v ~/.scratch/mlebe/preprocessing/generic_work/graph.dot ../data/generic_nipype.dot || True
 rsync -avP --exclude='*_cope.nii*' --exclude='*_zstat.nii*' ~/.scratch/mlebe/*l2* ../data/ || exit 1
-rsync -avP ~/.scratch/mlebe/data/ ../data || exit 1
+#rsync -avP ~/.scratch/mlebe/data/ ../data || exit 1
+cp ~/.scratch/mlebe/config.json ../data/ || exit 1
+cp -r ~/.scratch/mlebe/data/* ../data/ || exit 1

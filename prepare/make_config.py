@@ -12,7 +12,7 @@ scratch_dir = '~/.scratch/mlebe'
 config_path = os.path.expanduser(os.path.join(scratch_dir, 'config.json'))
 
 if __name__ == '__main__':
-    json_config_path = "/home/hendrik/docsrc/mlebe/prepare/configs/threed_config.json"
+    json_config_path = "/home/hendrik/docsrc/mlebe/prepare/configs/test_config.json"
     config = json_to_dict(json_config_path)
     new_config_path = os.path.expanduser(os.path.join(scratch_dir, 'config.json'))
     assert not os.path.exists(

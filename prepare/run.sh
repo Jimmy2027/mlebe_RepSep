@@ -28,6 +28,7 @@ python preprocess.py || exit 1
 python collapse.py || exit 1
 python l1.py || exit 1
 python manual_overview.py || exit 1
+# todo make this work for 3D model
 #python classifier/classifier_tester.py || exit 1
 
 mkdir -p ~/.scratch/mlebe/data

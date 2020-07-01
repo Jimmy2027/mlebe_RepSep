@@ -6,8 +6,8 @@ import os
 from os import path
 from lib.utils import float_to_tex, inline_anova, inline_factor
 from scipy.stats import levene, iqr, wilcoxon, mannwhitneyu
-import prepare.make_config as config
-
+from mlebe.threed.training.configs.utils import json_to_dict
+from prepare.make_config import config_path
 
 def fstatistic(factor,
                df_path='data/volume.csv',
@@ -146,7 +146,8 @@ def variance_test(
 
 def print_dice():
     reg_results_df = pd.read_csv('prepare/classifier/reg_results.csv')
-    uid = config.uid
+    config = json_to_dict(config_path)
+    uid = config['workflow_config']['uid']
     dice_score = reg_results_df.loc[reg_results_df['uid'] == uid, 'anat_model_dice'].item()
     return np.round(float(dice_score), 3)
 
