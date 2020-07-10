@@ -7,7 +7,7 @@ from make_config import config_path
 from samri.plotting.maps import contour_slices
 from samri.utilities import bids_substitution_iterator
 from subjects_reader import find_subjects
-from mlebe.threed.training.configs.utils import json_to_dict
+from mlebe.training.three_D.configs.utils import json_to_dict
 
 num_cores = max(mp.cpu_count() - 1, 1)
 mpl.rcParams['font.size'] = 14
@@ -118,9 +118,9 @@ for key in templates:
             if i[1] != 0:
                 continue
             anat_contrast = 'T1w'
-            func_path = '{{data_dir}}/preprocessing/{}_collapsed/sub-{{subject}}/ses-{{session}}/func/sub-{{subject}}_ses-{{session}}_task-rest_acq-EPI_run-{}_{}.nii.gz'.format(
+            func_path = '{{data_dir}}/preprocessing_dargcc/{}_collapsed/sub-{{subject}}/ses-{{session}}/func/sub-{{subject}}_ses-{{session}}_task-rest_acq-EPI_run-{}_{}.nii.gz'.format(
                 key, i[1], runs[i[1]])
-            anat_path = '{{data_dir}}/preprocessing/{}_collapsed/sub-{{subject}}/ses-{{session}}/anat/sub-{{subject}}_ses-{{session}}_acq-FLASH_T1w.nii.gz'.format(
+            anat_path = '{{data_dir}}/preprocessing_dargcc/{}_collapsed/sub-{{subject}}/ses-{{session}}/anat/sub-{{subject}}_ses-{{session}}_acq-FLASH_T1w.nii.gz'.format(
                 key)
         else:
             anat_contrast = 'T2w'

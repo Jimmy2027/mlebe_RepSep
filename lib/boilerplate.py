@@ -1,13 +1,14 @@
+from os import path
+
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
-import os
-from os import path
+from mlebe.training.three_D.configs.utils import json_to_dict
+from scipy.stats import iqr, wilcoxon
+
 from lib.utils import float_to_tex, inline_anova, inline_factor
-from scipy.stats import levene, iqr, wilcoxon, mannwhitneyu
-from mlebe.threed.training.configs.utils import json_to_dict
-from prepare.make_config import config_path
+
 
 def fstatistic(factor,
                df_path='data/volume.csv',
@@ -146,7 +147,7 @@ def variance_test(
 
 def print_dice():
     reg_results_df = pd.read_csv('prepare/classifier/reg_results.csv')
-    config = json_to_dict(config_path)
+    config = json_to_dict('data/config.json')
     uid = config['workflow_config']['uid']
     dice_score = reg_results_df.loc[reg_results_df['uid'] == uid, 'anat_model_dice'].item()
     return np.round(float(dice_score), 3)

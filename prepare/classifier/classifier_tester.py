@@ -1,23 +1,23 @@
-import mlebe.training.utils.data_loader as dl
-import mlebe.training.utils.general as utils
-import mlebe.training.utils.scoring_utils as su
 import copy
-from make_config import config_path, scratch_dir
-from mlebe.threed.training.utils.utils import json_file_to_pyobj
-import pandas as pd
-import numpy as np
 import os
+from classifier.utils import dice
+import nibabel as nib
+import numpy as np
+import pandas as pd
+from make_config import config_path, scratch_dir
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
-from mlebe.threed.training.models import get_model
-from mlebe.threed.training.utils.utils import json_file_to_pyobj
-from mlebe.threed.training.dataio.transformation import get_dataset_transformation
-from mlebe.threed.training.dataio.loaders import get_dataset
-from mlebe.training.utils.general import preprocess, arrange_mask, remove_black_images
-import nibabel as nib
+from mlebe.training.three_D.dataio.loaders.utils import load_mask
+from mlebe.training.three_D.dataio.loaders import get_dataset
+from mlebe.training.three_D.dataio.transformation import get_dataset_transformation
+from mlebe.training.three_D.models import get_model
+from mlebe.training.three_D.utils.utils import json_file_to_pyobj
+from mlebe.training.three_D.dataio.loaders.utils import arrange_mask
+from mlebe.masking.utils import remove_outliers, get_masking_opts, crop_bids_image, \
+    save_visualisation, reconstruct_image, pad_to_shape, get_model_config
 
 config = json_file_to_pyobj(config_path)
-data_dir = config.data_path
+data_dir = config.workflow_config.data_path
 template_dir = '/usr/share/mouse-brain-atlases/'
 study = ['irsabi_dargcc', 'irsabi']
 slice_view = 'coronal'
@@ -25,7 +25,8 @@ IMG_NBRs = [65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 65, 
 
 
 def evaluate(data_type):
-    json_opts = json_file_to_pyobj(config.anat_model_path)
+    masking_opts = get_masking_opts(config_path, data_type)
+    json_opts, _ = get_model_config(config_path, masking_opts)
     training_shape = json_opts.augmentation.mlebe.scale_size[:3]
     model = get_model(json_opts.model)
     save_path = model.save_dir.split('/')
@@ -47,7 +48,7 @@ def evaluate(data_type):
     print(save_path)
 
     mask_data = []
-    temp = dl.load_mask(template_dir)
+    temp = load_mask(template_dir)
     for i in range(len(data_selection)):
         mask_data.append(copy.deepcopy(temp))
 
@@ -79,7 +80,7 @@ def evaluate(data_type):
         target = np.moveaxis(target, 2, 0)
 
         for slice in range(img.shape[0]):
-            dice_score = su.dice(target[slice], mask_pred[slice])
+            dice_score = dice(target[slice], mask_pred[slice])
             dice_scores_df = dice_scores_df.append(
                 {'volume_name': volume_name, 'slice': slice, 'dice_score': dice_score, 'idx': volume},
                 ignore_index=True)
@@ -123,21 +124,21 @@ def evaluate(data_type):
     df = pd.DataFrame([[]])
     df['irsabi_dice_{}'.format(data_type)] = dice_scores_df['dice_score'].mean()
     df['irsabi_dice_std_{}'.format(data_type)] = dice_scores_df['dice_score'].std()
-    df['uid'] = config.uid
+    df['uid'] = config.workflow_config.uid
     reg_results = pd.read_csv('classifier/reg_results.csv')
     reg_results = pd.concat([reg_results, df]).groupby('uid', as_index=False).first()
     reg_results.to_csv('classifier/reg_results.csv', index=False)
 
-    if type(config.anat_model_training_config) == str and os.path.exists(config.anat_model_training_config):
-        models_results = pd.read_csv('classifier/results_df.csv')
-        if data_type == 'anat':
-            anat_model_training_config = pd.read_csv(config.anat_model_training_config)
-            df['uid'] = anat_model_training_config['uid']
-        elif data_type == 'func':
-            func_model_training_config = pd.read_csv(config.func_model_training_config)
-            df['uid'] = func_model_training_config['uid']
-        models_results = pd.concat([models_results, df]).groupby('uid', as_index=False).first()
-        models_results.to_csv('classifier/results_df.csv', index=False)
+    # if type(config.anat_model_training_config) == str and os.path.exists(config.anat_model_training_config):
+    #     models_results = pd.read_csv('classifier/results_df.csv')
+    #     if data_type == 'anat':
+    #         anat_model_training_config = pd.read_csv(config.anat_model_training_config)
+    #         df['uid'] = anat_model_training_config['uid']
+    #     elif data_type == 'func':
+    #         func_model_training_config = pd.read_csv(config.func_model_training_config)
+    #         df['uid'] = func_model_training_config['uid']
+    #     models_results = pd.concat([models_results, df]).groupby('uid', as_index=False).first()
+    #     models_results.to_csv('classifier/results_df.csv', index=False)
 
     command = 'cp {} {}.pdf'.format(
         os.path.join(scratch_dir, 'data', 'classifier', 'irsabi_test_{}.pdf'.format(data_type)), save_path)

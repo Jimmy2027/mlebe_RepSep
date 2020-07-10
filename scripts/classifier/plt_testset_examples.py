@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import pickle
 import os
-from mlebe.threed.training.configs.utils import json_to_dict
+from mlebe.training.three_D.configs.utils import json_to_dict
 
 seed = 2
 config_path = os.path.expanduser('data/config.json')
@@ -82,6 +82,7 @@ elif config['workflow_config']['model_type'] == '3D':
         plt.figure()
         plt.imshow(image, cmap='gray')
         plt.axis('off')
+
 
 else:
     raise NotImplementedError('Model type [{}] is not implemented'.format(config['workflow_config']['model_type']))

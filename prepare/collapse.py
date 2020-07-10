@@ -1,6 +1,6 @@
 from samri.pipelines import manipulations
 from make_config import config_path, scratch_dir
-from mlebe.threed.training.configs.utils import json_to_dict
+from mlebe.training.three_D.configs.utils import json_to_dict
 
 config = json_to_dict(config_path)
 if config['workflow_config']['with_FLASH']:
@@ -14,6 +14,16 @@ for bids_base in bids_bases:
     manipulations.collapse_nifti(bids_base,
                                  '{}/bids_collapsed'.format(scratch_dir),
                                  n_jobs_percentage=0.66,
+                                 )
+if config['workflow_config']['with_FLASH']:
+    manipulations.collapse_nifti('{}/preprocessing_dargcc/masked'.format(scratch_dir),
+                                 '{}/preprocessing_dargcc/masked_collapsed'.format(scratch_dir),
+                                 n_jobs_percentage=0.33,
+                                 )
+
+    manipulations.collapse_nifti('{}/preprocessing_dargcc/generic'.format(scratch_dir),
+                                 '{}/preprocessing_dargcc/generic_collapsed'.format(scratch_dir),
+                                 n_jobs_percentage=0.33,
                                  )
 
 manipulations.collapse_nifti('{}/preprocessing/masked'.format(scratch_dir),

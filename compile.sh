@@ -4,7 +4,7 @@ TARGET="${1}"
 WHITELIST="
 	article.tex
 	"
-scratch_dir=~/.scratch/mlebe_threed/
+scratch_dir=~/.scratch/mlebe/
 data_path=${scratch_dir}data/*
 cp -r $data_path data/
 cp -r "${scratch_dir}classifiers" data/
