@@ -34,18 +34,6 @@ A more detailed description can be found there.
         )}
 \end{sansmath}
 
-\begin{sansmath}
-\py{pytex_fig('scripts/classifier/show_blacklist.py',
-        conf='article/2*8plot.conf',
-        label='bl',
-        caption='
-                \\textbf{Slices where the mask includes too much outer-brain intensities are excluded from the data set.}\\
-                Examples from the slices that were excluded from the data set. The mask is shown in blue, on top of the brain image.
-                ',
-        multicol=True,
-        )}
-\end{sansmath}
-
 \subsection{Model}
 As the architecture of the classifier, the U-Net from Ronneberger et al \cite{ronneberger_u-net:_2015} was chosen based on its high performance in the field of biomedical image segmentation.
 This is a convolutional neural network that consists of a contracting path that captures context in addition to a symmetric expanding path that enables precise localization.
