@@ -10,7 +10,7 @@ from bids.grabbids import BIDSValidator
 import nipype.interfaces.io as nio
 from utils.bootstrapping import bootstrap, bootstrap_analysis
 from make_config import config_path, scratch_dir
-from mlebe.threed.training.utils.utils import json_file_to_pyobj
+from mlebe.training.three_D.utils.utils import json_file_to_pyobj
 
 masks = {
     'generic': '/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',
@@ -56,14 +56,18 @@ def acqname(inp_entry):
         return 'cbv'
 
 workflow_config = json_file_to_pyobj(config_path)
+preprocessing_folders = ['preprocessing']
+if workflow_config.workflow_config.with_FLASH:
+    preprocessing_folders.append('preprocessing_dargcc')
 
 df_bids = bids_autograb(scratch_dir + '/bids_collapsed/')
 df_bids['Processing'] = 'Unprocessed'
-
-df_generic = bids_autograb(scratch_dir + '/preprocessing/generic_collapsed/')
+df_generic = pd.DataFrame()
+df_masked = pd.DataFrame()
+for preprocessing_folder in preprocessing_folders:
+    df_generic = df_generic.append(bids_autograb(scratch_dir + '/{}/generic_collapsed/'.format(preprocessing_folder)))
+    df_masked = df_masked.append(bids_autograb(scratch_dir + '/{}/masked_collapsed/'.format(preprocessing_folder)))
 df_generic['Processing'] = 'Generic'
-
-df_masked = bids_autograb(scratch_dir + '/preprocessing/masked_collapsed/')
 df_masked['Processing'] = 'Masked'
 
 df = pd.concat([df_generic, df_masked, df_bids])

@@ -8,11 +8,10 @@ from bids.grabbids import BIDSLayout
 from bids.grabbids import BIDSValidator
 from utils.bootstrapping import bootstrap, bootstrap_analysis
 from make_config import config_path, scratch_dir
-from mlebe.threed.training.utils.utils import json_file_to_pyobj
+from mlebe.training.three_D.utils.utils import json_file_to_pyobj
 import os
 
 workflow_config = json_file_to_pyobj(config_path)
-
 
 def bids_autograb(bids_dir):
     bids_dir = path.abspath(path.expanduser(bids_dir))
@@ -24,21 +23,29 @@ def bids_autograb(bids_dir):
     df = df.rename(columns={'modality': 'type', 'type': 'modality'})
     return df
 
-
 base_df = bids_autograb('{}/bids_collapsed'.format(scratch_dir))
 base_df = base_df.loc[~base_df['path'].str.endswith('.json')]
 base_df = base_df.loc[base_df['modality'].isin(['bold', 'cbv'])]
 base_df['uID'] = base_df['subject'] + '_' + base_df['session'] + '_' + base_df['modality']
 
-generic_df = bids_autograb('{}/preprocessing/generic_collapsed'.format(scratch_dir))
-generic_df = generic_df.loc[~generic_df['path'].str.endswith('.json')]
-generic_df = generic_df.loc[generic_df['modality'].isin(['bold', 'cbv'])]
-generic_df['uID'] = generic_df['subject'] + '_' + generic_df['session'] + '_' + generic_df['modality']
+generic_df = pd.DataFrame()
+masked_df = pd.DataFrame()
+preprocessing_folders = ['preprocessing']
+if workflow_config.workflow_config.with_FLASH:
+    preprocessing_folders.append('preprocessing_dargcc')
 
-masked_df = bids_autograb('{}/preprocessing/masked_collapsed'.format(scratch_dir))
-masked_df = masked_df.loc[~masked_df['path'].str.endswith('.json')]
-masked_df = masked_df.loc[masked_df['modality'].isin(['bold', 'cbv'])]
-masked_df['uID'] = masked_df['subject'] + '_' + masked_df['session'] + '_' + masked_df['modality']
+for preprocessing_folder in preprocessing_folders:
+    generic_df_ = bids_autograb('{}/{}/generic_collapsed'.format(scratch_dir, preprocessing_folder))
+    generic_df_ = generic_df_.loc[~generic_df_['path'].str.endswith('.json')]
+    generic_df_ = generic_df_.loc[generic_df_['modality'].isin(['bold', 'cbv'])]
+    generic_df_['uID'] = generic_df_['subject'] + '_' + generic_df_['session'] + '_' + generic_df_['modality']
+    generic_df = generic_df.append(generic_df_, ignore_index=True)
+
+    masked_df_ = bids_autograb('{}/{}/masked_collapsed'.format(scratch_dir, preprocessing_folder))
+    masked_df_ = masked_df_.loc[~masked_df_['path'].str.endswith('.json')]
+    masked_df_ = masked_df_.loc[masked_df_['modality'].isin(['bold', 'cbv'])]
+    masked_df_['uID'] = masked_df_['subject'] + '_' + masked_df_['session'] + '_' + masked_df_['modality']
+    masked_df = masked_df.append(masked_df_, ignore_index=True)
 
 uids = base_df['uID'].unique()
 generic_df = generic_df.loc[generic_df['uID'].isin(uids)]
@@ -85,11 +92,7 @@ uids = df['uID'].unique()
 processings = [i for i in df['Processing'].unique() if i != 'Unprocessed']
 for uid, processing in list(product(uids, processings)):
     reference = df.loc[(df['uID'] == uid) & (df['Processing'] == 'Unprocessed'), 'Thresholded Volume'].item()
-    try:
-        volume = df.loc[(df['uID'] == uid) & (df['Processing'] == processing), 'Thresholded Volume'].item()
-    except:
-        volume = 1
-        print(uid, processing)
+    volume = df.loc[(df['uID'] == uid) & (df['Processing'] == processing), 'Thresholded Volume'].item()
     df.loc[(df['uID'] == uid) & (df['Processing'] == processing), 'Volume Conservation Factor'] = volume / reference
     df.loc[(df['uID'] == uid) & (df['Processing'] == processing), '1 - Vcf'] = np.abs(1 - volume / reference)
 
