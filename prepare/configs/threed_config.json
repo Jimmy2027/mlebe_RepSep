@@ -2,7 +2,7 @@
   "workflow_config": {
     "model_type": "3D",
     "data_path": "/mnt/data/hendrik/mlebe_data/",
-    "with_FLASH": true,
+    "with_FLASH": false,
     "subjects": []
   },
   "masking_config": {

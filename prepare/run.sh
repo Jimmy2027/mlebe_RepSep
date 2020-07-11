@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# data needed to run this script:
+# - /usr/share/irsabi_bidsdata and /usr/share/dargcc_bidsdata for make_bids
+# - /mnt/data/hendrik/mlebe_data/ for classifier_tester
 if [ ! -d ~/.scratch ]; then
   echo "You seem to be lacking a ~/.scratch/ directory."
   echo "We need this directory in order to process the data, and it needs to be on a volume with 200GB+ space."
@@ -21,14 +24,14 @@ fi
 #  exit 1
 #fi
 
-echo " Without cropping bids before predicting mask, with 3D classifier " >~/.scratch/mlebe/description.txt
-#python make_bids.py || exit 1
-#python preprocess.py || exit 1
+#echo " Write your experiment description here " >~/.scratch/mlebe/description.txt
+python make_bids.py || exit 1
+python preprocess.py || exit 1
 python collapse.py || exit 1
 python l1.py || exit 1
 python manual_overview.py || exit 1
 python classifier/classifier_tester.py || exit 1
-python classifier/get_model_data.py || exit 1
+#python classifier/get_model_data.py || exit 1
 
 mkdir -p ~/.scratch/mlebe/data
 python volume_data.py || exit 1
