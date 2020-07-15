@@ -1,0 +1,28 @@
+{
+  "workflow_config": {
+    "model_type": "3D",
+    "data_path": "/mnt/data/hendrik/mlebe_data/",
+    "with_FLASH": false,
+    "subjects": []
+  },
+  "masking_config": {
+    "masking_config_anat": {
+      "use_cuda": false,
+      "with_bids_cropping": false,
+      "input_type": "anat",
+      "visualisation_bool": false,
+      "bias_correct_bool": false,
+      "test": false,
+      "model_config_path": "/home/hendrik/src/MLEBE/mlebe/training/three_D/checkpoints/2020_7_9_6_59_50/trained_mlebe_config_anat.json"
+    },
+    "masking_config_func": {
+      "use_cuda": false,
+      "with_bids_cropping": false,
+      "input_type": "func",
+      "visualisation_bool": false,
+      "bias_correct_bool": false,
+      "test": false,
+      "model_config_path": "/home/hendrik/src/MLEBE/mlebe/training/three_D/checkpoints/2020_7_7_9_58_4/trained_mlebe_config_func.json"
+    }
+  }
+}

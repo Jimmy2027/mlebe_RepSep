@@ -8,7 +8,7 @@ import numpy as np
 volume_path = path.abspath('data/volume.csv')
 df = pd.read_csv(volume_path)
 
-generic_masked = df.loc[(df['Processing']=='Generic Masked'), 'Volume Conservation Factor'].tolist()
+generic_masked = df.loc[(df['Processing']=='Masked'), 'Volume Conservation Factor'].tolist()
 generic = df.loc[(df['Processing']=='Generic'), 'Volume Conservation Factor'].tolist()
 d_generic_masked = np.add(-1, generic_masked)
 d_generic = np.add(-1, generic)

@@ -9,7 +9,7 @@ df = pd.read_csv(volume_path)
 
 #legacy = df.loc[(df['Processing']=='Legacy') & (df['Template']=='Legacy'), 'Smoothness Conservation Factor'].tolist()
 #generic = df.loc[(df['Processing']=='Generic') & (df['Template']=='Generic'), 'Smoothness Conservation Factor'].tolist()
-generic_masked = df.loc[(df['Processing']=='Generic Masked'), 'Smoothness Conservation Factor'].tolist()
+generic_masked = df.loc[(df['Processing']=='Masked'), 'Smoothness Conservation Factor'].tolist()
 generic = df.loc[(df['Processing']=='Generic'), 'Smoothness Conservation Factor'].tolist()
 
 rmse_generic_masked = sqrt(mean_squared_error([1]*len(generic_masked), generic_masked))

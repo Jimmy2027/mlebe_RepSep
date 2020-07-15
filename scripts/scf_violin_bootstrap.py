@@ -8,7 +8,7 @@ bootstrapped_RMSEs = pd.read_csv('data/bootstrapped/bootstrapped_smoothness.csv'
 
 ax = violinplot(
 	x='Contrast',
-	y='RMSE',
+	y='SCF_RMSE',
 	data=bootstrapped_RMSEs,
 	hue="Processing",
 	saturation=1,
@@ -21,5 +21,5 @@ ax = violinplot(
 	linewidth=mpl.rcParams['grid.linewidth'],
 	linecolor='w',
 	)
-ax.legend()
-
+from matplotlib import pyplot as plt
+plt.show()

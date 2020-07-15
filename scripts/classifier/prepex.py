@@ -2,12 +2,16 @@ import os
 import nibabel as nib
 import numpy as np
 from matplotlib import pyplot as plt
-from samri.masking import utils
+from mlebe.training.two_D.utils import general
+from mlebe.training.three_D.configs.utils import json_to_dict
+
+config_path = os.path.expanduser('data/config.json')
+config = json_to_dict(config_path)
 
 example = 'sub-6570_ses-4mo_acq-TurboRARE_T2w.nii.gz'
 slice = 65
 
-dir = '/mnt/data/mlebe_data/'
+dir = config['workflow_config']['data_path']
 
 mask_dir = '/usr/share/mouse-brain-atlases/'
 
@@ -28,7 +32,7 @@ for i in im_data:
     mask = np.moveaxis(mask, 1, 0)
 
 for o in os.listdir(dir):
-    if o != 'irsabi':
+    if o != 'irsabi' and not o.startswith('.') and not o.endswith('.xz') and not o.startswith('mlebe'):
         for x in os.listdir(os.path.join(dir, o)):
             if x.endswith('preprocessing'):
                 for root, dirs, files in os.walk(os.path.join(dir, o, x)):
@@ -37,8 +41,8 @@ for o in os.listdir(dir):
                             img = nib.load(os.path.join(root, file))
                             img_data = img.get_data()
                             img_data = np.moveaxis(img_data, 1, 0)
-                            img_data = utils.data_normalization(img_data)
-                            mask = utils.arrange_mask(img_data, mask)
+                            img_data = general.data_normalization(img_data)
+                            mask = general.arrange_mask(img_data, mask)
                             image = img_data[slice]
                             mask = mask[slice]
 

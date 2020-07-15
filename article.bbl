@@ -1,4 +1,4 @@
-\begin{thebibliography}{27}
+\begin{thebibliography}{29}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -27,6 +27,42 @@ Horea-Ioan Ioanas, Markus Marks, Mehmet~Fatih Yanik, and Markus Rudin.
 \newblock preprint, Neuroscience, April 2019.
 \newblock URL \url{http://biorxiv.org/lookup/doi/10.1101/619650}.
 
+\bibitem[Geng et~al.(2018)Geng, Zhou, and Cao]{geng_survey_2018}
+Qichuan Geng, Zhong Zhou, and Xiaochun Cao.
+\newblock Survey of recent progress in semantic image segmentation with {CNNs}.
+\newblock \emph{Science China Information Sciences}, 61\penalty0 (5):\penalty0
+  051101, May 2018.
+\newblock ISSN 1674-733X, 1869-1919.
+\newblock \doi{10.1007/s11432-017-9189-6}.
+\newblock URL \url{http://link.springer.com/10.1007/s11432-017-9189-6}.
+
+\bibitem[Ronneberger et~al.(2015)Ronneberger, Fischer, and
+  Brox]{ronneberger_u-net:_2015}
+Olaf Ronneberger, Philipp Fischer, and Thomas Brox.
+\newblock U-{Net}: {Convolutional} {Networks} for {Biomedical} {Image}
+  {Segmentation}.
+\newblock \emph{arXiv:1505.04597 [cs]}, May 2015.
+\newblock URL \url{http://arxiv.org/abs/1505.04597}.
+\newblock arXiv: 1505.04597 version: 1.
+
+\bibitem[Tajbakhsh et~al.()Tajbakhsh, Jeyaseelan, Li, Chiang, Wu, and
+  Ding]{imperfect_datasets}
+Nima Tajbakhsh, Laura Jeyaseelan, Qian Li, Jeffrey~N. Chiang, Zhihao Wu, and
+  Xiaowei Ding.
+\newblock Embracing imperfect datasets: A review of deep learning solutions for
+  medical image segmentation.
+\newblock page 101693.
+\newblock ISSN 1361-8415.
+\newblock \doi{10.1016/j.media.2020.101693}.
+\newblock URL
+  \url{http://www.sciencedirect.com/science/article/pii/S136184152030058X}.
+
+\bibitem[imp()]{imperferct_segmentaion_labels}
+Imperfect segmentation labels: How much do they matter?
+\newblock URL
+  \url{https://www.researchgate.net/publication/325733789_Imperfect_Segmentation_Labels_How_Much_Do_They_Matter}.
+\newblock Library Catalog: www.researchgate.net.
+
 \bibitem[Ogawa et~al.(1990)Ogawa, Lee, Nayak, and Glynn]{bold}
 Seiji Ogawa, Tso-Ming Lee, Asha~S. Nayak, and Paul Glynn.
 \newblock Oxygenation-sensitive contrast in magnetic resonance image of rodent
@@ -46,24 +82,6 @@ John~J.A. Marota, C.~Ayata, Michael~A. Moskowitz, Robert~M. Weisskoff, Bruce~R.
 \newblock \doi{10.1002/(sici)1522-2594(199902)41:2<247::aid-mrm6>3.0.co;2-u}.
 \newblock URL
   \url{https://doi.org/10.1002/(sici)1522-2594(199902)41:2<247::aid-mrm6>3.0.co;2-u}.
-
-\bibitem[Geng et~al.(2018)Geng, Zhou, and Cao]{geng_survey_2018}
-Qichuan Geng, Zhong Zhou, and Xiaochun Cao.
-\newblock Survey of recent progress in semantic image segmentation with {CNNs}.
-\newblock \emph{Science China Information Sciences}, 61\penalty0 (5):\penalty0
-  051101, May 2018.
-\newblock ISSN 1674-733X, 1869-1919.
-\newblock \doi{10.1007/s11432-017-9189-6}.
-\newblock URL \url{http://link.springer.com/10.1007/s11432-017-9189-6}.
-
-\bibitem[Ronneberger et~al.(2015)Ronneberger, Fischer, and
-  Brox]{ronneberger_u-net:_2015}
-Olaf Ronneberger, Philipp Fischer, and Thomas Brox.
-\newblock U-{Net}: {Convolutional} {Networks} for {Biomedical} {Image}
-  {Segmentation}.
-\newblock \emph{arXiv:1505.04597 [cs]}, May 2015.
-\newblock URL \url{http://arxiv.org/abs/1505.04597}.
-\newblock arXiv: 1505.04597 version: 1.
 
 \bibitem[Dorr et~al.(2008)Dorr, Lerch, Spring, Kabani, and Henkelman]{dsu}
 A.E. Dorr, J.P. Lerch, S.~Spring, N.~Kabani, and R.M. Henkelman.

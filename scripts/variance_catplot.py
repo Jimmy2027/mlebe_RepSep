@@ -3,7 +3,7 @@ from os import path
 import seaborn as sns
 import matplotlib as mpl
 
-workflows = ['Generic', 'Generic Masked']
+workflows = ['Generic', 'Masked']
 palette = ['#80e050','#755575']
 
 df_path='data/variance.csv'

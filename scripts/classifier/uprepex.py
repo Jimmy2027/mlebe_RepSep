@@ -2,12 +2,15 @@ import os
 import nibabel as nib
 import numpy as np
 from matplotlib import pyplot as plt
+from mlebe.training.three_D.configs.utils import json_to_dict
 
+config_path = os.path.expanduser('~/.scratch/mlebe/config.json')
+config = json_to_dict(config_path)
 
 example = 'sub-6570_ses-4mo_acq-TurboRARE_T2w.nii.gz'
 slice = 65
 
-dir = '/mnt/data/mlebe_data/'
+dir = config['workflow_config']['data_path']
 
 mask_dir = '/usr/share/mouse-brain-atlases/'
 
@@ -18,9 +21,7 @@ for o in os.listdir(mask_dir):
     if o == 'dsurqec_200micron_mask.nii':
         im_data.append(os.path.join(mask_dir, o))
 
-
 im_data = np.sort(im_data)
-
 
 for i in im_data:
     img = nib.load(i)
@@ -28,13 +29,12 @@ for i in im_data:
     mask = np.moveaxis(mask, 1, 0)
 
 for o in os.listdir(dir):
-    if o != 'irsabi':
+    if o != 'irsabi' and not o.startswith('.') and not o.endswith('.xz') and not o.startswith('mlebe'):
         for x in os.listdir(os.path.join(dir, o)):
             if x.endswith('preprocessing'):
                 for root, dirs, files in os.walk(os.path.join(dir, o, x)):
                     for file in files:
                         if file.endswith(example):
-
                             img = nib.load(os.path.join(root, file))
                             img_data = img.get_data()
                             img_data = np.moveaxis(img_data, 1, 0)
@@ -49,7 +49,3 @@ for o in os.listdir(dir):
                             plt.imshow(np.squeeze(image), cmap='gray')
                             plt.imshow(np.squeeze(mask), alpha=0.6, cmap='Blues')
                             plt.axis('off')
-                            # plt.savefig('{name}_{it}.pdf'.format(name = example ,it=slice), format='pdf')
-                            # plt.close()
-
-

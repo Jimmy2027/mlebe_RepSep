@@ -4,6 +4,9 @@ TARGET="${1}"
 WHITELIST="
 	article.tex
 	"
+scratch_dir=~/.scratch/mlebe_threed
+# get all the necessary data from the preprocessing
+sh prepare/transfer.sh -s ${scratch_dir} -d data || exit
 
 if [[ $TARGET = "all" ]] || [[ "$TARGET" == "" ]]; then
 	for ITER_TARGET in *.tex; do
@@ -21,4 +24,5 @@ else
 	pdflatex -shell-escape ${TARGET}.tex
 fi
 
-mv auto_fig_py* Auto_fig_py/
+rm auto_fig_py*
+cp article.pdf $scratch_dir
