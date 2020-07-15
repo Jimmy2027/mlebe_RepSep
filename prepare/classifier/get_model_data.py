@@ -39,16 +39,15 @@ def tester(json_opts, test_dataset, save_directory):
             else:
                 output_arr = np.squeeze(model.pred_seg.cpu().byte().numpy()).astype(np.int16)
 
-            input_img, target = remove_black_images(input_arr, label_arr)
-            _, output_img = remove_black_images(input_arr, output_arr)
-
-            y = input_img.shape[2]
+            y = input_arr.shape[2]
             for slice in range(y):
-                if not np.max(target[..., slice]) <= 0:
-                    x_test.append(cv2.normalize(input_img[..., slice], None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX,
-                                                dtype=cv2.CV_32F))
-                    y_test.append(target[..., slice])
-                    y_pred.append(output_img[..., slice])
+                if not np.max(label_arr[..., slice]) <= 0:
+                    x_img = cv2.normalize(input_arr[..., slice], None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX,
+                                                dtype=cv2.CV_32F)
+                    assert x_img.shape == output_arr[..., slice].shape == label_arr[..., slice].shape == (json_opts.augmentation.mlebe.scale_size[0],json_opts.augmentation.mlebe.scale_size[1])
+                    x_test.append(x_img)
+                    y_test.append(label_arr[..., slice])
+                    y_pred.append(output_arr[..., slice])
 
     with open(os.path.join(save_directory, 'x_test.npy'), 'wb') as file1:
         np.save(file1, x_test)
@@ -115,5 +114,5 @@ test_dataset = ds_class(template_dir, ds_path, model_json_opts.data, split='test
                         valid_size=split_opts.validation_size, split_seed=split_opts.seed,
                         training_shape=model_json_opts.augmentation.mlebe.scale_size[:3])
 
-# tester(model_json_opts, test_dataset, save_dir)
+tester(model_json_opts, test_dataset, save_dir)
 get_traindata(model_json_opts, save_dir)

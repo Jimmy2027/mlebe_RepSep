@@ -4,11 +4,9 @@ TARGET="${1}"
 WHITELIST="
 	article.tex
 	"
-scratch_dir=~/.scratch/mlebe/
-data_path=${scratch_dir}data/*
-cp -r $data_path data/
-cp -r "${scratch_dir}classifiers" data/
-cp "${scratch_dir}config.json" data/
+scratch_dir=~/.scratch/mlebe_threed
+# get all the necessary data from the preprocessing
+sh prepare/transfer.sh -s ${scratch_dir} -d data || exit
 
 if [[ $TARGET = "all" ]] || [[ "$TARGET" == "" ]]; then
 	for ITER_TARGET in *.tex; do

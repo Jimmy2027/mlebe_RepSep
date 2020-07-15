@@ -79,8 +79,9 @@ df = df[df['type'] == 'func']
 # df['Contrast'] = df['modality']
 df['Contrast'] = df['modality']
 df['Contrast'] = df['Contrast'].str.upper()
-df.loc[df['Uid'].str.contains('VZ'), 'Contrast'] = 'T1w+'+df.loc[df['Uid'].str.contains('VZ'), 'Contrast']
-df.loc[~df['Uid'].str.contains('VZ'), 'Contrast'] = 'T2w+'+df.loc[~df['Uid'].str.contains('VZ'), 'Contrast']
+if workflow_config.workflow_config.with_FLASH:
+    df.loc[df['Uid'].str.contains('VZ'), 'Contrast'] = 'T1w+'+df.loc[df['Uid'].str.contains('VZ'), 'Contrast']
+    df.loc[~df['Uid'].str.contains('VZ'), 'Contrast'] = 'T2w+'+df.loc[~df['Uid'].str.contains('VZ'), 'Contrast']
 
 df['Smoothness'] = df['path'].apply(avg_smoothness)
 

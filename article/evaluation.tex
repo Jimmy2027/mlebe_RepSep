@@ -1,12 +1,13 @@
 \section{Evaluation}
-For the quality control of the workflow, we first evaluate the classification process, followed by a benchmark between the Generic and the improved (Masked) workflow.
+For the quality control of the workflow, we first evaluate the classification process, followed by a benchmark between the Generic and the improved "Masked" workflow.
 
 \subsection{Classification}
 %%% Again, background or discussion
-Quality control of our classifier is difficult in the sense that it should predict a better mask than the template.
-Nevertheless, it is useful to verify whether the output is similar, as it should be.
+Quality control of our classifier is difficult in the sense that the template mask does not always overlap perfectly with the brain region, such that small deviances of the predictions compared to the template could actually be caused by the prediction being more accurate than the template.
+Nevertheless, it is useful to verify whether the output is similar to the template, as it should be.
 As a similarity metric between the template mask and the classifier output we have used the Dice score (see \cref{eqDcoef}).
 The average Dice score taken on every slice of the test data set is $D_{coef}= $ \py{boilerplate.print_dice()} $\sim 1$, indicating that classifier output has only minor changes in comparison with the template.
+% todo should I give more scores? AUC, ...
 
 \begin{sansmath}
 \py{pytex_fig('scripts/classifier/plt_testset_examples.py',
@@ -92,7 +93,7 @@ While the performance of the Generic SAMRI workflow is only slightly different f
 
 Descriptively, we observe that neither the Generic nor the Masked workflow introduce a strong smoothing (SCF of \py{boilerplate.factorci('Processing[T.Masked]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
 
-Further, we note that there is a notable variance decrease for the Masked workflow
+Further, we note that there is a slight variance decrease for the Masked workflow
 (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3)}
 -fold).
 

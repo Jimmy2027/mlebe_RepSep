@@ -16,7 +16,7 @@ config_path = os.path.expanduser(os.path.join(scratch_dir, 'config.json'))
 if __name__ == '__main__':
     mkdir(os.path.expanduser(scratch_dir))
     # choose your workflow configuration
-    json_config_path = "configs/threed_config.json"
+    json_config_path = "configs/with_bias_corr.json"
     config = json_to_dict(json_config_path)
     # initialise model configs
     init_model_configs(config)

@@ -100,8 +100,9 @@ for uid, processing in list(product(uids, processings)):
 df['modality'] = df['modality'].str.upper()
 df = df.rename(columns={'modality': 'Contrast', })
 df.columns = map(str.title, df.columns)
-df.loc[df['Uid'].str.contains('VZ'), 'Contrast'] = 'T1w+' + df.loc[df['Uid'].str.contains('VZ'), 'Contrast']
-df.loc[~df['Uid'].str.contains('VZ'), 'Contrast'] = 'T2w+' + df.loc[~df['Uid'].str.contains('VZ'), 'Contrast']
+if workflow_config.workflow_config.with_FLASH:
+    df.loc[df['Uid'].str.contains('VZ'), 'Contrast'] = 'T1w+' + df.loc[df['Uid'].str.contains('VZ'), 'Contrast']
+    df.loc[~df['Uid'].str.contains('VZ'), 'Contrast'] = 'T2w+' + df.loc[~df['Uid'].str.contains('VZ'), 'Contrast']
 df.to_csv(path.join(scratch_dir, 'data', 'volume.csv'))
 
 """

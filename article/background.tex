@@ -22,7 +22,7 @@ This means that the model needs to learn its parameters based on observations of
 Manually creating annotations as required to train a deep-learning classifier for high-resolution data is often infeasible, since it requires manual expert segmentation of vast amounts of slices.
 In the medical domain especially, human labeled data is expensive to acquire and thus very scarce.
 A much more widely applicable approach is to train the network using the template mask as label together with registered scans.
-Registration is not be as precise as human labeling, but it is automatic and does not depend on expert input.
+Registration is not as precise as human labeling, but it is automatic and does not depend on expert input.
 \cite{imperfect_datasets, imperferct_segmentaion_labels} show that deep learning methods can indeed show satisfiable results when trained with imperfect training data.
 While our purpose was to create a workflow that generates better masks than the one from the template space, we show that the latter can be used as training data for the deep-learning model, by applying small changes to it.
 

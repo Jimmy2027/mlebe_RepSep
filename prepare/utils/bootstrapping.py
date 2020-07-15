@@ -6,7 +6,6 @@ import os
 import statsmodels.formula.api as smf
 
 
-# todo: remove test variable
 def bootstrap(df, factor, scratch_dir, nbr_samples=10000, test=False):
     if factor == 'Volume Conservation Factor':
         metric = 'VCF'
@@ -102,6 +101,6 @@ def bootstrap_analysis(
     fit = model.fit()
     summary = fit.summary().tables[1]
     if test:
-        summary.to_csv(scratch_dir + '/data/bootstrapped/{}_{}.csv'.format(df_name, nbr_samples))
+        summary.to_csv(scratch_dir + '/data/bootstrapped/{}_{}.csv'.format(df_name, nbr_samples), index=False)
     else:
-        summary.to_csv(scratch_dir + '/data/bootstrapped/{}.csv'.format(df_name))
+        summary.to_csv(scratch_dir + '/data/bootstrapped/{}.csv'.format(df_name), index=False)
