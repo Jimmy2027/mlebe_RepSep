@@ -1,17 +1,22 @@
-import pickle
+import pandas as pd
 from matplotlib import pyplot as plt
-import numpy as np
 import os
+import nibabel as nib
 
-xfile = open(os.path.expanduser('data/classifiers/T2/blacklisted_images.pkl'), 'rb')
-blacklisted_images = pickle.load(xfile)
-xfile.close()
-yfile = open(os.path.expanduser('data/classifiers/T2/blacklisted_masks.pkl'), 'rb')
-blacklisted_masks = pickle.load(yfile)
-yfile.close()
+template_dir = "/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii"
+blacklist_selection = pd.read_csv('data/Blacklist/blacklist_selection.csv')
+
+indexes = [3, 5, 5, 7, 8, 8, 8, 15]
+slices = [73, 23, 63, 16, 22, 62, 75, 23]
 plt.figure()
-for idx, i in enumerate(range(0, 8)):
-    plt.subplot(2, 4, idx + 1)
-    plt.imshow(np.squeeze(blacklisted_images[i]), cmap='gray')
-    plt.imshow(np.squeeze(blacklisted_masks[i]), alpha=0.6, cmap='Blues')
+counter = 1
+for index, s in zip(indexes, slices):
+    plt.subplot(2, 4, counter)
+    img = nib.load(blacklist_selection.iloc[index]['path']).get_data()
+    target = nib.load(template_dir).get_data()
+    plt.imshow(img[:, s, :], cmap='gray')
+    plt.imshow(target[:, s, :], cmap='Blues', alpha=0.6)
     plt.axis('off')
+    counter += 1
+
+plt.show()
