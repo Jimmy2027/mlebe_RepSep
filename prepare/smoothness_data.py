@@ -108,7 +108,7 @@ for uid in df['Uid'].unique():
             scf = df.loc[(df['Uid'] == uid) & (df['Processing'] == p), 'Smoothness Conservation Factor'].item()
             vcf = v.loc[(v['Uid'] == uid) & (v['Processing'] == p), 'Volume Conservation Factor'].item()
             df.loc[(df['Uid'] == uid) & (df['Processing'] == p), 'Volume-Normalized SCF'] = scf / (vcf ** (1. / 3.))
-            df.loc[(df['Uid'] == uid) & (df['Processing'] == p), '1 - Scf'] = np.abs(1 - (scf / (vcf ** (1. / 3.))))
+            df.loc[(df['Uid'] == uid) & (df['Processing'] == p), 'abs(1 - Scf)'] = np.abs(1 - (scf / (vcf ** (1. / 3.))))
 
 df.to_csv(path.join(scratch_dir, 'data', 'smoothness.csv'))
 

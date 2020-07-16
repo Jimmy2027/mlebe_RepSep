@@ -13,6 +13,7 @@ import os
 
 workflow_config = json_file_to_pyobj(config_path)
 
+
 def bids_autograb(bids_dir):
     bids_dir = path.abspath(path.expanduser(bids_dir))
     validate = BIDSValidator()
@@ -22,6 +23,7 @@ def bids_autograb(bids_dir):
     # Unclear in current BIDS specification, we refer to BOLD/CBV as modalities and func/anat as types
     df = df.rename(columns={'modality': 'type', 'type': 'modality'})
     return df
+
 
 base_df = bids_autograb('{}/bids_collapsed'.format(scratch_dir))
 base_df = base_df.loc[~base_df['path'].str.endswith('.json')]
@@ -94,7 +96,7 @@ for uid, processing in list(product(uids, processings)):
     reference = df.loc[(df['uID'] == uid) & (df['Processing'] == 'Unprocessed'), 'Thresholded Volume'].item()
     volume = df.loc[(df['uID'] == uid) & (df['Processing'] == processing), 'Thresholded Volume'].item()
     df.loc[(df['uID'] == uid) & (df['Processing'] == processing), 'Volume Conservation Factor'] = volume / reference
-    df.loc[(df['uID'] == uid) & (df['Processing'] == processing), '1 - Vcf'] = np.abs(1 - volume / reference)
+    df.loc[(df['uID'] == uid) & (df['Processing'] == processing), 'abs(1 - Vcf)'] = np.abs(1 - volume / reference)
 
 # Ready Strings for Printing
 df['modality'] = df['modality'].str.upper()
