@@ -1,12 +1,10 @@
 from os import path
-
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 from mlebe.training.three_D.configs.utils import json_to_dict
 from scipy.stats import iqr, wilcoxon
-
 from lib.utils import float_to_tex, inline_anova, inline_factor
 
 
@@ -153,6 +151,23 @@ def print_dice():
     return np.round(float(dice_score), 3)
 
 
+def get_training_shape(type='tuple'):
+    workflow_config = json_to_dict('data/config.json')
+    anat_model_config = json_to_dict(workflow_config['masking_config']['masking_config_anat']['model_config_path'])
+    scale_size = anat_model_config['augmentation']['mlebe']['scale_size']
+    if type == 'tuple':
+        return '({}, {})'.format(scale_size[0], scale_size[1])
+    else:
+        return scale_size[0]
+
+
+def get_epochs():
+    reg_results_df = pd.read_csv('prepare/classifier/reg_results.csv')
+    config = json_to_dict('data/config.json')
+    uid = config['workflow_config']['uid']
+    dice_score = reg_results_df.loc[reg_results_df['uid'] == uid, 'anat_model_dice'].item()
+
+
 def iqr_(
         df_path='data/volume.csv',
         dependent_variable='Volume Conservation Factor',
@@ -163,3 +178,36 @@ def iqr_(
     df = df.loc[df['Processing'] != 'Unprocessed']
     list = df.loc[(df['Processing'] == processing), dependent_variable].tolist()
     print(iqr(list))
+
+
+def plt_factorci_summary(df_path='data/volume.csv',
+                         dependent_variable='Volume Conservation Factor',
+                         expression='Processing*Contrast',
+                         exclusion_criteria={},
+                         caption=None,
+                         label=None,
+                         ):
+    df_path = path.abspath(df_path)
+    df = pd.read_csv(df_path)
+
+    df = df.loc[df['Processing'] != 'Unprocessed']
+    df = df.loc[((df['Processing'] == 'Masked')) | ((df['Processing'] == 'Generic'))]
+
+    for key in exclusion_criteria.keys():
+        df = df.loc[~df[key].isin(exclusion_criteria[key])]
+
+    formula = 'Q("{}") ~ {}'.format(dependent_variable, expression)
+    model = smf.mixedlm(formula, df, groups='Uid')
+    fit = model.fit()
+    summary = fit.summary()
+    # table1 = summary.tables[1].reset_index()
+    # table1 = table1.T.reset_index().T.reset_index(drop=True)
+    # table1.iloc[0, 0] = ''
+    # summary.tables[1] = table1
+    # summary.settings[1]['index'] = summary.settings[1]['header'] = False
+    if caption:
+        summary.title = caption
+    if label:
+        summary.label = label
+    return summary.as_latex().replace('\hline', '')
+

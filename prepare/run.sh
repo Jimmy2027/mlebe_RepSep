@@ -15,16 +15,11 @@ fi
 #ln -s ~/.scratch/irsabi/preprocessing/generic/* ~/.scratch/mlebe/preprocessing/generic/
 
 # This workflow runs with a json configuration file, choose one in configs/ and define it in make_config.py
-if [ ! -f ~/.scratch/mlebe/config.json ]; then
+if [ ! -f ~/.scratch/mlebe/preprocessing/config.json ]; then
   python make_config.py || exit 1
 fi
 
-#if [ ! -d ~/.scratch/mlebe/classifiers ]; then
-#  python classifier/move_classifier_data.py
-#  exit 1
-#fi
-
-#echo " Write your experiment description here " >~/.scratch/mlebe/description.txt
+echo " Trying with 128*128 predictions " > ~/.scratch/mlebe/description.txt
 python make_bids.py || exit 1
 python preprocess.py || exit 1
 python collapse.py || exit 1
@@ -38,4 +33,7 @@ python variance_data.py || exit 1
 python smoothness_data.py || exit 1
 python functional_data.py || exit 1
 python l2.py || exit 1
+
+mv ~/.scratch/mlebe/preprocessing/masked_work/graph.dot ~/.scratch/mlebe/data/masked_nipype.dot
+mv ~/.scratch/mlebe/preprocessing/generic_work/graph.dot ~/.scratch/mlebe/data/generic_nipype.dot
 #sh transfer.sh || exit 1

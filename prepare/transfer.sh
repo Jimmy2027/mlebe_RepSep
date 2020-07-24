@@ -22,10 +22,8 @@ cp -v ${scratch_dir}/manual_overview/masked/4001_ofMcF2_cbv.pdf ${destination_di
 #cp ${scratch_dir}/manual_overview_new/masked/VZ01_baseline_bold.pdf ${destination_dir}/manual_overview_new/masked/ || exit 1
 #cp ${scratch_dir}/manual_overview_new/masked/VZ01_baseline_T1w.pdf ${destination_dir}/manual_overview_new/masked/ || exit 1
 
-cp -v ${scratch_dir}/preprocessing/masked_work/graph.dot ${destination_dir}/masked_nipype.dot || exit 1
-cp -v ${scratch_dir}/preprocessing/generic_work/graph.dot ${destination_dir}/generic_nipype.dot || True
 rsync -avP --exclude='*_cope.nii*' --exclude='*_zstat.nii*' ${scratch_dir}/*l2* ${destination_dir}/ || exit 1
-#rsync -avP ${scratch_dir}/data/ ${destination_dir} || exit 1
+
 cp ${scratch_dir}/config.json ${destination_dir}/ || exit 1
 cp -r ${scratch_dir}/data/* ${destination_dir}/ || exit 1
 mkdir -p ${destination_dir}/classifier

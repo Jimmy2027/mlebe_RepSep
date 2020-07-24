@@ -1,15 +1,17 @@
-import pandas as pd
-import statsmodels.formula.api as smf
-from lib.categorical import violinplot
-from matplotlib import pyplot as plt
+from os import path
 import matplotlib as mpl
+import pandas as pd
+from lib.categorical import violinplot
 
-bootstrapped_RMSEs = pd.read_csv('data/bootstrapped/bootstrapped_volume.csv')
+df_path = 'data/smoothness.csv'
+df = pd.read_csv(path.abspath(df_path))
+
+df = df.loc[((df['Processing'] == 'Masked')) | ((df['Processing'] == 'Generic'))]
 
 ax = violinplot(
     x='Contrast',
-    y='VCF_RMSE',
-    data=bootstrapped_RMSEs,
+    y='Abs(1 - Scf)',
+    data=df,
     hue="Processing",
     saturation=1,
     split=True,
@@ -21,3 +23,4 @@ ax = violinplot(
     linewidth=mpl.rcParams['grid.linewidth'],
     linecolor='w',
 )
+ax.legend()

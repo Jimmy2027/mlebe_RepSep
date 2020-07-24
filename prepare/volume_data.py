@@ -88,7 +88,7 @@ df = df.round({'Volume': 3, 'Thresholded Volume': 3})
 
 # Calculate Volume Conservation Factor
 df['Volume Conservation Factor'] = -1
-df['1 - Vcf'] = -1
+df['Abs(1 - Vcf)'] = -1
 uids = df['uID'].unique()
 
 processings = [i for i in df['Processing'].unique() if i != 'Unprocessed']
@@ -96,7 +96,7 @@ for uid, processing in list(product(uids, processings)):
     reference = df.loc[(df['uID'] == uid) & (df['Processing'] == 'Unprocessed'), 'Thresholded Volume'].item()
     volume = df.loc[(df['uID'] == uid) & (df['Processing'] == processing), 'Thresholded Volume'].item()
     df.loc[(df['uID'] == uid) & (df['Processing'] == processing), 'Volume Conservation Factor'] = volume / reference
-    df.loc[(df['uID'] == uid) & (df['Processing'] == processing), 'abs(1 - Vcf)'] = np.abs(1 - volume / reference)
+    df.loc[(df['uID'] == uid) & (df['Processing'] == processing), 'Abs(1 - Vcf)'] = np.abs(1 - volume / reference)
 
 # Ready Strings for Printing
 df['modality'] = df['modality'].str.upper()
@@ -105,6 +105,7 @@ df.columns = map(str.title, df.columns)
 if workflow_config.workflow_config.with_FLASH:
     df.loc[df['Uid'].str.contains('VZ'), 'Contrast'] = 'T1w+' + df.loc[df['Uid'].str.contains('VZ'), 'Contrast']
     df.loc[~df['Uid'].str.contains('VZ'), 'Contrast'] = 'T2w+' + df.loc[~df['Uid'].str.contains('VZ'), 'Contrast']
+
 df.to_csv(path.join(scratch_dir, 'data', 'volume.csv'))
 
 """
@@ -131,16 +132,21 @@ reg_results['anat_model_path'] = workflow_config.masking_config.masking_config_a
 reg_results['func_model_path'] = workflow_config.masking_config.masking_config_func.model_config_path
 reg_results['func_model_dice'] = workflow_config.masking_config.masking_config_func.dice_score
 reg_results['anat_model_dice'] = workflow_config.masking_config.masking_config_anat.dice_score
-reg_results['masked_mean_Vcf_RMSE'] = df.loc[df['Processing'] == 'Masked', '1 - Vcf'].mean()
-reg_results['generic_mean_Vcf_RMSE'] = df.loc[df['Processing'] == 'Generic', '1 - Vcf'].mean()
+reg_results['masked_mean_Vcf_RMSE'] = df.loc[df['Processing'] == 'Masked', 'Abs(1 - Vcf)'].mean()
+reg_results['generic_mean_Vcf_RMSE'] = df.loc[df['Processing'] == 'Generic', 'Abs(1 - Vcf)'].mean()
 reg_results['max_RMSE_generic'] = -1
 reg_results['max_RMSE_generic'] = reg_results['max_RMSE_generic'].astype('object')
-reg_results.at[0, 'max_RMSE_generic'] = [df.loc[df['Processing'] == 'Generic'].groupby('Uid')['1 - Vcf'].max().idxmax(),
-                                         df.loc[df['Processing'] == 'Generic'].groupby('Uid')['1 - Vcf'].max().max()]
+reg_results.at[0, 'max_RMSE_generic'] = [df.loc[df['Processing'] == 'Generic'].groupby('Uid')['Abs(1 - Vcf)'].max().idxmax(),
+                                         df.loc[df['Processing'] == 'Generic'].groupby('Uid')['Abs(1 - Vcf)'].max().max()]
 reg_results['max_RMSE_masked'] = -1
 reg_results['max_RMSE_masked'] = reg_results['max_RMSE_masked'].astype('object')
-reg_results.at[0, 'max_RMSE_masked'] = [df.loc[df['Processing'] == 'Masked'].groupby('Uid')['1 - Vcf'].max().idxmax(),
-                                        df.loc[df['Processing'] == 'Masked'].groupby('Uid')['1 - Vcf'].max().max()]
+reg_results.at[0, 'max_RMSE_masked'] = [df.loc[df['Processing'] == 'Masked'].groupby('Uid')['Abs(1 - Vcf)'].max().idxmax(),
+                                        df.loc[df['Processing'] == 'Masked'].groupby('Uid')['Abs(1 - Vcf)'].max().max()]
 
-reg_results_ = reg_results_.append(reg_results)
+if workflow_config.workflow_config.uid in reg_results_['uid'].to_list():
+    reg_results_ = pd.concat([reg_results, reg_results_]).groupby('uid', as_index=False).first()
+else:
+    reg_results_ = reg_results_.append(reg_results)
+
+
 reg_results_.to_csv('classifier/reg_results.csv', index=False)

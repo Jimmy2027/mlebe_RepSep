@@ -82,6 +82,8 @@ df['Contrast'] = df['Contrast'].str.upper()
 if workflow_config.workflow_config.with_FLASH:
     df.loc[df['Uid'].str.contains('VZ'), 'Contrast'] = 'T1w+'+df.loc[df['Uid'].str.contains('VZ'), 'Contrast']
     df.loc[~df['Uid'].str.contains('VZ'), 'Contrast'] = 'T2w+'+df.loc[~df['Uid'].str.contains('VZ'), 'Contrast']
+else:
+    df.loc[~df['Uid'].str.contains('VZ'), 'Contrast'] = df.loc[~df['Uid'].str.contains('VZ'), 'Contrast']
 
 df['Smoothness'] = df['path'].apply(avg_smoothness)
 
@@ -99,7 +101,7 @@ v_path = path.join(scratch_dir, 'data', 'volume.csv')
 v = pd.read_csv(v_path)
 df = df.reset_index()
 df['Volume-Normalized SCF'] = 0
-df['1 - Scf'] = -1
+df['Abs(1 - Scf)'] = -1
 
 for uid in df['Uid'].unique():
     for p in ['Generic', 'Masked']:
@@ -108,7 +110,7 @@ for uid in df['Uid'].unique():
             scf = df.loc[(df['Uid'] == uid) & (df['Processing'] == p), 'Smoothness Conservation Factor'].item()
             vcf = v.loc[(v['Uid'] == uid) & (v['Processing'] == p), 'Volume Conservation Factor'].item()
             df.loc[(df['Uid'] == uid) & (df['Processing'] == p), 'Volume-Normalized SCF'] = scf / (vcf ** (1. / 3.))
-            df.loc[(df['Uid'] == uid) & (df['Processing'] == p), 'abs(1 - Scf)'] = np.abs(1 - (scf / (vcf ** (1. / 3.))))
+            df.loc[(df['Uid'] == uid) & (df['Processing'] == p), 'Abs(1 - Scf)'] = np.abs(1 - (scf / (vcf ** (1. / 3.))))
 
 df.to_csv(path.join(scratch_dir, 'data', 'smoothness.csv'))
 
@@ -130,18 +132,18 @@ Writing results
 
 reg_results = pd.DataFrame([[]])
 reg_results['uid'] = workflow_config.workflow_config.uid
-reg_results['masked_mean_Scf_RMSE'] = df.loc[df['Processing'] == 'Masked', '1 - Scf'].mean()
-reg_results['generic_mean_Scf_RMSE'] = df.loc[df['Processing'] == 'Generic', '1 - Scf'].mean()
+reg_results['masked_mean_Scf_RMSE'] = df.loc[df['Processing'] == 'Masked', 'Abs(1 - Scf)'].mean()
+reg_results['generic_mean_Scf_RMSE'] = df.loc[df['Processing'] == 'Generic', 'Abs(1 - Scf)'].mean()
 reg_results['max_Scf_RMSE_generic'] = -1
 reg_results['max_Scf_RMSE_generic'] = reg_results['max_Scf_RMSE_generic'].astype('object')
 reg_results.at[0, 'max_Scf_RMSE_generic'] = (
-    df.loc[df['Processing'] == 'Generic'].groupby('Uid')['1 - Scf'].max().idxmax(),
-    df.loc[df['Processing'] == 'Generic'].groupby('Uid')['1 - Scf'].max().max())
+    df.loc[df['Processing'] == 'Generic'].groupby('Uid')['Abs(1 - Scf)'].max().idxmax(),
+    df.loc[df['Processing'] == 'Generic'].groupby('Uid')['Abs(1 - Scf)'].max().max())
 reg_results['max_Scf_RMSE_masked'] = -1
 reg_results['max_Scf_RMSE_masked'] = reg_results['max_Scf_RMSE_masked'].astype('object')
 reg_results.at[0, 'max_Scf_RMSE_masked'] = (
-    df.loc[df['Processing'] == 'Masked'].groupby('Uid')['1 - Scf'].max().idxmax(),
-    df.loc[df['Processing'] == 'Masked'].groupby('Uid')['1 - Scf'].max().max())
+    df.loc[df['Processing'] == 'Masked'].groupby('Uid')['Abs(1 - Scf)'].max().idxmax(),
+    df.loc[df['Processing'] == 'Masked'].groupby('Uid')['Abs(1 - Scf)'].max().max())
 
 reg_results_ = pd.read_csv('classifier/reg_results.csv')
 reg_results_ = pd.concat([reg_results, reg_results_]).groupby('uid', as_index=False).first()

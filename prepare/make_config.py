@@ -16,9 +16,9 @@ config_path = os.path.expanduser(os.path.join(scratch_dir, 'config.json'))
 if __name__ == '__main__':
     mkdir(os.path.expanduser(scratch_dir))
     # choose your workflow configuration
-    json_config_path = "configs/with_bias_corr.json"
+    json_config_path = "configs/noBiascorr_noCrop.json"
     config = json_to_dict(json_config_path)
-    # initialise model configs
+    # change parameters of the model configs such as use_cuda, etc... for the workflow
     init_model_configs(config)
     # copy the json configuration file to the scratch directory
     new_config_path = os.path.expanduser(os.path.join(scratch_dir, 'config.json'))
@@ -40,6 +40,12 @@ if __name__ == '__main__':
         'with_FLASH': config['workflow_config']['with_FLASH'],
         'date': str(datetime.date.today()),
         '3D_prediction': True,
+        'masking_with_bias_corr_anat-func': '{}/ {}'.format(
+            config['masking_config']['masking_config_anat']['bias_correct_bool'],
+            config['masking_config']['masking_config_func']['bias_correct_bool']),
+        'masking_with_cropping': '{}/ {}'.format(
+            config['masking_config']['masking_config_anat']['with_bids_cropping'],
+            config['masking_config']['masking_config_func']['with_bids_cropping'])
     }
     parameters['uid'] = workflow_uid
     df = pd.DataFrame(parameters, index=[0])
