@@ -50,14 +50,10 @@ A more detailed description can be found there.
 As the architecture of the classifier, the U-Net from Ronneberger et al \cite{ronneberger_u-net:_2015} was chosen based on its high performance in the field of biomedical image segmentation.
 This is a convolutional neural network that consists of a contracting path that captures context in addition to a symmetric expanding path that enables precise localization.
 Localization in this context means that a class label is assigned to each pixel.
-We used the U-Net implementation from zhixuhao \cite{zhixuhao_zhixuhao/unet_2020}, written in Keras.
-Keras is a high-level neural networks API, written in Python and capable of running on top of TensorFlow, CNTK, or Theano.
-It allows for easily readable code and thus makes the workflow easier to reproduce.
-
-The implementation of the U-Net from zhixuhao has, in addition to the original architecture, two drop-out layers.
-A drop-out layer randomly sets a fraction of input units from the layer to 0 at each update during training time.
-The set fraction rate is 0.5.
-It is known that dropout helps prevent overfitting and greatly improves the performance of deep learning models \cite{srivastava2014dropout}.
+We used the attention gated U-Net implementation from Ozan Oktay et al. \cite{oktay_attention} for which the code is publicly available \cite{oktay_ozan-oktayattention-gated-networks_2020}.
+Additionally to the original U-Net structure, their implementation has attention gates in the expanding part which weight the information coming from the symmetric counterpart.
+The additional parameters in these attention gates allow the model to learn which region of the image is important for specific tasks and to suppress irrelevant regions.
+In our use case this implementation helped reduce false positive classifications of high intensities, outside of the mouse brain region.
 
 The model was trained using the Dice loss, which is computed from the Dice score.
 It calculates the similarity of two binary samples X and Y with
@@ -67,10 +63,6 @@ D_{coef} = \frac{2|X\cap Y|}{|X|+|Y|}
 
 It is a quantity ranging from 0 to 1 that is to be maximized.
 The loss is then calculated with $1-D_{coef}$.
-Because the Dice loss is not differentiable, small changes need to be made.
-In our case, the two samples to be compared are normalized, grey valued images and are thus not binary but have values between 0 and 1.
-Additionally, instead of using the logical operation \textit{and}, element wise products are used to approximate the non-differentiable intersection operation.
-To avoid a division by zero, $+1$ is added on the numerator and denominator.
 
 Because many more pixels in the masks are 0 than 1, there is a class imbalance problem.
 This is a problem because in this case a false positive gives a much higher loss than a false negative.
@@ -91,59 +83,53 @@ SAMRI is a data analysis package of the ETH/UZH Institute for Biomedical Enginee
 It is equipped with an optimized registration workflow and standard geometric space for small animal brain imaging \cite{ioanas_optimized_2019}.
 
 Because of variance in mouse brain anatomy and in the experiment setup, some of the transformed data do not overlap perfectly with the reference template.
-To filter these images out, most of the incongruent slices were removed manually from the data set.
+To filter these images out, most of the incongruent volumes were removed manually from the data set.
 
 For the registration of the images, a padding was needed to make the originally not affine space affine.
 As a result, the 3D volumes present many zero-valued slices, some of them overlapping with the mask.
 
 Since it is not wanted for the model to predict a mask on black slices, the mask is set to zero where the image is zero-valued.
+This has also the advantage of bringing variance into the template.
 Because some pixels representing the brain tissue are zero-valued, holes result from this operation.
 To patch these, the function \textcolor{mg}{\texttt{$binary\_fill\_holes$}} from scipy.ndimage.morphology \cite{noauthor_multi-dimensional_nodate} is used.
 An example of the preprocessing can be seen in \cref{fig:prepro_examples}.
 
 In the coronal view, each slice of the transformed data is originally of shape (63, 48), matching the reference space resolution of \SI{200}{\micro\metre}.
-It is then reshaped into (128, 128) by first zero-padding the smaller dimension to the same size as the bigger one and then reshaping the image into 128 using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package \cite{noauthor_opencv-python_nodate}.
+It is then reshaped into \py{boilerplate.get_training_shape('tuple' )} by first zero-padding the smaller dimension to the same size as the bigger one and then reshaping the image into \py{boilerplate.get_training_shape()} using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package \cite{noauthor_opencv-python_nodate}.
 
 Finally, the images are normalized by first clipping them from the minimum to the \nth{99} percentile of the data to remove outliers and then divided by the maximum.
 
 The data set is separated into Training, Validation and Test sets such that 90\% of the total data are used for training and validation while 10\% are used for testing.
 This is done with the help of the function \textcolor{mg}{\texttt{$train\_test\_split$}} from the package sklearn.model$\_$selection \cite{scikit-learn}.
 The Validation set is used for the optimization of hyperparameters while the Test set is used as a measure of extrapolation capability.
+The irsabi data was additionally added to the test set.
 
 \subsection{Data Augmentation} \label{Data Augmentation}
 
 Because of diverse settings in the experiment setup, including animal manipulations causing artifacts, MR image quality can differ substantially between labs and even individual study populations.
 To account for these variations, we apply an extensive set of transformations to our data.
-This includes rotations of up to 90$^{\circ}$, a width and height shift range of 30 pixels, a shear range of 0.5 pixels, zoom range of 0.3, brightness range of (0.7, 1.3) and horizontal as well as vertical flips.
-Additionally a gaussian noise with a variance range of (0, 0.001) is added to the image.
+This includes rotations of up to 20$^{\circ}$, a zoom range of -0.2 to +0.1, a random bias field added on the images and horizontal as well as vertical flips.
+Additionally a gaussian noise is added to the images.
 
 This not only increases the data set size but also makes it more representative of the general data distribution of mice brain MR images and results in a model with a better generalization capability.
 
-Many more sophisticated methods have been tested, but it has been shown that one of the more successful data augmentation strategies is the simple transformations mentioned above \cite{perez_effectiveness_2017}.
-
-
 \subsection{Training}
-The model was trained slice wise, with the coronal view and 600 as the maximum number of epochs.
-The coronal view was chosen over the axial one, because the shapes of the masks are much simpler in the coronal view and thus easier to learn for the network.
+The model was trained on 3D volumes in the coronal view.
+It was chosen over the axial one, because the shapes of the masks are much simpler in the coronal view and thus easier to learn for the network.
 
 Additionally, the coronal view has the advantage of higher resolution as the MR images were recorded coronally.
 
-To improve the learning process of the network, two callbacks from Keras were used \cite{noauthor_callbacks_nodate}.
-"\textcolor{mg}{\texttt{$ReduceLROnPlateau$}}" reduces the learning rate when the validation loss has stopped improving and "\textcolor{mg}{\texttt{$EarlyStopping$}}" stops the training when the validation loss has stopped improving for a number of epochs.
-The latter reduces computation time and prevents overfitting.
-
 \subsection{Masking}
 To improve the SAMRI registration workflow, an additional node is implemented where the images are masked, such that only the brain region remains.
-To alleviate the task of the classifier, the image is first bias-corrected using the "\textcolor{mg}{\texttt{$N4BiasFieldCorrection$}}" function of the ANTs package, with spatial parameters used in the samri functions.
-The image is then resampled into the resolution of the template space, which has a voxel size of $0.2\times 0.2 \times 0.2$.
+%To alleviate the task of the classifier, the image is first bias-corrected using the "\textcolor{mg}{\texttt{$N4BiasFieldCorrection$}}" function of the ANTs package, with spatial parameters used in the samri functions.
+The image is first resampled into the resolution of the template space, which has a voxel size of $0.2\times 0.2 \times 0.2$.
 This is done with the \textcolor{mg}{\texttt{$Resample$}} command from the FSL library which is an analysis tool for FMRI, MRI and DTI brain imaging data \cite{fsl}.
 Then, the image is preprocessed using the operations described in \cref{subsec:Data Set}.
-Since the classifier was trained to predict on images of shape (128, 128), the input needs to be reshaped.
+Since the classifier was trained to predict on images of shape \py{boilerplate.get_training_shape('tuple')}, the input needs to be reshaped.
 The slice-wise predictions of the model are reconstructed to a 3D mask via the command \textit{Nifit1Image} from the neuroimaging python package nibabel \cite{noauthor_neuroimaging_nodate}.
 This is done using the same affine space as the input image.
 The latter is then reshaped into the original shape inverting the preprocessing step, either with the opencv resize method or by cropping.
 Additionally, the binary mask is resampled into its original affine space, before being multiplied with the brain image to extract the ROI.
-The workflow then continues with only the Region Of Interest as the image.
 
 \subsection{Metrics}
 
@@ -154,12 +140,6 @@ The VCF is then obtained with \cref{eq:vcf}, where $v$ is the voxel volume in th
         V\!C\!F
         = \frac{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}{v\sum_{i=1}^n [s_i \geq P_{66}(S)]}
         = \frac{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}{v \lceil0.66n\rceil}
-\end{equation}
-
-The bootstrapped distribution of the RMSE (\cref{eq:RMSE}) is obtained by resampling the VCF distributions 10000 times with replacement, and computing the RMSE for every sample.
-
-\begin{equation} \label{eq:RMSE}
-        RMSE = \sqrt{(\text{mean}((1 - \text{VCF})^2)}
 \end{equation}
 
 The SCF metric is based on the ratio of smoothness before and after processing.
@@ -176,6 +156,12 @@ Voxelwise statistical estimates for the probability that a time course could ---
 \begin{equation} \label{eq:ms}
         M\!S = \frac{\sum_{i=1}^n -log(p_i)}{n}
 \end{equation}
+
+\subsection{Statistics}
+
+In the methods section, all statistics are presented with respect to the distributions of the absolute distances to 1, |1 - Metric|.
+Based on a Likelihood Ratio Test, we chose models that do not examine the Workflow- Contrast interaction.
+The full summaries of the analysis can be seen in tables \cref{table1} and \cref{table2}.
 
 \section{Data and Code Availability}
 

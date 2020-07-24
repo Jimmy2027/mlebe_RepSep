@@ -1,12 +1,13 @@
 \section{Evaluation}
 For the quality control of the workflow, we first evaluate the classification process, followed by a benchmark between the Generic and the improved "Masked" workflow.
+Statistics for the Volume Conservation and the Smoothness Conservation are presented with respect to the distributions of the absolute distances to the optimal value 1.
 
 \subsection{Classification}
 %%% Again, background or discussion
 Quality control of our classifier is difficult in the sense that the template mask does not always overlap perfectly with the brain region, such that small deviances of the predictions compared to the template could actually be caused by the prediction being more accurate than the template.
 Nevertheless, it is useful to verify whether the output is similar to the template, as it should be.
 As a similarity metric between the template mask and the classifier output we have used the Dice score (see \cref{eqDcoef}).
-The average Dice score taken on every slice of the test data set is $D_{coef}= $ \py{boilerplate.print_dice()} $\sim 1$, indicating that classifier output has only minor changes in comparison with the template.
+The average Dice score on the test data set is $D_{coef}= $ \py{boilerplate.print_dice()} $\sim 1$, indicating that classifier output has only minor changes in comparison with the template.
 % todo should I give more scores? AUC, ...
 
 \begin{sansmath}
@@ -24,8 +25,7 @@ The average Dice score taken on every slice of the test data set is $D_{coef}= $
 
 \subsection{Workflow}
 We use an established palette of workflow evaluation metrics --- inspecting volume and smoothness conservation, as well as downstream effects on basic functional analysis \cite{ioanas_optimized_2019} --- to benchmark the novel SAMRI Masked workflow against the SAMRI Generic workflow.
-%%% Introduce RMSE bootstrapping here, as you will need it for both VCF and SCF.
-In order to provide a statistical evaluation of the quality of registration, we evaluate a bootstrapped distribution of the respective root mean squared error (RMSE) to the optimal value of 1 for volume conservation and smoothness conservation.
+
 \subsection{Volume Conservation}
 
 \begin{sansmath}
@@ -41,19 +41,19 @@ In order to provide a statistical evaluation of the quality of registration, we 
                         'options_post':'\\vspace{1em}',
                         'caption':'Comparison across workflows and functional contrasts.'
                         ,},
-                {'script':'scripts/vc_violin_bootstrap.py', 'label':'vcfb','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                {'script':'scripts/vc_violin_absdiff.py', 'label':'vcfb','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
                         'options_pre_caption':'\\vspace{-1.5em}\\',
                         'options_post':'\\vspace{1em}',
-                        'caption':'Comparison of a bootstrapped distribution of the root mean squared errors to 1, across workflows and functional contrasts.'
+                        'caption':'Comparison of the distributions of the absolute distances to 1, across workflows and functional contrasts.'
                         ,},
-                {'script':'scripts/scf_violin_bootstrap.py', 'label':'scfb','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+                {'script':'scripts/scf_violin_absdiff.py', 'label':'scfb','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
                         'options_pre_caption':'\\vspace{-1.5em}\\',
                         'options_post':'\\vspace{1em}',
-                        'caption':'Comparison of a bootstrapped distribution of the root mean squared errors to 1, across workflows and functional contrasts.'
+                        'caption':'Comparison of the distributions of the absolute distances to 1, across workflows and functional contrasts.'
                         ,},
                 ],
         caption='\\textbf{Both the SAMRI Generic and the Masked workflow optimally and reliably conserve volume and smoothness, the latter showing values that are closely distributed to 1.}
-        Plots showing the distribution of two target metrics in the first row, together with the respective bootstrapped distributions of the RMESs in the second row. Solid lines in the colored distribution densities indicate the sample mean and dashed lines the inner quartiles.
+        Plots showing the distribution of two target metrics in the first row, together with the respective distributions of the absolute distances to 1 in the second row. Solid lines in the colored distribution densities indicate the sample mean and dashed lines the inner quartiles.
         ',
         label='fig:vc',
         )}
@@ -63,22 +63,18 @@ Volume Conservation Factor (VCF) \cite{ioanas_optimized_2019} measures the regis
 A positive ratio indicates that the brain was stretched to fill the template space, while a negative ratio indicates that non-brain voxels were introduced in the template brain space.
 Volume conservation is highest for a VCF equal to 1, indicating that the preprocessing has no influence on the brain volume of the scans.
 
-As seen in \cref{fig:vccv}, we note that in the described dataset VCF is sensitive to the workflow
-(\py{boilerplate.fstatistic('Processing', condensed=True)}),
-but not the interaction of the workflow with the contrast (\py{boilerplate.fstatistic('Processing:Contrast', condensed=True)}).
-The performance of the Generic SAMRI workflow is different from that of Generic*, yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
+As seen in \cref{fig:vcfb}, we note that in the described dataset the absolute distance of the VCF to 1 is sensitive to the workflow
+(\py{boilerplate.fstatistic('Processing', dependent_variable='Abs(1 - Vcf)', expression='Processing+Contrast', condensed=True)}).
+The performance of the Generic SAMRI workflow is different from that of the Masked, yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
 With respect to the data break-up by contrast (CBV versus BOLD, \cref{fig:vccv}), we see no notable main effect for the contrast variable
-(VCF of \py{boilerplate.corecomparison_factorci('Contrast[T.T2w+CBV]')}), nor do we report a notable effect for the contrast-workflow interaction (VCF of \py{boilerplate.corecomparison_factorci('Processing[T.Masked]:Contrast[T.T2w+CBV]')}).
+(VCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]',dependent_variable='Abs(1 - Vcf)', expression='Processing+Contrast')}).
 %%% Ok, you introduce the VCF and you show the VCF plots primarily, and then you list the stats for RMSE only? You should definitely write out the modelling evaluation for VCF. My recommendation is to write down a paragraph for the VCF evaluation, and then RMSE evaluation, plot-wise you show a composite figure with subfigures for VCF, SCF, and the respective bootstrapped RMSE.
 
 %%% briefly introduce what the RMSE tells you here.
 We note that there is a significant variance decrease in all conditions for the Masked workflow
 (\py{boilerplate.varianceratio()}-fold).
 Further, we note that the root mean squared error ratio favours the Masked workflow
-($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
-Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to the optimal VCF 1, we report that it is sensitive to the
-workflow (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Masked]')})
-and the contrast-workflow interaction (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Masked]:Contrast[T.CBV]')}).
+($\mathrm{RMSE_{M}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/vc_rmser.py')}$).
 
 \subsection{Smoothness Conservation}
 
@@ -89,22 +85,16 @@ Image smoothness comes at the cost of image contrast as well as feature saliency
 As an indicator of image smothness induced by the workflow, the Smoothness Conservation Factor (SCF) \cite{ioanas_optimized_2019} expresses the ratio between the smoothness of the preprocessed images and the smoothness of the original images.
 Smoothess Conservation is highest for a SCF equal to 1, indicating that the preprocessing does not influence image smoothness.
 
-While the performance of the Generic SAMRI workflow is only slightly different from that of the Masked workflow, the root mean squared error ratio favors the Masked workflow ($\mathrm{RMSE_{G*}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
+While the performance of the Generic SAMRI workflow is only slightly different from that of the Masked workflow, the root mean squared error ratio favors the Masked workflow ($\mathrm{RMSE_{M}/RMSE_{G}\simeq} \py{pytex_printonly('scripts/scf_rmser.py')}$).
 
-Descriptively, we observe that neither the Generic nor the Masked workflow introduce a strong smoothing (SCF of \py{boilerplate.factorci('Processing[T.Masked]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
+Descriptively, we observe that neither the Generic nor the Masked workflow introduce a strong smoothing (SCF of \py{boilerplate.factorci('Processing[T.Masked]', df_path='data/smoothness.csv',dependent_variable='Abs(1 - Scf)', expression='Processing+Contrast')}).
 
 Further, we note that there is a slight variance decrease for the Masked workflow
 (\py{boilerplate.varianceratio(df_path='data/smoothness.csv',dependent_variable='Smoothness Conservation Factor', max_len=3)}
 -fold).
 
 Given the break-up by contrast shown in \cref{fig:sccv}, we see no effect for the contrast variable
-(SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.T2w+CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')})
-and the contrast-workflow interaction
-(SCF of \py{boilerplate.corecomparison_factorci('Processing[T.Masked]:Contrast[T.T2w+CBV]', df_path='data/smoothness.csv', dependent_variable='Smoothness Conservation Factor')}).
-
-Evaluating a bootstrapped distribution of the respective Root Mean Squared Errors (RMSE) to 1, we report that the RMSE is sensitive to the
-workflow (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Masked]', metric= 'smoothness')})
-and the contrast-workflow interaction (RMSE of \py{boilerplate.bootstrapped_corecomparison_factorci('Processing[T.Masked]:Contrast[T.CBV]', metric= 'smoothness')}).
+(SCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/smoothness.csv', dependent_variable='Abs(1 - Scf)', expression='Processing+Contrast')}).
 
 \subsection{Functional Analysis}
 
