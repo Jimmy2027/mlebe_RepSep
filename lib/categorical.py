@@ -14,9 +14,6 @@ import matplotlib.patches as Patches
 import matplotlib.pyplot as plt
 import warnings
 
-from seaborn.external.six import string_types
-from seaborn.external.six.moves import range
-
 from seaborn import utils
 from seaborn.utils import iqr, categorical_order, remove_na
 from seaborn.algorithms import bootstrap
@@ -154,7 +151,7 @@ class _CategoricalPlotter(object):
 
             # Validate the inputs
             for input in [x, y, hue, units]:
-                if isinstance(input, string_types):
+                if isinstance(input, str):
                     err = "Could not interpret input '{}'".format(input)
                     raise ValueError(err)
 
@@ -1706,12 +1703,12 @@ class _PointPlotter(_CategoricalStatPlotter):
             dodge = .025 * len(self.hue_names)
 
         # Make sure we have a marker for each hue level
-        if isinstance(markers, string_types):
+        if isinstance(markers, str):
             markers = [markers] * len(self.colors)
         self.markers = markers
 
         # Make sure we have a line style for each hue level
-        if isinstance(linestyles, string_types):
+        if isinstance(linestyles, str):
             linestyles = [linestyles] * len(self.colors)
         self.linestyles = linestyles
 
