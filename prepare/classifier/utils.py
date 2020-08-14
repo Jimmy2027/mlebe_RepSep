@@ -1,4 +1,4 @@
-from mlebe.training.three_D.configs.utils import write_to_jsonfile
+from mlebe.training.configs.utils import write_to_jsonfile
 import numpy as np
 
 

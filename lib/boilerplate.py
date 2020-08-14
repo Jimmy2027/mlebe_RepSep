@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
-from mlebe.training.three_D.configs.utils import json_to_dict
+from mlebe.training.configs.utils import json_to_dict
 from scipy.stats import iqr, wilcoxon
 from lib.utils import float_to_tex, inline_anova, inline_factor
 
@@ -161,7 +161,7 @@ def get_training_shape(type='tuple'):
         return scale_size[0]
 
 
-def get_epochs():
+def get_epochs():  # todo is this needed?
     reg_results_df = pd.read_csv('prepare/classifier/reg_results.csv')
     config = json_to_dict('data/config.json')
     uid = config['workflow_config']['uid']
@@ -200,14 +200,23 @@ def plt_factorci_summary(df_path='data/volume.csv',
     model = smf.mixedlm(formula, df, groups='Uid')
     fit = model.fit()
     summary = fit.summary()
-    # table1 = summary.tables[1].reset_index()
-    # table1 = table1.T.reset_index().T.reset_index(drop=True)
-    # table1.iloc[0, 0] = ''
-    # summary.tables[1] = table1
-    # summary.settings[1]['index'] = summary.settings[1]['header'] = False
     if caption:
         summary.title = caption
     if label:
         summary.label = label
     return summary.as_latex().replace('\hline', '')
 
+
+def get_nmbrScans_from_dataselection(data_set):
+    data_selection = pd.read_csv('data/data_selection.csv')
+    return data_selection.loc[data_selection['data_set'] == data_set].groupby('subject').count()['uid'].sum()
+
+
+def get_nmbrSubject_from_dataselection(data_set):
+    data_selection = pd.read_csv('data/data_selection.csv')
+    return len(data_selection.loc[data_selection['data_set'] == data_set].groupby('subject')['subject'])
+
+
+def get_max_numbrSession_from_dataselection(data_set):
+    data_selection = pd.read_csv('data/data_selection.csv')
+    return max(data_selection.loc[data_selection['data_set'] == data_set].groupby('subject').count()['uid'])

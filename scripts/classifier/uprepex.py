@@ -2,7 +2,7 @@ import os
 import nibabel as nib
 import numpy as np
 from matplotlib import pyplot as plt
-from mlebe.training.three_D.configs.utils import json_to_dict
+from mlebe.training.configs.utils import json_to_dict
 
 config_path = os.path.expanduser('~/.scratch/mlebe/config.json')
 config = json_to_dict(config_path)

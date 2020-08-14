@@ -1,5 +1,5 @@
 from make_config import config_path, scratch_dir
-from mlebe.training.three_D.configs.utils import json_to_dict
+from mlebe.training.configs.utils import json_to_dict
 from samri.pipelines.preprocess import generic
 
 config = json_to_dict(config_path)

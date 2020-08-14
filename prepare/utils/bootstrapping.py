@@ -5,7 +5,7 @@ from math import sqrt
 import os
 import statsmodels.formula.api as smf
 from make_config import config_path, scratch_dir
-from mlebe.training.three_D.utils.utils import json_file_to_pyobj
+from mlebe.training.utils.utils import json_file_to_pyobj
 
 workflow_config = json_file_to_pyobj(config_path)
 

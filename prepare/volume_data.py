@@ -8,7 +8,7 @@ from bids.grabbids import BIDSLayout
 from bids.grabbids import BIDSValidator
 from utils.bootstrapping import bootstrap, bootstrap_analysis
 from make_config import config_path, scratch_dir
-from mlebe.training.three_D.utils.utils import json_file_to_pyobj
+from mlebe.training.utils.utils import json_file_to_pyobj
 import os
 
 workflow_config = json_file_to_pyobj(config_path)

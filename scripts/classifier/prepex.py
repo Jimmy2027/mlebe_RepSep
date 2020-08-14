@@ -2,8 +2,9 @@ import os
 import nibabel as nib
 import numpy as np
 from matplotlib import pyplot as plt
-from mlebe.training.two_D.utils import general
-from mlebe.training.three_D.configs.utils import json_to_dict
+from mlebe.training.dataio.loaders.utils import arrange_mask
+from mlebe.training.dataio.loaders.utils import data_normalization
+from mlebe.training.configs.utils import json_to_dict
 
 config_path = os.path.expanduser('data/config.json')
 config = json_to_dict(config_path)
@@ -41,8 +42,8 @@ for o in os.listdir(dir):
                             img = nib.load(os.path.join(root, file))
                             img_data = img.get_data()
                             img_data = np.moveaxis(img_data, 1, 0)
-                            img_data = general.data_normalization(img_data)
-                            mask = general.arrange_mask(img_data, mask)
+                            img_data = data_normalization(img_data)
+                            mask = arrange_mask(img_data, mask)
                             image = img_data[slice]
                             mask = mask[slice]
 

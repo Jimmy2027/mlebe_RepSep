@@ -1,12 +1,12 @@
 import os
 import numpy as np
 from make_config import config_path, scratch_dir
-from mlebe.training.three_D.dataio.loaders import get_dataset
-from mlebe.training.three_D.dataio.transformation import get_dataset_transformation
-from mlebe.training.three_D.dataio.loaders.utils import remove_black_images
-from mlebe.training.three_D.models import get_model
-from mlebe.training.three_D.utils.utils import json_file_to_pyobj
-from mlebe.training.three_D.utils.utils import mkdir
+from mlebe.training.dataio.loaders import get_dataset
+from mlebe.training.dataio.transformation import get_dataset_transformation
+from mlebe.training.dataio.loaders.utils import remove_black_images
+from mlebe.training.models import get_model
+from mlebe.training.utils.utils import json_file_to_pyobj
+from mlebe.training.utils.utils import mkdir
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 import cv2

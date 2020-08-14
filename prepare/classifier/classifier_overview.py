@@ -1,10 +1,12 @@
-import pandas as pd
+import functools
 import json
+import operator
 import os
-from mlebe.training.utils.masking_vis import tester
+
+import pandas as pd
 from matplotlib import pyplot as plt
-import operator, functools
-import numpy as np
+from mlebe.training.utils.masking_vis import tester
+
 # experiment_config = '/Users/Hendrik/Desktop/bartholin/results/attention_unet_anat/dice_600_2020-04-21/1_Step/experiment_config.json'
 # vis_dir = '/Users/Hendrik/Desktop/bartholin/results/attention_unet_anat/dice_600_2020-04-21/1_Step'
 experiment_config = '/mnt/data/mlebe_data/results/attention_unet_anat/dice_600_2020-04-21/1_Step/experiment_config.json'
@@ -32,7 +34,8 @@ if not os.path.isfile(labels_df):
 else:
     labels_df = pd.read_csv(labels_df)
 
-def get_label(labels_df,slice, rewind = False):
+
+def get_label(labels_df, slice, rewind=False):
     img_path = os.path.join(vis_dir, 'anat', dir, slices[slice])
     temp_df = labels_df.loc[functools.reduce(operator.and_, (labels_df[item] == current for item, current in
                                                              zip(['subject', 'slice'], [dir, int(slice)]))), 'label']
@@ -61,20 +64,21 @@ def get_label(labels_df,slice, rewind = False):
         print('already seen')
         return 'seen'
 
+
 for idx, dir in enumerate(os.listdir(os.path.join(vis_dir, 'anat'))):
     print(idx, ' out of ', len(os.listdir(os.path.join(vis_dir, 'anat'))))
-    if os.path.isdir(os.path.join(vis_dir, 'anat',dir)):
-        slices = os.listdir(os.path.join(vis_dir, 'anat',dir))
+    if os.path.isdir(os.path.join(vis_dir, 'anat', dir)):
+        slices = os.listdir(os.path.join(vis_dir, 'anat', dir))
         for slice in range(len(slices)):
             slice_temp = 0
             label = get_label(labels_df, slice)
             print('label = ', label)
-            while (label == '-' and slice-slice_temp > 0):
+            while (label == '-' and slice - slice_temp > 0):
                 slice_temp += 1
-                label = get_label(labels_df, slice-slice_temp, rewind=True)
+                label = get_label(labels_df, slice - slice_temp, rewind=True)
             while slice_temp > 0:
-                slice_temp = slice_temp -1
-                label = get_label(labels_df, slice-slice_temp, rewind=True)
+                slice_temp = slice_temp - 1
+                label = get_label(labels_df, slice - slice_temp, rewind=True)
             if not label == 'seen':
                 labels_df = labels_df.append({'subject': dir, 'slice': slice, 'label': label}, ignore_index=True)
                 labels_df.to_csv(os.path.join(vis_dir, 'labels_df.csv'), index=False)
@@ -90,4 +94,4 @@ temp['bad'] = total_bad
 temp['okay'] = total_okay
 temp['manual_label'] = manual_label
 results_df = results_df.append(temp, ignore_index=True)
-results_df.to_csv('results_df.csv', index = False)
+results_df.to_csv('results_df.csv', index=False)

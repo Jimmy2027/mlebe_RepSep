@@ -7,7 +7,7 @@ from make_config import config_path
 from samri.plotting.maps import contour_slices
 from samri.utilities import bids_substitution_iterator
 from subjects_reader import find_subjects
-from mlebe.training.three_D.configs.utils import json_to_dict
+from mlebe.training.configs.utils import json_to_dict
 
 num_cores = max(mp.cpu_count() - 1, 1)
 mpl.rcParams['font.size'] = 14

@@ -110,10 +110,10 @@ With respect to the data break-up by contrast (\cref{fig:mscv}), we see no notab
 (MS of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
 %and no notable effect for the contrast-template interaction
 %(MS of \py{boilerplate.corecomparison_factorci('Processing[T.Legacy]:Contrast[T.CBV]', df_path='data/functional_significance.csv', dependent_variable='Mean Significance')}).
-
+%
 %Functional analysis effects can further be inspected by visualizing the statistic maps.
 %Second-level t-statistic maps depicting the CBV and BOLD omnibus contrasts (common to all subjects and sessions) provide a succinct overview capturing both amplitude and directionality of the signal (\cref{fig:m}).
-%%While the most salient feature of this figure is the qualitative distribution difference between CBV and BOLD scans, we note that this is to be expected given the different nature of the processes, and is wholly orthogonal to the question of registration.
+%While the most salient feature of this figure is the qualitative distribution difference between CBV and BOLD scans, we note that this is to be expected given the different nature of the processes, and is wholly orthogonal to the question of registration.
 %The differential coverage is crucial to the examination of registration quality and its effects on functional read-outs.
 %We note that processing with the Generic* workflow (\cref{fig:mllc,fig:mllb}), does not induce issues with statistic coverage alignment and overflow.
 
@@ -140,7 +140,7 @@ Neighborhood Cross Correlation (CC, sensitive to localized correlation),
 Global Correlation (GC, sensitive to whole-image correlation),
 and Mutual Information (MI, sensitive to whole-image information similarity).
 
-\Cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Masked workflows.
+\cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Masked workflows.
 Both, the Generic and the Masked workflow produce results which show a higher F-statistic for the subject than for the session variable.
 For the Masked workflow, F-statistics show:
 CC (subject: \py{boilerplate.variance_test('C(Subject)','Masked','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Masked','CC', condensed=True)}),

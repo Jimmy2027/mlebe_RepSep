@@ -10,7 +10,7 @@ from bids.grabbids import BIDSValidator
 import nipype.interfaces.io as nio
 from utils.bootstrapping import bootstrap, bootstrap_analysis
 from make_config import config_path, scratch_dir
-from mlebe.training.three_D.utils.utils import json_file_to_pyobj
+from mlebe.training.utils.utils import json_file_to_pyobj
 
 masks = {
     'generic': '/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii',

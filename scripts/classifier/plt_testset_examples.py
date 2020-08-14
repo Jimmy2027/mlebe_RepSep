@@ -2,7 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 import pickle
 import os
-from mlebe.training.three_D.configs.utils import json_to_dict
+from mlebe.training.configs.utils import json_to_dict
 
 seed = 2
 config_path = os.path.expanduser('data/config.json')

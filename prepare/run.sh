@@ -18,8 +18,8 @@ fi
 if [ ! -f ~/.scratch/mlebe/preprocessing/config.json ]; then
   python make_config.py || exit 1
 fi
-
-echo " Trying with 128*128 predictions " > ~/.scratch/mlebe/description.txt
+# Write your workflow description here
+echo "" > ~/.scratch/mlebe/description.txt
 python make_bids.py || exit 1
 python preprocess.py || exit 1
 python collapse.py || exit 1

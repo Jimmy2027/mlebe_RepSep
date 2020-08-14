@@ -7,6 +7,8 @@ d) destination_dir=${OPTARG};;
 esac
 done
 
+python prepare/make_dataselection.py || exit 1
+
 echo "moving data from ${scratch_dir} to ${destination_dir}"
 mkdir -p ${destination_dir}/manual_overview/generic
 cp -v ${scratch_dir}/manual_overview/generic/coherence_4001_cbv.pdf ${destination_dir}/manual_overview/generic/ || exit 1
