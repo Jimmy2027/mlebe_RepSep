@@ -1,73 +1,74 @@
-%\section{Methods}\label{sec:methods}
-%For the benchmarking of the two workflows, the same methods that are described in the original paper have been applied in this work.
-%A more detailed description can be found there.
-%
-%\begin{sansmath}
-%\py{pytex_subfigs(
-%        [
-%                {'script':'scripts/classifier/uprepex.py', 'label':'exunprepro', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
-%                        'options_pre_caption':'\\vspace{0.1em}',
-%                        'options_post':'\\vspace{1em}',
-%                        'caption':'Example of an unpreprocessed slice.'
-%                        ,},
-%                {'script':'scripts/classifier/prepex.py', 'label':'exprepro', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
-%                        'options_pre_caption':'\\vspace{0.1em}',
-%                        'options_post':'\\vspace{1em}',
-%                        'caption':'Example of a preprocessed slice.'
-%                        ,},
-%                ],
-%        caption='\\textbf{The preprocessing removes the mask there, where the image-pixelvalues are 0.}\\
-%        Plots of the same image, superposed with the template mask, with and without preprocessing.
-%        ',
-%        label='fig:prepro_examples',
-%        )}
-%\end{sansmath}
-%
-%\begin{sansmath}
-%\py{pytex_fig('scripts/classifier/plt_trainset.py',
-%        conf='article/2*8plot.conf',
-%        label='trainset',
-%        caption='
-%        Augmented samples from the Training set.
-%        ',
-%        multicol=True,
-%        )}
-%\end{sansmath}
-%
-%\begin{sansmath}
-%\py{pytex_fig('scripts/classifier/show_blacklist.py',
-%        conf='article/2*8plot.conf',
-%        label='bl',
-%        caption='
-%                \\textbf{Slices where the mask includes too much outer-brain intensities are excluded from the data set.}\\
-%                Examples from the slices that were excluded from the data set. The mask is shown in blue, on top of the brain image.
-%                ',
-%        multicol=True,
-%        )}
-%\end{sansmath}
-%
-%\subsection{Model}
-%As the architecture of the classifier, the U-Net from Ronneberger et al \cite{ronneberger_u-net:_2015} was chosen based on its high performance in the field of biomedical image segmentation.
-%This is a convolutional neural network that consists of a contracting path that captures context in addition to a symmetric expanding path that enables precise localization.
-%Localization in this context means that a class label is assigned to each pixel.
-%We used the attention gated U-Net implementation from Ozan Oktay et al. \cite{oktay_attention} for which the code is publicly available \cite{oktay_ozan-oktayattention-gated-networks_2020}.
-%Additionally to the original U-Net structure, their implementation has attention gates in the expanding part which weight the information coming from the symmetric counterpart.
-%The additional parameters in these attention gates allow the model to learn which region of the image is important for specific tasks and to suppress irrelevant regions.
-%In our use case this implementation helped reduce false positive classifications of high intensities, outside of the mouse brain region.
-%
-%The model was trained using the Dice loss, which is computed from the Dice score.
-%It calculates the similarity of two binary samples X and Y with
-%\begin{equation}\label{eqDcoef}
-%D_{coef} = \frac{2|X\cap Y|}{|X|+|Y|}
-%\end{equation}
-%
-%It is a quantity ranging from 0 to 1 that is to be maximized.
-%The loss is then calculated with $1-D_{coef}$.
-%
-%Because many more pixels in the masks are 0 than 1, there is a class imbalance problem.
-%This is a problem because in this case a false positive gives a much higher loss than a false negative.
-%For example, predicting only black would give an acceptable loss, while predicting only white pixels would not.
-%Using the Dice coefficient as a loss function for training should make it invariant to this class imbalance problem as stated by Fausto Milletari et al. in \cite{milletari_v-net:_2016}.
+\section{Methods}\label{sec:methods}
+For the benchmarking of the two workflows, the same methods that are described in the original paper have been applied in this work.
+A more detailed description can be found there.
+
+\begin{sansmath}
+\py{pytex_subfigs(
+        [
+                {'script':'scripts/classifier/uprepex.py', 'label':'exunprepro', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+                        'options_pre_caption':'\\vspace{0.1em}',
+                        'options_post':'\\vspace{1em}',
+                        'caption':'Example of an unpreprocessed slice.'
+                        ,},
+                {'script':'scripts/classifier/prepex.py', 'label':'exprepro', 'conf':'article/1col.conf', 'options_pre':'{.48\\textwidth} \\vspace{-2em}',
+                        'options_pre_caption':'\\vspace{0.1em}',
+                        'options_post':'\\vspace{1em}',
+                        'caption':'Example of a preprocessed slice.'
+                        ,},
+                ],
+        caption='\\textbf{The preprocessing removes the mask there, where the image-pixelvalues are 0.}\\
+        Plots of the same image, superposed with the template mask, with and without preprocessing.
+        ',
+        label='fig:prepro_examples',
+        )}
+\end{sansmath}
+
+\begin{sansmath}
+\py{pytex_fig('scripts/classifier/plt_trainset.py',
+        conf='article/2*8plot.conf',
+        label='trainset',
+        caption='
+        Augmented samples from the Training set.
+        ',
+        multicol=True,
+        )}
+\end{sansmath}
+
+\begin{sansmath}
+\py{pytex_fig('scripts/classifier/show_blacklist.py',
+        conf='article/2*8plot.conf',
+        label='bl',
+        caption='
+                \\textbf{Slices where the mask includes too much outer-brain intensities are excluded from the data set.}\\
+                Examples from the slices that were excluded from the data set. The mask is shown in blue, on top of the brain image.
+                ',
+        multicol=True,
+        )}
+\end{sansmath}
+
+\subsection{Model}
+As the architecture of the classifier, the U-Net from Ronneberger et al \cite{ronneberger_u-net:_2015} was chosen based on its high performance in the field of biomedical image segmentation.
+This is a convolutional neural network that consists of a contracting path that captures context in addition to a symmetric expanding path that enables precise localization.
+Localization in this context means that a class label is assigned to each pixel.
+We used the attention gated U-Net implementation from Ozan Oktay et al. \cite{oktay_attention} for which the code is publicly available \cite{oktay_ozan-oktayattention-gated-networks_2020}.
+Additionally to the original U-Net structure, their implementation has attention gates in the expanding part which weight the information coming from the symmetric counterpart.
+The additional parameters in these attention gates allow the model to learn which region of the image is important for specific tasks and to suppress irrelevant regions.
+In our use case this implementation helped reduce false positive classifications of high intensities, outside of the mouse brain region.
+
+The model was trained using the Dice loss, which is computed from the Dice score.
+It calculates the similarity of two binary samples X and Y with
+\begin{equation}\label{eqDcoef}
+D_{coef} = \frac {2|X\cap Y| + \epsilon}{|X|+|Y| + \epsilon}
+\end{equation}
+where a smoothing factor $\epsilon$ of 0.01 is used.
+
+It is a quantity ranging from 0 to 1 that is to be maximized.
+The loss is then calculated with $1-D_{coef}$.
+
+Because many more pixels in the masks are 0 than 1, there is a class imbalance problem.
+This is a problem because in this case a false positive gives a much higher loss than a false negative.
+For example, predicting only black would give an acceptable loss, while predicting only white pixels would not.
+Using the Dice coefficient as a loss function for training should make it invariant to this class imbalance problem as stated by Fausto Milletari et al. in \cite{milletari_v-net:_2016}.
 
 \subsection{Data Set} \label{subsec:Data Set}
 The data set consists of 3D MR images taken from an aggregation of three studies: irsabi \cite{irsabi_bidsdata}, opfvta \cite{ioanas_whole-brain_nodate}, drlfom \cite{ioanas_effects_nodate} and other unpublished data, acquired with similar parameters.
@@ -84,99 +85,99 @@ The drlfom data set consists of \py{boilerplate.get_nmbrScans_from_dataselection
 The sessions were repeated at ??? days intervals, each containing one anatomical (echo-time: 30ms, inter-echo spacing: 10ms, repetition time (TR): 2950ms) and a functional (CBV with a flip angle of 60°) scan.
 The functional scans were sampled at $\mathrm{\Delta x(\nu)=y(\phi)=\SI{225}{\micro\meter}}$, and a slice thickness$\mathrm{\Delta z(t)=\SI{450}{\micro\meter}}$.
 
-%The measured animals were fitted with an optic fiber implant ($\mathrm{l=\SI{3.2}{\milli\meter} \ d=\SI{400}{\micro\meter}}$) targeting the Dorsal Raphe (DR) nucleus in the brain stem.
-%Using this dataset shows that the classifier is robust to these types of experiment setups.
-%
-%Images from the irsabi study are only used for quality control of the registration and are thus unknown to the classifier.
-%It is the same dataset that was used to benchmark the Generic workflow in the original paper and thus allows for a better estimation of the general performance of our improved pipeline.
-%
-%The images are transformed into a standard space using a template mask via SAMRI \cite{noauthor_ibt-fmi/samri_2019} and are thus defined in the same affine space.
-%SAMRI is a data analysis package of the ETH/UZH Institute for Biomedical Engineering.
-%It is equipped with an optimized registration workflow and standard geometric space for small animal brain imaging \cite{ioanas_optimized_2019}.
-%
-%Because of variance in mouse brain anatomy and in the experiment setup, some of the transformed data do not overlap perfectly with the reference template.
-%To filter these images out, most of the incongruent volumes were removed manually from the data set.
-%
-%For the registration of the images, a padding was needed to make the originally not affine space affine.
-%As a result, the 3D volumes present many zero-valued slices, some of them overlapping with the mask.
-%
-%Since it is not wanted for the model to predict a mask on black slices, the mask is set to zero where the image is zero-valued.
-%This has also the advantage of bringing variance into the template.
-%Because some pixels representing the brain tissue are zero-valued, holes result from this operation.
-%To patch these, the function \textcolor{mg}{\texttt{$binary\_fill\_holes$}} from scipy.ndimage.morphology \cite{noauthor_multi-dimensional_nodate} is used.
-%An example of the preprocessing can be seen in \cref{fig:prepro_examples}.
-%
-%In the coronal view, each slice of the transformed data is originally of shape (63, 48), matching the reference space resolution of \SI{200}{\micro\metre}.
-%It is then reshaped into \py{boilerplate.get_training_shape('tuple')} by first zero-padding the smaller dimension to the same size as the bigger one and then reshaping the image into \py{boilerplate.get_training_shape()} using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package \cite{noauthor_opencv-python_nodate}.
-%
-%Finally, the images are normalized by first clipping them from the minimum to the \nth{99} percentile of the data to remove outliers and then divided by the maximum.
-%
-%The data set is separated into Training, Validation and Test sets such that 90\% of the total data are used for training and validation while 10\% are used for testing.
-%This is done with the help of the function \textcolor{mg}{\texttt{$train\_test\_split$}} from the package sklearn.model$\_$selection \cite{scikit-learn}.
-%The Validation set is used for the optimization of hyperparameters while the Test set is used as a measure of extrapolation capability.
-%The irsabi data was additionally added to the test set.
+The measured animals were fitted with an optic fiber implant ($\mathrm{l=\SI{3.2}{\milli\meter} \ d=\SI{400}{\micro\meter}}$) targeting the Dorsal Raphe (DR) nucleus in the brain stem.
+Using this dataset shows that the classifier is robust to these types of experiment setups.
 
-%\subsection{Data Augmentation} \label{Data Augmentation}
-%
-%Because of diverse settings in the experiment setup, including animal manipulations causing artifacts, MR image quality can differ substantially between labs and even individual study populations.
-%To account for these variations, we apply an extensive set of transformations to our data.
-%This includes rotations of up to 20$^{\circ}$, a zoom range of -0.2 to +0.1, a random bias field added on the images and horizontal as well as vertical flips.
-%Additionally a gaussian noise is added to the images.
-%
-%This not only increases the data set size but also makes it more representative of the general data distribution of mice brain MR images and results in a model with a better generalization capability.
-%
-%\subsection{Training}
-%The model was trained on 3D volumes in the coronal view.
-%It was chosen over the axial one, because the shapes of the masks are much simpler in the coronal view and thus easier to learn for the network.
-%
-%Additionally, the coronal view has the advantage of higher resolution as the MR images were recorded coronally.
-%
-%\subsection{Masking}
-%To improve the SAMRI registration workflow, an additional node is implemented where the images are masked, such that only the brain region remains.
-%%To alleviate the task of the classifier, the image is first bias-corrected using the "\textcolor{mg}{\texttt{$N4BiasFieldCorrection$}}" function of the ANTs package, with spatial parameters used in the samri functions.
-%The image is first resampled into the resolution of the template space, which has a voxel size of $0.2\times 0.2 \times 0.2$.
-%This is done with the \textcolor{mg}{\texttt{$Resample$}} command from the FSL library which is an analysis tool for FMRI, MRI and DTI brain imaging data \cite{fsl}.
-%Then, the image is preprocessed using the operations described in \cref{subsec:Data Set}.
-%Since the classifier was trained to predict on images of shape \py{boilerplate.get_training_shape('tuple')}, the input needs to be reshaped.
-%The predictions of the model are reconstructed to a 3D mask via the command \textit{Nifit1Image} from the neuroimaging python package nibabel \cite{noauthor_neuroimaging_nodate}.
-%This is done using the same affine space as the input image.
-%The latter is then reshaped into the original shape inverting the preprocessing step, either with the opencv resize method or by cropping.
-%Additionally, the binary mask is resampled into its original affine space, before being multiplied with the brain image to extract the ROI.
-%
-%\subsection{Metrics}
-%
-%The VCF uses the 66\textsuperscript{th} voxel intensity percentile of the raw scan before any processing as definition of the brain volume.
-%The VCF is then obtained with \cref{eq:vcf}, where $v$ is the voxel volume in the original space, $v^\prime$ the voxel volume in the transformed space, $n$ the number of voxels in the original space, $m$ the number of voxels in the transformed space, $s$ a voxel value sampled from the vector $S$ containing all values in the original data, and $s^\prime$ a voxel value sampled from the transformed data.
-%
-%\begin{equation} \label{eq:vcf}
-%        V\!C\!F
-%        = \frac{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}{v\sum_{i=1}^n [s_i \geq P_{66}(S)]}
-%        = \frac{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}{v \lceil0.66n\rceil}
-%\end{equation}
-%
-%The SCF metric is based on the ratio of smoothness before and after processing.
-%It is obtained via \cref{eq:acf}, where $r$ is the distance of two amplitude distribution samples, $a$ is the relative weight of the Gaussian term in the model, $b$ is the width of the Gaussian and $c$ the decay of the mono-exponential term \cite{cox2017fmri}.
-%
-%\begin{equation} \label{eq:acf}
-%        ACF(r)
-%        = a * e^{ -r^{2}/ (2 * b^{2}) } + (1 - a) + e^{-r/c}
-%\end{equation}
-%
-%The for the MS relevant statistical power is obtained via the negative logarithm of first-level p-value maps.
-%Voxelwise statistical estimates for the probability that a time course could --- by chance alone --- be at least as well correlated with the stimulation regressor as the voxel time course measured are averaged via \cref{eq:ms}, where $n$ represents the number of statistical estimates in the scan, and $p$ is a p-value.
-%
-%\begin{equation} \label{eq:ms}
-%        M\!S = \frac{\sum_{i=1}^n -log(p_i)}{n}
-%\end{equation}
-%
-%\subsection{Statistics}
-%
-%In the methods section, all statistics are presented with respect to the distributions of the absolute distances to 1, |1 - Metric|.
-%Based on a Likelihood Ratio Test, we chose models that do not examine the Workflow- Contrast interaction.
-%The full summaries of the analysis can be seen in tables \cref{table1} and \cref{table2}.
-%
-%\section{Data and Code Availability}
-%
-%%The data archive relevant for this article is freely available \cite{mlebe_bidsdata}, and automatically accessible via the Gentoo Linux package manager.
-%In addition to the workflow code \cite{mlebe, samri}, we openly release the re-executable source code \cite{mlebe_repsep} for all statistics and figures in this document.
-%The herein introduced novel method as well as the benchmarking are thus fully transparent and reusable for further data.
+Images from the irsabi study are only used for quality control of the registration and are thus unknown to the classifier.
+It is the same dataset that was used to benchmark the Generic workflow in the original paper and thus allows for a better estimation of the general performance of our improved pipeline.
+
+The images are transformed into a standard space using a template mask via SAMRI \cite{noauthor_ibt-fmi/samri_2019} and are thus defined in the same affine space.
+SAMRI is a data analysis package of the ETH/UZH Institute for Biomedical Engineering.
+It is equipped with an optimized registration workflow and standard geometric space for small animal brain imaging \cite{ioanas_optimized_2019}.
+
+Because of variance in mouse brain anatomy and in the experiment setup, some of the transformed data do not overlap perfectly with the reference template.
+To filter these images out, most of the incongruent volumes were removed manually from the data set.
+
+For the registration of the images, a padding was needed to make the originally not affine space affine.
+As a result, the 3D volumes present many zero-valued slices, some of them overlapping with the mask.
+
+Since it is not wanted for the model to predict a mask on black slices, the mask is set to zero where the image is zero-valued.
+This has also the advantage of bringing variance into the template.
+Because some pixels representing the brain tissue are zero-valued, holes result from this operation.
+To patch these, the function \textcolor{mg}{\texttt{$binary\_fill\_holes$}} from scipy.ndimage.morphology \cite{noauthor_multi-dimensional_nodate} is used.
+An example of the preprocessing can be seen in \cref{fig:prepro_examples}.
+
+In the coronal view, each slice of the transformed data is originally of shape (63, 48), matching the reference space resolution of \SI{200}{\micro\metre}.
+It is then reshaped into \py{boilerplate.get_training_shape('tuple')} by first zero-padding the smaller dimension to the same size as the bigger one and then reshaping the image into \py{boilerplate.get_training_shape()} using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package \cite{noauthor_opencv-python_nodate}.
+
+Finally, the images are normalized by first clipping them from the minimum to the \nth{99} percentile of the data to remove outliers and then divided by the maximum.
+
+The data set is separated into Training, Validation and Test sets such that 90\% of the total data are used for training and validation while 10\% are used for testing.
+This is done with the help of the function \textcolor{mg}{\texttt{$train\_test\_split$}} from the package sklearn.model$\_$selection \cite{scikit-learn}.
+The Validation set is used for the optimization of hyperparameters while the Test set is used as a measure of extrapolation capability.
+The irsabi data was additionally added to the test set.
+
+\subsection{Data Augmentation} \label{Data Augmentation}
+
+Because of diverse settings in the experiment setup, including animal manipulations causing artifacts, MR image quality can differ substantially between labs and even individual study populations.
+To account for these variations, we apply an extensive set of transformations to our data.
+This includes rotations of up to 20$^{\circ}$, a zoom range of -0.2 to +0.1, a random bias field added on the images and horizontal as well as vertical flips.
+Additionally a gaussian noise is added to the images.
+
+This not only increases the data set size but also makes it more representative of the general data distribution of mice brain MR images and results in a model with a better generalization capability.
+
+\subsection{Training}
+The model was trained on 3D volumes in the coronal view.
+It was chosen over the axial one, because the shapes of the masks are much simpler in the coronal view and thus easier to learn for the network.
+
+Additionally, the coronal view has the advantage of higher resolution as the MR images were recorded coronally.
+
+\subsection{Masking}
+To improve the SAMRI registration workflow, an additional node is implemented where the images are masked, such that only the brain region remains.
+%To alleviate the task of the classifier, the image is first bias-corrected using the "\textcolor{mg}{\texttt{$N4BiasFieldCorrection$}}" function of the ANTs package, with spatial parameters used in the samri functions.
+The image is first resampled into the resolution of the template space, which has a voxel size of $0.2\times 0.2 \times 0.2$.
+This is done with the \textcolor{mg}{\texttt{$Resample$}} command from the FSL library which is an analysis tool for FMRI, MRI and DTI brain imaging data \cite{fsl}.
+Then, the image is preprocessed using the operations described in \cref{subsec:Data Set}.
+Since the classifier was trained to predict on images of shape \py{boilerplate.get_training_shape('tuple')}, the input needs to be reshaped.
+The predictions of the model are reconstructed to a 3D mask via the command \textit{Nifit1Image} from the neuroimaging python package nibabel \cite{noauthor_neuroimaging_nodate}.
+This is done using the same affine space as the input image.
+The latter is then reshaped into the original shape inverting the preprocessing step, either with the opencv resize method or by cropping.
+Additionally, the binary mask is resampled into its original affine space, before being multiplied with the brain image to extract the ROI.
+
+\subsection{Metrics}
+
+The VCF uses the 66\textsuperscript{th} voxel intensity percentile of the raw scan before any processing as definition of the brain volume.
+The VCF is then obtained with \cref{eq:vcf}, where $v$ is the voxel volume in the original space, $v^\prime$ the voxel volume in the transformed space, $n$ the number of voxels in the original space, $m$ the number of voxels in the transformed space, $s$ a voxel value sampled from the vector $S$ containing all values in the original data, and $s^\prime$ a voxel value sampled from the transformed data.
+
+\begin{equation} \label{eq:vcf}
+        V\!C\!F
+        = \frac{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}{v\sum_{i=1}^n [s_i \geq P_{66}(S)]}
+        = \frac{v^\prime\sum_{i=1}^m [s^\prime_i \geq P_{66}(S)]}{v \lceil0.66n\rceil}
+\end{equation}
+
+The SCF metric is based on the ratio of smoothness before and after processing.
+It is obtained via \cref{eq:acf}, where $r$ is the distance of two amplitude distribution samples, $a$ is the relative weight of the Gaussian term in the model, $b$ is the width of the Gaussian and $c$ the decay of the mono-exponential term \cite{cox2017fmri}.
+
+\begin{equation} \label{eq:acf}
+        ACF(r)
+        = a * e^{ -r^{2}/ (2 * b^{2}) } + (1 - a) + e^{-r/c}
+\end{equation}
+
+The for the MS relevant statistical power is obtained via the negative logarithm of first-level p-value maps.
+Voxelwise statistical estimates for the probability that a time course could --- by chance alone --- be at least as well correlated with the stimulation regressor as the voxel time course measured are averaged via \cref{eq:ms}, where $n$ represents the number of statistical estimates in the scan, and $p$ is a p-value.
+
+\begin{equation} \label{eq:ms}
+        M\!S = \frac{\sum_{i=1}^n -log(p_i)}{n}
+\end{equation}
+
+\subsection{Statistics}
+
+In the methods section, all statistics are presented with respect to the distributions of the absolute distances to 1, |1 - Metric|.
+Based on a Likelihood Ratio Test, we chose models that do not examine the Workflow- Contrast interaction.
+The full summaries of the analysis can be seen in tables \cref{table1},\cref{table2},\cref{table3} and \cref{table4}.
+
+\section{Data and Code Availability}
+
+%The data archive relevant for this article is freely available \cite{mlebe_bidsdata}, and automatically accessible via the Gentoo Linux package manager.
+In addition to the workflow code \cite{mlebe, samri}, we openly release the re-executable source code \cite{mlebe_repsep} for all statistics and figures in this document.
+The herein introduced novel method as well as the benchmarking are thus fully transparent and reusable for further data.

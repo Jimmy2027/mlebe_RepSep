@@ -3,7 +3,7 @@
 \renewcommand{\thefigure}{S\arabic{figure}}
 
 
-\section{Supplementary Materials}
+\section{Supplementary Materials}[h!]
 
 \begin{sansmath}
     \py{pytex_fig('scripts/msc_violin.py',
@@ -163,40 +163,13 @@ label='fig:m',)}
     \label{fig:nwfg}
 \end{figure*}
 
-\py{boilerplate.plt_factorci_summary(dependent_variable='Abs(1 - Vcf)',expression='Processing*Contrast', caption = 'Mixed Linear Model Regression Results --  With Processing/Contrast Interaction', label = 'table1')}
-\py{boilerplate.plt_factorci_summary(dependent_variable='Abs(1 - Vcf)',expression='Processing+Contrast', caption = ' Mixed Linear Model Regression Results --  Without Processing/Contrast Interaction', label = 'table2')}
+\py{boilerplate.plt_factorci_summary(dependent_variable='Abs(1 - Vcf)',expression='Processing*Contrast', caption = 'Mixed Linear Model Regression Results --  With Processing/Contrast Interaction for the Volume Conservation Factor', label = 'table1')}
 
-%\begin{center}
-%\begin{table}
-%\caption{Mixed Linear Model Regression Results}
-%\begin{center}
-%\begin{tabular}{llll}
-%%\hline
-%Model:            & MixedLM & Dependent Variable: & Q("VCF\_absDiff")  \\
-%No. Observations: & 136     & Method:             & REML               \\
-%No. Groups:       & 68      & Scale:              & 0.0008             \\
-%Min. group size:  & 2       & Likelihood:         & 246.6337           \\
-%Max. group size:  & 2       & Converged:          & Yes                \\
-%Mean group size:  & 2.0     &                     &                    \\
-%%\hline
-%\end{tabular}
-%\end{center}
-%%\hline
-%\begin{center}
-%\begin{tabular}{lllllll}
-%%\hline
-%                     & Coef.  & Std.Err. & z      & P$> |$z$|$ & [0.025 & 0.975]  \\
-%Intercept            & 0.048  & 0.006    & 7.988  & 0.000       & 0.037  & 0.060   \\
-%Processing[T.Masked] & -0.014 & 0.005    & -2.808 & 0.005       & -0.024 & -0.004  \\
-%Contrast[T.T2w+CBV]  & 0.011  & 0.008    & 1.402  & 0.161       & -0.004 & 0.026   \\
-%Uid Var              & 0.001  & 0.009    &        &             &        &         \\
-%%\hline
-%\end{tabular}
-%\end{center}
-%\end{table}
-%\end{center}
+\py{boilerplate.plt_factorci_summary(dependent_variable='Abs(1 - Vcf)',expression='Processing+Contrast', caption = ' Mixed Linear Model Regression Results --  Without Processing/Contrast Interaction for the Volume Conservation Factor', label = 'table2')}
+\cleardoublepage
+\py{boilerplate.plt_factorci_summary(df_path='data/smoothness.csv', dependent_variable='Abs(1 - Scf)',expression='Processing*Contrast', caption = 'Mixed Linear Model Regression Results --  With Processing/Contrast Interaction for the Smoothness Conservation Factor', label = 'table3')}
 
-
+\py{boilerplate.plt_factorci_summary(df_path='data/smoothness.csv', dependent_variable='Abs(1 - Scf)',expression='Processing+Contrast', caption = ' Mixed Linear Model Regression Results --  Without Processing/Contrast Interaction for the Smoothness Conservation Factor', label = 'table4')}
 
 %\py{pytex_tab('scripts/stim_table.py',
 %                label='stim',

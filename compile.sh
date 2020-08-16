@@ -6,7 +6,7 @@ WHITELIST="
 	"
 scratch_dir=~/.scratch/mlebe_threed
 # get all the necessary data from the preprocessing
-#sh prepare/transfer.sh -s ${scratch_dir} -d data || exit
+sh prepare/transfer.sh -s ${scratch_dir} -d data || exit
 
 if [[ $TARGET = "all" ]] || [[ "$TARGET" == "" ]]; then
 	for ITER_TARGET in *.tex; do
