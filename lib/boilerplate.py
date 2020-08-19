@@ -185,7 +185,7 @@ def plt_factorci_summary(df_path='data/volume.csv',
                          expression='Processing*Contrast',
                          exclusion_criteria={},
                          caption=None,
-                         label=None,
+                         label='',
                          ):
     df_path = path.abspath(df_path)
     df = pd.read_csv(df_path)
@@ -202,9 +202,7 @@ def plt_factorci_summary(df_path='data/volume.csv',
     summary = fit.summary()
     if caption:
         summary.title = caption
-    if label:
-        summary.label = label
-    return summary.as_latex().replace('\hline', '')
+    return summary.as_latex(label=label).replace('\hline', '')
 
 
 def get_nmbrScans_from_dataselection(data_set):
