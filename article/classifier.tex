@@ -3,7 +3,6 @@ We lay out a preparatory step to improve brain registration by specifically extr
 Our solution utilises a machine learning enabled brain tissue classifier, and the software implementation is formulated to integrate with the SAMRI Generic workflow \cite{ioanas_optimized_2019}, in order to ensure broader usability and reproducible benchmarking.
 It creates a mask of the brain region using a classifier, which is then used to extract the region of interest.
 Two classifiers were trained, one for scans acquired with RARE sequences yielding $T_2$-weighted contrast and one scans acquired with gradient-echo EPI sequences yielding either BOLD \cite{bold} and CBV \cite{cbv} contrasts (see \cref{subsec:Data Set}).
-%%%todo Maybe reference the methods section, where you briefly cite the data and list the actual scan parameters (echo time, inter-echo spacing, etc. --- all available in the methods section of the DRLFOM, IRSABI, and OPFVTA publications) --- reviewers will want to see this.
 The assignment of “brain” and “not brain” annotation to each voxel in the scans is performed via a trained U-Net, a popular neural network for medical image segmentation.
 
 \subsection{Workflow integration}
@@ -17,7 +16,8 @@ The registration transformation is applied to the unmasked data to make the proc
 To improve general-purpose application, training examples need to be drawn from a usually unknown probability distribution, which is expected to be representative of the space of occurrences.
 We set up an occurence space from which the data of interest is drawn, consisting of all the different mouse brain MRI data sets coming from multiple experiments, with their corresponding labels.
 Based on an approximation of the occurrence space, the network builds a general model that enables it to extrapolate and produce sufficiently accurate predictions in new cases.
-As a training dataset, we use scans which were preprocessed with the SAMRI Generic workflow.
+As a training dataset, we use scans which were preprocessed with the SAMRI \cite{noauthor_ibt-fmi/samri_2019} Generic workflow.
 This data thus contains scans mapped onto a bregma-centered standard \cite{ioanas_optimized_2019} space derived from the Toronto Hospital for Sick Children Mouse Imaging Center brain template \cite{dsu}.
 A template-based mask is available in the same reference space, and constitutes a ground truth estimation.
 As registration in the absence of brain extraction is prone to imperfections, the mask does not always align perfectly with the brain region of every slice and some scans had to be removed manually.
+Examples of slices from black listed volumes can be seen in \cref{bl}.

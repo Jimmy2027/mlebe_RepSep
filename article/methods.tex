@@ -87,7 +87,7 @@ The functional scans were sampled at $\mathrm{\Delta x(\nu)=y(\phi)=\SI{225}{\mi
 
 The measured animals were fitted with an optic fiber implant ($\mathrm{l=\SI{3.2}{\milli\meter} \ d=\SI{400}{\micro\meter}}$) targeting the Dorsal Raphe (DR) nucleus in the brain stem.
 Using this dataset shows that the classifier is robust to these types of experiment setups.
-
+%todo is this true for all the datasets?
 Images from the irsabi study are only used for quality control of the registration and are thus unknown to the classifier.
 It is the same dataset that was used to benchmark the Generic workflow in the original paper and thus allows for a better estimation of the general performance of our improved pipeline.
 
@@ -172,12 +172,6 @@ Voxelwise statistical estimates for the probability that a time course could ---
 
 \subsection{Statistics}
 
-In the methods section, all statistics are presented with respect to the distributions of the absolute distances to 1, |1 - Metric|.
+In the results section, all statistics are presented with respect to the distributions of the absolute distances to 1, i.e. |1 - Metric|.
 Based on a Likelihood Ratio Test, we chose models that do not examine the Workflow- Contrast interaction.
-The full summaries of the analysis can be seen in tables \cref{table1},\cref{table2},\cref{table3} and \cref{table4}.
-
-\section{Data and Code Availability}
-
-%The data archive relevant for this article is freely available \cite{mlebe_bidsdata}, and automatically accessible via the Gentoo Linux package manager.
-In addition to the workflow code \cite{mlebe, samri}, we openly release the re-executable source code \cite{mlebe_repsep} for all statistics and figures in this document.
-The herein introduced novel method as well as the benchmarking are thus fully transparent and reusable for further data.
+The full summaries of the analysis can be seen in tables \cref{table1}, \cref{table2}, \cref{table3} and \cref{table4}.
