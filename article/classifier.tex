@@ -6,9 +6,9 @@ Two classifiers were trained, one for scans acquired with RARE sequences yieldin
 The assignment of “brain” and “not brain” annotation to each voxel in the scans is performed via a trained U-Net, a popular neural network for medical image segmentation.
 
 \subsection{Workflow integration}
-%%% re-write SAMRI integration as a separate subsection “Workflow Integration”, and at the end of it, also highlight the advantages this has for software distribution (i.e. via NeuroGentoo), reproducibility (article RepSeP infrastructure), and benchmark accessibility.
+%% re-write SAMRI integration as a separate subsection “Workflow Integration”, and at the end of it, also highlight the advantages this has for software distribution (i.e. via NeuroGentoo), reproducibility (article RepSeP infrastructure), and benchmark accessibility.
 The brain extraction nodes of the workflow return both the masked input and the binary mask.
-The latter is used to constrain image similarity metric estimation on the relevant region of interest (ROI), while the extracted brain volume is used to prevent drifting of extracranial hyperintensities into the ROI. %todo how?
+The latter is used to constrain image similarity metric estimation on the relevant region of interest (ROI), while the extracted brain volume is used to prevent drifting of extracranial hyperintensities into the ROI.
 The registration transformation is applied to the unmasked data to make the process minimally destructive.
 
 \subsection{Training Data}

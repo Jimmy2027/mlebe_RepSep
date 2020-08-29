@@ -134,7 +134,6 @@ Additionally, the coronal view has the advantage of higher resolution as the MR 
 
 \subsection{Masking}
 To improve the SAMRI registration workflow, an additional node is implemented where the images are masked, such that only the brain region remains.
-%To alleviate the task of the classifier, the image is first bias-corrected using the "\textcolor{mg}{\texttt{$N4BiasFieldCorrection$}}" function of the ANTs package, with spatial parameters used in the samri functions.
 The image is first resampled into the resolution of the template space, which has a voxel size of $0.2\times 0.2 \times 0.2$.
 This is done with the \textcolor{mg}{\texttt{$Resample$}} command from the FSL library which is an analysis tool for FMRI, MRI and DTI brain imaging data \cite{fsl}.
 Then, the image is preprocessed using the operations described in \cref{subsec:Data Set}.

@@ -2,7 +2,7 @@
 For the quality control of the workflow, we first evaluate the classification process, followed by a benchmark between the Generic and the improved "Masked" workflow.
 
 \subsection{Classification}
-%%% Again, background or discussion
+%% Again, background or discussion
 Quality control of our classifier is difficult in the sense that the template mask does not always overlap perfectly with the brain region, such that small deviances of the predictions compared to the template could actually be caused by the prediction being more accurate than the template.
 Nevertheless, it is useful to verify whether the output is similar to the template, as it should be.
 As a similarity metric between the template mask and the classifier output we have used the Dice score (see \cref{eqDcoef}).
@@ -68,9 +68,8 @@ As seen in \cref{fig:vcfb}, we note that in the described dataset the absolute d
 The performance of the Generic SAMRI workflow is different from that of the Masked, yielding a two-tailed p-value of \py{pytex_printonly('scripts/vc_t.py')}.
 With respect to the data break-up by contrast (CBV versus BOLD, \cref{fig:vccv}), we see no notable main effect for the contrast variable
 (VCF of \py{boilerplate.corecomparison_factorci('Contrast[T.CBV]',dependent_variable='Abs(1 - Vcf)', expression='Processing+Contrast')}).
-%%% Ok, you introduce the VCF and you show the VCF plots primarily, and then you list the stats for RMSE only? You should definitely write out the modelling evaluation for VCF. My recommendation is to write down a paragraph for the VCF evaluation, and then RMSE evaluation, plot-wise you show a composite figure with subfigures for VCF, SCF, and the respective bootstrapped RMSE.
+%% Ok, you introduce the VCF and you show the VCF plots primarily, and then you list the stats for RMSE only? You should definitely write out the modelling evaluation for VCF. My recommendation is to write down a paragraph for the VCF evaluation, and then RMSE evaluation, plot-wise you show a composite figure with subfigures for VCF, SCF, and the respective bootstrapped RMSE.
 
-%%% briefly introduce what the RMSE tells you here.
 We note that there is a significant variance decrease in all conditions for the Masked workflow
 (\py{boilerplate.varianceratio()}-fold).
 Further, we note that the root mean squared error ratio favours the Masked workflow
@@ -78,7 +77,7 @@ Further, we note that the root mean squared error ratio favours the Masked workf
 
 \subsection{Smoothness Conservation}
 
-%%% Same comments as for VCF
+%% Same comments as for VCF
 
 Smoothing is a popular tool employed by many preprocessing functions to increase the signal-to-noise ratio.
 Image smoothness comes at the cost of image contrast as well as feature saliency and has been shown to result in inferior anatomical alignment \cite{fmriprep} due to the loss of spatial resolution.
@@ -98,7 +97,7 @@ Given the break-up by contrast shown in \cref{fig:sccv}, we see no effect for th
 
 \subsection{Functional Analysis}
 
-%%% Same comments as for VCF, these three sections can basically be copy-pasted in as far as the sentence structure is concerned.
+%% Same comments as for VCF, these three sections can basically be copy-pasted in as far as the sentence structure is concerned.
 Functional Analysis expresses the significance detected across all voxels of a scan by computing the Mean Significance (MS) \cite{ioanas_optimized_2019}.
 
 We observe that the Masked level of the workflow variable does not introduce a notable significance loss

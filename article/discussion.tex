@@ -1,12 +1,11 @@
 \section{Discussion}
 
-%%% Accuracy is given by the VCF/SCF model significance testing. Since this is not significant I don't think you can claim it improves accuracy. You can say it improves precision vhile conserving accuracy, or if you get p<=0.1 for VCF/SCF you can say it significantly improves precision and shows a trend towards accuracy improvement.
+%% Accuracy is given by the VCF/SCF model significance testing. Since this is not significant I don't think you can claim it improves accuracy. You can say it improves precision vhile conserving accuracy, or if you get p<=0.1 for VCF/SCF you can say it significantly improves precision and shows a trend towards accuracy improvement.
 The classifier improves the volume conservation, smoothness conservation, and session-to-session consistency of the SAMRI Generic workflow in terms of precision while conserving accuracy.
 
-%%% didn't you want to select one of the broken scans censored from the training data set and show that validity is improved when using masking? You really didn't talk about this scan censoring at all. It could be useful to mention in the context of your aim in showing how classification can be improved even when starting with imperfect “ground truth” data. You could in this context mention that for large data collections it is infeasible to obtain operator annotations, but if an imperfect annotation exists it is considerebly more feasible to implement operator censorship- 
+%%% todo didn't you want to select one of the broken scans censored from the training data set and show that validity is improved when using masking? You really didn't talk about this scan censoring at all. It could be useful to mention in the context of your aim in showing how classification can be improved even when starting with imperfect “ground truth” data. You could in this context mention that for large data collections it is infeasible to obtain operator annotations, but if an imperfect annotation exists it is considerebly more feasible to implement operator censorship-
 Region assignment validity is also revealed in a qualitative examination of higher-level functional maps (\cref{fig:m}), where both the Generic and the Generic Masked workflow provide accurate coverage of the sampled volume for both BOLD and CBV fMRI data.
 
-%%% maybe reference the figures where it is less and equally susceptible, respectively.
 These benefits of the classifier are robust to the functional contrast (\cref{fig:vccv,fig:sccv}), with the Generic Masking workflow being less or equally susceptible to the contrast variable, when compared to the Generic workflow.
 
 The classifier improves the performance of the SAMRI Generic workflow, making these accessible in the same interface with the same advantages in terms of transparency, parametrization, ease of package management, and non-destructive metadata management.
@@ -16,15 +15,16 @@ We make public the functions used for the masking in the workflow as well as tho
 
 Our workflow has the advantage that the performance of a Neural Network can increase when trained further with new data.
 The FOSS distribution model for both the classifier and workflow, as well as the article, allows users to easily take advantage of the classifier extendability and recreate the steps described herein.
-%%% but you already have this workflow, why not use this workflow to create more data? sort of like bootstrapping the training data validity.
+%% but you already have this workflow, why not use this workflow to create more data? sort of like bootstrapping the training data validity.
 Registering new data with the Generic Maksed workflow can increase the size of the training data set of the classifier.
 After removing possibly bad registrations, the latter can be trained again, which will improve its generalisation capability.
 Another advantage of the trainability of the classifier and the openly published code is that this workflow can be adapted to a wast variety of data types.
 
 \subsection{Conclusion}
 
-%%% No, you present a classifier. The entire SAMRI thing is just part of the implementation and benchmarking. Make it more about your classifier, and mention the workflow as a very thorough way to test real-life performance. If you make it about the workflow this will be dismissed as too “incremental” (i.e. you don't do anything new, you just tweak something old)--- you DO someting new!
-We present a remodeled version of the SAMRI Genetic registration workflow, which offers several advantages summarized by established metrics for data features commonly biased by registration.
+%% No, you present a classifier. The entire SAMRI thing is just part of the implementation and benchmarking. Make it more about your classifier, and mention the workflow as a very thorough way to test real-life performance. If you make it about the workflow this will be dismissed as too “incremental” (i.e. you don't do anything new, you just tweak something old)--- you DO someting new!
+We present a brain labeling classifier, that when used as a ROI extraction in an extention of the SAMRI Generic registration workflow, significantly improves the quality of the latter.
+The extended Generic Masked workflow offers several advantages summarized by established metrics for data features commonly biased by registration.
 Comparison with the original SAMRI Generic workflow revealed superior performance of the SAMRI Generic Masked workflow in terms of volume and smoothness conservation, as well as variance structure across subjects and sessions.
 The easily accessible, optimized registration parameters of the SAMRI Generic Workflow as well as the open source code to the classifier training functions make the pipeline transferable to any other imaging applications.
 The open source software choices in both the workflow and this article's source code empower users to better verify, understand, remix, and reuse our work.
