@@ -17,11 +17,22 @@
 \usepackage{booktabs}
 \usepackage{graphviz}
 \usepackage{subcaption}
-\usepackage{cleveref}
 \usepackage[font={small,sf},labelfont={bf}]{caption}
 \usepackage{nameref}
 \usepackage{sansmath}
 \usepackage{nth}
+%IEEE TM
+\usepackage{tmi}
+\usepackage{cite}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{amsmath,amssymb,amsfonts}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\usepackage{cleveref} % cleveref must be loaded after amsmath!
 
 % Single-session PythonTeX codeblocks
 \newcounter{pysessioncounter}
@@ -38,27 +49,7 @@
 \let\mydate\@date
 \makeatother
 
-%HEADER/FOOTER
-\usepackage{fancyhdr}
-	\pagestyle{fancy}
-	\renewcommand{\headrulewidth}{0.0pt}
-	\renewcommand{\footrulewidth}{1pt}
-	\renewcommand{\sectionmark}[1]{\markboth{#1}{}}
 
-	\lhead{}
-	\chead{\small\textsf{\textcolor{Gray}{\mytitle}}}
-	\rhead{}
-
-	\lfoot{}
-	\cfoot{\footnotesize\textsf{\textcolor{Gray}{\today}}}
-	\rfoot{\footnotesize\textsf{\textcolor{Gray}{Page} \thepage\ \textcolor{Gray}{of \pageref{LastPage}}}}
-
-	\fancypagestyle{firstpage}{
-		\fancyhf{}
-		\lfoot{}
-		\cfoot{\footnotesize\textsf{\textcolor{Gray}{\today}}}
-		\rfoot{\footnotesize\textsf{\textcolor{Gray}{Page} \thepage\ \textcolor{Gray}{of \pageref{LastPage}}}}
-	}
 
 \usepackage{etoolbox}
 	\makeatletter
@@ -66,41 +57,7 @@
 	\makeatother
 
 
-%TITLE
-\newcommand{\authorstyle}[1]{{\large\bfseries\textsf{\color{Gray}#1}}}
-\newcommand{\institution}[1]{{\footnotesize\textsf{\color{Black}#1}}}
-\usepackage{titling}
-\newcommand{\HorRule}{\color{Gray}\rule{\linewidth}{1pt}}
-\pretitle{
-	\vspace{-6em} %move title section up
-	\HorRule %horizontal rule abve title
-	\vspace{1.2em}
-	\huge\usefont{T1}{phv}{b}{n}
-	\color{Black} %title color
-}
-\posttitle{\par\vskip 0.5em}
-\preauthor{}
-\postauthor{
-	\vspace{1.2em}
-	\par\HorRule %horizontal rule below title
-	\vspace{-1em}
-}
 
-
-% Sections
-% make sure the first paragraph of a section is not indented
-\makeatletter
-	\let\@afterindenttrue\@afterindentfalse
-	\@afterindentfalse
-\makeatother
-
-\usepackage[explicit]{titlesec}
-\titleformat{\section}[hang]{\Large\usefont{T1}{phv}{b}{n}\color{Black}}{}{0em}{#1}%
-\titlespacing{\section}{0em}{1.5em}{0.4em}
-\titleformat{\subsection}[hang]{\usefont{T1}{phv}{b}{n}\color{Black}}{}{0em}{#1}%
-\titlespacing{\subsection}{0em}{1em}{0.2em}
-\titleformat{\subsubsection}[hang]{\footnotesize\usefont{T1}{phv}{b}{n}\color{Black}}{}{0em}{#1}%
-\titlespacing{\subsubsection}{0em}{0.75em}{0em}
 
 % Pythontex
 \usepackage[autoprint=false, gobble=auto, pyfuture=all]{pythontex} %create figures on-line directly from python!
@@ -128,6 +85,3 @@ pytex.add_dependencies(DOC_STYLE,
 
 % Boilerplate visual style improvements
 \newcommand{\niceus}{\texttt{\_}}
-
-%BIBLIOGRAPHY
-\usepackage[numbers]{natbib}
