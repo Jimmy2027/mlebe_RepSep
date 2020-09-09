@@ -19,7 +19,8 @@ else
 	pdflatex -shell-escape ${TARGET}.tex &&\
 	pythontex.py ${TARGET}.tex &&\
 	pdflatex -shell-escape ${TARGET}.tex &&\
-	bibtex ${TARGET} &&\
+#	bibtex ${TARGET} &&\
+	biber ${TARGET} &&\
 	pdflatex -shell-escape ${TARGET}.tex &&\
 	pdflatex -shell-escape ${TARGET}.tex
 fi

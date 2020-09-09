@@ -2,14 +2,14 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{geometry}
-	\geometry{
-		top=1cm,
-		bottom=1.5cm,
-		left=2cm,
-		right=2cm,
-		includehead,
-		includefoot,
-	}
+\geometry{
+top=1cm,
+bottom=1.5cm,
+left=2cm,
+right=2cm,
+includehead,
+includefoot,
+}
 \usepackage[hidelinks]{hyperref}
 \usepackage{graphicx}
 \usepackage{lastpage}
@@ -23,23 +23,23 @@
 \usepackage{nth}
 %IEEE TM
 \usepackage{tmi}
-\usepackage{cite}
+%\usepackage{cite}
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{amsmath,amssymb,amsfonts}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \usepackage{cleveref} % cleveref must be loaded after amsmath!
 
 % Single-session PythonTeX codeblocks
 \newcounter{pysessioncounter}
 \newcommand{\sessionpy}{%
-	  \edef\sessionpysession{session\arabic{pysessioncounter}}%
-	    \stepcounter{pysessioncounter}%
-	      \expandafter\py\expandafter[\sessionpysession]}
+\edef\sessionpysession{session\arabic{pysessioncounter}}%
+\stepcounter{pysessioncounter}%
+\expandafter\py\expandafter[\sessionpysession]}
 
 %VARIABLES
 %set up a more stable buffers (the normal ones gets blanked after the titlepage is invoked)
@@ -52,11 +52,9 @@
 
 
 \usepackage{etoolbox}
-	\makeatletter
-		\patchcmd{\footrule}{\hrule}{\color{Gray}\hrule}{}{}
-	\makeatother
-
-
+\makeatletter
+\patchcmd{\footrule}{\hrule}{\color{Gray}\hrule}{}{}
+\makeatother
 
 
 % Pythontex
@@ -65,13 +63,13 @@
 
 \input{pythontex/functions.py}
 \begin{pythontexcustomcode}[begin]{py}
-DOC_STYLE = 'article/main.conf'
-pytex.add_dependencies(DOC_STYLE,
-	'article/3dplot.conf',
-	'lib/utils.py',
-	'lib/categorical.py',
-	'data/volume.csv'
-	)
+    DOC_STYLE = 'article/main.conf'
+    pytex.add_dependencies(DOC_STYLE,
+    'article/3dplot.conf',
+    'lib/utils.py',
+    'lib/categorical.py',
+    'data/volume.csv'
+    )
 \end{pythontexcustomcode}
 
 % Grey definitiosn.
@@ -85,3 +83,11 @@ pytex.add_dependencies(DOC_STYLE,
 
 % Boilerplate visual style improvements
 \newcommand{\niceus}{\texttt{\_}}
+
+%BIBLIOGRAPHY
+\usepackage[
+backend=biber,
+style=ieee,
+citestyle=numeric
+]{biblatex}
+\addbibresource{./bib.bib}
