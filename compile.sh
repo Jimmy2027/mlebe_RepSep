@@ -2,7 +2,7 @@
 
 TARGET="${1}"
 WHITELIST="
-	article.tex
+	article_ieeetm.tex
 	"
 scratch_dir=~/.scratch/mlebe_threed
 # get all the necessary data from the preprocessing
