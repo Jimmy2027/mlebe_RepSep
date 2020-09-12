@@ -151,12 +151,16 @@ def print_dice():
     return np.round(float(dice_score), 3)
 
 
-def get_training_shape(type='tuple'):
+def get_training_shape(type='tuple', idx=False):
     workflow_config = json_to_dict('data/config.json')
     anat_model_config = json_to_dict(workflow_config['masking_config']['masking_config_anat']['model_config_path'])
     scale_size = anat_model_config['augmentation']['mlebe']['scale_size']
-    if type == 'tuple':
+    if idx:
+        return scale_size[type]
+    elif type == 'tuple':
         return '({}, {})'.format(scale_size[0], scale_size[1])
+    elif type == 'triple':
+        return '({}, {}, {})'.format(scale_size[0], scale_size[1], scale_size[2])
     else:
         return scale_size[0]
 
@@ -218,3 +222,7 @@ def get_nmbrSubject_from_dataselection(data_set):
 def get_max_numbrSession_from_dataselection(data_set):
     data_selection = pd.read_csv('data/data_selection.csv')
     return max(data_selection.loc[data_selection['data_set'] == data_set].groupby('subject').count()['uid'])
+
+
+if __name__ == '__main__':
+    print(get_training_shape())

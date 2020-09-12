@@ -44,7 +44,7 @@ for index in range(nbr_tries):
 
         # run workflow
         os.system('./run.sh')
-        sddfg
+        dsyfdxgf
         # create article
         os.system('../cleanup.sh')
         os.system('../compile.sh')

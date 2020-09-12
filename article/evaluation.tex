@@ -10,53 +10,66 @@ The average Dice score on the test data set is $D_{coef}= $ \py{boilerplate.prin
 % todo should I give more scores? AUC, ...
 
 \begin{sansmath}
-\py{pytex_fig('scripts/classifier/plt_testset_examples.py',
-        conf='article/wide.conf',
-        label='testset_ex',
-        caption='
-                \\textbf{The Classifier predicts a similar mask to the ground truth.}
-                Randomly picked plots from the test set illustrate the predictions of the classifier.
-                The first row presents the input image, the second the ground truth and the third row shows the predictions of the classifier.
-                ',
-        multicol=True,
-        )}
+    \py{pytex_fig('scripts/classifier/plt_testset_examples.py',
+    conf='article/wide.conf',
+    label='testset_ex',
+    caption='
+    \\textbf{The Classifier predicts a similar mask to the ground truth.}
+    Randomly picked plots from the test set illustrate the predictions of the classifier.
+    The first row presents the input image, the second the ground truth and the third row shows the predictions of the classifier.
+    ',
+    multicol=True,
+    )}
 \end{sansmath}
 
 \subsection{Workflow}
+\begin{sansmath}
+    \py{pytex_fig('scripts/classifier/plt_registration_comparison.py',
+    conf='article/4*2.conf',
+    label='regComp',
+    caption='
+\\textbf{The Masked workflow prevents the shifting of outer-brain region voxels into the template-brain region (in blue).} Comparison of slices from 3 different volumes, registered with the Generic (first row) and the Masked (second row) workflow.',
+    multicol=True,
+    )}
+\end{sansmath}
+
 We use an established palette of workflow evaluation metrics --- inspecting volume and smoothness conservation, as well as downstream effects on basic functional analysis \cite{ioanas_optimized_2019} --- to benchmark the novel SAMRI Masked workflow against the SAMRI Generic workflow.
 Statistics for the Volume Conservation and the Smoothness Conservation are presented with respect to the distributions of the absolute distances to the optimal value 1.
+
+A qualitative evaluation of the registered volume shows that the classifier reduces the shifting of outer brain regions into the brain region and improves the quality of the registration.
+This can be seen in \cref{fig:regComp}, comparing slices of three different registered volumes with and without the help of the classifier.
 
 \subsection{Volume Conservation}
 
 \begin{sansmath}
-\py{pytex_subfigs(
-        [
-                {'script':'scripts/vcc_violin.py', 'label':'vccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
-                        'options_pre_caption':'\\vspace{-1.5em}\\',
-                        'options_post':'\\vspace{1em}',
-                        'caption':'Comparison across workflows and functional contrasts.'
-                        ,},
-                {'script':'scripts/scf_violin_contrasts.py', 'label':'sccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
-                        'options_pre_caption':'\\vspace{-1.5em}\\',
-                        'options_post':'\\vspace{1em}',
-                        'caption':'Comparison across workflows and functional contrasts.'
-                        ,},
-                {'script':'scripts/vc_violin_absdiff.py', 'label':'vcfb','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
-                        'options_pre_caption':'\\vspace{-1.5em}\\',
-                        'options_post':'\\vspace{1em}',
-                        'caption':'Comparison of the distributions of the absolute distances to 1, across workflows and functional contrasts.'
-                        ,},
-                {'script':'scripts/scf_violin_absdiff.py', 'label':'scfb','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
-                        'options_pre_caption':'\\vspace{-1.5em}\\',
-                        'options_post':'\\vspace{1em}',
-                        'caption':'Comparison of the distributions of the absolute distances to 1, across workflows and functional contrasts.'
-                        ,},
-                ],
-        caption='\\textbf{Both the SAMRI Generic and the Masked workflow optimally and reliably conserve volume and smoothness, the latter showing values that are closely distributed to 1.}
-        Plots showing the distribution of two target metrics in the first row, together with the respective distributions of the absolute distances to 1 in the second row. Solid lines in the colored distribution densities indicate the sample mean and dashed lines the inner quartiles.
-        ',
-        label='fig:vc',
-        )}
+    \py{pytex_subfigs(
+    [
+    {'script':'scripts/vcc_violin.py', 'label':'vccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+    'options_pre_caption':'\\vspace{-1.5em}\\',
+    'options_post':'\\vspace{1em}',
+    'caption':'Comparison of the VCF across workflows and functional contrasts.'
+    ,},
+    {'script':'scripts/scf_violin_contrasts.py', 'label':'sccv','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+    'options_pre_caption':'\\vspace{-1.5em}\\',
+    'options_post':'\\vspace{1em}',
+    'caption':'Comparison of the SCF across workflows and functional contrasts.'
+    ,},
+    {'script':'scripts/vc_violin_absdiff.py', 'label':'vcfb','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+    'options_pre_caption':'\\vspace{-1.5em}\\',
+    'options_post':'\\vspace{1em}',
+    'caption':'Comparison of the distributions of the absolute VCF errors, across workflows and functional contrasts.'
+    ,},
+    {'script':'scripts/scf_violin_absdiff.py', 'label':'scfb','conf':'article/1col.conf', 'options_pre':'{.48\\textwidth}',
+    'options_pre_caption':'\\vspace{-1.5em}\\',
+    'options_post':'\\vspace{1em}',
+    'caption':'Comparison of the distributions of the absolute SCF errors, across workflows and functional contrasts.'
+    ,},
+    ],
+    caption='\\textbf{Both the SAMRI Generic and the Masked workflow optimally and reliably conserve volume and smoothness, the latter showing values that are closely distributed to 1.}
+    Plots showing the distribution of two target metrics in the first row, together with the respective distributions of the absolute distances to 1 in the second row. Solid lines in the colored distribution densities indicate the sample mean and dashed lines the inner quartiles.
+    ',
+    label='fig:vc',
+    )}
 \end{sansmath}
 
 Volume Conservation Factor (VCF) \cite{ioanas_optimized_2019} measures the registration induced deformation of the scanned brain, by computing the ratio of the brain volume before and after preprocessing.
@@ -117,19 +130,6 @@ With respect to the data break-up by contrast (\cref{fig:mscv}), we see no notab
 %We note that processing with the Generic* workflow (\cref{fig:mllc,fig:mllb}), does not induce issues with statistic coverage alignment and overflow.
 
 \subsection{Variance Analysis}
-
-\begin{sansmath}
-\py{pytex_fig('scripts/variance_catplot.py',
-        conf='article/varplot.conf',
-        label='var',
-        caption='
-                \\textbf{Both the Generic and the Masked workflow minimize trial-to-trial variability while conserving subject-wise variability.}
-                Swarmplots of three metric scores illustrate similarity of preprocessed images for the two corresponding workflow templates, plotted across subjects (separated into x-axis bins) and sessions (individual points in each x-axis bin), for the CBV contrast.
-                ',
-        multicol=True,
-        )}
-\end{sansmath}
-
 As an additional metric for the comparison between workflows, we evaluate if physiological meaningfull variability is retained across repeated measurements.
 It is based on the assumption that adult mouse brains retain size, shape, and implant position in the absence of intervention, throughout the 8 week study period \cite{ioanas_optimized_2019}.
 Examining the similarity between the template and preprocessed scans, session-wise variability should be smaller than subject-wise variability.
@@ -139,7 +139,6 @@ Neighborhood Cross Correlation (CC, sensitive to localized correlation),
 Global Correlation (GC, sensitive to whole-image correlation),
 and Mutual Information (MI, sensitive to whole-image information similarity).
 
-\cref{fig:var} renders the similarity metric scores for both the SAMRI Generic and Masked workflows.
 Both, the Generic and the Masked workflow produce results which show a higher F-statistic for the subject than for the session variable.
 For the Masked workflow, F-statistics show:
 CC (subject: \py{boilerplate.variance_test('C(Subject)','Masked','CC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Masked','CC', condensed=True)}),
@@ -151,8 +150,9 @@ CC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','CC', condense
 GC (subject: \py{boilerplate.variance_test('C(Subject)','Generic','GC', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','GC', condensed=True)}),
 and MI (subject: \py{boilerplate.variance_test('C(Subject)','Generic','MI', condensed=True)}, session: \py{boilerplate.variance_test('C(Session)','Generic','MI', condensed=True)}).
 
-\section{Data and Code Availability}
 
-%The data archive relevant for this article is freely available \cite{mlebe_bidsdata}, and automatically accessible via the Gentoo Linux package manager.
-In addition to the workflow code \cite{mlebe, samri}, we openly release the re-executable source code \cite{mlebe_repsep} for all statistics and figures in this document.
-The herein introduced novel method as well as the benchmarking are thus fully transparent and reusable for further data.
+%\section{Data and Code Availability}
+%
+%%The data archive relevant for this article is freely available \cite{mlebe_bidsdata}, and automatically accessible via the Gentoo Linux package manager.
+%In addition to the workflow code \cite{mlebe, samri}, we openly release the re-executable source code \cite{mlebe_repsep} for all statistics and figures in this document.
+%The herein introduced novel method as well as the benchmarking are thus fully transparent and reusable for further data.

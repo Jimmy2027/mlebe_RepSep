@@ -33,6 +33,7 @@ python variance_data.py || exit 1
 python smoothness_data.py || exit 1
 python functional_data.py || exit 1
 python l2.py || exit 1
+python classifier/build_graph.py || exit 1
 
 mv ~/.scratch/mlebe/preprocessing/masked_work/graph.dot ~/.scratch/mlebe/data/masked_nipype.dot
 mv ~/.scratch/mlebe/preprocessing/generic_work/graph.dot ~/.scratch/mlebe/data/generic_nipype.dot

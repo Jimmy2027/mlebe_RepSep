@@ -3,13 +3,14 @@ We lay out a preparatory step to improve brain registration by specifically extr
 Our solution utilises a machine learning enabled brain tissue classifier, and the software implementation is formulated to integrate with the SAMRI Generic workflow \cite{ioanas_optimized_2019}, in order to ensure broader usability and reproducible benchmarking.
 It creates a mask of the brain region using a classifier, which is then used to extract the region of interest.
 Two classifiers were trained, one for scans acquired with RARE sequences yielding $T_2$-weighted contrast and one scans acquired with gradient-echo EPI sequences yielding either BOLD \cite{bold} and CBV \cite{cbv} contrasts (see \cref{subsec:Data Set}).
-The assignment of “brain” and “not brain” annotation to each voxel in the scans is performed via a trained U-Net, a popular neural network for medical image segmentation.
+The assignment of “brain” and “not brain” annotation to each voxel in the scans is performed via a trained U-Net, a popular neural network for medical image segmentation \cite{ronneberger_u-net:_2015}.
 
 \subsection{Workflow integration}
 %% re-write SAMRI integration as a separate subsection “Workflow Integration”, and at the end of it, also highlight the advantages this has for software distribution (i.e. via NeuroGentoo), reproducibility (article RepSeP infrastructure), and benchmark accessibility.
 The brain extraction nodes of the workflow return both the masked input and the binary mask.
 The latter is used to constrain image similarity metric estimation on the relevant region of interest (ROI), while the extracted brain volume is used to prevent drifting of extracranial hyperintensities into the ROI.
 The registration transformation is applied to the unmasked data to make the process minimally destructive.
+\Cref{fig:workflow_graph} shows the integration of the classifier into the SAMRI workflow in a simplified manner.
 
 \subsection{Training Data}
 
@@ -20,4 +21,30 @@ As a training dataset, we use scans which were preprocessed with the SAMRI \cite
 This data thus contains scans mapped onto a bregma-centered standard \cite{ioanas_optimized_2019} space derived from the Toronto Hospital for Sick Children Mouse Imaging Center brain template \cite{dsu}.
 A template-based mask is available in the same reference space, and constitutes a ground truth estimation.
 As registration in the absence of brain extraction is prone to imperfections, the mask does not always align perfectly with the brain region of every slice and some scans had to be removed manually.
-Examples of slices from black listed volumes can be seen in the supplementary material \cref{blacklist_example}.
+Examples of slices from black listed volumes can be seen in the supplementary material \cref{fig:blacklist_example}.
+\Cref{fig:training_graph} depicts the training workflow of the classifier.
+
+\begin{figure*}[h!]
+    \begin{subfigure}{0.45\textwidth}
+        \centering
+        \includedot[width=\linewidth]{data/training}
+        \vspace{-1.9em}
+        \caption{
+        Flowchart describing the training process of the classifier.
+        }
+        \label{fig:training_graph}
+    \end{subfigure}
+    \begin{subfigure}{0.45\linewidth}
+        \centering
+        \includedot[width=\textwidth]{data/workflow}
+        \vspace{-1.9em}
+        \caption{
+        Flowchart describing the integration of the classifier into the SAMRI Generic workflow in a simplified manner.
+        }
+        \label{fig:workflow_graph}
+    \end{subfigure}\hfill
+    \caption{
+        Flowcharts describing the training and the integration of the classifier in a simplified manner.
+    }
+    \label{fig:model_graphs}
+\end{figure*}
