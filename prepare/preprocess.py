@@ -8,7 +8,6 @@ bids_base = '{}/bids'.format(scratch_dir)
 
 # Preprocess all of the data:
 if config['workflow_config']['with_FLASH']:
-        # todo does it make sense to have a separate folder for this?
     dargcc_bids_base = '{}/dargcc_bids'.format(scratch_dir)
 
     generic(dargcc_bids_base,
