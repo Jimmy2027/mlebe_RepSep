@@ -8,8 +8,9 @@ import os
 import pandas as pd
 from mlebe.training.configs.utils import json_to_dict, write_to_jsonfile
 from mlebe.training.utils.utils import mkdir
+from utils.general import verify_config_paths
 
-nbr_tries = 1
+nbr_tries = 5
 
 # load model results table
 model_results_table_path = os.path.expanduser('~/src/MLEBE/mlebe/training/results.csv')
@@ -32,6 +33,8 @@ for index in range(nbr_tries):
     anat_model = model_results_table_anat.iloc[index]['config_path']
     func_model = model_results_table_func.iloc[index]['config_path']
 
+    verify_config_paths(anat_model, func_model)
+
     anat_model_uid = model_results_table_anat.iloc[index]['uid']
     func_model_uid = model_results_table_func.iloc[index]['uid']
 
@@ -44,10 +47,9 @@ for index in range(nbr_tries):
 
         # run workflow
         os.system('./run.sh')
-        dsyfdxgf
         # create article
         os.system('../cleanup.sh')
-        os.system('../compile.sh')
+        os.system('../compile.sh mlebe')
 
         # move data to results folder
         dir_name = index

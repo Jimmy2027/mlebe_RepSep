@@ -5,10 +5,11 @@ import datetime
 import os
 import uuid
 from shutil import copyfile
+
 import pandas as pd
+from classifier.utils import init_model_configs
 from mlebe.training.configs.utils import json_to_dict, write_to_jsonfile, get_dice_score_of_model
 from mlebe.training.utils.utils import mkdir
-from classifier.utils import init_model_configs
 
 scratch_dir = '~/.scratch/mlebe'
 config_path = os.path.expanduser(os.path.join(scratch_dir, 'config.json'))

@@ -11,6 +11,7 @@ def init_model_configs(config):
     write_to_jsonfile(func_model_config_path,
                       [('model.use_cuda', config['masking_config']['masking_config_func']['use_cuda'])])
 
+
 def dice(im1, im2, empty_score=1.0):
     """
     Computes the Dice coefficient, a measure of set similarity.

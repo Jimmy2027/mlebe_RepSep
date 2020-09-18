@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 
-TARGET="${1}"
+TARGET="${2}"
+SCRATCH_DIR="${1}"
+
 WHITELIST="
 	article_ieeetm.tex
 	"
-scratch_dir=~/.scratch/mlebe_threed
+if [["$SCRATCH_DIR" == ""]]; then
+  scratch_dir=~/.scratch/mlebe_threed
+else
+   scratch_dir=~/.scratch/${SCRATCH_DIR}
+fi
+
 # get all the necessary data from the preprocessing
 #sh prepare/transfer.sh -s ${scratch_dir} -d data || exit
 
