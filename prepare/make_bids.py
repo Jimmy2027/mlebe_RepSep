@@ -77,8 +77,8 @@ if __name__ == '__main__':
 				for subject in subjects:
 					command = f'ln -s /usr/share/irsabi_bidsdata/sub-{subject} ~/.scratch/mlebe/bids/'
 					os.system(command)
-					command = 'cp /usr/share/irsabi_bidsdata/dataset_description.json ~/.scratch/mlebe/bids/'
-					os.system(command)
+				command = 'cp /usr/share/irsabi_bidsdata/dataset_description.json ~/.scratch/mlebe/bids/'
+				os.system(command)
 			else:
 				command = 'ln -s /usr/share/irsabi_bidsdata/* ~/.scratch/mlebe/bids/'
 				os.system(command)

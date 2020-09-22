@@ -9,7 +9,6 @@ import mlebe
 from mlebe.masking.predict_mask import predict_mask
 from mlebe.training.configs.utils import json_to_dict
 
-
 def test_masker():
     test_dir = os.path.join(os.path.dirname(mlebe.__file__), 'masking/tests/temp/')
     os.makedirs(test_dir, exist_ok=True)
@@ -24,5 +23,5 @@ def test_masker():
     shutil.rmtree(test_dir)
 
 
-if __name__ == '__name__':
+if __name__ == '__main__':
     test_masker()

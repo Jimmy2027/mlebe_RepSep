@@ -11,13 +11,14 @@ from classifier.utils import init_model_configs
 from mlebe.training.configs.utils import json_to_dict, write_to_jsonfile, get_dice_score_of_model
 from mlebe.training.utils.utils import mkdir
 
+# choose your workflow configuration
+json_config_path = "configs/noBiascorr_noCrop.json"
+
 scratch_dir = '~/.scratch/mlebe'
 config_path = os.path.expanduser(os.path.join(scratch_dir, 'config.json'))
 
 if __name__ == '__main__':
     mkdir(os.path.expanduser(scratch_dir))
-    # choose your workflow configuration
-    json_config_path = "configs/noBiascorr_noCrop.json"
     config = json_to_dict(json_config_path)
     # change parameters of the model configs such as use_cuda, etc... for the workflow
     init_model_configs(config)
