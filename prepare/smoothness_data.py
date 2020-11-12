@@ -9,7 +9,7 @@ from bids.grabbids import BIDSLayout
 from bids.grabbids import BIDSValidator
 import nipype.interfaces.io as nio
 from utils.bootstrapping import bootstrap, bootstrap_analysis
-from make_config import config_path, scratch_dir
+from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
 from mlebe.training.utils.utils import json_file_to_pyobj
 
 masks = {

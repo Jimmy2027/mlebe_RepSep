@@ -1,0 +1,8 @@
+git+git://github.com/Jimmy2027/SAMRI#egg=samri
+# SAMRI:
+joblib
+argh
+# SAMRI needs bids>=0.10.2
+bids>=0.10.2
+nilearn
+nipype

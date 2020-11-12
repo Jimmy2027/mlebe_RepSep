@@ -2,6 +2,12 @@
 # data needed to run this script:
 # - /usr/share/irsabi_bidsdata and /usr/share/dargcc_bidsdata for make_bids
 # - /mnt/data/hendrik/mlebe_data/ for classifier_tester
+# need to have run python setup.py develop --user for MLEBE package
+
+source ~/miniconda3/etc/profile.d/conda.sh
+conda activate mlebe
+which python
+
 if [ ! -d ~/.scratch ]; then
   echo "You seem to be lacking a ~/.scratch/ directory."
   echo "We need this directory in order to process the data, and it needs to be on a volume with 200GB+ space."
@@ -15,14 +21,14 @@ fi
 #ln -s ~/.scratch/irsabi/preprocessing/generic/* ~/.scratch/mlebe/preprocessing/generic/
 
 # This workflow runs with a json configuration file, choose one in configs/ and define it in make_config.py
-if [ ! -f ~/.scratch/mlebe/preprocessing/config.json ]; then
-  python make_config.py || exit 1
-fi
+#if [ ! -f ~/.scratch/mlebe/preprocessing/config.json ]; then
+#  python make_config.py || exit 1
+#fi
 # Write your workflow description here
 echo "" > ~/.scratch/mlebe/description.txt
-python make_bids.py || exit 1
-python preprocess.py || exit 1
-python collapse.py || exit 1
+#python make_bids.py || exit 1
+#python preprocess.py || exit 1
+#python collapse.py || exit 1
 python l1.py || exit 1
 python manual_overview.py || exit 1
 python classifier/get_model_data.py || exit 1

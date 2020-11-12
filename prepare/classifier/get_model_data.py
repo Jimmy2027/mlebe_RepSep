@@ -1,6 +1,6 @@
 import os
 import numpy as np
-from make_config import config_path, scratch_dir
+from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
 from mlebe.training.dataio.loaders import get_dataset
 from mlebe.training.dataio.transformation import get_dataset_transformation
 from mlebe.training.dataio.loaders.utils import remove_black_images

@@ -1,10 +1,19 @@
 from mlebe.training.configs.utils import write_to_jsonfile
 import numpy as np
+from typing import Dict
 
 
-def init_model_configs(config):
-    anat_model_config_path = config['masking_config']['masking_config_anat']['model_config_path']
-    func_model_config_path = config['masking_config']['masking_config_func']['model_config_path']
+def init_model_configs(config: Dict):
+    """
+    overwrite parameters of the model configs such as use_cuda for the workflow
+    Parameters
+    ----------
+    config : dict
+    """
+    anat_model_config_path = config['masking_config']['masking_config_anat'][
+                                 'model_folder_path'] + '/trained_mlebe_config_anat.json'
+    func_model_config_path = config['masking_config']['masking_config_func'][
+                                 'model_folder_path'] + '/trained_mlebe_config_func.json'
 
     write_to_jsonfile(anat_model_config_path,
                       [('model.use_cuda', config['masking_config']['masking_config_anat']['use_cuda'])])

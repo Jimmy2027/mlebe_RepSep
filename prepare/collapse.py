@@ -1,5 +1,5 @@
 from samri.pipelines import manipulations
-from make_config import config_path, scratch_dir
+from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
 from mlebe.training.configs.utils import json_to_dict
 
 config = json_to_dict(config_path)

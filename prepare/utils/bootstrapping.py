@@ -4,7 +4,7 @@ from sklearn.metrics import mean_squared_error
 from math import sqrt
 import os
 import statsmodels.formula.api as smf
-from make_config import config_path, scratch_dir
+from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
 from mlebe.training.utils.utils import json_file_to_pyobj
 
 workflow_config = json_file_to_pyobj(config_path)

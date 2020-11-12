@@ -3,7 +3,7 @@ import pandas as pd
 import os
 from samri.pipelines.reposit import bru2bids
 from datetime import datetime
-from make_config import config_path, scratch_dir
+from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
 from mlebe.training.utils.utils import json_file_to_pyobj
 
 def produce_bids():

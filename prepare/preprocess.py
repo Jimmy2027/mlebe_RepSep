@@ -1,6 +1,7 @@
-from make_config import config_path, scratch_dir
 from mlebe.training.configs.utils import json_to_dict
 from samri.pipelines.preprocess import generic
+
+from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
 
 config = json_to_dict(config_path)
 subjects = config['workflow_config']['subjects']
