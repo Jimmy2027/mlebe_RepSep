@@ -18,7 +18,7 @@ for key in masks:
            mask=masks[key],
            keep_work=False,
            n_jobs_percentage=.33,
-           match={'modality': ['cbv']},
+           match={'suffix': ['cbv']},
            exclude={'task': ['rest']},
            invert=True,
            out_base='{}/l1'.format(scratch_dir)
@@ -30,7 +30,7 @@ for key in masks:
            mask=masks[key],
            keep_work=False,
            n_jobs_percentage=.33,
-           match={'modality': ['bold']},
+           match={'suffix': ['bold']},
            exclude={'task': ['rest']},
            invert=False,
            out_base='{}/l1'.format(scratch_dir)
