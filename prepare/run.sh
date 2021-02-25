@@ -17,18 +17,18 @@ if [ ! -d ~/.scratch ]; then
 fi
 
 #ln -s /home/hendrik/.scratch/mlebe_final/classifiers /home/hendrik/.scratch/mlebe/classifiers
-#mkdir -p ~/.scratch/mlebe/preprocessing/generic
-#ln -s ~/.scratch/irsabi/preprocessing/generic/* ~/.scratch/mlebe/preprocessing/generic/
+mkdir -p ~/.scratch/mlebe/preprocessing/generic
+ln -s ~/.scratch/chymera/irsabi/preprocessing/generic/* ~/.scratch/mlebe/preprocessing/generic/
 
 # This workflow runs with a json configuration file, choose one in configs/ and define it in make_config.py
-#if [ ! -f ~/.scratch/mlebe/preprocessing/config.json ]; then
-#  python make_config.py || exit 1
-#fi
+if [ ! -f ~/.scratch/mlebe/preprocessing/config.json ]; then
+  python make_config.py || exit 1
+fi
 # Write your workflow description here
 echo "" > ~/.scratch/mlebe/description.txt
-#python make_bids.py || exit 1
-#python preprocess.py || exit 1
-#python collapse.py || exit 1
+python make_bids.py || exit 1
+python preprocess.py || exit 1
+python collapse.py || exit 1
 python l1.py || exit 1
 python manual_overview.py || exit 1
 python classifier/get_model_data.py || exit 1

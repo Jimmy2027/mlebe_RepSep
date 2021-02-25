@@ -11,9 +11,10 @@ from mlebe.training.configs.utils import json_to_dict, write_to_jsonfile, get_di
 from mlebe.training.utils.utils import mkdir
 
 from classifier.utils import init_model_configs
+from pathlib import Path
 
 # choose your workflow configuration
-JSON_CONFIG_PATH = "configs/noBiascorr_noCrop.json"
+JSON_CONFIG_PATH = Path(__file__).parent / "configs/noBiascorr_noCrop.json"
 EXPERIMENT_RESULTS_DF_PATH = os.path.expanduser('~/src/MLEBE/mlebe/training/results.csv')
 SCRATCH_DIR = '~/.scratch/mlebe'
 CONFIG_PATH = os.path.expanduser(os.path.join(SCRATCH_DIR, 'config.json'))
