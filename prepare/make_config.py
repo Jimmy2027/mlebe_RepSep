@@ -14,12 +14,11 @@ from pathlib import Path
 
 # choose your workflow configuration
 JSON_CONFIG_PATH = Path(__file__).parent / "configs/noBiascorr_noCrop.json"
-EXPERIMENT_RESULTS_DF_PATH = os.path.expanduser('~/src/MLEBE/mlebe/training/results.csv')
 SCRATCH_DIR = Path('~/.scratch/mlebe').expanduser()
 CONFIG_PATH = os.path.expanduser(os.path.join(SCRATCH_DIR, 'config.json'))
 
 
-def prepare_config(json_config_path: Path, scratch_dir: Path, experiment_results_df_path: str):
+def prepare_config(json_config_path: Path, scratch_dir: Path):
     mkdir(os.path.expanduser(scratch_dir))
     config = json_to_dict(json_config_path)
     # copy the json configuration file to the scratch directory
@@ -56,6 +55,5 @@ def verify_config_path(config_path):
 
 
 if __name__ == '__main__':
-    CONFIG, WORKFLOW_UID = prepare_config(JSON_CONFIG_PATH, SCRATCH_DIR,
-                                          experiment_results_df_path=EXPERIMENT_RESULTS_DF_PATH)
+    CONFIG, WORKFLOW_UID = prepare_config(JSON_CONFIG_PATH, SCRATCH_DIR)
     prepare_experiment_result_dataframe(config=CONFIG, workflow_uid=WORKFLOW_UID)
