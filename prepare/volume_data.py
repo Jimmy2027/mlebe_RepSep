@@ -1,24 +1,24 @@
+import os
 from itertools import product
 from os import path
-from samri.report.snr import df_threshold_volume, iter_threshold_volume
+
 import nibabel as nib
 import numpy as np
 import pandas as pd
-from bids.grabbids import BIDSLayout
-from bids.grabbids import BIDSValidator
-from utils.bootstrapping import bootstrap, bootstrap_analysis
-from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
+from bids.layout import BIDSLayout
 from mlebe.training.utils.utils import json_file_to_pyobj
-import os
+from samri.report.snr import df_threshold_volume
+
+from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
+from utils.bootstrapping import bootstrap, bootstrap_analysis
 
 workflow_config = json_file_to_pyobj(config_path)
 
 
 def bids_autograb(bids_dir):
     bids_dir = path.abspath(path.expanduser(bids_dir))
-    validate = BIDSValidator()
-    layout = BIDSLayout(bids_dir)
-    df = layout.as_data_frame()
+    layout = BIDSLayout(bids_dir, validate=False)
+    df = layout.to_df()
 
     # Unclear in current BIDS specification, we refer to BOLD/CBV as modalities and func/anat as types
     df = df.rename(columns={'datatype': 'type', 'suffix': 'modality'})
@@ -130,8 +130,8 @@ reg_results['anat_model_uid'] = anat_model_training_config.model.uid
 reg_results['func_model_uid'] = func_model_training_config.model.uid
 reg_results['anat_model_path'] = workflow_config.masking_config.masking_config_anat.model_config_path
 reg_results['func_model_path'] = workflow_config.masking_config.masking_config_func.model_config_path
-reg_results['func_model_dice'] = workflow_config.masking_config.masking_config_func.dice_score
-reg_results['anat_model_dice'] = workflow_config.masking_config.masking_config_anat.dice_score
+# reg_results['func_model_dice'] = workflow_config.masking_config.masking_config_func.dice_score
+# reg_results['anat_model_dice'] = workflow_config.masking_config.masking_config_anat.dice_score
 reg_results['masked_mean_Vcf_RMSE'] = df.loc[df['Processing'] == 'Masked', 'Abs(1 - Vcf)'].mean()
 reg_results['generic_mean_Vcf_RMSE'] = df.loc[df['Processing'] == 'Generic', 'Abs(1 - Vcf)'].mean()
 reg_results['max_RMSE_generic'] = -1
