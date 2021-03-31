@@ -5,17 +5,17 @@
 
 \section{Supplementary Materials}
 
-\begin{sansmath}
-\py{pytex_fig('scripts/classifier/show_blacklist.py',
-        conf='article/2*8plot.conf',
-        label='blacklist_example',
-        caption='
-                \\textbf{Slices where the mask includes too much outer-brain intensities are excluded from the data set.}\\
-                Examples from the slices that were excluded from the data set. The mask is shown in blue, on top of the brain image.
-                ',
-        multicol=True,
-        )}
-\end{sansmath}
+%\begin{sansmath}
+%\py{pytex_fig('scripts/classifier/show_blacklist.py',
+%        conf='article/2*8plot.conf',
+%        label='blacklist_example',
+%        caption='
+%                \\textbf{Slices where the mask includes too much outer-brain intensities are excluded from the data set.}\\
+%                Examples from the slices that were excluded from the data set. The mask is shown in blue, on top of the brain image.
+%                ',
+%        multicol=True,
+%        )}
+%\end{sansmath}
 
 \begin{sansmath}
     \py{pytex_fig('scripts/msc_violin.py',
@@ -29,35 +29,35 @@
     )}
 \end{sansmath}
 
-\py{pytex_subfigs(
-[
-{'script':'scripts/map_generic_cbv.py', 'label':'mggc', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
-'caption':'
-The Generic workflow together with the CBV map shows a correct slice orientation and a coverage that is correctly bounded to the acquisition area.
-'
-,},
-{'script':'scripts/map_generic_masked_cbv.py', 'label':'mllc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
-'caption':'
-The Generic Masked workflow together with the CBV map shows a correct slice orientation and a coverage that is correctly bounded to the acquisition area.
-'
-,},
-{'script':'scripts/map_generic_bold.py', 'label':'mggb', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
-'caption':'
-The Generic workflow together with the BOLD map, shows a correct slice orientation and coverage that is correctly bounded to the acquisition area.
-'
-,},
-{'script':'scripts/map_generic_masked_bold.py', 'label':'mllb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
-'caption':'
-The Generic Masked workflow together with the BOLD map, shows a correct slice orientation and coverage that is correctly bounded to the acquisition area.
-'
-,},
-],
-caption='
-\\textbf{The Generic Masked workflow does not induce statistic coverage misalignment nor does it induce overflow of the statistic maps into adjacent anatomical regions.}
-Four multiplanar depictions of second-level omnibus statistic maps thresholded at $\mathrm{|t|\geq2}$ are shown, corresponding to CBV and BOLD scans.
-The acquisition area is outlined by the pink square.
-',
-label='fig:m',)}
+%\py{pytex_subfigs(
+%[
+%{'script':'scripts/map_generic_cbv.py', 'label':'mggc', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+%'caption':'
+%The Generic workflow together with the CBV map shows a correct slice orientation and a coverage that is correctly bounded to the acquisition area.
+%'
+%,},
+%{'script':'scripts/map_generic_masked_cbv.py', 'label':'mllc','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+%'caption':'
+%The Generic Masked workflow together with the CBV map shows a correct slice orientation and a coverage that is correctly bounded to the acquisition area.
+%'
+%,},
+%{'script':'scripts/map_generic_bold.py', 'label':'mggb', 'conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+%'caption':'
+%The Generic workflow together with the BOLD map, shows a correct slice orientation and coverage that is correctly bounded to the acquisition area.
+%'
+%,},
+%{'script':'scripts/map_generic_masked_bold.py', 'label':'mllb','conf':'article/map.conf', 'options_pre':'{.48\\textwidth}',
+%'caption':'
+%The Generic Masked workflow together with the BOLD map, shows a correct slice orientation and coverage that is correctly bounded to the acquisition area.
+%'
+%,},
+%],
+%caption='
+%\\textbf{The Generic Masked workflow does not induce statistic coverage misalignment nor does it induce overflow of the statistic maps into adjacent anatomical regions.}
+%Four multiplanar depictions of second-level omnibus statistic maps thresholded at $\mathrm{|t|\geq2}$ are shown, corresponding to CBV and BOLD scans.
+%The acquisition area is outlined by the pink square.
+%',
+%label='fig:m',)}
 
 \begin{figure*}[h!]
     \centering
