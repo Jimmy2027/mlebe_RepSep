@@ -3,7 +3,7 @@ import multiprocessing as mp
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from joblib import Parallel, delayed
-from make_config import config_path
+from make_config import CONFIG_PATH
 from samri.plotting.maps import contour_slices
 from samri.utilities import bids_substitution_iterator
 from subjects_reader import find_subjects
@@ -17,7 +17,7 @@ templates = {
     'masked': '/usr/share/mouse-brain-atlases/dsurqec_40micron_masked.nii',
 }
 
-config = json_to_dict(config_path)
+config = json_to_dict(CONFIG_PATH)
 if config['workflow_config']['subjects']:
     subjects = config['workflow_config']['subjects']
 else:
@@ -159,16 +159,16 @@ for key in templates:
                                                   [spacing] * len(anat_substitutions),
                                                   [anat_contrast] * len(anat_substitutions),
                                                   ))
-
-        contour_slices(templates[key],
-                       alpha=[0.6],
-                       colors=cmap[::2],
-                       figure_title='Multi-Session Coherence Control\n Subject {} | Task {}'.format(i[0], runs[i[1]]),
-                       file_template=func_path,
-                       force_reverse_slice_order=True,
-                       legend_template='{session} session',
-                       levels_percentile=[77],
-                       save_as='{}/manual_overview/{}/coherence_{}_{}.pdf'.format(data_dir, key, i[0], runs[i[1]]),
-                       slice_spacing=spacing,
-                       substitutions=func_substitutions,
-                       )
+        # fixme: this gives the error "zero-size array to reduction operation minimum which has no identity"
+        # contour_slices(templates[key],
+        #                alpha=[0.6],
+        #                colors=cmap[::2],
+        #                figure_title='Multi-Session Coherence Control\n Subject {} | Task {}'.format(i[0], runs[i[1]]),
+        #                file_template=func_path,
+        #                force_reverse_slice_order=True,
+        #                legend_template='{session} session',
+        #                levels_percentile=[77],
+        #                save_as='{}/manual_overview/{}/coherence_{}_{}.pdf'.format(data_dir, key, i[0], runs[i[1]]),
+        #                slice_spacing=spacing,
+        #                substitutions=func_substitutions,
+        #                )
