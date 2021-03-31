@@ -5,6 +5,7 @@ from samri.pipelines.reposit import bru2bids
 from datetime import datetime
 from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
 from mlebe.training.utils.utils import json_file_to_pyobj
+from norby import send_msg
 
 def produce_bids():
 	from labbookdb.report.selection import animal_id, parameterized
@@ -68,7 +69,8 @@ def produce_bids():
 
 if __name__ == '__main__':
 	config = json_file_to_pyobj(config_path)
-
+	if config.workflow_config.norby:
+		send_msg(f'Starting make_bids.', add_loc_name=True)
 	if not os.path.exists(os.path.expanduser(os.path.join(scratch_dir, 'bids'))):
 		if os.path.exists('/usr/share/irsabi_bidsdata'):
 			os.mkdir(os.path.expanduser(os.path.join(scratch_dir, 'bids')))
@@ -94,3 +96,5 @@ if __name__ == '__main__':
 				os.system(command)
 			else:
 				print("No DARGCC BIDS data distribution found, processing from scanner IRSABI data:")
+
+

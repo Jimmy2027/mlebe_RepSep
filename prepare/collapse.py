@@ -1,8 +1,11 @@
 from samri.pipelines import manipulations
 from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
 from mlebe.training.configs.utils import json_to_dict
+from norby import send_msg
 
 config = json_to_dict(config_path)
+if config['workflow_config']['norby']:
+    send_msg(f'Starting collapse.', add_loc_name=True)
 if config['workflow_config']['with_FLASH']:
     bids_bases = ['{}/bids'.format(scratch_dir), '{}/dargcc_bids'.format(scratch_dir)]
 else:
