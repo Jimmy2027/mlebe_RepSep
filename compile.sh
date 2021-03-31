@@ -11,7 +11,6 @@ if [["$SCRATCH_DIR" == ""]]; then
 else
    scratch_dir=~/.scratch/${SCRATCH_DIR}
 fi
-
 # get all the necessary data from the preprocessing
 #sh prepare/transfer.sh -s ${scratch_dir} -d data || exit
 
@@ -33,4 +32,4 @@ else
 fi
 
 rm auto_fig_py*
-cp article.pdf $scratch_dir
+cp "${TARGET}.pdf" $scratch_dir

@@ -3,5 +3,5 @@ pushd prepare
 popd
 ./cleanup.sh || exit
 ./compile.sh || exit
-./upload.sh || exit
+#./upload.sh || exit
 echo "produce workflow finished"

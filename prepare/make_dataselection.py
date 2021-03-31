@@ -1,8 +1,13 @@
-import pandas as pd
+"""Creates a dataselection dataframe."""
+
 import os
+
+import pandas as pd
 from mlebe.training.configs.utils import json_to_dict
 
-config = json_to_dict('data/config.json')
+from make_config import CONFIG_PATH as config_path
+
+config = json_to_dict(config_path)
 data_dir = config['workflow_config']['data_path']
 studies = ["drlfom", "mgtdbs", "opfvta", "ztau", "hendrik_nvcz", 'irsabi']
 
@@ -66,4 +71,4 @@ def make_dataselection_func(data_dir, studies):
 dataselection_anat = make_dataselection_anat(data_dir=data_dir, studies=studies)
 dataselection_func = make_dataselection_anat(data_dir=data_dir, studies=studies)
 data_selection = dataselection_anat.append(dataselection_func)
-data_selection.to_csv('data/data_selection.csv')
+data_selection.to_csv('../data/data_selection.csv')

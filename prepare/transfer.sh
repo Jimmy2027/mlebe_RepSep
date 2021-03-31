@@ -7,7 +7,7 @@ d) destination_dir=${OPTARG};;
 esac
 done
 
-python prepare/make_dataselection.py || exit 1
+python make_dataselection.py || exit 1
 
 echo "moving data from ${scratch_dir} to ${destination_dir}"
 mkdir -p ${destination_dir}/manual_overview/generic
@@ -30,3 +30,5 @@ cp ${scratch_dir}/config.json ${destination_dir}/ || exit 1
 cp -r ${scratch_dir}/data/* ${destination_dir}/ || exit 1
 mkdir -p ${destination_dir}/classifier
 cp -v ${scratch_dir}/classifiers/T2/y_test.npy ${destination_dir}/classifier/ || exit 1
+cp -v ${scratch_dir}/classifiers/T2/y_pred.npy ${destination_dir}/classifier/ || exit 1
+cp -v ${scratch_dir}/classifiers/T2/x_test.npy ${destination_dir}/classifier/ || exit 1

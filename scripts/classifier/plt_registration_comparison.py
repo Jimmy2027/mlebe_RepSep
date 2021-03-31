@@ -7,8 +7,8 @@ table = pd.DataFrame(
     [['sub-4005_ses-ofMaF_acq-TurboRARElowcov_T2w', 61], ['sub-4001_ses-ofMcF2_acq-TurboRARElowcov_T2w', 42],
      ['sub-4001_ses-ofMcF2_acq-TurboRARElowcov_T2w', 33]], columns=['volume', 'slice'], index=[1, 2, 3])
 
-preprocessed_folders = [os.path.expanduser('~/.scratch/mlebe_threed/preprocessing/generic'),
-                        os.path.expanduser('~/.scratch/mlebe_threed/preprocessing/masked')]
+preprocessed_folders = [os.path.expanduser('~/.scratch/mlebe/preprocessing/generic'),
+                        os.path.expanduser('~/.scratch/mlebe/preprocessing/masked')]
 template_path = '/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii'
 template_volume = nib.load(template_path).get_data()
 
@@ -45,4 +45,5 @@ for idx, ax in enumerate(axs.flat[4:]):
         volume = nib.load(table.iloc[idx - 1]['masked_path']).get_data()
         ax.imshow(volume[:, table.iloc[idx - 1]['slice'], :], cmap='gray')
         ax.imshow(template_volume[:, table.iloc[idx - 1]['slice'], :], alpha=0.7, cmap='Blues')
+
 plt.show()

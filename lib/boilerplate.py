@@ -1,10 +1,12 @@
 from os import path
+
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 from mlebe.training.configs.utils import json_to_dict
 from scipy.stats import iqr, wilcoxon
+
 from lib.utils import float_to_tex, inline_anova, inline_factor
 
 

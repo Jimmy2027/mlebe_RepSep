@@ -3,8 +3,8 @@ from mlebe.training.configs.utils import json_to_dict, write_to_jsonfile
 
 
 def verify_config_paths(anat_config, func_config):
-    assert os.path.exists(anat_config), 'model_config_path ' + os.path.exists(anat_config) + ' does not exist'
-    assert os.path.exists(func_config), 'model_config_path ' + os.path.exists(func_config) + ' does not exist'
+    assert os.path.exists(anat_config), 'model_config_path ' + anat_config + ' does not exist'
+    assert os.path.exists(func_config), 'model_config_path ' + func_config + ' does not exist'
 
     for model_config in [anat_config, func_config]:
         model_config_dict = json_to_dict(model_config)

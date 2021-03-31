@@ -1,15 +1,18 @@
 import os
+
+import cv2
 import numpy as np
-from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
 from mlebe.training.dataio.loaders import get_dataset
-from mlebe.training.dataio.transformation import get_dataset_transformation
 from mlebe.training.dataio.loaders.utils import remove_black_images
+from mlebe.training.dataio.transformation import get_dataset_transformation
 from mlebe.training.models import get_model
 from mlebe.training.utils.utils import json_file_to_pyobj
 from mlebe.training.utils.utils import mkdir
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-import cv2
+from mlebe.training.utils.error_logger import ErrorLogger
+
+from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
 
 """
 This script saves x_test, y_test and y_pred as .npy files 
@@ -20,8 +23,8 @@ def tester(json_opts, test_dataset, save_directory):
     model = get_model(json_opts.model)
     train_opts = json_opts.training
 
-    test_loader = DataLoader(dataset=test_dataset, num_workers=16, batch_size=train_opts.batchSize, shuffle=False)
-
+    test_loader = DataLoader(dataset=test_dataset, num_workers=0, batch_size=train_opts.batchSize, shuffle=False)
+    error_logger = ErrorLogger()
     # test
     x_test = []
     y_test = []
@@ -31,10 +34,13 @@ def tester(json_opts, test_dataset, save_directory):
         model.test()
         ids = test_dataset.get_ids(indices)
 
+        stats = model.get_segmentation_stats()
+        error_logger.update(stats, split='test')
+
         for batch_iter in range(len(ids)):
             input_arr = np.squeeze(images[batch_iter].cpu().numpy()).astype(np.float32)
             label_arr = np.squeeze(labels[batch_iter].cpu().numpy()).astype(np.int16)
-            if not len(ids) == 1:
+            if len(ids) != 1:
                 output_arr = np.squeeze(model.pred_seg.cpu().byte().numpy()).astype(np.int16)[batch_iter]
             else:
                 output_arr = np.squeeze(model.pred_seg.cpu().byte().numpy()).astype(np.int16)
@@ -43,8 +49,9 @@ def tester(json_opts, test_dataset, save_directory):
             for slice in range(y):
                 if not np.max(label_arr[..., slice]) <= 0:
                     x_img = cv2.normalize(input_arr[..., slice], None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX,
-                                                dtype=cv2.CV_32F)
-                    assert x_img.shape == output_arr[..., slice].shape == label_arr[..., slice].shape == (json_opts.augmentation.mlebe.scale_size[0],json_opts.augmentation.mlebe.scale_size[1])
+                                          dtype=cv2.CV_32F)
+                    assert x_img.shape == output_arr[..., slice].shape == label_arr[..., slice].shape == (
+                        json_opts.augmentation.mlebe.scale_size[0], json_opts.augmentation.mlebe.scale_size[1])
                     x_test.append(x_img)
                     y_test.append(label_arr[..., slice])
                     y_pred.append(output_arr[..., slice])
@@ -58,7 +65,6 @@ def tester(json_opts, test_dataset, save_directory):
 
 
 def get_traindata(json_opts, save_directory):
-    model = get_model(json_opts.model)
     train_opts = json_opts.training
     ds_transform = get_dataset_transformation('mlebe', opts=model_json_opts.augmentation,
                                               max_output_channels=model_json_opts.model.output_nc)
@@ -67,8 +73,9 @@ def get_traindata(json_opts, save_directory):
                              transform=ds_transform['train'],
                              train_size=split_opts.train_size, test_size=split_opts.test_size,
                              valid_size=split_opts.validation_size, split_seed=split_opts.seed,
-                             training_shape=model_json_opts.augmentation.mlebe.scale_size[:3])
-    train_loader = DataLoader(dataset=train_dataset, num_workers=16, batch_size=train_opts.batchSize, shuffle=False)
+                             training_shape=model_json_opts.augmentation.mlebe.scale_size)
+    # train_loader = DataLoader(dataset=train_dataset, num_workers=16, batch_size=train_opts.batchSize, shuffle=False)
+    train_loader = DataLoader(dataset=train_dataset, num_workers=0, batch_size=train_opts.batchSize, shuffle=False)
 
     # test
     x_train = []
@@ -82,8 +89,9 @@ def get_traindata(json_opts, save_directory):
 
             for slice in range(input_arr.shape[-1]):
                 if not np.max(label_arr[..., slice]) <= 0:
-                    x_train.append(cv2.normalize(input_arr[..., slice], None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX,
-                                                dtype=cv2.CV_32F))
+                    x_train.append(
+                        cv2.normalize(input_arr[..., slice], None, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX,
+                                      dtype=cv2.CV_32F))
                     y_train.append(label_arr[..., slice])
 
     with open(os.path.join(save_directory, 'x_train.npy'), 'wb') as file1:
@@ -115,4 +123,4 @@ test_dataset = ds_class(template_dir, ds_path, model_json_opts.data, split='test
                         training_shape=model_json_opts.augmentation.mlebe.scale_size[:3])
 
 tester(model_json_opts, test_dataset, save_dir)
-get_traindata(model_json_opts, save_dir)
+# get_traindata(model_json_opts, save_dir)#

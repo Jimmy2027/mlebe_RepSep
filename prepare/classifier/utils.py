@@ -3,24 +3,6 @@ import numpy as np
 from typing import Dict
 
 
-def init_model_configs(config: Dict):
-    """
-    overwrite parameters of the model configs such as use_cuda for the workflow
-    Parameters
-    ----------
-    config : dict
-    """
-    anat_model_config_path = config['masking_config']['masking_config_anat'][
-                                 'model_folder_path'] + '/trained_mlebe_config_anat.json'
-    func_model_config_path = config['masking_config']['masking_config_func'][
-                                 'model_folder_path'] + '/trained_mlebe_config_func.json'
-
-    write_to_jsonfile(anat_model_config_path,
-                      [('model.use_cuda', config['masking_config']['masking_config_anat']['use_cuda'])])
-    write_to_jsonfile(func_model_config_path,
-                      [('model.use_cuda', config['masking_config']['masking_config_func']['use_cuda'])])
-
-
 def dice(im1, im2, empty_score=1.0):
     """
     Computes the Dice coefficient, a measure of set similarity.

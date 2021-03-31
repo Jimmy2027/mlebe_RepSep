@@ -4,13 +4,12 @@ Pretrained models can be downloaded at: https://zenodo.org/record/3759361#.Xp70K
 import datetime
 import os
 import uuid
+from pathlib import Path
 from shutil import copyfile
 
 import pandas as pd
-from mlebe.training.configs.utils import json_to_dict, write_to_jsonfile, get_dice_score_of_model
+from mlebe.training.configs.utils import json_to_dict, write_to_jsonfile
 from mlebe.training.utils.utils import mkdir
-
-from pathlib import Path
 
 # choose your workflow configuration
 JSON_CONFIG_PATH = Path(__file__).parent / "configs/noBiascorr_noCrop.json"

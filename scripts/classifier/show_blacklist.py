@@ -4,7 +4,7 @@ import os
 import nibabel as nib
 
 template_dir = "/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii"
-blacklist_selection = pd.read_csv('data/Blacklist/blacklist_selection.csv')
+blacklist_selection = pd.read_csv('data/Blacklist/blacklist.csv')
 
 indexes = [3, 5, 5, 7, 8, 8, 8, 15]
 slices = [73, 23, 63, 16, 22, 62, 75, 23]
