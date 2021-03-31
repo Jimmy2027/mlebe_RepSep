@@ -25,7 +25,7 @@ def bids_autograb(bids_dir):
     df = layout.as_data_frame()
 
     # Unclear in current BIDS specification, we refer to BOLD/CBV as modalities and func/anat as types
-    df = df.rename(columns={'modality': 'type', 'type': 'modality'})
+    df = df.rename(columns={'datatype': 'type', 'suffix': 'modality'})
     return df
 
 
