@@ -23,12 +23,7 @@
 \usepackage{sansmath}
 \usepackage{nth}
 
-% Single-session PythonTeX codeblocks
-\newcounter{pysessioncounter}
-\newcommand{\sessionpy}{%
-	  \edef\sessionpysession{session\arabic{pysessioncounter}}%
-	    \stepcounter{pysessioncounter}%
-	      \expandafter\py\expandafter[\sessionpysession]}
+
 
 %VARIABLES
 %set up a more stable buffers (the normal ones gets blanked after the titlepage is invoked)
@@ -102,20 +97,7 @@
 \titleformat{\subsubsection}[hang]{\footnotesize\usefont{T1}{phv}{b}{n}\color{Black}}{}{0em}{#1}%
 \titlespacing{\subsubsection}{0em}{0.75em}{0em}
 
-% Pythontex
-\usepackage[autoprint=false, gobble=auto, pyfuture=all]{pythontex} %create figures on-line directly from python!
-\usepackage{pgf} %we need this backend
 
-\input{pythontex/functions.py}
-\begin{pythontexcustomcode}[begin]{py}
-DOC_STYLE = 'article/main.conf'
-pytex.add_dependencies(DOC_STYLE,
-	'article/3dplot.conf',
-	'lib/utils.py',
-	'lib/categorical.py',
-	'data/volume.csv'
-	)
-\end{pythontexcustomcode}
 
 % Grey definitiosn.
 \definecolor{dg}{gray}{0.25}
