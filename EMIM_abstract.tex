@@ -1,0 +1,26 @@
+% Preamble
+\documentclass[11pt, english]{article}
+\usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex}
+\addbibresource{bib.bib}
+
+\input{common_header.tex}
+
+% Document
+\begin{document}
+    \section{Introduction}
+    Cross-subject and cross-study comparability of preclinical imaging data, whole-brain imaging data in particular, is contingent on the quality of registration to a standard reference space.
+    Current methods for neuroimaging rely on full image processing, with high varying intensities outside the brain region of interest that interfere with registration.
+    Applying the processing to a masked image improves the quality of the latter.
+    Here we present a deep learning enabled framework for segmentation of brain tissue in functional and structural MR images that when included in a small animal brain imaging workflow significantly improves the quality of the latter.
+
+
+    \section{Methods}
+    We apply a machine learning auto-encoder type model as preprocessing to a registration workflow in order to generate a mask of the brain region.
+    This mask is used to focus computation on the brain region during registration.
+    As model architecture, we use the U-Net \citep{ronneberger_u-net:_2015} implementation from \citet{oktay_ozan-oktayattention-gated-networks_2020}.
+    The model was trained on 3D MR images taken from an aggregation of multiple studies, namely opfvta \citep{ioanas_whole-brain_nodate}, drlfom \citep{imperfect_datasets} and other unpublished data, acquired with similar parameters.
+    We compare our extended registration workflow to the SAMRI workflow \citep{samri} on data from the irsabi study \citep{irsabi_bidsdata}.
+
+    \clearpage
+    \printbibliography
+\end{document}
