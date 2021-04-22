@@ -7,33 +7,37 @@
     "keep_work": true
   },
   "masking_config": {
-    "masking_config_anat": {
-      "use_cuda": false,
-      "with_bids_cropping": false,
-      "input_type": "anat",
-      "visualisation_bool": false,
-      "bias_correct_bool": true,
-      "test": false,
-      "model_config_path": "",
-      "bias_field_correction": {
-        "bspline_fitting": "[10, 4]",
-        "convergence": "[ 150x100x50x30, 1e-16 ]",
-        "shrink_factor": 2
-      }
+    "masking_config_anat":
+      {
+        "use_cuda": false,
+        "with_bids_cropping": false,
+        "input_type": "anat",
+        "visualisation_bool": false,
+        "bias_correct_bool": true,
+        "test": false,
+        "model_config_path": "",
+        "bias_field_correction":
+          {
+            "bspline_fitting": "[10, 4]",
+            "convergence": "[ 150x100x50x30, 1e-16 ]",
+            "shrink_factor": 2
+          }
     },
-    "masking_config_func": {
-      "use_cuda": false,
-      "with_bids_cropping": false,
-      "input_type": "func",
-      "visualisation_bool": false,
-      "bias_correct_bool": true,
-      "test": false,
-      "model_config_path": "",
-      "bias_field_correction": {
-        "bspline_fitting": "[10, 4]",
-        "convergence": "[ 150x100x50x30, 1e-11 ]",
-        "shrink_factor": 2
-      }
+
+    "masking_config_func":
+      {
+        "use_cuda": false,
+        "with_bids_cropping": false,
+        "input_type": "func",
+        "visualisation_bool": false,
+        "bias_correct_bool": true,
+        "test": false,
+        "model_config_path": "",
+        "bias_field_correction": {
+          "bspline_fitting": "[10, 4]",
+          "convergence": "[ 150x100x50x30, 1e-11 ]",
+          "shrink_factor": 2
+        }
     }
   }
 }

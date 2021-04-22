@@ -1,7 +1,7 @@
 import os
 from subjects_reader import find_subjects
 from samri.pipelines.utils import bids_data_selection
-from bids.grabbids import BIDSLayout
+from bids.layout import BIDSLayout
 from bids.grabbids import BIDSValidator
 import pandas as pd
 from copy import deepcopy
