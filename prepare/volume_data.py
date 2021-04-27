@@ -1,6 +1,7 @@
 import os
 from itertools import product
 from os import path
+from pathlib import Path
 
 import nibabel as nib
 import numpy as np
@@ -117,8 +118,12 @@ bootstrap_analysis('volume', dependent_variable='VCF_RMSE', expression='Processi
 """
 Writing results
 """
-anat_model_training_config = json_file_to_pyobj(workflow_config.masking_config.masking_config_anat.model_config_path)
-func_model_training_config = json_file_to_pyobj(workflow_config.masking_config.masking_config_func.model_config_path)
+anat_model_config_path = Path(
+    workflow_config.masking_config.masking_config_anat.model_folder_path) / 'trained_mlebe_config_anat.json'
+anat_model_training_config = json_file_to_pyobj(anat_model_config_path)
+func_model_config_path = Path(
+    workflow_config.masking_config.masking_config_func.model_folder_path) / 'trained_mlebe_config_func.json'
+func_model_training_config = json_file_to_pyobj(func_model_config_path)
 
 if not os.path.exists('classifier/reg_results.csv'):
     reg_results_ = pd.DataFrame([[]])
@@ -128,25 +133,26 @@ reg_results = pd.DataFrame([[]])
 reg_results['uid'] = workflow_config.workflow_config.uid
 reg_results['anat_model_uid'] = anat_model_training_config.model.uid
 reg_results['func_model_uid'] = func_model_training_config.model.uid
-reg_results['anat_model_path'] = workflow_config.masking_config.masking_config_anat.model_config_path
-reg_results['func_model_path'] = workflow_config.masking_config.masking_config_func.model_config_path
+reg_results['anat_model_path'] = anat_model_config_path
+reg_results['func_model_path'] = func_model_config_path
 # reg_results['func_model_dice'] = workflow_config.masking_config.masking_config_func.dice_score
 # reg_results['anat_model_dice'] = workflow_config.masking_config.masking_config_anat.dice_score
 reg_results['masked_mean_Vcf_RMSE'] = df.loc[df['Processing'] == 'Masked', 'Abs(1 - Vcf)'].mean()
 reg_results['generic_mean_Vcf_RMSE'] = df.loc[df['Processing'] == 'Generic', 'Abs(1 - Vcf)'].mean()
 reg_results['max_RMSE_generic'] = -1
 reg_results['max_RMSE_generic'] = reg_results['max_RMSE_generic'].astype('object')
-reg_results.at[0, 'max_RMSE_generic'] = [df.loc[df['Processing'] == 'Generic'].groupby('Uid')['Abs(1 - Vcf)'].max().idxmax(),
-                                         df.loc[df['Processing'] == 'Generic'].groupby('Uid')['Abs(1 - Vcf)'].max().max()]
+reg_results.at[0, 'max_RMSE_generic'] = [
+    df.loc[df['Processing'] == 'Generic'].groupby('Uid')['Abs(1 - Vcf)'].max().idxmax(),
+    df.loc[df['Processing'] == 'Generic'].groupby('Uid')['Abs(1 - Vcf)'].max().max()]
 reg_results['max_RMSE_masked'] = -1
 reg_results['max_RMSE_masked'] = reg_results['max_RMSE_masked'].astype('object')
-reg_results.at[0, 'max_RMSE_masked'] = [df.loc[df['Processing'] == 'Masked'].groupby('Uid')['Abs(1 - Vcf)'].max().idxmax(),
-                                        df.loc[df['Processing'] == 'Masked'].groupby('Uid')['Abs(1 - Vcf)'].max().max()]
+reg_results.at[0, 'max_RMSE_masked'] = [
+    df.loc[df['Processing'] == 'Masked'].groupby('Uid')['Abs(1 - Vcf)'].max().idxmax(),
+    df.loc[df['Processing'] == 'Masked'].groupby('Uid')['Abs(1 - Vcf)'].max().max()]
 
 if workflow_config.workflow_config.uid in reg_results_['uid'].to_list():
     reg_results_ = pd.concat([reg_results, reg_results_]).groupby('uid', as_index=False).first()
 else:
     reg_results_ = reg_results_.append(reg_results)
-
 
 reg_results_.to_csv('classifier/reg_results.csv', index=False)
