@@ -8,11 +8,11 @@ from samri.pipelines import glm
 from samri.pipelines import manipulations
 from samri.pipelines.preprocess import generic
 
-from make_config import prepare_config, JSON_CONFIG_PATH, \
-    EXPERIMENT_RESULTS_DF_PATH, prepare_experiment_result_dataframe
+from make_config import prepare_config, prepare_experiment_result_dataframe
 
 TEST_DATA_DIR = Path(os.getcwd()) / 'tests/data_for_tests'
 BIDS_BASE = TEST_DATA_DIR / 'bids'
+JSON_CONFIG_PATH = Path(os.getcwd()) / 'configs/test_config.json'
 
 
 def init_test_data():
@@ -44,8 +44,8 @@ class TestWorkflow(TestCase):
         with tempfile.TemporaryDirectory() as tmpdirname:
             scratch_dir = Path(tmpdirname)
             print('scratch dir :', tmpdirname)
-            config, workflow_uid = prepare_config(json_config_path=JSON_CONFIG_PATH, scratch_dir=scratch_dir,
-                                                  experiment_results_df_path=EXPERIMENT_RESULTS_DF_PATH)
+
+            config, workflow_uid = prepare_config(json_config_path=JSON_CONFIG_PATH, scratch_dir=scratch_dir)
             prepare_experiment_result_dataframe(config=config, workflow_uid=workflow_uid)
             config_path = os.path.expanduser(os.path.join(scratch_dir, 'config.json'))
 
@@ -75,8 +75,7 @@ class TestWorkflow(TestCase):
         with tempfile.TemporaryDirectory() as tmpdirname:
             scratch_dir = Path(tmpdirname)
             print('scratch dir :', tmpdirname)
-            config, workflow_uid = prepare_config(json_config_path=JSON_CONFIG_PATH, scratch_dir=scratch_dir,
-                                                  experiment_results_df_path=EXPERIMENT_RESULTS_DF_PATH)
+            config, workflow_uid = prepare_config(json_config_path=JSON_CONFIG_PATH, scratch_dir=scratch_dir)
             prepare_experiment_result_dataframe(config=config, workflow_uid=workflow_uid)
             config_path = os.path.expanduser(os.path.join(scratch_dir, 'config.json'))
 
