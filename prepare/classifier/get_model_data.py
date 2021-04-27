@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import cv2
 import numpy as np
@@ -6,11 +7,11 @@ from mlebe.training.dataio.loaders import get_dataset
 from mlebe.training.dataio.loaders.utils import remove_black_images
 from mlebe.training.dataio.transformation import get_dataset_transformation
 from mlebe.training.models import get_model
+from mlebe.training.utils.error_logger import ErrorLogger
 from mlebe.training.utils.utils import json_file_to_pyobj
 from mlebe.training.utils.utils import mkdir
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-from mlebe.training.utils.error_logger import ErrorLogger
 
 from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
 
@@ -104,7 +105,9 @@ save_dir = os.path.expanduser(os.path.join(scratch_dir, 'classifiers', 'T2'))
 mkdir(save_dir)
 
 workflow_json_opts = json_file_to_pyobj(config_path)
-model_json_opts = json_file_to_pyobj(workflow_json_opts.masking_config.masking_config_anat.model_config_path)
+model_config_path = Path(
+    workflow_json_opts.masking_config.masking_config_anat.model_folder_path) / 'trained_mlebe_config_anat.json'
+model_json_opts = json_file_to_pyobj(model_config_path)
 data_dir = model_json_opts.data.data_dir
 template_dir = '/usr/share/mouse-brain-atlases/'
 
