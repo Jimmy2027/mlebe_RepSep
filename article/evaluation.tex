@@ -6,7 +6,9 @@ For the quality control of the workflow, we first evaluate the classification pr
 Quality control of our classifier is difficult in the sense that the template mask does not always overlap perfectly with the brain region, such that small deviances of the predictions compared to the template could actually be caused by the prediction being more accurate than the template.
 Nevertheless, it is useful to verify whether the output is similar to the template, as it should be.
 As a similarity metric between the template mask and the classifier output we have used the Dice score (see \cref{eqDcoef}).
-The average Dice score on the test data set is $D_{coef}= $ \py{boilerplate.print_dice()} $\sim 1$, indicating that classifier output has only minor changes in comparison with the template.
+The average Dice score on the test data set is $D_{coef}= $
+%\py{boilerplate.print_dice()}
+$\sim 1$, indicating that classifier output has only minor changes in comparison with the template.
 % todo should I give more scores? AUC, ...
 
 \begin{sansmath}
