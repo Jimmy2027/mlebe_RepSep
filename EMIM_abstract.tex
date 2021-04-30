@@ -1,25 +1,99 @@
 % Preamble
 \documentclass[11pt, english]{article}
 \usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex}
+\usepackage{cleveref}
+\usepackage{sansmath}
 \addbibresource{bib.bib}
+
+% Single-session PythonTeX codeblocks
+\newcounter{pysessioncounter}
+\newcommand{\sessionpy}{%
+    \edef\sessionpysession{session\arabic{pysessioncounter}}%
+    \stepcounter{pysessioncounter}%
+    \expandafter\py\expandafter[\sessionpysession]}
+
+% Pythontex
+\usepackage[autoprint=false, gobble=auto, pyfuture=all]{pythontex} %create figures on-line directly from python!
+\usepackage{pgf} %we need this backend
+
+\input{pythontex/functions.py}
+\begin{pythontexcustomcode}[begin]{py}
+    DOC_STYLE = 'article/main.conf'
+    pytex.add_dependencies(DOC_STYLE,
+    )
+\end{pythontexcustomcode}
+
+
 
 \input{common_header.tex}
 
+\title{Machine Learning Enabled Brain Segmentation for Small Animal Image Registration}
+\date{}
+
 % Document
 \begin{document}
+    \maketitle
+
+
     \section{Introduction}
-    Cross-subject and cross-study comparability of preclinical imaging data, whole-brain imaging data in particular, is contingent on the quality of registration to a standard reference space.
-    Current methods for neuroimaging rely on full image processing, with high varying intensities outside the brain region of interest that interfere with registration.
+    Cross-subject and cross-study comparability of preclinical imaging data, whole-brain imaging data in particular, is
+    contingent on the quality of registration to a standard reference space.
+    Current methods for neuroimaging rely on full image processing, with high varying intensities outside the brain
+    region of interest that interfere with registration.
     Applying the processing to a masked image improves the quality of the latter.
-    Here we present a deep learning enabled framework for segmentation of brain tissue in functional and structural MR images that when included in a small animal brain imaging workflow significantly improves the quality of the latter.
+    Here we present a deep learning enabled framework for segmentation of brain tissue in functional and structural MR
+    images that when included in a small animal brain imaging workflow significantly improves the quality of the latter.
 
 
     \section{Methods}
-    We apply a machine learning auto-encoder type model as preprocessing to a registration workflow in order to generate a mask of the brain region.
+    We apply a machine learning auto-encoder type model as preprocessing to a registration workflow in order to
+    generate a mask of the brain region.
     This mask is used to focus computation on the brain region during registration.
-    As model architecture, we use the U-Net \citep{ronneberger_u-net:_2015} implementation from \citet{oktay_ozan-oktayattention-gated-networks_2020}.
-    The model was trained on 3D MR images taken from an aggregation of multiple studies, namely opfvta \citep{ioanas_whole-brain_nodate}, drlfom \citep{imperfect_datasets} and other unpublished data, acquired with similar parameters.
-    We compare our extended registration workflow to the SAMRI workflow \citep{samri} on data from the irsabi study \citep{irsabi_bidsdata}.
+    As model architecture, we use the U-Net \citep{ronneberger_u-net:_2015} implementation from
+    \citet{oktay_ozan-oktayattention-gated-networks_2020}.
+    The model was trained on 3D MR images taken from an aggregation of multiple studies, namely opfvta
+    \citep{ioanas_whole-brain_nodate}, drlfom \citep{imperfect_datasets} and other unpublished data, acquired with
+    similar parameters.
+    We compare our extended registration workflow to the SAMRI workflow \citep{samri} on data from the irsabi study
+    \citep{irsabi_bidsdata}.
+
+
+    \section{Results}
+    In comparison to the SAMRI registration workflow, which does not focus computation on the brain region, our workflow
+    exceeds in multiple metrics.
+    The Volume Conservation Factor (VCF) \citep{ioanas_optimized_2019} which measures the registration induced
+    deformation of the scanned brain, by computing the ratio of the brain volume before and after preprocessing, favours
+    our workflow with a root mean squared error ratio of ($\mathrm{RMSE_{M}/RMSE_{G}\simeq} 0.66$).
+    We also note that our workflow results in a inter-sample VCF variance decrease (0.44-fold).
+    Evaluating the Smoothness Conservation Factor (SCF) \citep{ioanas_optimized_2019}, which expresses the ratio between
+    smoothness of the registered image in comparison to the original, yields that the improvement of the VCF does not
+    come at the cost of a reduced SCF: $\mathrm{RMSE_{M}/RMSE_{G}\simeq} 0.93$.
+    \Cref{fig:regComp} shows a qualitative comparison between the registration quality of the two workflows.
+
+
+    \begin{sansmath}
+        \py{pytex_fig('scripts/classifier/plt_registration_comparison.py',
+            conf='article/4*2.conf',
+            label='regComp',
+            caption='
+            \\textbf{The Masked workflow prevents the shifting of outer-brain region voxels into the template-brain
+            region (in blue).} Comparison of slices from 3 different volumes, registered with the Generic (first row)
+            and the Masked (second row) workflow.',
+            )}
+    \end{sansmath}
+
+
+    \section{Conclusion}
+    We present a brain labeling classifier, that when used as a ROI extraction in an extention of the SAMRI Generic
+    registration workflow, significantly improves the quality of the latter.
+    Our extended workflow offers several advantages summarized by established metrics.
+    The easily accessible registration parameters of the SAMRI Generic Workflow as well as the open source
+    code to the classifier training functions make the pipeline transferable to any other imaging applications.
+%    Visual inspection of registration quality reveals that the classifier successfully reduces the shifting of outer brain
+%    region voxels into the template space.
+
+
+
 
     \clearpage
     \printbibliography
