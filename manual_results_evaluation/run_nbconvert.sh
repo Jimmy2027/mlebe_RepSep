@@ -1,0 +1,1 @@
+jupyter nbconvert --to notebook --execute qualitative_reg_ev.ipynb && jupyter nbconvert --to html qualitative_reg_ev.nbconvert.ipynb
