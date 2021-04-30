@@ -36,38 +36,27 @@
 
 
     \section{Introduction}
-    Cross-subject and cross-study comparability of preclinical imaging data, whole-brain imaging data in particular, is
-    contingent on the quality of registration to a standard reference space.
-    Current methods for neuroimaging rely on full image processing, with high varying intensities outside the brain
-    region of interest that interfere with registration.
+    %%% meinst du nicht dass das zu nahe am SAMRI registrierungsartikel ist?
+    Cross-subject and cross-study comparability of preclinical imaging data, and whole-brain imaging data in particular, is contingent on the quality of registration to a standard reference space.
+    Current methods for neuroimaging rely on full image processing, with high varying intensities outside the brain region of interest that interfere with registration.
     Applying the processing to a masked image improves the quality of the latter.
-    Here we present a deep learning enabled framework for segmentation of brain tissue in functional and structural MR
-    images that when included in a small animal brain imaging workflow significantly improves the quality of the latter.
+    Here we present a deep learning enabled framework for segmentation of brain tissue in functional and structural MR images that when included in a small animal brain imaging workflow significantly improves the quality of the latter.
 
 
     \section{Methods}
-    We apply a machine learning auto-encoder type model as preprocessing to a registration workflow in order to
-    generate a mask of the brain region.
+    We apply a machine learning auto-encoder type model as preprocessing to a registration workflow in order to generate a mask of the brain region.
     This mask is used to focus computation on the brain region during registration.
-    As model architecture, we use the U-Net \citep{ronneberger_u-net:_2015} implementation from
-    \citet{oktay_ozan-oktayattention-gated-networks_2020}.
-    The model was trained on 3D MR images taken from an aggregation of multiple studies, namely opfvta
-    \citep{ioanas_whole-brain_nodate}, drlfom \citep{imperfect_datasets} and other unpublished data, acquired with
-    similar parameters.
+    As model architecture, we use the U-Net \citep{ronneberger_u-net:_2015} implementation from \citet{oktay_ozan-oktayattention-gated-networks_2020}.
+    The model was trained on 3D MR images taken from an aggregation of multiple studies, namely opfvta \citep{ioanas_whole-brain_nodate}, drlfom \citep{imperfect_datasets} and other unpublished data, acquired with similar parameters.
     We compare our extended registration workflow to the SAMRI workflow \citep{samri} on data from the irsabi study
     \citep{irsabi_bidsdata}.
 
 
     \section{Results}
-    In comparison to the SAMRI registration workflow, which does not focus computation on the brain region, our workflow
-    exceeds in multiple metrics.
-    The Volume Conservation Factor (VCF) \citep{ioanas_optimized_2019} which measures the registration induced
-    deformation of the scanned brain, by computing the ratio of the brain volume before and after preprocessing, favours
-    our workflow with a root mean squared error ratio of ($\mathrm{RMSE_{M}/RMSE_{G}\simeq} 0.66$).
+    In comparison to the SAMRI registration workflow, which does not focus computation on the brain region, our workflow exceeds in multiple metrics.
+    The Volume Conservation Factor (VCF) \citep{ioanas_optimized_2019} which measures the registration induced deformation of the scanned brain, by computing the ratio of the brain volume before and after preprocessing, favours our workflow with a root mean squared error ratio of ($\mathrm{RMSE_{M}/RMSE_{G}\simeq} 0.66$).
     We also note that our workflow results in a inter-sample VCF variance decrease (0.44-fold).
-    Evaluating the Smoothness Conservation Factor (SCF) \citep{ioanas_optimized_2019}, which expresses the ratio between
-    smoothness of the registered image in comparison to the original, yields that the improvement of the VCF does not
-    come at the cost of a reduced SCF: $\mathrm{RMSE_{M}/RMSE_{G}\simeq} 0.93$.
+    Evaluating the Smoothness Conservation Factor (SCF) \citep{ioanas_optimized_2019}, which expresses the ratio between smoothness of the registered image in comparison to the original, yields that the improvement of the VCF does not come at the cost of a reduced SCF: $\mathrm{RMSE_{M}/RMSE_{G}\simeq} 0.93$.
     \Cref{fig:regComp} shows a qualitative comparison between the registration quality of the two workflows.
 
 
@@ -84,11 +73,9 @@
 
 
     \section{Conclusion}
-    We present a brain labeling classifier, that when used as a ROI extraction in an extention of the SAMRI Generic
-    registration workflow, significantly improves the quality of the latter.
+    We present a brain labeling classifier, that when used as a ROI extraction in an extention of the SAMRI Generic registration workflow, significantly improves the quality of the latter.
     Our extended workflow offers several advantages summarized by established metrics.
-    The easily accessible registration parameters of the SAMRI Generic Workflow as well as the open source
-    code to the classifier training functions make the pipeline transferable to any other imaging applications.
+    The easily accessible registration parameters of the SAMRI Generic Workflow as well as the open source code to the classifier training functions make the pipeline transferable to any other imaging applications.
 %    Visual inspection of registration quality reveals that the classifier successfully reduces the shifting of outer brain
 %    region voxels into the template space.
 
