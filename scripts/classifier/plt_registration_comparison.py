@@ -1,16 +1,31 @@
 import os
+
+import nibabel as nib
 import pandas as pd
 from matplotlib import pyplot as plt
-import nibabel as nib
+
+# sys.path.append(str(Path(os.getcwd()).parent.parent))
+# from utils import get_template_path
+
+# def get_template_path():
+#     paths = [Path('/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii'),
+#              Path('/usr/local/share/mouse-brain-atlases/dsurqec_200micron_mask.nii')]
+#     for path in paths:
+#         if path.exists():
+#             return path
+#
+#     raise RuntimeError(f'Template path not found under paths.')
+
 
 table = pd.DataFrame(
     [['sub-4005_ses-ofMaF_acq-TurboRARElowcov_T2w', 61], ['sub-4001_ses-ofMcF2_acq-TurboRARElowcov_T2w', 42],
      ['sub-4001_ses-ofMcF2_acq-TurboRARElowcov_T2w', 33]], columns=['volume', 'slice'], index=[1, 2, 3])
 
-preprocessed_folders = [os.path.expanduser('~/.scratch/mlebe/preprocessing/generic'),
-                        os.path.expanduser('~/.scratch/mlebe/preprocessing/masked')]
+preprocessed_folders = [os.path.expanduser('~/.scratch/mlebe_threed/preprocessing/generic'),
+                        os.path.expanduser('~/.scratch/mlebe_threed/preprocessing/masked')]
+# template_path = get_template_path()
 template_path = '/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii'
-template_volume = nib.load(template_path).get_data()
+template_volume = nib.load(template_path).dataobj
 
 generic_preprocessed_list = []
 masked_preprocessed_list = []
@@ -34,7 +49,7 @@ for idx, ax in enumerate(axs.flat[:4]):
         ax.text(0.5, 0.5, 'Generic', size=15, ha='center', va='center')
         ax.axis("off")
     else:
-        volume = nib.load(table.iloc[idx - 1]['generic_path']).get_data()
+        volume = nib.load(table.iloc[idx - 1]['generic_path']).dataobj
         ax.imshow(volume[:, table.iloc[idx - 1]['slice'], :], cmap='gray')
         ax.imshow(template_volume[:, table.iloc[idx - 1]['slice'], :], alpha=0.7, cmap='Blues')
 for idx, ax in enumerate(axs.flat[4:]):
@@ -42,7 +57,7 @@ for idx, ax in enumerate(axs.flat[4:]):
         ax.text(0.5, 0.5, 'Masked', size=15, ha='center', va='center')
         ax.axis("off")
     else:
-        volume = nib.load(table.iloc[idx - 1]['masked_path']).get_data()
+        volume = nib.load(table.iloc[idx - 1]['masked_path']).dataobj
         ax.imshow(volume[:, table.iloc[idx - 1]['slice'], :], cmap='gray')
         ax.imshow(template_volume[:, table.iloc[idx - 1]['slice'], :], alpha=0.7, cmap='Blues')
 
