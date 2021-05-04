@@ -36,26 +36,32 @@
 
 
     \section{Introduction}
-    Registration is needed to compare and measure imaging data across populations with subject-wise variation.
-    Current methods for neuroimaging rely on full image processing, with high varying intensities outside the brain region of interest that interfere with registration.
-    Applying the processing to a masked image improves the quality of the latter.
-    We present a deep learning framework for segmentation of brain tissue in functional and structural MR images that significantly improves the quality of registration in small animal brain imaging.
-
+    In biomedical imaging, between-subject comparability can be attained at the voxel level via image registration.
+    The registration process requires several data preparation steps, of which brain extraction is particularly problematic in preclinical applications.
+    This owes to the absence of native rodent brain extraction functions, and prompts researchers to either use adapted human brain extraction functions, known for high false negative rates and rostral and caudal tissue removal --- or forego this step entirely, leaving high intensity and high variance voxels, particularly on the dorsal aspect of the brain \cite{ioanas_optimized_2019}.
+    %%% you can't really say this in the intro, since this is the conclusion of your study, no? :) so let's turn it around and say that without brain extraction, registration can suck, which is the case independently of this study ^
+    %Applying the processing to an adequately masked image improves the quality of the latter.
+    %%% before you send it, please consult the data (or the methods in my previous studies) to see whether it's se-EPI or ge-EPI :)
+    In order to mitigate this methodological constrain in preclinical brain imaging, we have developed a deep learning framework for brain tissue segmentation across common functional and structural contrasts (T2*-weighted se-EPI, T2-weighted RARE, T1-weighted FLASH).
+    To ascertain performance, we benchmark this workflow plug-in against optimized non-extracted brain registration, and find significant improvements in terms of both physiological accuracy, and reduced variation in registration.
 
     \section{Methods}
-    We apply a machine learning auto-encoder type model as preprocessing to a registration workflow in order to generate a mask of the brain region.
-    This mask is used to focus computation on the brain region during registration.
-    As model architecture, we use the U-Net \citep{ronneberger_u-net:_2015} implementation from \citet{oktay_ozan-oktayattention-gated-networks_2020}.
-    The model was trained on 3D MR images taken from an aggregation of multiple studies, namely opfvta \citep{ioanas_whole-brain_nodate}, drlfom \citep{imperfect_datasets} and other unpublished data, acquired with similar parameters.
-    We compare our extended registration workflow to the SAMRI workflow \citep{samri} on data from the irsabi study
+    %%% always explain the abbreviation the first time you use it, or in this case, since you don't reuse it, spell it out.
+    The model was iteratively trained on 3D magnetic resonance images taken from an aggregation of multiple studies, comprising high age heterogeneity \citet{ioanas_whole-brain_nodate,imperfect_datasets}, as well as supplementary novel data, acquired with similar parameters.
+    For the model architecture, we leveraged the U-Net \citep{ronneberger_u-net:_2015} native 3D implementation from \citet{oktay_ozan-oktayattention-gated-networks_2020}.
+
+    The resulting auto-encoder type model was utilised for benchmarking and can optimally be re-used as a parameterized preprocessing step in the “SAMRI Generic” \citet{ioanas_optimized_2019} registration workflow, though a standalone version is also available.
     \citep{irsabi_bidsdata}.
 
 
     \section{Results}
-    In comparison to the SAMRI registration workflow, which does not focus computation on the brain region, our workflow exceeds in multiple metrics.
-    The Volume Conservation Factor (VCF) \citep{ioanas_optimized_2019} which measures the registration induced deformation of the scanned brain, by computing the ratio of the brain volume before and after preprocessing, favours our workflow with a root mean squared error ratio of ($\mathrm{RMSE_{M}/RMSE_{G}\simeq} 0.66$).
-    We also note that our workflow results in a inter-sample VCF variance decrease (0.44-fold).
-    Evaluating the Smoothness Conservation Factor (SCF) \citep{ioanas_optimized_2019}, which expresses the ratio between smoothness of the registered image in comparison to the original, yields that the improvement of the VCF does not come at the cost of a reduced SCF: $\mathrm{RMSE_{M}/RMSE_{G}\simeq} 0.93$.
+    In comparison to the template SAMRI Generic registration workflow --- which provides adequate and modular registration capabilities, yet does not constrain similarity metrics for the registration process to brain tissue --- our workflow shows significant improvements in multiple metrics.
+    The Volume Conservation Factor (VCF) \citep{ioanas_optimized_2019} which measures the registration induced volume deformation of the input image, and is optimal at a value of 1, favours our workflow with a root mean squared error ratio of ($\mathrm{RMSE_{M}/RMSE_{G}\simeq} 0.66$).
+    %%% wenn das nächste Wort mit einem Selbstlaut anfängt, heißt es “an”, nicht a “”
+    Further, our workflow exhibits an inter-sample VCF variance decrease (0.44-fold), indicating not only increased accuracy, but increased precision and reproducibility.
+    %%% between X in comparison to Y ist zweimal gesagt. Between X and Y reicht ^^
+    %%% ist aber keine besonders offensichtliche Annahme dass VCF und SCF gegenspielen sollten --- die Sache ist, wenn VCF über 0 ist, dann ja, SCF sollte schlechter (aslo höher) werden, aber wenn VCF unter null ist sollte SCF artifiziell besser (geringer, was der unentweichbaren Glättung durch interpolierung entgegenwirken würde, und den Wert vllt näher an null bringen könnte).... aber du sagst ja nichts zu dem absolutwert, was auch nicht verkehrt ist in dem format, aber vllt für den Artikel relevant.
+    Evaluating the Smoothness Conservation Factor (SCF) \citep{ioanas_optimized_2019}, which expresses the ratio between smoothness of the image before and after registration, we find a furter improvement of $\mathrm{RMSE_{M}/RMSE_{G}\simeq} 0.93$.
     \Cref{fig:regComp} shows a qualitative comparison between the registration quality of the two workflows.
 
 
@@ -65,16 +71,23 @@
             label='regComp',
             caption='
             \\textbf{The Masked workflow prevents the shifting of outer-brain region voxels into the template-brain
-            region (in blue).} Comparison of slices from 3 different volumes, registered with the Generic (first row)
-            and the Masked (second row) workflow.',
+            region (in blue).} Comparison of slices from 3 different volumes, registered with the SAMRI Generic (first row)
+            and the “SAMRI GENERIC Masked (second row) workflow”.',
             )}
     \end{sansmath}
 
 
     \section{Conclusion}
-    We present a brain labeling classifier, that when used as a ROI extraction in an extention of the SAMRI Generic registration workflow, significantly improves the quality of the latter.
-    Our extended workflow offers several advantages summarized by established metrics.
-    The easily accessible registration parameters of the SAMRI Generic Workflow as well as the open source code to the classifier training functions make the pipeline transferable to any other imaging applications.
+    Here present a novel preclinical brain tissue classifier, which can be leveraged for brain extraction in a simple drop-in fashion in modular neuroimaging workflows.
+    We benchmark the augmented workflow against the selfsame methods highlighted in the original publication, and find numerous improvements, at a significance level approaching that reached in the benchmarking of the aforementioned workflow in comparison to the legacy \textit{ad hoc} methods it aims to supersede.
+
+    We publish both the resulting classifier as well as the training pipeline, thereby allowing the methods transfer to any biomedical use cases looking to iteratively improve classification of tissues in 3D.
+    %%% Bist du sicher dass du nicht genug Platz hast um deine herangehensweise etwas mehr darzulegen?
+    Conceptually, this study further highlights the possibility of iteratively improving classifier accuracy based on imperfect input data and endogenous data features --- a key challenge in the biomedical field.
+    %significantly improves the quality of the latter.
+    %Our extended workflow offers several advantages summarized by established metrics.
+    %%% Code of the classifier not code TO the classifier.
+    %The easily accessible registration parameters of the SAMRI Generic Workflow as well as the open source code of the classifier training functions make the pipeline transferable to any other imaging applications.
 %    Visual inspection of registration quality reveals that the classifier successfully reduces the shifting of outer brain
 %    region voxels into the template space.
 
