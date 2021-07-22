@@ -17,18 +17,21 @@ SCRATCH_DIR = Path('~/.scratch/mlebe').expanduser()
 CONFIG_PATH = os.path.expanduser(os.path.join(SCRATCH_DIR, 'config.json'))
 
 
-def prepare_config(json_config_path: Path, scratch_dir: Path):
+def prepare_config(json_config_path: Path, scratch_dir: Path, additional_args: list = None):
     mkdir(os.path.expanduser(scratch_dir))
     config = json_to_dict(json_config_path)
+
     # copy the json configuration file to the scratch directory
     new_config_path = scratch_dir / 'config.json'
     verify_config_path(new_config_path)
     copyfile(json_config_path, new_config_path)
-    # prepare the workflow config file
+
     workflow_uid = uuid.uuid4().hex
 
+    parameters = [('workflow_config.uid', workflow_uid), *additional_args] if additional_args else [
+        ('workflow_config.uid', workflow_uid)]
     # write workflow uid and model dice scores to new workflow config
-    write_to_jsonfile(new_config_path, [('workflow_config.uid', workflow_uid)])
+    write_to_jsonfile(new_config_path, parameters)
     return config, workflow_uid
 
 
