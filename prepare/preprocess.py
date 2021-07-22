@@ -61,13 +61,13 @@ generic(bids_base,
         # sessions=sessions,
         )
 
-# generic(bids_base,
-#         template_path,
-#         registration_mask=registration_mask,
-#         functional_match=functional_match,
-#         structural_match=structural_match,
-#         out_base='{}/preprocessing'.format(scratch_dir),
-#         workflow_name='generic',
-#         keep_work=config['workflow_config']['keep_work'],
-#         subjects=subjects,
-#         )
+generic(bids_base,
+        template_path,
+        registration_mask=registration_mask,
+        functional_match=functional_match,
+        structural_match=structural_match,
+        out_base='{}/preprocessing'.format(scratch_dir),
+        workflow_name='generic',
+        keep_work=config['workflow_config']['keep_work'],
+        subjects=subjects,
+        )
