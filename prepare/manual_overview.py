@@ -8,6 +8,8 @@ from samri.plotting.maps import contour_slices
 from samri.utilities import bids_substitution_iterator
 from subjects_reader import find_subjects
 from mlebe.training.configs.utils import json_to_dict
+from norby.utils import maybe_norby
+
 
 num_cores = max(mp.cpu_count() - 1, 1)
 mpl.rcParams['font.size'] = 14
@@ -110,65 +112,66 @@ def anat_contour_slices(substitution, file_path, data_dir, key, i, spacing, cont
                    save_as='{}/manual_overview/{}/{}_{}_T2w.pdf'.format(data_dir, key, i[0], substitution['session']),
                    )
 
+with maybe_norby(config['workflow_config']['norby'], 'starting manual overview', 'manual overview finished',
+                 whichbot='mlebe'):
+    for key in templates:
+        spacing = 0.65
+        for i in list(itertools.product(subjects, runs)):
+            if 'VZ' in i[0]:
+                if i[1] != 0:
+                    continue
+                anat_contrast = 'T1w'
+                func_path = '{{data_dir}}/preprocessing_dargcc/{}_collapsed/sub-{{subject}}/ses-{{session}}/func/sub-{{subject}}_ses-{{session}}_task-rest_acq-EPI_run-{}_{}.nii.gz'.format(
+                    key, i[1], runs[i[1]])
+                anat_path = '{{data_dir}}/preprocessing_dargcc/{}_collapsed/sub-{{subject}}/ses-{{session}}/anat/sub-{{subject}}_ses-{{session}}_acq-FLASH_T1w.nii.gz'.format(
+                    key)
+            else:
+                anat_contrast = 'T2w'
+                func_path = '{{data_dir}}/preprocessing/{}_collapsed/sub-{{subject}}/ses-{{session}}/func/sub-{{subject}}_ses-{{session}}_task-JogB_acq-EPIlowcov_run-{}_{}.nii.gz'.format(
+                    key, i[1], runs[i[1]])
+                anat_path = '{{data_dir}}/preprocessing/{}_collapsed/sub-{{subject}}/ses-{{session}}/anat/sub-{{subject}}_ses-{{session}}_acq-TurboRARElowcov_T2w.nii.gz'.format(
+                    key)
 
-for key in templates:
-    spacing = 0.65
-    for i in list(itertools.product(subjects, runs)):
-        if 'VZ' in i[0]:
-            if i[1] != 0:
-                continue
-            anat_contrast = 'T1w'
-            func_path = '{{data_dir}}/preprocessing_dargcc/{}_collapsed/sub-{{subject}}/ses-{{session}}/func/sub-{{subject}}_ses-{{session}}_task-rest_acq-EPI_run-{}_{}.nii.gz'.format(
-                key, i[1], runs[i[1]])
-            anat_path = '{{data_dir}}/preprocessing_dargcc/{}_collapsed/sub-{{subject}}/ses-{{session}}/anat/sub-{{subject}}_ses-{{session}}_acq-FLASH_T1w.nii.gz'.format(
-                key)
-        else:
-            anat_contrast = 'T2w'
-            func_path = '{{data_dir}}/preprocessing/{}_collapsed/sub-{{subject}}/ses-{{session}}/func/sub-{{subject}}_ses-{{session}}_task-JogB_acq-EPIlowcov_run-{}_{}.nii.gz'.format(
-                key, i[1], runs[i[1]])
-            anat_path = '{{data_dir}}/preprocessing/{}_collapsed/sub-{{subject}}/ses-{{session}}/anat/sub-{{subject}}_ses-{{session}}_acq-TurboRARElowcov_T2w.nii.gz'.format(
-                key)
+            func_substitutions = bids_substitution_iterator(
+                sessions=sessions,
+                subjects=[i[0]],
+                data_dir=data_dir,
+                validate_for_template=func_path,
+            )
+            anat_substitutions = bids_substitution_iterator(
+                sessions=sessions,
+                subjects=[i[0]],
+                data_dir=data_dir,
+                validate_for_template=anat_path,
+            )
 
-        func_substitutions = bids_substitution_iterator(
-            sessions=sessions,
-            subjects=[i[0]],
-            data_dir=data_dir,
-            validate_for_template=func_path,
-        )
-        anat_substitutions = bids_substitution_iterator(
-            sessions=sessions,
-            subjects=[i[0]],
-            data_dir=data_dir,
-            validate_for_template=anat_path,
-        )
-
-        Parallel(n_jobs=num_cores, verbose=0)(map(delayed(func_contour_slices),
-                                                  func_substitutions,
-                                                  [func_path] * len(func_substitutions),
-                                                  [data_dir] * len(func_substitutions),
-                                                  [key] * len(func_substitutions),
-                                                  [i] * len(func_substitutions),
-                                                  [spacing] * len(func_substitutions),
-                                                  ))
-        Parallel(n_jobs=num_cores, verbose=0)(map(delayed(anat_contour_slices),
-                                                  anat_substitutions,
-                                                  [anat_path] * len(anat_substitutions),
-                                                  [data_dir] * len(anat_substitutions),
-                                                  [key] * len(anat_substitutions),
-                                                  [i] * len(anat_substitutions),
-                                                  [spacing] * len(anat_substitutions),
-                                                  [anat_contrast] * len(anat_substitutions),
-                                                  ))
-        # fixme: this gives the error "zero-size array to reduction operation minimum which has no identity"
-        # contour_slices(templates[key],
-        #                alpha=[0.6],
-        #                colors=cmap[::2],
-        #                figure_title='Multi-Session Coherence Control\n Subject {} | Task {}'.format(i[0], runs[i[1]]),
-        #                file_template=func_path,
-        #                force_reverse_slice_order=True,
-        #                legend_template='{session} session',
-        #                levels_percentile=[77],
-        #                save_as='{}/manual_overview/{}/coherence_{}_{}.pdf'.format(data_dir, key, i[0], runs[i[1]]),
-        #                slice_spacing=spacing,
-        #                substitutions=func_substitutions,
-        #                )
+            Parallel(n_jobs=num_cores, verbose=0)(map(delayed(func_contour_slices),
+                                                      func_substitutions,
+                                                      [func_path] * len(func_substitutions),
+                                                      [data_dir] * len(func_substitutions),
+                                                      [key] * len(func_substitutions),
+                                                      [i] * len(func_substitutions),
+                                                      [spacing] * len(func_substitutions),
+                                                      ))
+            Parallel(n_jobs=num_cores, verbose=0)(map(delayed(anat_contour_slices),
+                                                      anat_substitutions,
+                                                      [anat_path] * len(anat_substitutions),
+                                                      [data_dir] * len(anat_substitutions),
+                                                      [key] * len(anat_substitutions),
+                                                      [i] * len(anat_substitutions),
+                                                      [spacing] * len(anat_substitutions),
+                                                      [anat_contrast] * len(anat_substitutions),
+                                                      ))
+            # fixme: this gives the error "zero-size array to reduction operation minimum which has no identity"
+            # contour_slices(templates[key],
+            #                alpha=[0.6],
+            #                colors=cmap[::2],
+            #                figure_title='Multi-Session Coherence Control\n Subject {} | Task {}'.format(i[0], runs[i[1]]),
+            #                file_template=func_path,
+            #                force_reverse_slice_order=True,
+            #                legend_template='{session} session',
+            #                levels_percentile=[77],
+            #                save_as='{}/manual_overview/{}/coherence_{}_{}.pdf'.format(data_dir, key, i[0], runs[i[1]]),
+            #                slice_spacing=spacing,
+            #                substitutions=func_substitutions,
+            #                )

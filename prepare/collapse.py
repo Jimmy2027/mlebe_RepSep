@@ -1,40 +1,42 @@
-from samri.pipelines import manipulations
-from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
 from mlebe.training.configs.utils import json_to_dict
-from norby import send_msg
+from norby.utils import maybe_norby
+from samri.pipelines import manipulations
+
+from make_config import CONFIG_PATH as config_path, SCRATCH_DIR as scratch_dir
 
 config = json_to_dict(config_path)
-if config['workflow_config']['norby']:
-    send_msg(f'Starting collapse.', add_loc_name=True)
-if config['workflow_config']['with_FLASH']:
-    bids_bases = ['{}/bids'.format(scratch_dir), '{}/dargcc_bids'.format(scratch_dir)]
-else:
-    bids_bases = ['{}/bids'.format(scratch_dir)]
-for bids_base in bids_bases:
-    # Create 3D collapsed dataset to speed up repeated evaluations
-    # Uncomment n_jobs_percentage parameter for machines with limited memory,
-    # or comment them out for machines with plenty of memory.
-    manipulations.collapse_nifti(bids_base,
-                                 '{}/bids_collapsed'.format(scratch_dir),
-                                 n_jobs_percentage=0.66,
-                                 )
-if config['workflow_config']['with_FLASH']:
-    manipulations.collapse_nifti('{}/preprocessing_dargcc/masked'.format(scratch_dir),
-                                 '{}/preprocessing_dargcc/masked_collapsed'.format(scratch_dir),
+
+with maybe_norby(config['workflow_config']['norby'], 'starting collapse', 'collapse finished',
+                 whichbot='mlebe'):
+    if config['workflow_config']['with_FLASH']:
+        bids_bases = ['{}/bids'.format(scratch_dir), '{}/dargcc_bids'.format(scratch_dir)]
+    else:
+        bids_bases = ['{}/bids'.format(scratch_dir)]
+    for bids_base in bids_bases:
+        # Create 3D collapsed dataset to speed up repeated evaluations
+        # Uncomment n_jobs_percentage parameter for machines with limited memory,
+        # or comment them out for machines with plenty of memory.
+        manipulations.collapse_nifti(bids_base,
+                                     '{}/bids_collapsed'.format(scratch_dir),
+                                     n_jobs_percentage=0.66,
+                                     )
+    if config['workflow_config']['with_FLASH']:
+        manipulations.collapse_nifti('{}/preprocessing_dargcc/masked'.format(scratch_dir),
+                                     '{}/preprocessing_dargcc/masked_collapsed'.format(scratch_dir),
+                                     n_jobs_percentage=0.33,
+                                     )
+
+        manipulations.collapse_nifti('{}/preprocessing_dargcc/generic'.format(scratch_dir),
+                                     '{}/preprocessing_dargcc/generic_collapsed'.format(scratch_dir),
+                                     n_jobs_percentage=0.33,
+                                     )
+
+    manipulations.collapse_nifti('{}/preprocessing/masked'.format(scratch_dir),
+                                 '{}/preprocessing/masked_collapsed'.format(scratch_dir),
                                  n_jobs_percentage=0.33,
                                  )
 
-    manipulations.collapse_nifti('{}/preprocessing_dargcc/generic'.format(scratch_dir),
-                                 '{}/preprocessing_dargcc/generic_collapsed'.format(scratch_dir),
+    manipulations.collapse_nifti('{}/preprocessing/generic'.format(scratch_dir),
+                                 '{}/preprocessing/generic_collapsed'.format(scratch_dir),
                                  n_jobs_percentage=0.33,
                                  )
-
-manipulations.collapse_nifti('{}/preprocessing/masked'.format(scratch_dir),
-                             '{}/preprocessing/masked_collapsed'.format(scratch_dir),
-                             n_jobs_percentage=0.33,
-                             )
-
-manipulations.collapse_nifti('{}/preprocessing/generic'.format(scratch_dir),
-                             '{}/preprocessing/generic_collapsed'.format(scratch_dir),
-                             n_jobs_percentage=0.33,
-                             )
