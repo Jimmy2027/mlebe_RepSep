@@ -2,10 +2,7 @@
 
 TARGET="${1}"
 WHITELIST="
-	pitch.tex
-	article.tex
-	poster.tex
-	slides.tex
+  article_ieeetm.tex
 	"
 
 if [[ "$TARGET" = "all" ]] || [[ "$TARGET" == "" ]]; then
