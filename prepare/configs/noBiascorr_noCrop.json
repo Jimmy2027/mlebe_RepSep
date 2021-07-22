@@ -4,14 +4,13 @@
     "with_FLASH": false,
     "subjects": [],
     "keep_work": true,
-    "norby": true
+    "norby": false
   },
   "masking_config": {
     "masking_config_anat": {
       "use_cuda": false,
       "with_bids_cropping": false,
       "input_type": "anat",
-      "visualisation_path": "~/.scratch/mlebe/masking_vis/anat",
       "bias_correct_bool": false,
       "test": false,
       "model_folder_path": "/home/hendrik/src/MLEBE_/mlebe/training/checkpoints/2020_7_1_8_58_40",
@@ -21,7 +20,6 @@
       "use_cuda": false,
       "with_bids_cropping": false,
       "input_type": "func",
-      "visualisation_path": "~/.scratch/mlebe/masking_vis/func",
       "bias_correct_bool": false,
       "test": false,
       "model_folder_path": "/home/hendrik/src/MLEBE_/mlebe/training/checkpoints/2020_7_7_9_58_4",
