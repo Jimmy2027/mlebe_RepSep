@@ -3,10 +3,10 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python{2_7,3_4,3_5,3_6} )
+PYTHON_COMPAT=( python3_{7..8} )
 
-DESCRIPTION="Registration Workflow and Geometric Space for Small Animal Brain Imaging"
-HOMEPAGE="https://bitbucket.org/TheChymera/irsabi"
+DESCRIPTION="Registration Workflow and Geometric Space for Small Animal Brain Imaging using a deep learning enabled brain extraction"
+HOMEPAGE="https://github.com/Jimmy2027/mlebe_RepSep"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -26,9 +26,9 @@ RDEPEND="
 	>=dev-tex/pythontex-0.16[${PYTHON_USEDEP}]
 	media-gfx/graphviz
 	sci-biology/nilearn[${PYTHON_USEDEP}]
-	>=sci-biology/samri-0.3[${PYTHON_USEDEP}]
 	sci-libs/scikits_learn[${PYTHON_USEDEP}]
 	sci-libs/pybids[${PYTHON_USEDEP}]
 	scanner-data? ( sci-biology/samri_data )
 	!scanner-data? ( sci-biology/samri_bidsdata )
 "
+# 	>=sci-biology/samri-0.3[${PYTHON_USEDEP}]
