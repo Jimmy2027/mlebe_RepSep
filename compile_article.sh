@@ -6,8 +6,8 @@ SCRATCH_DIR="${1}"
 WHITELIST="
 	article_ieeetm.tex
 	"
-if [["$SCRATCH_DIR" == ""]]; then
-  scratch_dir=~/.scratch/mlebe_threed
+if [[ "$SCRATCH_DIR" == "" ]]; then
+  scratch_dir=~/.scratch/mlebe
 else
    scratch_dir=~/.scratch/${SCRATCH_DIR}
 fi
