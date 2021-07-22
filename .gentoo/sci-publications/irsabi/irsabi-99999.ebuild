@@ -16,6 +16,7 @@ KEYWORDS=""
 DEPEND=""
 RDEPEND="
 	app-text/texlive[publishers,science,xetex]
+    dev-python/norby[${PYTHON_USEDEP}]
 	dev-python/joblib[${PYTHON_USEDEP}]
 	dev-python/matplotlib[${PYTHON_USEDEP}]
 	dev-python/numpy[${PYTHON_USEDEP}]
