@@ -12,6 +12,7 @@ structural_match = {'acquisition': ['TurboRARElowcov'], }
 subjects = config['workflow_config']['subjects']
 
 # mask all scans in scratch_dir / bids
+# This is done before the samri pipeline such that the masking model only need to be loaded once.
 bids_masker = BidsMasker(scratch_dir, str(scratch_dir / 'config.json'), structural_match=structural_match,
                          functional_match=functional_match, subjects=subjects,
                          # sessions=sessions
