@@ -9,22 +9,17 @@ config = json_to_dict(config_path)
 
 functional_match = {'acquisition': ['EPIlowcov'], }
 structural_match = {'acquisition': ['TurboRARElowcov'], }
-# temp
-# structural_match = {'acquisition': ['TurboRARElowcov'], 'datatype': ['anat']}
-# subjects = ['4009']
-# sessions = ['ofMpF']
-# end temp
 
 subjects = config['workflow_config']['subjects']
 
 # mask all scans in scratch_dir / bids
-with maybe_norby(config['workflow_config']['norby'], 'starting bids masking', 'bids masking finished',
-                 whichbot='mlebe'):
-    bids_masker = BidsMasker(scratch_dir, str(scratch_dir / 'config.json'), structural_match=structural_match,
-                             functional_match=functional_match, subjects=subjects,
-                             # sessions=sessions
-                             )
-    bids_masker.run()
+# with maybe_norby(config['workflow_config']['norby'], 'starting bids masking', 'bids masking finished',
+#                  whichbot='mlebe'):
+#     bids_masker = BidsMasker(scratch_dir, str(scratch_dir / 'config.json'), structural_match=structural_match,
+#                              functional_match=functional_match, subjects=subjects,
+#                              # sessions=sessions
+#                              )
+#     bids_masker.run()
 
 # launch SAMRI preprocessing
 with maybe_norby(config['workflow_config']['norby'], 'starting bids preprocessing', 'bids preprocessing finished',
