@@ -21,8 +21,8 @@ table = pd.DataFrame(
     [['sub-4005_ses-ofMaF_acq-TurboRARElowcov_T2w', 61], ['sub-4001_ses-ofMcF2_acq-TurboRARElowcov_T2w', 42],
      ['sub-4001_ses-ofMcF2_acq-TurboRARElowcov_T2w', 33]], columns=['volume', 'slice'], index=[1, 2, 3])
 
-preprocessed_folders = [os.path.expanduser('~/.scratch/mlebe_threed/preprocessing/generic'),
-                        os.path.expanduser('~/.scratch/mlebe_threed/preprocessing/masked')]
+preprocessed_folders = [os.path.expanduser('~/.scratch/hendrik/mlebe_threed/preprocessing/generic'),
+                        os.path.expanduser('~/.scratch/hendrik/mlebe_threed/preprocessing/masked')]
 # template_path = get_template_path()
 template_path = '/usr/share/mouse-brain-atlases/dsurqec_200micron_mask.nii'
 template_volume = nib.load(template_path).dataobj
@@ -44,6 +44,7 @@ for preprocessed_folder in preprocessed_folders:
 fig, axs = plt.subplots(nrows=2, ncols=4,
                         subplot_kw={'xticks': [], 'yticks': []})
 
+
 for idx, ax in enumerate(axs.flat[:4]):
     if idx == 0:
         ax.text(0.5, 0.5, 'Generic', size=15, ha='center', va='center')
@@ -61,4 +62,6 @@ for idx, ax in enumerate(axs.flat[4:]):
         ax.imshow(volume[:, table.iloc[idx - 1]['slice'], :], cmap='gray')
         ax.imshow(template_volume[:, table.iloc[idx - 1]['slice'], :], alpha=0.7, cmap='Blues')
 
+
+# plt.savefig('temp_.png')
 plt.show()
