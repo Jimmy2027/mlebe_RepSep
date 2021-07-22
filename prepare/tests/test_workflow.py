@@ -75,7 +75,10 @@ class TestWorkflow(TestCase):
         with tempfile.TemporaryDirectory() as tmpdirname:
             scratch_dir = Path(tmpdirname)
             print('scratch dir :', tmpdirname)
-            config, workflow_uid = prepare_config(json_config_path=JSON_CONFIG_PATH, scratch_dir=scratch_dir)
+            args = [(f'masking_config.masking_config_{mod}.visualisation_path', str(scratch_dir / f'vis_{mod}')) for mod in
+                    ['anat', 'func']]
+            config, workflow_uid = prepare_config(json_config_path=JSON_CONFIG_PATH, scratch_dir=scratch_dir,
+                                                  additional_args=args)
             prepare_experiment_result_dataframe(config=config, workflow_uid=workflow_uid)
             config_path = os.path.expanduser(os.path.join(scratch_dir, 'config.json'))
 
@@ -162,10 +165,13 @@ class TestWorkflow(TestCase):
 
 
 if __name__ == '__main__':
-    TestWorkflow.test_generic_preprocess(TestWorkflow)
-    TestWorkflow.test_generic_masked_preprocess(TestWorkflow)
-    TestWorkflow.test_collapse_bids(TestWorkflow)
-    TestWorkflow.test_collapse_generic(TestWorkflow)
-    TestWorkflow.test_collapse_masked(TestWorkflow)
-    TestWorkflow.test_l1_generic(TestWorkflow)
-    TestWorkflow.test_l1_masked(TestWorkflow)
+    from norby.utils import norby
+
+    with norby('starting mlebe test workflow', 'mlebe test workflow finished.'):
+        TestWorkflow.test_generic_preprocess(TestWorkflow)
+        TestWorkflow.test_generic_masked_preprocess(TestWorkflow)
+        TestWorkflow.test_collapse_bids(TestWorkflow)
+        TestWorkflow.test_collapse_generic(TestWorkflow)
+        TestWorkflow.test_collapse_masked(TestWorkflow)
+        TestWorkflow.test_l1_generic(TestWorkflow)
+        TestWorkflow.test_l1_masked(TestWorkflow)
