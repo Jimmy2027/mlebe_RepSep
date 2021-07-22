@@ -42,7 +42,7 @@
     %%% you can't really say this in the intro, since this is the conclusion of your study, no? :) so let's turn it around and say that without brain extraction, registration can suck, which is the case independently of this study ^
     %Applying the processing to an adequately masked image improves the quality of the latter.
     %%% before you send it, please consult the data (or the methods in my previous studies) to see whether it's se-EPI or ge-EPI :)
-    In order to mitigate this methodological constrain in preclinical brain imaging, we have developed a deep learning framework for brain tissue segmentation across common functional and structural contrasts (T2*-weighted se-EPI, T2-weighted RARE, T1-weighted FLASH).
+    In order to mitigate this methodological constrain in preclinical brain imaging, we have developed a deep learning framework for brain tissue segmentation across common functional and structural contrasts (T2-weighted ge-EPI, T2-weighted RARE, T1-weighted FLASH).
     To ascertain performance, we benchmark this workflow plug-in against optimized non-extracted brain registration, and find significant improvements in terms of both physiological accuracy, and reduced variation in registration.
 
     \section{Methods}
@@ -61,7 +61,7 @@
     Further, our workflow exhibits an inter-sample VCF variance decrease (0.44-fold), indicating not only increased accuracy, but increased precision and reproducibility.
     %%% between X in comparison to Y ist zweimal gesagt. Between X and Y reicht ^^
     %%% ist aber keine besonders offensichtliche Annahme dass VCF und SCF gegenspielen sollten --- die Sache ist, wenn VCF über 0 ist, dann ja, SCF sollte schlechter (aslo höher) werden, aber wenn VCF unter null ist sollte SCF artifiziell besser (geringer, was der unentweichbaren Glättung durch interpolierung entgegenwirken würde, und den Wert vllt näher an null bringen könnte).... aber du sagst ja nichts zu dem absolutwert, was auch nicht verkehrt ist in dem format, aber vllt für den Artikel relevant.
-    Evaluating the Smoothness Conservation Factor (SCF) \citep{ioanas_optimized_2019}, which expresses the ratio between smoothness of the image before and after registration, we find a furter improvement of $\mathrm{RMSE_{M}/RMSE_{G}\simeq} 0.93$.
+    Evaluating the Smoothness Conservation Factor (SCF) \citep{ioanas_optimized_2019}, which expresses the ratio between smoothness of the image before and after registration, we find a further improvement of $\mathrm{RMSE_{M}/RMSE_{G}\simeq} 0.93$.
     \Cref{fig:regComp} shows a qualitative comparison between the registration quality of the two workflows.
 
 
@@ -78,7 +78,7 @@
 
 
     \section{Conclusion}
-    Here present a novel preclinical brain tissue classifier, which can be leveraged for brain extraction in a simple drop-in fashion in modular neuroimaging workflows.
+    We present a novel preclinical brain tissue classifier, which can be leveraged for brain extraction in a simple drop-in fashion in modular neuroimaging workflows.
     We benchmark the augmented workflow against the selfsame methods highlighted in the original publication, and find numerous improvements, at a significance level approaching that reached in the benchmarking of the aforementioned workflow in comparison to the legacy \textit{ad hoc} methods it aims to supersede.
 
     We publish both the resulting classifier as well as the training pipeline, thereby allowing the methods transfer to any biomedical use cases looking to iteratively improve classification of tissues in 3D.
