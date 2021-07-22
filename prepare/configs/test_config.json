@@ -12,7 +12,7 @@
       "use_cuda": false,
       "with_bids_cropping": false,
       "input_type": "anat",
-      "visualisation_path": "~/.scratch/mlebe/masking_vis/anat",
+      "visualisation_path": "",
       "bias_correct_bool": false,
       "test": false,
       "model_folder_path": ""
@@ -22,7 +22,7 @@
       "use_cuda": false,
       "with_bids_cropping": false,
       "input_type": "func",
-      "visualisation_path": "~/.scratch/mlebe/masking_vis/func",
+      "visualisation_path": "",
       "bias_correct_bool": false,
       "test": false,
       "model_folder_path": ""
