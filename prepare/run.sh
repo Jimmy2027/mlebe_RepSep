@@ -26,7 +26,7 @@ python preprocess.py || exit 1
 python collapse.py || exit 1
 python l1.py || exit 1
 python manual_overview.py || exit 1
-python classifier/get_model_data.py || exit 1
+#python classifier/get_model_data.py || exit 1
 
 mkdir -p ~/.scratch/mlebe/data
 python volume_data.py || exit 1
