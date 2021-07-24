@@ -83,10 +83,15 @@ To patch these, the function \textcolor{mg}{\texttt{$binary\_fill\_holes$}} from
 An example of the preprocessing can be seen in \cref{fig:prepro_examples}.
 
 Each slice of the transformed data is originally of shape (63, 96, 48), matching the reference space resolution of \SI{200}{\micro\metre}.
-The volume is then reshaped into \py{boilerplate.get_training_shape('triple')} by first zero-padding the smaller x-y dimension to the same size as the bigger one.
+The volume is then reshaped into
+%\py{boilerplate.get_training_shape('triple')}
+by first zero-padding the smaller x-y dimension to the same size as the bigger one.
 This is done to conserve the ratio of the image.
-The z-axis is zero-padded to \py{boilerplate.get_training_shape(type=2, idx=True)}.
-The scan is then reshaped into \py{boilerplate.get_training_shape(type='triple')} using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package \cite{noauthor_opencv-python_nodate}.
+The z-axis is zero-padded to
+%\py{boilerplate.get_training_shape(type=2, idx=True)}.
+The scan is then reshaped into
+%\py{boilerplate.get_training_shape(type='triple')}
+using the function \textcolor{mg}{\texttt{$cv2.resize$}} from the opencv python package \cite{noauthor_opencv-python_nodate}.
 
 Finally, the images are normalized by first clipping them from the minimum to the \nth{99} percentile of the data to remove outliers and then divided by the maximum.
 
@@ -109,7 +114,9 @@ To improve the SAMRI registration workflow, an additional node is implemented wh
 The image is first resampled into the resolution of the template space, which has a voxel size of $0.2\times 0.2 \times 0.2$.
 This is done with the \textcolor{mg}{\texttt{$Resample$}} command from the FSL library which is an analysis tool for FMRI, MRI and DTI brain imaging data \cite{fsl}.
 Then, the image is preprocessed using the operations described in \cref{subsec:Data Set}.
-Since the classifier was trained to predict on images of shape \py{boilerplate.get_training_shape('triple')}, the input needs to be reshaped.
+Since the classifier was trained to predict on images of shape
+%\py{boilerplate.get_training_shape('triple')}
+, the input needs to be reshaped.
 The predictions of the model are reconstructed to a 3D mask via the command \textit{Nifit1Image} from the neuroimaging python package nibabel \cite{noauthor_neuroimaging_nodate}.
 This is done using the same affine space as the input image.
 The latter is then reshaped into the original shape inverting the preprocessing step, either with the opencv resize method or by cropping.
