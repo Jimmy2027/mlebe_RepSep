@@ -28,7 +28,8 @@ rsync -avP --exclude='*_cope.nii*' --exclude='*_zstat.nii*' ${scratch_dir}/*l2* 
 
 cp ${scratch_dir}/config.json ${destination_dir}/
 cp -r ${scratch_dir}/data/* ${destination_dir}/
-mkdir -p ${destination_dir}/classifier
-cp -v ${scratch_dir}/classifiers/T2/y_test.npy ${destination_dir}/classifier/
-cp -v ${scratch_dir}/classifiers/T2/y_pred.npy ${destination_dir}/classifier/
-cp -v ${scratch_dir}/classifiers/T2/x_test.npy ${destination_dir}/classifier/
+# temp
+#mkdir -p ${destination_dir}/classifier
+#cp -v ${scratch_dir}/classifiers/T2/y_test.npy ${destination_dir}/classifier/
+#cp -v ${scratch_dir}/classifiers/T2/y_pred.npy ${destination_dir}/classifier/
+#cp -v ${scratch_dir}/classifiers/T2/x_test.npy ${destination_dir}/classifier/

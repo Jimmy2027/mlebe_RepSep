@@ -26,12 +26,14 @@ python preprocess.py || exit 1
 python collapse.py || exit 1
 python l1.py || exit 1
 python manual_overview.py || exit 1
+# temp
 #python classifier/get_model_data.py || exit 1
 
 mkdir -p ~/.scratch/mlebe/data
 python volume_data.py || exit 1
 python variance_data.py || exit 1
 python smoothness_data.py || exit 1
+# temp
 #python functional_data.py || exit 1
 python l2.py || exit 1
 python classifier/build_graph.py || exit 1
